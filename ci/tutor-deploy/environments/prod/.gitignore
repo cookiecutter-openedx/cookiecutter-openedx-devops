@@ -1,0 +1,13 @@
+.terraform
+terraform.tfstate
+*.tfstate*
+*.tfstate.*
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.test-data
+modules/**/.test-data
+.terragrunt-cache
+.DS_Store

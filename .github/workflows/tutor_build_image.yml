@@ -1,0 +1,136 @@
+#------------------------------------------------------------------------------ 
+# written by: Miguel Afonso
+#             https://www.linkedin.com/in/mmafonso/
+#
+# date: Aug-2021
+#
+# usage: Creates a Tutor Docker image using the latest stable version of Open edX.
+#        additionally installs
+#        - custom theme
+#        - plugin
+#        - various Xblocks
+#        Registers the new container in AWS ECR.
+#------------------------------------------------------------------------------ 
+name: Tutor Build Image
+
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    env:
+      ECR_REPOSITORY: openedx
+      ECR_REGISTRY: 320713933456.dkr.ecr.us-east-2.amazonaws.com
+      TUTOR_VERSION: v13.1.5
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Install Tutor (from source)
+        run: |-
+          pip install --upgrade pyyaml
+          echo "TUTOR_ROOT=$GITHUB_WORKSPACE/tutor" >> $GITHUB_ENV
+          git clone https://github.com/overhangio/tutor.git
+          cd tutor
+          git checkout ${TUTOR_VERSION}
+          pip install -e .
+          echo "TUTOR_VERSION=$(tutor --version | cut -f3 -d' ')" >> $GITHUB_ENV
+
+
+      - name: Set Tutor Root in the Workspace
+        run: |
+          echo "REPOSITORY_TAG=$TUTOR_VERSION-$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
+          echo "TUTOR_ROOT=$GITHUB_WORKSPACE/tutor" >> $GITHUB_ENV
+          echo "THEMES_PATH=$GITHUB_WORKSPACE/tutor/env/build/openedx/themes" >> $GITHUB_ENV
+          echo "PLUGINS_PATH=$GITHUB_WORKSPACE/tutor/env/build/openedx/requirements" >> $GITHUB_ENV
+
+      - name: Test Tutor and Environment
+        run: |
+          tutor --version
+          echo "REPOSITORY_TAG=$REPOSITORY_TAG"
+          echo "TUTOR_ROOT=$TUTOR_ROOT"
+          echo "THEMES_PATH=$THEMES_PATH"
+          echo "PLUGINS_PATH=$PLUGINS_PATH"
+
+      - name: Checkout Theme repo
+        uses: actions/checkout@v2
+        with:
+          repository: stepwisemath/stepwise-edx-theme
+          path: ${{ env.THEMES_PATH }}/stepwise-edx-theme
+          token: ${{ secrets.PAT }}
+          ref: main
+
+      - name: Checkout stepwise-edx-plugin repo
+        uses: actions/checkout@v2
+        with:
+          repository: stepwisemath/stepwise-edx-plugin
+          path: ${{ env.PLUGINS_PATH }}/stepwise-edx-plugin
+          token: ${{ secrets.PAT }}
+          ref: main
+
+      - name: Checkout geogebra_xblock repo
+        uses: actions/checkout@v2
+        with:
+          repository: QueriumCorp/geogebra_xblock
+          path: ${{ env.PLUGINS_PATH }}/geogebra_xblock
+          token: ${{ secrets.PAT }}
+          ref: lilac.master
+
+      - name: Checkout hdrXblock repo
+        uses: actions/checkout@v2
+        with:
+          repository: QueriumCorp/hdrXblock
+          path: ${{ env.PLUGINS_PATH }}/hdrXblock
+          token: ${{ secrets.PAT }}
+          ref: lilac.master
+
+      - name: Checkout swxblock repo
+        uses: actions/checkout@v2
+        with:
+          repository: QueriumCorp/swxblock
+          path: ${{ env.PLUGINS_PATH }}/swxblock
+          token: ${{ secrets.PAT }}
+          ref: lilac.master
+
+      - name: Validate custom resource locations
+        run: |
+          echo "### Themes"
+          tree -d $THEMES_PATH
+          echo "### Plugins"
+          ls -l $PLUGINS_PATH
+          tree -d $PLUGINS_PATH
+
+      - name: Add private.txt requirements
+        run: |
+          cp ci/tutor-build/requirements/private.txt ${{ env.PLUGINS_PATH }}
+
+      - name: Render Tutor Config
+        run: |
+          tutor config save --set DOCKER_IMAGE_OPENEDX=${ECR_REGISTRY}/${ECR_REPOSITORY}:${REPOSITORY_TAG}
+
+      - name: Build the image
+        # see: https://docs.tutor.overhang.io/configuration.html
+        run: tutor images build openedx
+
+      - name: Push the image
+        run: |
+          tutor images push openedx
+          docker tag ${ECR_REGISTRY}/${ECR_REPOSITORY}:${REPOSITORY_TAG} ${ECR_REGISTRY}/${ECR_REPOSITORY}:latest
+          docker push ${ECR_REGISTRY}/${ECR_REPOSITORY}:latest
+      - name: Docker image:tag
+        run: |
+          echo "Docker image: ${ECR_REGISTRY}/${ECR_REPOSITORY}:${REPOSITORY_TAG}"
+
