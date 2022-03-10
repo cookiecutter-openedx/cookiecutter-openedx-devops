@@ -192,7 +192,7 @@ Additionally, they require a Github Personal Access Token (PAT) for a Github use
 II. Configure Your Open edX Back End
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Set your `global parameters <terraform/environments/global.hcl>`_
+Review your `global parameters <terraform/environments/global.hcl>`_. These were pre-populated from your responses to the CookieCutter command-line questionnaire.
 
 .. code-block:: hcl
 
@@ -206,7 +206,7 @@ Set your `global parameters <terraform/environments/global.hcl>`_
   }
 
 
-Set your `production environment parameters <terraform/environments/prod/env.hcl>`_
+Review your `production environment parameters <terraform/environments/prod/env.hcl>`_. 
 
 .. code-block:: hcl
 
@@ -403,3 +403,18 @@ Why Use Terragrunt?
 ~~~~~~~~~~~~~~~~~~~
 
 `Terragrunt <https://terragrunt.gruntwork.io/>`_ is a thin wrapper that provides extra tools for keeping your configurations DRY, working with multiple Terraform modules, and managing remote state. DRY means don't repeat yourself. That helped a lot with self-repeating modules we had to use in this architecture.
+
+Get Involved!
+-------------
+
+Contributors are welcome. Contact me here: `lawrencemcdaniel.com <https://lawrencemcdaniel.com>`_
+
+Special thanks go out to several folks in the open source community who've already made signficant contributions to this project.
+
+- to **UK Cabinet Office**, who created and still use the original version of this codebase to manage their production Open edX environment.
+- to `Miguel Afonso <https://www.linkedin.com/in/mmafonso/>`_, who wrote nearly all of the early versions of the CI and Terraform code.
+- to `Querium Corp <https://querium.com/>`_, who generously allowed me to open-source this version of the CI and Terraform code.
+- to `Turn The Bus <https://turnthebus.org/>`_, for helping me with the requisite code refactoring that preceded publication of this CookieCutter
+- to the guys at `hastexo/tutor-contrib-s3 <https://github.com/hastexo/tutor-contrib-s3>`_, who lead the effort in creating a version of their AWS S3 plugin that works with this code.
+
+
