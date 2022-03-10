@@ -72,8 +72,8 @@ Important Considerations
 
 - this code only works for AWS.
 - the root domain yourschool.edu must be hosted in `AWS Route53 <https://console.aws.amazon.com/route53/v2/hostedzones#>`_
-- the Github Actions workflows depend on secrets located in the repository settings page. Look for further instructions in the README of your new repository.
-- the Github Actions use an AWS IAM key pair from an IAM user named *ci* that you must manually create.
+- the Github Actions workflows in your new repository will depend on secrets located in the repository settings page. Look for further instructions in the README of your new repository.
+- the Github Actions workflows in your new repository will use an AWS IAM key pair from an IAM user named *ci* that you must manually create.
 - the collection of resources created by these scripts **will generate AWS costs of around $0.41 USD per hour ($10.00 USD per day)** while the platform is in a mostly-idle pre-production state. This cost will grow proportionally to your production work loads.
 - **BE ADVISED** that MySQL RDS, MongoDB and Redis ElastiCache are vertically scaled **manually** and therefore require some insight and potential adjustments on your part. All of these services are defaulted to their minimum instance sizes which you can modify in the environment configuration file.
 
@@ -184,7 +184,7 @@ Quick Start (After running CookieCutter)
 I. Add Your Secret Credentials To Your New Repository
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Github Actions workflows in your new repository depend on several workflow secrets including two sets of AWS IAM keypairs, one for CI workflows and another for the AWS Simple Email Service. 
+The Github Actions workflows in your new repository will depend on several workflow secrets including two sets of AWS IAM keypairs, one for CI workflows and another for the AWS Simple Email Service. 
 Additionally, they require a Github Personal Access Token (PAT) for a Github user account with all requisite privileges in your new repository as well as any other repositories that are cloned during any of the build / installation pipelines.
 
 .. image:: doc/repository-secrets.png
