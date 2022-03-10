@@ -17,7 +17,7 @@ Luckily the Tutor CLI allows all of it's params to be passed as a command line a
 We leverage this feature to provide all the custom details, from external sources.
 
 ## Building an image
-To manually trigger the build of a new image, we need to head to [GitHub's actions tab](https://github.com/stepwisemath/tutor-build/actions)
+To manually trigger the build of a new image, we need to head to [GitHub's actions tab](https://github.com/{{ cookiecutter.github_account_name }}/tutor-build/actions)
 in this repo, select the `Build Tutor Docker image` workflow, and click the "Run workflow" button.
 
 An image will be built and pushed to the ECR repo defined on the Workflow definition.
@@ -25,5 +25,5 @@ An image will be built and pushed to the ECR repo defined on the Workflow defini
 The docker image tag will be automatically suffixed with a timestamp. The full location of the pushed image, and its
 unique docker tag can be visualised in the last user defined step of the workflow.
 
-This value then needs to be updated on the target environment's configuration on the [deployment repository](https://github.com/stepwisemath/tutor-deploy).
+This value then needs to be updated on the target environment's configuration on the [deployment repository](https://github.com/{{ cookiecutter.github_account_name }}/tutor-deploy).
 

@@ -13,7 +13,7 @@ metadata:
   name: letsencrypt
 spec:
   acme:
-    email: no-reply@stepwisemath.ai
+    email: no-reply@{{ cookiecutter.global_root_domain }}
     privateKeySecretRef:
       name: letsencrypt
     server: https://acme-v02.api.letsencrypt.org/directory
@@ -33,6 +33,6 @@ spec:
   issuerRef:
     kind: ClusterIssuer
     name: letsencrypt
-  commonName: web.stepwisemath.ai
+  commonName: {{ cookiecutter.prod_environment }}.{{ cookiecutter.global_root_domain }}
   dnsNames:
-    - "*.web.stepwisemath.ai"
+    - "*.{{ cookiecutter.prod_environment }}.{{ cookiecutter.global_root_domain }}"

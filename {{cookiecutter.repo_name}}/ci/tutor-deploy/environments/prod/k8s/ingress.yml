@@ -26,11 +26,11 @@ metadata:
 spec:
   tls:
   - hosts:
-    - "web.stepwisemath.ai"
-    - "*.web.stepwisemath.ai"
+    - "{{ cookiecutter.prod_environment }}.{{ cookiecutter.global_root_domain }}"
+    - "*.{{ cookiecutter.prod_environment }}.{{ cookiecutter.global_root_domain }}"
     secretName: wild-openedx-prod-tls
   rules:
-  - host: web.stepwisemath.ai
+  - host: {{ cookiecutter.prod_environment }}.{{ cookiecutter.global_root_domain }}
     http:
       paths:
       - path: /
@@ -40,7 +40,7 @@ spec:
             name: lms
             port:
               number: 8000
-  - host: studio.web.stepwisemath.ai
+  - host: studio.{{ cookiecutter.prod_environment }}.{{ cookiecutter.global_root_domain }}
     http:
       paths:
       - path: /
