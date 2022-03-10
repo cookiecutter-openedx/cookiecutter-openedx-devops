@@ -44,8 +44,8 @@ CookieCutter Tutor Open edX Production Devops Tools
 |
 
 
-This repository contains Terraform code and Github Actions workflows to deploy and manage a `Tutor <https://docs.tutor.overhang.io/>`_ Kubernetes-managed
-production installation of Open edX that will automatically scale up, reliably supporting several hundred thousand learners.
+This repository contains a `CookieCutter <https://github.com/cookiecutter/cookiecutter>`_ to create Terraform code and Github Actions workflows that will deploy a `Tutor <https://docs.tutor.overhang.io/>`_ Kubernetes-managed
+production installation of Open edX that will automatically scale up, reliably supporting anywhere from a few hundred to as many as several hundred thousand learners.
 
 
 The Terraform scripts in this repo provide a 1-click means of creating / updating / destroying the following for each environment:
@@ -160,7 +160,7 @@ Set your `global parameters <terraform/environments/global.hcl>`_
   locals {
     platform_name    = "yourschool"
     platform_region  = "virginia"
-    root_domain      = "courses.yourschool.edu"
+    root_domain      = "yourschool.edu"
     aws_region       = "us-east-1"
     account_id       = "123456789012"
     ec2_ssh_key_name = "any-valid-pem-key-file-name"
