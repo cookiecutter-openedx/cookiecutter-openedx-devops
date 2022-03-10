@@ -70,7 +70,7 @@ These would result in environments like the following:
 Important Considerations
 ------------------------
 
-- this code only works for AWS.
+- the Terraform code and Github Actions workflows in your new repository will only work for AWS.
 - the root domain yourschool.edu must be hosted in `AWS Route53 <https://console.aws.amazon.com/route53/v2/hostedzones#>`_
 - the Github Actions workflows in your new repository will depend on secrets located in the repository settings page. Look for further instructions in the README of your new repository.
 - the Github Actions workflows in your new repository will use an AWS IAM key pair from an IAM user named *ci* that you must manually create.
