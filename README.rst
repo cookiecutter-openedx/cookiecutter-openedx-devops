@@ -416,7 +416,7 @@ Special thanks go out to several folks in the open source community who've alrea
 - to the guys at `hastexo/tutor-contrib-s3 <https://github.com/hastexo/tutor-contrib-s3>`_, who lead the effort to create a version of their AWS S3 plugin that works with this code base.
 - to `Querium Corp <https://querium.com/>`_, who generously allowed me to open-source this repository.
 - to **UK Cabinet Office**, who created and still use the original version of this code base to manage their production Open edX environment.
-- to `Turn The Bus <https://turnthebus.org/>`_, for helping me with the requisite code refactoring that preceded publication of this CookieCutter
+- to `Turn The Bus <https://turnthebus.org/>`_, for helping me with the requisite code refactoring that preceded publication of this CookieCutter template.
 
 Early Adopters
 ~~~~~~~~~~~~~~
