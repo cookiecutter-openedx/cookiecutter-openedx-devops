@@ -407,7 +407,7 @@ Why Use Terragrunt?
 Get Involved!
 -------------
 
-Contributors are welcome. Contact me here: `lawrencemcdaniel.com <https://lawrencemcdaniel.com>`_
+Contributors are welcome. Contact me here: `lawrencemcdaniel.com <https://lawrencemcdaniel.com>`_ if you're interested in becomming a core-committer to this project.
 
 Special thanks go out to several folks in the open source community who've already made signficant contributions to this project.
 
