@@ -1,5 +1,5 @@
 {
-    "project_slug": "openedx_devops",
+    "repo_name": "openedx_devops",
     "global_platform_name": "yourschool",
     "global_platform_region": "virginia",
     "global_root_domain": "{{ cookiecutter.global_platform_name|lower|replace(' ', '-') }}.edu",

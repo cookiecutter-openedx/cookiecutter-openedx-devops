@@ -44,7 +44,7 @@ jobs:
           aws-region: {{ cookiecutter.global_aws_region }}
 
       - name: Get Kube config
-        run: aws eks --region {{ cookiecutter.global_aws_region }} update-kubeconfig --name web-stepwisemath-mexico --alias eks-prod
+        run: aws eks --region {{ cookiecutter.global_aws_region }} update-kubeconfig --name {{ cookiecutter.prod_environment }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }} --alias eks-prod
 
       - name: Install kubectl
         uses: azure/setup-kubectl@v1
@@ -140,7 +140,7 @@ jobs:
       #        example values:
       #          OPENEDX_AWS_ACCESS_KEY: ABDCE123456789OHBBGQ
       #          OPENEDX_AWS_SECRET_ACCESS_KEY: A123456789srJ8lgel+ABCDEFGHIJKabcdefghijk
-      #          S3_STORAGE_BUCKET: web-stepwisemath-mexico-storage
+      #          S3_STORAGE_BUCKET: {{ cookiecutter.prod_environment }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-storage
       #          S3_CUSTOM_DOMAIN: cdn.web.stepwisemath.ai
       #          S3_REGION: {{ cookiecutter.global_aws_region }}
       # 
@@ -158,7 +158,7 @@ jobs:
       #                      "s3:GetObject*",
       #                      "s3:List*"
       #                  ],
-      #                  "Resource": "arn:aws:s3:::web-stepwisemath-mexico-storage/*"
+      #                  "Resource": "arn:aws:s3:::{{ cookiecutter.prod_environment }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-storage/*"
       #              }
       #          ]
       #      }

@@ -105,7 +105,7 @@ Answer the prompts with your own desired [options](http://cookiecutter-django.re
     Receiving objects: 100% (550/550), 127.66 KiB | 58 KiB/s, done.
     Resolving deltas: 100% (283/283), done.
     project_name [My Awesome Project]: Reddit Clone
-    project_slug [reddit_clone]: reddit
+    repo_name [reddit_clone]: reddit
     description [Behold My Awesome Project!]: A reddit clone.
     author_name [Daniel Roy Greenfeld]: Daniel Greenfeld
     domain_name [example.com]: myreddit.com
