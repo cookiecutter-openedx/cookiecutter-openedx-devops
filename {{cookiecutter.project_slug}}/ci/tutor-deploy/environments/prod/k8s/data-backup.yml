@@ -1,0 +1,102 @@
+#------------------------------------------------------------------------------ 
+# written by: Lawrence McDaniel
+#             https://lawrencemcdaniel.com/
+#
+# date: Feb-2022
+#
+# usage: Dumps mysql and mongo. stores the completed backups in AWS S3
+#------------------------------------------------------------------------------ 
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: data-backup
+  namespace: web-stepwisemath-mexico
+spec:
+  schedule: "0 8 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: mongodb
+              image: docker.io/mongo:4.0.25
+              imagePullPolicy: IfNotPresent
+              command:
+                - /bin/sh
+                - -c
+                - |-
+                  echo "Backup MongoDB"
+                  apt-get update && apt-get install -y curl unzip
+                  curl -s "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+                  unzip -q awscliv2.zip
+                  ./aws/install
+                  mongodump --host="mongodb:27017"
+                  DATE=$(date +%Y%m%d-%H%M) && echo $DATE
+                  MONGO_FILE="mongodump-$DATE"
+                  mv dump $MONGO_FILE
+                  aws s3 sync $MONGO_FILE s3://$S3_BUCKET/$MONGO_FILE/
+              env:
+                - name: AWS_ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: s3-data-backup-web
+                      key: AWS_ACCESS_KEY_ID
+                - name: AWS_SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: s3-data-backup-web
+                      key:  AWS_SECRET_ACCESS_KEY
+                - name: S3_BUCKET
+                  valueFrom:
+                    secretKeyRef:
+                      name: s3-data-backup-web
+                      key:  S3_BUCKET
+            - name: mysql
+              image: docker.io/mysql:5.7.33
+              imagePullPolicy: IfNotPresent
+              command:
+                - /bin/sh
+                - -c
+                - |-
+                  echo "Backup MySQL"
+                  apt-get update && apt-get install -y curl unzip
+                  curl -s "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+                  unzip -q awscliv2.zip
+                  ./aws/install
+                  DATE=$(date +%Y%m%d-%H%M) && echo $DATE
+                  SQL_FILE="mysqldump-$DATE"
+                  mysqldump -h"$MYSQL_HOST" -u"$MYSQL_ROOT_USERNAME" -p"$MYSQL_ROOT_PASSWORD" --add-drop-database --set-gtid-purged=OFF --column-statistics=0  openedx > ${SQL_FILE}
+                  aws s3 sync $SQL_FILE s3://$S3_BUCKET/$SQL_FILE/
+              env:
+                - name: AWS_ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: s3-data-backup-web
+                      key: AWS_ACCESS_KEY_ID
+                - name: AWS_SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: s3-data-backup-web
+                      key:  AWS_SECRET_ACCESS_KEY
+                - name: S3_BUCKET
+                  valueFrom:
+                    secretKeyRef:
+                      name: s3-data-backup-web
+                      key:  S3_BUCKET
+                - name: MYSQL_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: sql-root
+                      key:  MYSQL_HOST
+                - name: MYSQL_ROOT_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: sql-root
+                      key:  MYSQL_ROOT_USERNAME
+                - name: MYSQL_ROOT_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: sql-root
+                      key:  MYSQL_ROOT_PASSWORD
+
+          restartPolicy: OnFailure

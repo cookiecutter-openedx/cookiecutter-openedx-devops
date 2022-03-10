@@ -1,0 +1,3 @@
+LMS_HOSTNAME=web.stepwisemath.ai
+CMS_HOSTNAME=studio.web.stepwisemath.ai
+DOCKER_IMAGE_OPENEDX=320713933456.dkr.ecr.us-east-2.amazonaws.com/openedx:latest

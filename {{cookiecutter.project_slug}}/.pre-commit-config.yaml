@@ -1,0 +1,13 @@
+---
+
+repos:
+  - repo: git://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.43.0
+    hooks:
+      - id: terraform_fmt
+      - id: terraform_docs
+      - id: terraform_tflint
+  - repo: https://github.com/gruntwork-io/pre-commit
+    rev: v0.1.12
+    hooks:
+      - id: terragrunt-hclfmt
