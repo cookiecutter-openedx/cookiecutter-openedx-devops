@@ -75,14 +75,72 @@ Important Considerations
 - the collection of resources created by these scripts **will generate AWS costs of around $0.41 USD per hour ($10.00 USD per day)** while the platform is in a mostly-idle pre-production state. This cost will grow proportionally to your production work loads. You can view your `AWS Billing dashboard here <https://console.aws.amazon.com/billing/home?region={{ cookiecutter.global_aws_region }}#/>`_
 - **BE ADVISED** that MySQL RDS, MongoDB and Redis ElastiCache are vertically scaled **manually** and therefore require some insight and potential adjustments on your part. All of these services are defaulted to their minimum instance sizes which you can modify in the `environment configuration file <terraform/environments/prod/env.hcl>`_
 
-Quick Start
------------
+Usage
+-----
 
-I. Add Your Secret Credentials To This Repository
+## Usage
+
+You use a popular command-line tool named `CookieCutter <https://github.com/cookiecutter/cookiecutter>`_ to generate your git code repository using this repo as a template.
+
+First, get Cookiecutter. Trust me, it's awesome:
+
+    $ pip install "cookiecutter>=1.7.0"
+
+Now run it against this repo:
+
+    $ cookiecutter https://github.com/lpm0073/cookiecutter-openedx-devops
+
+You'll be prompted for some values. Provide them, then a complete git repository, with Github Actions workflows to automate build and deployment of your Tutor Open edX platform, and Terraform scripts to automate the build your AWS backend, will be created for you.
+
+Answer the prompts with your own desired [options](http://cookiecutter-django.readthedocs.io/en/latest/project-generation-options.html). For example:
+
+    Cloning into 'cookiecutter-django'...
+    remote: Counting objects: 550, done.
+    remote: Compressing objects: 100% (310/310), done.
+    remote: Total 550 (delta 283), reused 479 (delta 222)
+    Receiving objects: 100% (550/550), 127.66 KiB | 58 KiB/s, done.
+    Resolving deltas: 100% (283/283), done.
+    project_name [My Awesome Project]: Reddit Clone
+    project_slug [reddit_clone]: reddit
+    description [Behold My Awesome Project!]: A reddit clone.
+    author_name [Daniel Roy Greenfeld]: Daniel Greenfeld
+    domain_name [example.com]: myreddit.com
+    email [daniel-greenfeld@example.com]: pydanny@gmail.com
+    version [0.1.0]: 0.0.1
+    Select open_source_license:
+    1 - MIT
+    2 - BSD
+    3 - GPLv3
+    4 - Apache Software License 2.0
+    5 - Not open source
+    Choose from 1, 2, 3, 4, 5 [1]: 1
+
+
+Enter the project and take a look around:
+
+    $ cd openedx_devops/
+    $ ls
+
+Create a git repo and push it there:
+
+    $ git init
+    $ git add .
+    $ git commit -m "first awesome commit"
+    $ git remote add origin git@github.com:pydanny/openedx_devops.git
+    $ git push -u origin master
+
+Now take a look at your repo. Don't forget to carefully look at the generated README. Awesome, right?
+
+
+
+Quick Start (After running CookieCutter)
+----------------------------------------
+
+I. Add Your Secret Credentials To Your New Repository
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Github Actions workflows in this repository depend on several `workflow secrets <settings>`_ including two sets of AWS IAM keypairs, one for CI workflows and another for the AWS Simple Email Service. 
-Additionally, they require a Github Personal Access Token (PAT) for a Github user account with all requisite privileges in this repository as well as any other repositories that are cloned during any of the build / installation pipelines.
+The Github Actions workflows in your new repository depend on several `workflow secrets <settings>`_ including two sets of AWS IAM keypairs, one for CI workflows and another for the AWS Simple Email Service. 
+Additionally, they require a Github Personal Access Token (PAT) for a Github user account with all requisite privileges in your new repository as well as any other repositories that are cloned during any of the build / installation pipelines.
 
 .. image:: doc/repository-secrets.png
   :width: 700
