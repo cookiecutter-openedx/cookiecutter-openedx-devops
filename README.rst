@@ -411,6 +411,7 @@ Special Thanks
 ~~~~~~~~~~~~~~
 Special thanks go out to several folks in the open source community who've already made signficant contributions to this project.
 
+- to `Régis Behmo <https://overhang.io/>`_ for creating Tutor, where the real magic happens. Without Tutor you wouldn't be reading this right now.
 - to `Miguel Afonso <https://www.linkedin.com/in/mmafonso/>`_, who architected the Kubernetes-based deployment of Open edX and wrote nearly all of the early versions of the CI and Terraform code.
 - to the guys at `hastexo/tutor-contrib-s3 <https://github.com/hastexo/tutor-contrib-s3>`_, who lead the effort to create a version of their AWS S3 plugin that works with this code base.
 - to `Querium Corp <https://querium.com/>`_, who generously allowed me to open-source this repository.
