@@ -1,4 +1,4 @@
-Tutor Open edX Production Devops Tools
+CookieCutter Tutor Open edX Production Devops Tools
 ======================================
 .. image:: https://img.shields.io/badge/hack.d-Lawrence%20McDaniel-orange.svg
   :target: https://lawrencemcdaniel.com
@@ -78,8 +78,6 @@ Important Considerations
 Usage
 -----
 
-## Usage
-
 You use a popular command-line tool named `CookieCutter <https://github.com/cookiecutter/cookiecutter>`_ to generate your git code repository using this repo as a template.
 
 First, get Cookiecutter. Trust me, it's awesome:
@@ -90,9 +88,11 @@ Now run it against this repo:
 
     $ cookiecutter https://github.com/lpm0073/cookiecutter-openedx-devops
 
-You'll be prompted for some values. Provide them, then a complete git repository, with Github Actions workflows to automate build and deployment of your Tutor Open edX platform, and Terraform scripts to automate the build your AWS backend, will be created for you.
+You'll be prompted for some values. Provide them, then a complete git repository will be created for you, with Github Actions workflows to automate the build and deployment of your Tutor Open edX platform, and Terraform scripts to automate the build of your AWS backend.
 
 Answer the prompts with your own desired [options](http://cookiecutter-django.readthedocs.io/en/latest/project-generation-options.html). For example:
+
+.. code-block:: shell
 
     Cloning into 'cookiecutter-django'...
     remote: Counting objects: 550, done.
