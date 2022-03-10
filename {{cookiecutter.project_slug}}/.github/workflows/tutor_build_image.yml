@@ -69,7 +69,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: {{ cookiecutter.ci_build_theme_repository }}
-          path: ${{ env.THEMES_PATH }}/custom-edx-theme
+          path: {% raw %}${{ env.THEMES_PATH }}{% endraw %}/custom-edx-theme
           token: {% raw %}${{ secrets.PAT }}{% endraw %}
           ref: {{ cookiecutter.ci_build_theme_ref }}
 
@@ -77,7 +77,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: {{ cookiecutter.ci_build_plugin_repository }}
-          path: ${{ env.PLUGINS_PATH }}/custom-edx-plugin
+          path: {% raw %}${{ env.PLUGINS_PATH }}{% endraw %}/custom-edx-plugin
           token: {% raw %}${{ secrets.PAT }}{% endraw %}
           ref: {{ cookiecutter.ci_build_plugin_ref }}
 
@@ -85,7 +85,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: {{ cookiecutter.ci_build_xblock_org }}/{{ cookiecutter.ci_build_xblock_repository }}
-          path: ${{ env.PLUGINS_PATH }}/{{ cookiecutter.ci_build_xblock_repository }}
+          path: {% raw %}${{ env.PLUGINS_PATH }}{% endraw %}/{{ cookiecutter.ci_build_xblock_repository }}
           token: {% raw %}${{ secrets.PAT }}{% endraw %}
           ref: {{ cookiecutter.ci_build_xblock_ref }}
 
@@ -99,7 +99,7 @@ jobs:
 
       - name: Add private.txt requirements
         run: |
-          cp ci/tutor-build/requirements/private.txt ${{ env.PLUGINS_PATH }}
+          cp ci/tutor-build/requirements/private.txt {% raw %}${{ env.PLUGINS_PATH }}{% endraw %}
 
       - name: Render Tutor Config
         run: |
