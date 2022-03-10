@@ -2,6 +2,7 @@
     "github_account_name": "lpm0073",
     "repo_name": "openedx_devops",
     "global_platform_name": "yourschool",
+    "global_platform_description": "Your School",
     "global_platform_region": "virginia",
     "global_root_domain": "{{ cookiecutter.global_platform_name|lower|replace(' ', '-') }}.edu",
     "global_aws_region": "us-east-1",
