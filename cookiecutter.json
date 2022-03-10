@@ -1,15 +1,28 @@
 {
     "project_slug": "openedx_devops",
 
-    "global_platform_name": "organizationname",
-    "global_platform_region": "mexico",
-    "global_root_domain": "domainname.edu",
+    "global_platform_name": "yourschool",
+    "global_platform_region": "virginia",
+    "global_root_domain": "yourschool.edu",
     "global_aws_region": "us-east-1",
     "global_account_id": "123456789012",
-    "global_ec2_ssh_key_name": "your_pem_key_file_name",
+    "global_ec2_ssh_key_name": "any-valid-pem-key-file-name",
 
-    "prod_environment": "web",
+    "prod_environment": "courses",
   
+    "ci_build_TUTOR_VERSION": "v13.1.5", 
+    "ci_build_theme_repository": "lpm0073/edx-theme-example",
+    "ci_build_theme_ref": "main",
+
+    "ci_build_plugin_repository": "lpm0073/openedx-plugin-example",
+    "ci_build_plugin_ref": "main",
+
+    "ci_build_xblock_org": "openedx",
+    "ci_build_xblock_repository": "edx-ora2",
+    "ci_build_xblock_ref": "master",
+
+    "ci_deploy_OPENEDX_COMMON_VERSION": "open-release/maple.2",
+
     "mongodb_master_username": "root",
     "mongodb_db_port": 27017,
     "mongodb_deletion_protection": false,
@@ -40,19 +53,6 @@
     "redis_port": 6379,
     "redis_family": "redis6.x",
 
-    "ci_build_TUTOR_VERSION": "v13.1.5",
-
-    "ci_build_theme_repository": "lpm0073/edx-theme-example",
-    "ci_build_theme_ref": "main",
-
-    "ci_build_plugin_repository": "lpm0073/openedx-plugin-example",
-    "ci_build_plugin_ref": "main",
-
-    "ci_build_xblock_org": "openedx",
-    "ci_build_xblock_repository": "edx-ora2",
-    "ci_build_xblock_ref": "master",
-
-    "ci_deploy_OPENEDX_COMMON_VERSION": "open-release/maple.2",
     "ci_deploy_EMAIL_HOST": "email-smtp.us-east-1.amazonaws.com",
     "ci_deploy_EMAIL_PORT": 587,
     "ci_deploy_EMAIL_USE_TLS": true
