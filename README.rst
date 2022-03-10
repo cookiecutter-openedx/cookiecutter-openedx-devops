@@ -71,7 +71,7 @@ Important Considerations
 ------------------------
 
 - the Terraform code and Github Actions workflows in your new repository will only work for AWS.
-- the application domain for your Open edX installation (ie courses.yourschool.edu) must be hosted in `AWS Route53 <https://console.aws.amazon.com/route53/v2/hostedzones#>`_. Terraform will create several subdomains inside of this hosted zone, and it will optionally create additional hosted zones (one for each additional optional environment) that will be linked to the hosted zone of your application domain.
+- the application domain for your Open edX installation (ie courses.yourschool.edu) must be hosted in `AWS Route53 <https://console.aws.amazon.com/route53/v2/hostedzones#>`_. Terraform will create several DNS entries inside of this hosted zone, and it will optionally create additional hosted zones (one for each additional optional environment) that will be linked to the hosted zone of your application domain.
 - the Github Actions workflows in your new repository will depend on secrets located in the repository settings page. Look for further instructions in the README of your new repository.
 - the Github Actions workflows in your new repository will use an AWS IAM key pair from an IAM user named *ci* that you must manually create.
 - the collection of resources created by these scripts **will generate AWS costs of around $0.41 USD per hour ($10.00 USD per day)** while the platform is in a mostly-idle pre-production state. This cost will grow proportionally to your production work loads.
