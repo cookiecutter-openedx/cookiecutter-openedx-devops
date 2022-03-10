@@ -94,7 +94,7 @@ Now run it against this repo:
 
 You'll be prompted for some values. Provide them, then a complete git repository will be created for you, with Github Actions workflows to automate the build and deployment of your Tutor Open edX platform, and Terraform scripts to automate the build of your AWS backend.
 
-Answer the prompts with your own desired [options](http://cookiecutter-django.readthedocs.io/en/latest/project-generation-options.html). For example:
+Answer the prompts with your own desired options. For example:
 
 .. code-block:: shell
 
@@ -158,20 +158,23 @@ Answer the prompts with your own desired [options](http://cookiecutter-django.re
 
 Enter the project and take a look around:
 
+.. code-block:: shell
+
     $ cd openedx_devops/
     $ ls
 
 Create a git repo and push it there:
 
-    $ git init
-    $ git add .
-    $ git commit -m "first awesome commit"
-    $ git remote add origin git@github.com:pydanny/openedx_devops.git
-    $ git push -u origin master
+.. code-block:: shell
+
+  $ git init
+  $ git add .
+  $ git commit -m "first commit"
+  $ git branch -M main
+  $ git remote add origin https://github.com/lpm0073/openedx_devops.git
+  $ git push -u origin main
 
 Now take a look at your repo. Don't forget to carefully look at the generated README. Awesome, right?
-
-
 
 Quick Start (After running CookieCutter)
 ----------------------------------------
