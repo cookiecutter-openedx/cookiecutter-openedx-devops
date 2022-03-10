@@ -312,14 +312,14 @@ Both the Build as well as the Deploy workflows will be pre-configured based on y
 I. Build your Tutor Docker Image
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Use the included automated Github Actions workflow "Tutor Build Image" to build a customized Open edX Docker container based on the latest stable version of Open edX (currently maple.2) and
+The automated Github Actions workflow "Tutor Build Image" in your new repository will build a customized Open edX Docker container based on the latest stable version of Open edX (currently maple.2) and
 your Open edX custom theme repository and Open edX plugin repository. Your new Docker image will be automatically uploaded to `AWS Amazon Elastic Container Registry.
  
 
 II. Deploy your Docker Image to a Kubernetes Cluster
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Use the included automated Github Actions workflow "Tutor Deploy Prod" to deploy your customized Docker container to a Kubernetes Cluster.
+The automated Github Actions workflow "Tutor Deploy Prod" in your new repository will deploy your customized Docker container to a Kubernetes Cluster.
 
 About The Open edX Platform Back End
 ------------------------------------
