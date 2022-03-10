@@ -200,21 +200,20 @@ Specifically with regard to MySQL, several 3rd party analytics tools provide out
 Continuous Integration (CI)
 ---------------------------
 
-Both the Build as well as the Deploy workflows were pre-configured based on your responses to the CookieCutter questionnaire. Look for these two files in `.github/workflows <.github/workflows>`_.
- You'll find additional Open edX deployment and configuration files in `ci/tutor-build <ci/tutor-build>`_ and `ci/tutor-deploy <ci/tutor-deploy>`_
+Both the Build as well as the Deploy workflows were pre-configured based on your responses to the CookieCutter questionnaire. Look for these two files in `.github/workflows <.github/workflows>`_. You'll find additional Open edX deployment and configuration files in `ci/tutor-build <ci/tutor-build>`_ and `ci/tutor-deploy <ci/tutor-deploy>`_
 
 
 I. Build your Tutor Docker Image
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Use `this automated Github Actions workflow <actions/workflows/tutor_build_image.yml>`_ to build a customized Open edX Docker container based on the latest stable version of Open edX (current maple.2) and
+Use `this automated Github Actions workflow <https://github.com/{{ cookiecutter.github_account_name }}/{{ cookiecutter.repo_name }}/actions/workflows/tutor_build_image.yml>`_ to build a customized Open edX Docker container based on the latest stable version of Open edX (current maple.2) and
 your Open edX custom theme repository and Open edX plugin repository. Your new Docker image will be automatically uploaded to `AWS Amazon Elastic Container Registry <https://{{ cookiecutter.global_aws_region }}.console.aws.amazon.com/ecr/repositories?region={{ cookiecutter.global_aws_region }}>`_
  
 
 II. Deploy your Docker Image to a Kubernetes Cluster
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Use `this automated Github Actions workflow <actions/workflows/tutor_deploy_prod.yml>`_ to deploy your customized Docker container to a Kubernetes Cluster.
+Use `this automated Github Actions workflow <https://github.com/{{ cookiecutter.github_account_name }}/{{ cookiecutter.repo_name }}/actions/workflows/tutor_deploy_prod.yml>`_ to deploy your customized Docker container to a Kubernetes Cluster.
 Open edX LMS and Studio configuration parameters are located `here <ci/tutor-deploy/environments/prod/settings_merge.json>`_.
 
 
