@@ -82,9 +82,13 @@ You use a popular command-line tool named `CookieCutter <https://github.com/cook
 
 First, get Cookiecutter. Trust me, it's awesome:
 
+.. code-block:: shell
+
     $ pip install "cookiecutter>=1.7.0"
 
 Now run it against this repo:
+
+.. code-block:: shell
 
     $ cookiecutter https://github.com/lpm0073/cookiecutter-openedx-devops
 
