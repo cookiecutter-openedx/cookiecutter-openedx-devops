@@ -69,7 +69,7 @@ Important Considerations
 ------------------------
 
 - this code only works for AWS.
-- the root domain {{ cookiecutter.global_root_domain }} must be hosted in `AWS Route53 <https://console.aws.amazon.com/route53/v2/hostedzones#>`_
+- the root domain {{ cookiecutter.global_root_domain }} must be hosted in `AWS Route53 <https://console.aws.amazon.com/route53/v2/hostedzones#>`_. Terraform will create several subdomains inside of this hosted zone, and it will optionally create additional hosted zones (one for each additional optional environment) that will be linked to the hosted zone of your root domain.
 - resources are deployed to this AWS region: ``{{ cookiecutter.global_aws_region }}``
 - the Github Actions workflows depend on secrets `located here <settings> (see 'secrets/actions' from the left menu bar) `_
 - the Github Actions use an AWS IAM key pair from `this manually-created user named *ci* <https://console.aws.amazon.com/iam/home#/users/ci?section=security_credentials>`_
