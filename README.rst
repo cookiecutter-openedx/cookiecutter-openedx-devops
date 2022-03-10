@@ -98,26 +98,62 @@ Answer the prompts with your own desired [options](http://cookiecutter-django.re
 
 .. code-block:: shell
 
-    Cloning into 'cookiecutter-django'...
+    Cloning into 'cookiecutter-openedx-devops'...
     remote: Counting objects: 550, done.
     remote: Compressing objects: 100% (310/310), done.
     remote: Total 550 (delta 283), reused 479 (delta 222)
     Receiving objects: 100% (550/550), 127.66 KiB | 58 KiB/s, done.
     Resolving deltas: 100% (283/283), done.
-    project_name [My Awesome Project]: Reddit Clone
-    repo_name [reddit_clone]: reddit
-    description [Behold My Awesome Project!]: A reddit clone.
-    author_name [Daniel Roy Greenfeld]: Daniel Greenfeld
-    domain_name [example.com]: myreddit.com
-    email [daniel-greenfeld@example.com]: pydanny@gmail.com
-    version [0.1.0]: 0.0.1
-    Select open_source_license:
-    1 - MIT
-    2 - BSD
-    3 - GPLv3
-    4 - Apache Software License 2.0
-    5 - Not open source
-    Choose from 1, 2, 3, 4, 5 [1]: 1
+    github_account_name [lpm0073]: 
+    repo_name [openedx_devops]: 
+    global_platform_name [yourschool]: 
+    global_platform_description [Your School]: 
+    global_platform_region [virginia]: 
+    global_root_domain [yourschool.edu]: 
+    global_aws_route53_hosted_zone_id [For your root domain. Values look like this: Z0232691KVI7Y7U23HBD]: 
+    global_aws_region [us-east-1]: 
+    global_account_id [123456789012]: 
+    global_ec2_ssh_key_name [any-valid-pem-key-file-name]: 
+    prod_environment [courses]: 
+    ci_build_TUTOR_VERSION [v13.1.5]: 
+    ci_build_theme_repository [lpm0073/edx-theme-example]: 
+    ci_build_theme_ref [main]: 
+    ci_build_plugin_repository [lpm0073/openedx-plugin-example]: 
+    ci_build_plugin_ref [main]: 
+    ci_build_xblock_org [openedx]: 
+    ci_build_xblock_repository [edx-ora2]: 
+    ci_build_xblock_ref [master]: 
+    ci_deploy_OPENEDX_COMMON_VERSION [open-release/maple.2]: 
+    mongodb_master_username [root]: 
+    mongodb_db_port [27017]: 
+    mongodb_deletion_protection [False]: 
+    mongodb_engine [docdb]: 
+    mongodb_engine_version [3.6.0]: 
+    mongodb_retention_period [7]: 
+    mongodb_preferred_maintenance_window []: 
+    mongodb_preferred_backup_window [07:00-09:00]: 
+    mongodb_auto_minor_version_upgrade [True]: 
+    mysql_username [root]: 
+    mysql_port [3306]: 
+    mysql_engine [mysql]: 
+    mysql_family [mysql5.7]: 
+    mysql_major_engine_version [5.7]: 
+    mysql_engine_version [5.7.33]: 
+    mysql_allocated_storage [10]: 
+    mysql_create_random_password [true]: 
+    mysql_iam_database_authentication_enabled [False]: 
+    mysql_maintenance_window [Sun:00:00-Sun:03:00]: 
+    mysql_backup_window [03:00-06:00]: 
+    mysql_backup_retention_period [7]: 
+    mysql_deletion_protection [False]: 
+    mysql_skip_final_snapshot [True]: 
+    redis_engine_version [6.x]: 
+    redis_number_cache_clusters [1]: 
+    redis_port [6379]: 
+    redis_family [redis6.x]: 
+    ci_deploy_EMAIL_HOST [email-smtp.us-east-1.amazonaws.com]: 
+    ci_deploy_EMAIL_PORT [587]: 
+    ci_deploy_EMAIL_USE_TLS [True]: 
 
 
 Enter the project and take a look around:
