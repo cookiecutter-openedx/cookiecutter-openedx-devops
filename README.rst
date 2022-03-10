@@ -409,10 +409,21 @@ Get Involved!
 
 Contributors are welcome. Contact me here: `lawrencemcdaniel.com <https://lawrencemcdaniel.com>`_ if you're interested in becomming a core-committer to this project.
 
+Special Thanks
+~~~~~~~~~~~~~~
 Special thanks go out to several folks in the open source community who've already made signficant contributions to this project.
 
 - to `Miguel Afonso <https://www.linkedin.com/in/mmafonso/>`_, who architected the Kubernetes-based deployment of Open edX and wrote nearly all of the early versions of the CI and Terraform code.
-- to the guys at `hastexo/tutor-contrib-s3 <https://github.com/hastexo/tutor-contrib-s3>`_, who lead the effort to create a version of their AWS S3 plugin that works with this codebase.
+- to the guys at `hastexo/tutor-contrib-s3 <https://github.com/hastexo/tutor-contrib-s3>`_, who lead the effort to create a version of their AWS S3 plugin that works with this code base.
 - to `Querium Corp <https://querium.com/>`_, who generously allowed me to open-source this repository.
-- to **UK Cabinet Office**, who created and still use the original version of this codebase to manage their production Open edX environment.
+- to **UK Cabinet Office**, who created and still use the original version of this code base to manage their production Open edX environment.
 - to `Turn The Bus <https://turnthebus.org/>`_, for helping me with the requisite code refactoring that preceded publication of this CookieCutter
+
+Early Adopters
+~~~~~~~~~~~~~~
+Several large-scale Open edX installations already use this code base to manage their platforms, including:
+
+- `Stepwise Math <https://stepwisemath.ai/>`_
+- `UK Government <https://platform.staging.global-communications-academy.com/>`_
+- `Turn The Bus <https://app.turnthebus.org/>`_
+
