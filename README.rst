@@ -301,32 +301,23 @@ Specifically with regard to MySQL, several 3rd party analytics tools provide out
   :alt: Connecting to MySQL Workbench
 
 
-V. Build your Tutor Docker Image
+Continuous Integration (CI)
+---------------------------
+
+Both the Build as well as the Deploy workflows will be pre-configured based on your responses to the CookieCutter questionnaire.
+
+
+I. Build your Tutor Docker Image
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Use the included automated Github Actions workflow to build a customized Open edX Docker container based on the latest stable version of Open edX (current maple.2) and
-your Open edX custom theme repository and Open edX plugin repository. Your new Docker image will be automatically uploaded to AWS Amazon Elastic Container Registry
+Use the included automated Github Actions workflow "Tutor Build Image" to build a customized Open edX Docker container based on the latest stable version of Open edX (currently maple.2) and
+your Open edX custom theme repository and Open edX plugin repository. Your new Docker image will be automatically uploaded to `AWS Amazon Elastic Container Registry.
+ 
 
-Review the folders `ci/tutor-build` and `ci/tutor-deploy` in your new repository to orient yourself on the locations of the Open edX configuration files. 
-
-VI. Deploy your Docker Image to a Kubernetes Cluster
+II. Deploy your Docker Image to a Kubernetes Cluster
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Use the included automated Github Actions workflow to deploy your customized Docker container to a Kubernetes Cluster.
-Open edX LMS and Studio configuration parameters are located here 
-
-
-Setting Up Github Actions CI
-----------------------------
-
-I. tutor_build_image
-~~~~~~~~~~~~~~~~~~~~
-
-check CookieCutter for how to create a loop for Xblock settings.
-
-
-II. tutor_deploy_prod
-~~~~~~~~~~~~~~~~~~~~~
+Use the included automated Github Actions workflow "Tutor Deploy Prod" to deploy your customized Docker container to a Kubernetes Cluster.
 
 About The Open edX Platform Back End
 ------------------------------------
