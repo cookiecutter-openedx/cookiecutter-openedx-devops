@@ -20,8 +20,8 @@ locals {
 }
 
 provider "aws" {
-  alias  = "{{ cookiecutter.global_aws_region }}"
-  region = "{{ cookiecutter.global_aws_region }}"
+  alias  = "us-east-1"
+  region = "us-east-1"
 }
 
 
@@ -31,11 +31,11 @@ data "aws_route53_zone" "environment_domain" {
 
 
 # see ./acm.tf for creation of this certificate as well as 
-# the definition for the provider "aws.{{ cookiecutter.global_aws_region }}"
+# the definition for the provider "aws.us-east-1"
 data "aws_acm_certificate" "environment_domain" {
   domain   = var.environment_domain
   statuses = ["ISSUED"]
-  provider = "aws.{{ cookiecutter.global_aws_region }}"
+  provider = "aws.us-east-1"
 }
 
 data "aws_s3_bucket" "environment_domain" {

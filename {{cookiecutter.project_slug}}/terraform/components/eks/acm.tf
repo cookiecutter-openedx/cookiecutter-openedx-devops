@@ -4,7 +4,7 @@
 #
 # date: Feb-2022
 #
-# usage: Add tls certs to {{ cookiecutter.global_aws_region }} for Cloudfront distributions.
+# usage: Add tls certs to us-east-1 for Cloudfront distributions.
 #
 # we have to add these here, inside of eks because we 
 # need to iterate the subdomains, and this is only possible
@@ -20,8 +20,8 @@
 #------------------------------------------------------------------------------ 
 
 provider "aws" {
-  alias  = "{{ cookiecutter.global_aws_region }}"
-  region = "{{ cookiecutter.global_aws_region }}"
+  alias  = "us-east-1"
+  region = "us-east-1"
 }
 
 module "acm_root_domain" {
@@ -29,7 +29,7 @@ module "acm_root_domain" {
     version   = "~> 3.0"
 
     providers = {
-      aws = aws.{{ cookiecutter.global_aws_region }}
+      aws = aws.us-east-1
     }
 
     domain_name  = var.root_domain
@@ -48,7 +48,7 @@ module "acm_environment_domain" {
     version   = "~> 3.0"
 
     providers = {
-      aws = aws.{{ cookiecutter.global_aws_region }}
+      aws = aws.us-east-1
     }
 
     domain_name  = var.environment_domain
@@ -67,7 +67,7 @@ module "acm_subdomains" {
     version   = "~> 3.0"
 
     providers = {
-      aws = aws.{{ cookiecutter.global_aws_region }}
+      aws = aws.us-east-1
     }
 
     count        = length(var.subdomains)
