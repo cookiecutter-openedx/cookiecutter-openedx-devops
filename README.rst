@@ -192,7 +192,7 @@ Additionally, they require a Github Personal Access Token (PAT) for a Github use
 II. Configure Your Open edX Back End
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Review your global parameters. These were pre-populated from your responses to the CookieCutter command-line questionnaire.
+Review your global parameters. These will be pre-populated from your responses to the CookieCutter command-line questionnaire.
 
 .. code-block:: hcl
 
@@ -306,7 +306,8 @@ V. Build your Tutor Docker Image
 
 Use the included automated Github Actions workflow to build a customized Open edX Docker container based on the latest stable version of Open edX (current maple.2) and
 your Open edX custom theme repository and Open edX plugin repository. Your new Docker image will be automatically uploaded to AWS Amazon Elastic Container Registry
- 
+
+Review the folders `ci/tutor-build` and `ci/tutor-deploy` in your new repository to orient yourself on the locations of the Open edX configuration files. 
 
 VI. Deploy your Docker Image to a Kubernetes Cluster
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
