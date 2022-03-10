@@ -4,9 +4,7 @@
 This repository contains a GitHub actions workflow that assists with the process of building a custom docker image for Open edX. It essentially captures what is described in Tutor's official documentation [here](https://docs.tutor.overhang.io/configuration.html#custom-open-edx-docker-image).
 
 ## Why do we need a custom image.
-We need a custom image because we need to pack a custom [theme](https://github.com/stepwisemath/stepwise-edx-theme) and
-an integration [plug-in](https://github.com/stepwisemath/stepwise-edx-plugin) for edx-platform.
-The contents of these two repositories need to be included in the resulting image.
+We need a custom image because we need to package your custom theme and plug-in inside the edx-platform Docker container.
 
 ## How it works
 All the logic is packed in the actual workflow. It mostly follows the steps outlined on Tutor's documentation with some

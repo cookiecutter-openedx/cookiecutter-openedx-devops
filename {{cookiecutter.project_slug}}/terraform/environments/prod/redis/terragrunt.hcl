@@ -48,29 +48,28 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  resource_name = local.resource_name
-  tags          = local.tags
 
+  # AWS Elasticache identifying information
+  resource_name                 = local.resource_name
+  tags                          = local.tags
+
+  # cache instance identifying information
   replication_group_description = "${local.environment_vars.locals.environment_namespace}"
   create_random_auth_token      = "false"
 
-  # DB subnet group
-  subnet_ids = dependency.vpc.outputs.elasticache_subnets
+  # cache engine configuration
+  engine                        = "redis"
+  engine_version                = "{{ cookiecutter.redis_engine_version }}"
+  number_cache_clusters         = {{ cookiecutter.redis_number_cache_clusters }}
+  port                          = {{ cookiecutter.redis_port }}
+  family                        = "{{ cookiecutter.redis_family }}"
+  node_type                     = local.redis_node_type
+  transit_encryption_enabled    = false
 
+  # networking configuration
+  subnet_ids                    = dependency.vpc.outputs.elasticache_subnets
+  vpc_id                        = dependency.vpc.outputs.vpc_id
+  ingress_cidr_blocks           = [dependency.vpc.outputs.vpc_cidr_block]
 
-  # Security group
-  vpc_id              = dependency.vpc.outputs.vpc_id
-  ingress_cidr_blocks = [dependency.vpc.outputs.vpc_cidr_block]
-
-  engine                = "redis"
-  engine_version        = "6.x"
-  number_cache_clusters = 1
-  port                  = 6379
-
-  # DB parameter group
-  family = "redis6.x"
-
-  node_type                  = local.redis_node_type
-  transit_encryption_enabled = false
 }
 

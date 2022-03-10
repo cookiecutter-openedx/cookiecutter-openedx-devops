@@ -51,43 +51,23 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  resource_name = local.resource_name
-  tags          = local.tags
+  # AWS RDS instance identifying information
+  resource_name         = local.resource_name
+  tags                  = local.tags
+  identifier            = "${local.resource_name}"
 
-  identifier = "${local.resource_name}"
+  # database identifying information
+  name                                = "openedx"
+  username                            = "{{ cookiecutter.mysql_username }}"
+  create_random_password              = {{ cookiecutter.mysql_create_random_password }}
+  iam_database_authentication_enabled = {{ cookiecutter.mysql_iam_database_authentication_enabled }}
 
-  name              = "openedx"
-  username          = "root"
-  port              = "3306"
-  engine            = "mysql"
-  engine_version    = "5.7.33"
-  instance_class    = local.mysql_instance_class
-  allocated_storage = 10
-
-  create_random_password              = "true"
-  iam_database_authentication_enabled = false
-
-  maintenance_window = "Sun:00:00-Sun:03:00"
-  backup_window      = "03:00-06:00"
-
-  backup_retention_period = 7
-
-  # DB subnet group
-  subnet_ids = dependency.vpc.outputs.database_subnets
-
-  # Security group
-  vpc_id              = dependency.vpc.outputs.vpc_id
-  ingress_cidr_blocks = [dependency.vpc.outputs.vpc_cidr_block]
-
-  # DB parameter group
-  family = "mysql5.7"
-  # DB option group
-  major_engine_version = "5.7"
-
-  # Database Deletion Protection
-  deletion_protection = false
-  skip_final_snapshot = true
-  # Custom DB parameters
+  # db server parameters
+  port                  = "{{ cookiecutter.mysql_port }}"
+  engine                = "{{ cookiecutter.mysql_engine }}"
+  engine_version        = "{{ cookiecutter.mysql_engine_version }}"
+  family                = "{{ cookiecutter.mysql_family }}"
+  major_engine_version  = "{{ cookiecutter.mysql_major_engine_version }}"
   parameters = [
     {
       name  = "character_set_client"
@@ -98,5 +78,22 @@ inputs = {
       value = "utf8mb4"
     }
   ]
+
+  # db server size
+  instance_class        = local.mysql_instance_class
+  allocated_storage     = {{ cookiecutter.mysql_allocated_storage }}
+
+  # backups and maintenance
+  maintenance_window    = "{{ cookiecutter.mysql_maintenance_window }}"
+  backup_window         = "{{ cookiecutter.mysql_backup_window }}"
+  backup_retention_period = {{ cookiecutter.mysql_backup_retention_period }}
+  deletion_protection   = {{ cookiecutter.mysql_deletion_protection }}
+  skip_final_snapshot   = {{ cookiecutter.mysql_skip_final_snapshot }}
+
+  # network configuration
+  subnet_ids            = dependency.vpc.outputs.database_subnets
+  vpc_id                = dependency.vpc.outputs.vpc_id
+  ingress_cidr_blocks   = [dependency.vpc.outputs.vpc_cidr_block]
+
 }
 

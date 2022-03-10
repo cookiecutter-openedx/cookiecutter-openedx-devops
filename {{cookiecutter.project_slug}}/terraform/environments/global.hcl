@@ -8,12 +8,12 @@
 #        Terragrunt modules in this repository.
 #------------------------------------------------------------------------------ 
 locals {
-  platform_name    = "organizationname"
-  platform_region  = "mexico"
-  root_domain      = "domainname.edu"
-  aws_region       = "us-east-1"
-  account_id       = "123456789012"
-  ec2_ssh_key_name = "pem_key_file_name"
+  platform_name    = "{{ cookiecutter.global_platform_name }}"
+  platform_region  = "{{ cookiecutter.global_platform_region }}"
+  root_domain      = "{{ cookiecutter.global_root_domain }}"
+  aws_region       = "{{ cookiecutter.global_aws_region }}"
+  account_id       = "{{ cookiecutter.global_account_id }}"
+  ec2_ssh_key_name = "{{ cookiecutter.global_ec2_ssh_key_name }}"
 
   tags = {
     Platform        = local.platform_name

@@ -26,9 +26,9 @@ jobs:
     env:
       KUBECONFIG: /home/runner/.kube/config
       ENVIRONMENT_ID: prod
-      NAMESPACE: web-stepwisemath-mexico
-      TUTOR_VERSION: v13.1.5
-      OPENEDX_COMMON_VERSION: open-release/maple.2
+      NAMESPACE: {{ cookiecutter.prod_environment }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}
+      TUTOR_VERSION: {{ cookiecutter.ci_build_TUTOR_VERSION }}
+      OPENEDX_COMMON_VERSION: {{ cookiecutter.ci_deploy_OPENEDX_COMMON_VERSION }}
 
     steps:
       - name: Checkout
@@ -41,10 +41,10 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-2
+          aws-region: {{ cookiecutter.global_aws_region }}
 
       - name: Get Kube config
-        run: aws eks --region us-east-2 update-kubeconfig --name web-stepwisemath-mexico --alias eks-prod
+        run: aws eks --region {{ cookiecutter.global_aws_region }} update-kubeconfig --name web-stepwisemath-mexico --alias eks-prod
 
       - name: Install kubectl
         uses: azure/setup-kubectl@v1
@@ -99,11 +99,11 @@ jobs:
         run: |-
           echo "TUTOR_RUN_SMTP=true" >> $GITHUB_ENV
           tutor config save --set EMAIL_BACKEND="django.core.mail.backends.smtp.EmailBackend" \
-                            --set EMAIL_HOST="email-smtp.us-east-1.amazonaws.com" \
+                            --set EMAIL_HOST="{{ cookiecutter.ci_deploy_EMAIL_HOST }}" \
                             --set EMAIL_HOST_PASSWORD=${{ secrets.AWS_SES_IAM_SECRET }} \
                             --set EMAIL_HOST_USER=${{ secrets.AWS_SES_IAM_KEY }} \
-                            --set EMAIL_PORT=587 \
-                            --set EMAIL_USE_TLS=true
+                            --set EMAIL_PORT={{ cookiecutter.ci_deploy_EMAIL_PORT }} \
+                            --set EMAIL_USE_TLS={{ cookiecutter.ci_deploy_EMAIL_USE_TLS }}
 
       # see: https://github.com/StepwiseMath/terraform-openedx/blob/main/components/secrets/session.tf
       - name: EDX Secret Key
@@ -142,7 +142,7 @@ jobs:
       #          OPENEDX_AWS_SECRET_ACCESS_KEY: A123456789srJ8lgel+ABCDEFGHIJKabcdefghijk
       #          S3_STORAGE_BUCKET: web-stepwisemath-mexico-storage
       #          S3_CUSTOM_DOMAIN: cdn.web.stepwisemath.ai
-      #          S3_REGION: us-east-2
+      #          S3_REGION: {{ cookiecutter.global_aws_region }}
       # 
       # this config depends on a public read-only AWS S3 bucket policy like this:
       # https://github.com/StepwiseMath/terraform-openedx/blob/main/components/s3/main.tf#L19
@@ -231,7 +231,7 @@ jobs:
 
       - name: Set theme
         run:  |-
-          tutor k8s settheme stepwise-edx-theme
+          tutor k8s settheme custom-edx-theme
 
       - name: Create admin user
         run:  |-

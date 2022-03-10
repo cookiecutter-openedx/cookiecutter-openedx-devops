@@ -18,4 +18,4 @@
 -e ./geogebra_xblock
 -e ./hdrXblock
 -e ./swxblock
--e ./stepwise-edx-plugin
+-e ./custom-edx-plugin

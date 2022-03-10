@@ -20,7 +20,7 @@ spec:
     solvers:
       - dns01:
           route53:
-            region: us-east-2
+            region: {{ cookiecutter.global_aws_region }}
             hostedZoneID: Z0232691KVI7Y7U23HBD
 
 ---

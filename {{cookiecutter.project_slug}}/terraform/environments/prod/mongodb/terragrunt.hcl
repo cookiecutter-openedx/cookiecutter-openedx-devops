@@ -80,12 +80,12 @@ inputs = {
                           {"apply_method"="pending-reboot","name"="ttl_monitor","value"="disabled"}
                           ]
 
-  master_username       = "root"
-  db_port               = 27017
-  deletion_protection   = false
-  engine                = "docdb"
-  engine_version        = "3.6.0"
-  retention_period      = 7
+  master_username       = "{{ cookiecutter.mongodb_master_username }}"
+  db_port               = {{ cookiecutter.mongodb_db_port }}
+  deletion_protection   = {{ cookiecutter.mongodb_deletion_protection }}
+  engine                = "{{ cookiecutter.mongodb_engine }}"
+  engine_version        = "{{ cookiecutter.mongodb_engine_version }}"
+  retention_period      = {{ cookiecutter.mongodb_retention_period }}
   enabled               = true
 
   availability_zones    = ["${local.aws_region}a", "${local.aws_region}b", "${local.aws_region}c"]
@@ -108,9 +108,9 @@ inputs = {
   storage_encrypted = false
   apply_immediately = false
   skip_final_snapshot = true
-  preferred_maintenance_window = ""
-  preferred_backup_window = "07:00-09:00"
-  auto_minor_version_upgrade = true
+  preferred_maintenance_window = "{{ cookiecutter.mongodb_preferred_maintenance_window }}"
+  preferred_backup_window = "{{ cookiecutter.mongodb_preferred_backup_window }}"
+  auto_minor_version_upgrade = {{ cookiecutter.mongodb_auto_minor_version_upgrade }}
 
   tags                  = local.tags
 
