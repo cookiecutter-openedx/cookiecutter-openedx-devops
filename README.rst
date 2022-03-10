@@ -78,7 +78,7 @@ Important Considerations
 Usage
 -----
 
-You use a popular command-line tool named `CookieCutter <https://github.com/cookiecutter/cookiecutter>`_ to generate your git code repository using this repo as a template.
+You use a popular command-line tool named `CookieCutter <https://cookiecutter.readthedocs.io/>`_ to generate your git code repository using this repo as a template.
 
 First, get Cookiecutter. Trust me, it's awesome:
 
