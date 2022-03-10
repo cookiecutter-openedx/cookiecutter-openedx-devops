@@ -39,8 +39,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: {% raw %}${{ secrets.AWS_ACCESS_KEY_ID }}{% endraw %}
+          aws-secret-access-key: {% raw %}${{ secrets.AWS_SECRET_ACCESS_KEY }}{% endraw %}
           aws-region: {{ cookiecutter.global_aws_region }}
 
       - name: Get Kube config
@@ -100,8 +100,8 @@ jobs:
           echo "TUTOR_RUN_SMTP=true" >> $GITHUB_ENV
           tutor config save --set EMAIL_BACKEND="django.core.mail.backends.smtp.EmailBackend" \
                             --set EMAIL_HOST="{{ cookiecutter.ci_deploy_EMAIL_HOST }}" \
-                            --set EMAIL_HOST_PASSWORD=${{ secrets.AWS_SES_IAM_SECRET }} \
-                            --set EMAIL_HOST_USER=${{ secrets.AWS_SES_IAM_KEY }} \
+                            --set EMAIL_HOST_PASSWORD={% raw %}${{ secrets.AWS_SES_IAM_SECRET }}{% endraw %} \
+                            --set EMAIL_HOST_USER={% raw %}${{ secrets.AWS_SES_IAM_KEY }}{% endraw %} \
                             --set EMAIL_PORT={{ cookiecutter.ci_deploy_EMAIL_PORT }} \
                             --set EMAIL_USE_TLS={{ cookiecutter.ci_deploy_EMAIL_USE_TLS }}
 
@@ -181,8 +181,8 @@ jobs:
 
       - name: Configure 3rd Party Authentication
         run:  |-
-          tutor config save --set OPENEDX_FACEBOOK_APP_ID="${{ secrets.FACEBOOK_APP_ID }}" \
-                            --set OPENEDX_FACEBOOK_APP_SECRET="${{ secrets.FACEBOOK_APP_SECRET }}"
+          tutor config save --set OPENEDX_FACEBOOK_APP_ID="{% raw %}${{ secrets.FACEBOOK_APP_ID }}{% endraw %}" \
+                            --set OPENEDX_FACEBOOK_APP_SECRET="{% raw %}${{ secrets.FACEBOOK_APP_SECRET }}{% endraw %}"
 
       - name: Generate Tutor Config
         run:  |-

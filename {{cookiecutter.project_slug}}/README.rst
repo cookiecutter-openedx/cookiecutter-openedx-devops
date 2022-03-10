@@ -253,6 +253,14 @@ FAQ
 
 Why Use Tutor?
 ~~~~~~~~~~~~~~
+Tutor is the official Docker-based Open edX distribution, both for production and local development. The goal of Tutor is to make it easy to deploy, customize, upgrade and scale Open edX. Tutor is reliable, fast, extensible, and it is already used to deploy hundreds of Open edX platforms around the world.
+
+- Runs on Docker
+- 1-click installation and upgrades
+- Comes with batteries included: theming, SCORM, HTTPS, web-based administration interface, mobile app, custom translations…
+- Extensible architecture with plugins
+- Works out of the box with Kubernetes
+- Amazing premium plugins available in the Tutor Wizard Edition, including Cairn the next-generation analytics solution for Open edX.
 
 
 Why Use Docker?

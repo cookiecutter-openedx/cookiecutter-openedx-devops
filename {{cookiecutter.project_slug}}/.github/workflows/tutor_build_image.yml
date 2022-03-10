@@ -31,8 +31,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: {% raw %}${{ secrets.AWS_ACCESS_KEY_ID }}{% endraw %}
+          aws-secret-access-key: {% raw %}${{ secrets.AWS_SECRET_ACCESS_KEY }}{% endraw %}
           aws-region: {{ cookiecutter.global_aws_region }}
 
       - name: Login to Amazon ECR
@@ -70,7 +70,7 @@ jobs:
         with:
           repository: {{ cookiecutter.ci_build_theme_repository }}
           path: ${{ env.THEMES_PATH }}/custom-edx-theme
-          token: ${{ secrets.PAT }}
+          token: {% raw %}${{ secrets.PAT }}{% endraw %}
           ref: {{ cookiecutter.ci_build_theme_ref }}
 
       - name: Checkout custom edx plugin repo
@@ -78,7 +78,7 @@ jobs:
         with:
           repository: {{ cookiecutter.ci_build_plugin_repository }}
           path: ${{ env.PLUGINS_PATH }}/custom-edx-plugin
-          token: ${{ secrets.PAT }}
+          token: {% raw %}${{ secrets.PAT }}{% endraw %}
           ref: {{ cookiecutter.ci_build_plugin_ref }}
 
       - name: Checkout example xblock repo
@@ -86,7 +86,7 @@ jobs:
         with:
           repository: {{ cookiecutter.ci_build_xblock_org }}/{{ cookiecutter.ci_build_xblock_repository }}
           path: ${{ env.PLUGINS_PATH }}/{{ cookiecutter.ci_build_xblock_repository }}
-          token: ${{ secrets.PAT }}
+          token: {% raw %}${{ secrets.PAT }}{% endraw %}
           ref: {{ cookiecutter.ci_build_xblock_ref }}
 
       - name: Validate custom resource locations

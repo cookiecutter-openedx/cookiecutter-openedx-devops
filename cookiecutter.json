@@ -2,7 +2,7 @@
     "project_slug": "openedx_devops",
     "global_platform_name": "yourschool",
     "global_platform_region": "virginia",
-    "global_root_domain": "yourschool.edu",
+    "global_root_domain": "{{ cookiecutter.global_platform_name|lower|replace(' ', '-') }}.edu",
     "global_aws_region": "us-east-1",
     "global_account_id": "123456789012",
     "global_ec2_ssh_key_name": "any-valid-pem-key-file-name",
@@ -43,7 +43,7 @@
     "redis_number_cache_clusters": 1,
     "redis_port": 6379,
     "redis_family": "redis6.x",
-    "ci_deploy_EMAIL_HOST": "email-smtp.us-east-1.amazonaws.com",
+    "ci_deploy_EMAIL_HOST": "email-smtp.{{ cookiecutter.global_aws_region|lower|replace(' ', '-') }}.amazonaws.com",
     "ci_deploy_EMAIL_PORT": 587,
     "ci_deploy_EMAIL_USE_TLS": true
 }
