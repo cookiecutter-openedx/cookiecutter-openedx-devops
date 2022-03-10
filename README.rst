@@ -70,6 +70,7 @@ These would result in environments like the following:
 Important Considerations
 ------------------------
 
+- this CookieCutter can only generate a GitHub repository.
 - the Terraform code and Github Actions workflows in your new repository will only work for AWS.
 - the application domain for your Open edX installation (ie courses.yourschool.edu) must be hosted in `AWS Route53 <https://console.aws.amazon.com/route53/v2/hostedzones#>`_. Terraform will create several DNS entries inside of this hosted zone, and it will optionally create additional hosted zones (one for each additional optional environment) that will be linked to the hosted zone of your application domain.
 - the Github Actions workflows in your new repository will depend on secrets located in the repository settings page. Look for further instructions in the README of your new repository.
