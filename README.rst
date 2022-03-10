@@ -73,7 +73,7 @@ Important Considerations
 - the Github Actions workflows depend on secrets `located here <settings> (see 'secrets/actions' from the left menu bar) `_
 - the Github Actions use an AWS IAM key pair from `this manually-created user named *ci* <https://console.aws.amazon.com/iam/home#/users/ci?section=security_credentials>`_
 - the collection of resources created by these scripts **will generate AWS costs of around $0.41 USD per hour ($10.00 USD per day)** while the platform is in a mostly-idle pre-production state. This cost will grow proportionally to your production work loads.
-- **BE ADVISED** that MySQL RDS, MongoDB and Redis ElastiCache are vertically scaled **manually** and therefore require some insight and potential adjustments on your part. All of these services are defaulted to their minimum instance sizes which you can modify in the `environment configuration file <terraform/environments/prod/env.hcl>`_
+- **BE ADVISED** that MySQL RDS, MongoDB and Redis ElastiCache are vertically scaled **manually** and therefore require some insight and potential adjustments on your part. All of these services are defaulted to their minimum instance sizes which you can modify in the environment configuration file.
 
 Usage
 -----
@@ -182,7 +182,7 @@ Quick Start (After running CookieCutter)
 I. Add Your Secret Credentials To Your New Repository
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Github Actions workflows in your new repository depend on several `workflow secrets <settings>`_ including two sets of AWS IAM keypairs, one for CI workflows and another for the AWS Simple Email Service. 
+The Github Actions workflows in your new repository depend on several workflow secrets including two sets of AWS IAM keypairs, one for CI workflows and another for the AWS Simple Email Service. 
 Additionally, they require a Github Personal Access Token (PAT) for a Github user account with all requisite privileges in your new repository as well as any other repositories that are cloned during any of the build / installation pipelines.
 
 .. image:: doc/repository-secrets.png
@@ -192,7 +192,7 @@ Additionally, they require a Github Personal Access Token (PAT) for a Github use
 II. Configure Your Open edX Back End
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Review your `global parameters <terraform/environments/global.hcl>`_. These were pre-populated from your responses to the CookieCutter command-line questionnaire.
+Review your global parameters. These were pre-populated from your responses to the CookieCutter command-line questionnaire.
 
 .. code-block:: hcl
 
@@ -206,7 +206,7 @@ Review your `global parameters <terraform/environments/global.hcl>`_. These were
   }
 
 
-Review your `production environment parameters <terraform/environments/prod/env.hcl>`_. 
+Review your production environment parameters. 
 
 .. code-block:: hcl
 
@@ -304,14 +304,14 @@ Specifically with regard to MySQL, several 3rd party analytics tools provide out
 V. Build your Tutor Docker Image
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Use `this automated Github Actions workflow <actions/workflows/tutor_build_image.yml>`_ to build a customized Open edX Docker container based on the latest stable version of Open edX (current maple.2) and
+Use the included automated Github Actions workflow to build a customized Open edX Docker container based on the latest stable version of Open edX (current maple.2) and
 your Open edX custom theme repository and Open edX plugin repository. Your new Docker image will be automatically uploaded to AWS Amazon Elastic Container Registry
  
 
 VI. Deploy your Docker Image to a Kubernetes Cluster
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Use `this automated Github Actions workflow <actions/workflows/tutor_deploy_prod.yml>`_ to deploy your customized Docker container to a Kubernetes Cluster.
+Use the included automated Github Actions workflow to deploy your customized Docker container to a Kubernetes Cluster.
 Open edX LMS and Studio configuration parameters are located here 
 
 
@@ -320,8 +320,6 @@ Setting Up Github Actions CI
 
 I. tutor_build_image
 ~~~~~~~~~~~~~~~~~~~~
-
-Set the `ECR_REGISTRY <.github/workflows/tutor_build_image.yml#L23>`_
 
 check CookieCutter for how to create a loop for Xblock settings.
 
