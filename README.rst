@@ -160,19 +160,19 @@ Enter the project and take a look around:
 
 .. code-block:: shell
 
-    $ cd openedx_devops/
-    $ ls
+    cd openedx_devops/
+    ls
 
 Create a git repo and push it there:
 
 .. code-block:: shell
 
-  $ git init
-  $ git add .
-  $ git commit -m "first commit"
-  $ git branch -M main
-  $ git remote add origin https://github.com/lpm0073/openedx_devops.git
-  $ git push -u origin main
+  git init
+  git add .
+  git commit -m "first commit"
+  git branch -M main
+  git remote add origin https://github.com/lpm0073/openedx_devops.git
+  git push -u origin main
 
 Now take a look at your repo. Don't forget to carefully look at the generated README. Awesome, right?
 
