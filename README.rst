@@ -324,12 +324,12 @@ Use the included automated Github Actions workflow "Tutor Deploy Prod" to deploy
 About The Open edX Platform Back End
 ------------------------------------
 
-The scripts in the `terraform <terraform>`_ folder provide 1-click functionality to create and manage all resources in your AWS account. 
+The scripts in the `terraform <terraform>`_ folder of your new repo will provide 1-click functionality to create and manage all resources in your AWS account. 
 These scripts generally follow current best practices for implementing a large Python Django web platform like Open edX in a secure, cloud-hosted environment.
 Besides reducing human error, there are other tangible improvements to managing your cloud infrastructure with Terraform as opposed to creating and managing your cloud infrastructure resources manually from the AWS console. 
 For example, all AWS resources are systematically tagged which in turn facilitates use of CloudWatch and improved consolidated logging and AWS billing expense reporting.
 
-These scripts will create the following resources in your AWS account:
+The Terraform scripts in your new repository will allow you to automatically create the following resources in your AWS account:
 
 - **MySQL**. uses `AWS RDS <https://aws.amazon.com/rds/>`_ for all MySQL data, accessible inside the vpc as mysql.courses.yourschool.edu:3306. Instance size settings are located in the `environment configuration file <terraform/environments/prod/env.hcl>`_, and other common configuration settings `are located here <terraform/environments/prod/rds/terragrunt.hcl>`_. Passwords are stored in `Kubernetes Secrets <https://kubernetes.io/docs/concepts/configuration/secret/>`_ accessible from the EKS cluster.
 - **MongoDB**. uses `AWS DocumentDB <https://aws.amazon.com/documentdb/>`_ for all MongoDB data, accessible insid the vpc as mongodb.master.courses.yourschool.edu:27017 and mongodb.reader.courses.yourschool.edu. Instance size settings are located in the `environment configuration file <terraform/environments/prod/env.hcl>`_, and other common configuration settings `are located here <terraform/components/documentdb>`_. Passwords are stored in `Kubernetes Secrets <https://kubernetes.io/docs/concepts/configuration/secret/>`_ accessible from the EKS cluster.
