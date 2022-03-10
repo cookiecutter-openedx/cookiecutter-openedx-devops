@@ -21,7 +21,7 @@ spec:
       - dns01:
           route53:
             region: {{ cookiecutter.global_aws_region }}
-            hostedZoneID: Z0232691KVI7Y7U23HBD
+            hostedZoneID: {{ cookiecutter.global_aws_route53_hosted_zone_id }}
 
 ---
 apiVersion: cert-manager.io/v1

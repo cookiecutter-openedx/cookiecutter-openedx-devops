@@ -79,7 +79,7 @@
     "SESSION_COOKIE_SECURE": true,
     "SOCIAL_AUTH_REDIRECT_IS_HTTPS": true,
     "SOCIAL_AUTH_RAISE_EXCEPTIONS": false,
-    "SOCIAL_AUTH_BACKEND_ERROR_URL": "https://{{ cookiecutter.prod_environment }}.{{ cookiecutter.global_root_domain }}/stepwise/marketing-redirector/?stepwise_page=oauth-error",
+    "SOCIAL_AUTH_BACKEND_ERROR_URL": "https://{{ cookiecutter.prod_environment }}.{{ cookiecutter.global_root_domain }}/oauth-error",
     "SOCIAL_MEDIA_FOOTER_URLS": {
         "linkedin": "https://www.linkedin.com/",
         "twitter": "https://twitter.com/",

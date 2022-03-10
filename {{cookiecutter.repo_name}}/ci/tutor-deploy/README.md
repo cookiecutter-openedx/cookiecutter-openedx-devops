@@ -1,5 +1,5 @@
 # tutor-deploy
-##  Stepwise Math Tutor Deployment
+##  Open edX Tutor Deployment
 This repository contains a set of GitHub actions workflows to deploy Tutor's Open edX onto our [Kubenetes (EKS) cluster](https://github.com/{{ cookiecutter.github_account_name }}/terraform-aws).
 
 

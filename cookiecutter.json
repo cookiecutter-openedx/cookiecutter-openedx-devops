@@ -5,6 +5,7 @@
     "global_platform_description": "Your School",
     "global_platform_region": "virginia",
     "global_root_domain": "{{ cookiecutter.global_platform_name|lower|replace(' ', '-') }}.edu",
+    "global_aws_route53_hosted_zone_id": "For your root domain. Values look like this: Z0232691KVI7Y7U23HBD",
     "global_aws_region": "us-east-1",
     "global_account_id": "123456789012",
     "global_ec2_ssh_key_name": "any-valid-pem-key-file-name",

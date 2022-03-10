@@ -1,5 +1,5 @@
 # tutor-build
-## Stepwise Math Tutor image building
+## Open edX Tutor image building
 
 This repository contains a GitHub actions workflow that assists with the process of building a custom docker image for Open edX. It essentially captures what is described in Tutor's official documentation [here](https://docs.tutor.overhang.io/configuration.html#custom-open-edx-docker-image).
 
