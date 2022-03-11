@@ -54,6 +54,13 @@ inputs = {
   single_nat_gateway   = true
   enable_dns_hostnames = true
 
+  # a bit of foreshadowing:
+  # AWS EKS uses tags for identifying resources which it interacts.
+  # here we are tagging the public and private subnets with specially-named tags
+  # that EKS uses to know where its public and internal load balancers should be placed.
+  #
+  # these tags are required, regardless of whether we're using EKS with EC2 worker nodes
+  # or with a Fargate Compute Cluster.
   public_subnet_tags = {
     "kubernetes.io/cluster/${local.environment_namespace}" = "shared"
     "kubernetes.io/role/elb"                               = "1"
