@@ -200,7 +200,7 @@ Specifically with regard to MySQL, several 3rd party analytics tools provide out
 Continuous Integration (CI)
 ---------------------------
 
-Both the Build as well as the Deploy workflows were pre-configured based on your responses to the CookieCutter questionnaire. Look for these two files in `.github/workflows <.github/workflows>`_. You'll find additional Open edX deployment and configuration files in `ci/tutor-build <ci/tutor-build>`_ and `ci/tutor-deploy <ci/tutor-deploy>`_
+Both the Build as well as the Deploy workflows were pre-configured based on your responses to the Cookiecutter questionnaire. Look for these two files in `.github/workflows <.github/workflows>`_. You'll find additional Open edX deployment and configuration files in `ci/tutor-build <ci/tutor-build>`_ and `ci/tutor-deploy <ci/tutor-deploy>`_
 
 
 I. Build your Tutor Docker Image

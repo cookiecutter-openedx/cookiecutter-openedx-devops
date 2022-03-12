@@ -4,7 +4,7 @@ Terraform environments give you the ability to create multiple, distinct AWS VPC
 
 The general strategy is that a common set of parameters are defined in [terraform/environments/global.hcl](terraform/environments/global.hcl) that each environment uses, plus, each environment maintains its own set of parameters for environment-specific settings like domain names and resource instances sizes for example.
 
-On an aside, choosing appropriate names for Terragrunt environments was a struggle. the environment named **prod** in this folder was originally named **live** as a means of differentiating it from alternative environments like say, **sandbox**. This was sensible, but it also complicates managing consistent namespaces in AWS and in Kubernetes. We opted to rename this to **prod** since CookieCutter only creates one single environment for you, and this is where your prod environment resides. Unfortunately, this creates some potential confusion given that the recommended way of creating dev / qa / test environments is to add appropriately named subdomains to prod.
+On an aside, choosing appropriate names for Terragrunt environments was a struggle. the environment named **prod** in this folder was originally named **live** as a means of differentiating it from alternative environments like say, **sandbox**. This was sensible, but it also complicates managing consistent namespaces in AWS and in Kubernetes. We opted to rename this to **prod** since Cookiecutter only creates one single environment for you, and this is where your prod environment resides. Unfortunately, this creates some potential confusion given that the recommended way of creating dev / qa / test environments is to add appropriately named subdomains to prod.
 
 So, to be clear, creating additional Terragrunt environments might be more separation than you actually require, and add more costs than your budget can bear. Keep in mind that this is probably more easily accomplished simply by adding subdomains to the one VPC that is created based on the settings in [terraform/environments/prod/env.hcl](terraform/environments/prod/env.hcl), as follows:
 
@@ -22,7 +22,7 @@ The difference between these two methodologies is that the former creates an ent
 
 1. You would take this approach if, for example, internal policy at your organization dictactates that developers and qa staff **must** be completely isolated from your prod environment. That is precisely what an additional Terragrunt environment provides for you. This affords you absolute separation between environemnts, but at significantly higher AWS cost and more support burden on you.
 
-2. An alternative scenario would be that, for quality-of-service reasons, you want to completely separate a large MOOC from the course content that you offer to regularly-enrolled students. To accomplish this you could use the **prod** environement created by CookieCutter for your enrolled students, and then create a second environment named **mooc**.
+2. An alternative scenario would be that, for quality-of-service reasons, you want to completely separate a large MOOC from the course content that you offer to regularly-enrolled students. To accomplish this you could use the **prod** environement created by Cookiecutter for your enrolled students, and then create a second environment named **mooc**.
 
 ### Why wouldn't you create an additional Terragrunt environment?
 
