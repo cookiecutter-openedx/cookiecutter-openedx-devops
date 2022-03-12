@@ -404,11 +404,13 @@ Contributors are welcome. Contact me here: `lawrencemcdaniel.com <https://lawren
 
 Special Thanks
 ~~~~~~~~~~~~~~
-Special thanks go out to several folks in the open source community who've already made signficant contributions to this project.
+Special thanks go out to several folks in the open source community who've already made signficant contributions to this project, even if they're not actually aware.
 
 - to `Régis Behmo <https://overhang.io/>`_ for creating Tutor, where the real magic happens. Without Tutor you wouldn't be reading this right now.
 - to `Miguel Afonso <https://www.linkedin.com/in/mmafonso/>`_, who architected the Kubernetes-based deployment of Open edX and wrote nearly all of the early versions of the CI and Terraform code.
+- to `Harshet Jain <https://www.linkedin.com/in/harshet-jain/>`_ for publishing a `great article <https://betterprogramming.pub/with-latest-updates-create-amazon-eks-fargate-cluster-and-managed-node-group-using-terraform-bc5cfefd5773>`_ on how to implement an AWS Elastic Kubernetes Fargate Cluster.
 - to the guys at `hastexo/tutor-contrib-s3 <https://github.com/hastexo/tutor-contrib-s3>`_, who lead the effort to create a version of their AWS S3 plugin that works with this code base.
+- to the guys at `Cookiecutter Django <https://github.com/cookiecutter/cookiecutter-django>`_ on which I relied heavily for coding examples for this project.
 - to `Querium Corp <https://querium.com/>`_, who generously allowed me to open-source this repository.
 - to **UK Cabinet Office**, who created and still use the original version of this code base to manage their production Open edX environment.
 - to `Turn The Bus <https://turnthebus.org/>`_, for helping me with the requisite code refactoring that preceded publication of this CookieCutter template.

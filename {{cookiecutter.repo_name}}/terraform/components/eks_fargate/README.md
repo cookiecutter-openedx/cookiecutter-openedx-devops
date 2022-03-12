@@ -1,4 +1,4 @@
-## Elastic Kubernetes Cluster with Fargate Compute Cluster
+## Elastic Kubernetes Fargate Cluster
 
 This is an alternative implementation of an [Elastic Kubernetes Cluster (EKS)](https://aws.amazon.com/eks/) using [AWS Fargate](https://aws.amazon.com/fargate/) as a replacement to more traditional [AWS EC2 compute instances](https://aws.amazon.com/ec2/). This Terraform component implements an [Application Load Balancer (ALB)](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html) that routes traffic to an EKS cluser that in turn manages its pods inside of a Fargate cluster.
 
