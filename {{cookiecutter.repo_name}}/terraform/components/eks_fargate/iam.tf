@@ -7,6 +7,8 @@
 # usage: build an EKS cluster load balancer that uses a Fargate Compute Cluster
 #------------------------------------------------------------------------------ 
 
+# Harshet Jain: As you can see, we also need to attach a role to the cluster, 
+# which will give it the necessary permission for interacting with the nodes. 
 resource "aws_iam_role" "eks_cluster_role" {
   name = "${var.cluster_name}-cluster-role"
   description = "Allow cluster to manage node groups, fargate nodes and cloudwatch logs"
@@ -41,7 +43,8 @@ resource "aws_iam_role_policy_attachment" "AmazonEKSVPCResourceController1" {
 }
 
 #------------------------------------------------------------------------------
-# Node Group roles
+# Harshet Jain: The node group also requires an attached role in order to 
+# communicate with the pods running on it, which is set up as follows:
 #------------------------------------------------------------------------------
 resource "aws_iam_role" "eks_node_group_role" {
   name = "${var.cluster_name}-node-group_role"
@@ -75,6 +78,10 @@ resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly" {
 
 #------------------------------------------------------------------------------
 # Fargate profile roles
+#
+# Harshet Jain: the Fargate profile also requires an attached role that lets 
+# the Fargate controller make calls to the AWS API on your behal, 
+# which is setup as follows:
 #------------------------------------------------------------------------------
 resource "aws_iam_role" "eks_fargate_role" {
   name = "${var.cluster_name}-fargate_cluster_role"
@@ -115,9 +122,9 @@ resource "aws_iam_role_policy_attachment" "AmazonEKSVPCResourceController" {
 }
 
 #------------------------------------------------------------------------------
-# Add Cloudwatch
+# Harchet Jain: We’ll also add CloudWatch metrics to this cluster. 
+# For this, we need to add the CloudWatch log group, which is set up as follows:
 #------------------------------------------------------------------------------
-
 resource "aws_iam_policy" "AmazonEKSClusterCloudWatchMetricsPolicy" {
   name   = "AmazonEKSClusterCloudWatchMetricsPolicy"
   policy = <<EOF

@@ -10,6 +10,12 @@ locals {
 
 }
 
+#------------------------------------------------------------------------------
+# Setup Kubernetes
+#
+# Harshet Jain:  First, we tell Terraform where our Kubernetes cluster is 
+# running. For this, we need to add a kubernetes provider, like this:
+#------------------------------------------------------------------------------ 
 data "aws_eks_cluster" "cluster" {
   name = module.eks.cluster_id
 }
@@ -18,39 +24,17 @@ data "aws_eks_cluster_auth" "cluster" {
   name = module.eks.cluster_id
 }
 
-provider "kubernetes" {
-  host                   = data.aws_eks_cluster.cluster.endpoint
-  cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
-  token                  = data.aws_eks_cluster_auth.cluster.token
-  load_config_file       = false
-}
-
-resource "kubernetes_namespace" "fargate" {
-  metadata {
-    name = "openedx"
-  }
-    name = "fargate-node"
-  }
-
-
-resource "aws_eks_cluster" "eks_cluster" {
-  name     = "${var.cluster_name}"
-   
-  role_arn = aws_iam_role.eks_cluster_role.arn
-  enabled_cluster_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
-  
-   vpc_config {
-    subnet_ids =  concat(var.public_subnets, var.private_subnets)
-  }
-   
-   timeouts {
-     delete    = "30m"
-   }
-}
 
 
 #------------------------------------------------------------------------------
-# Node Group
+# Harshet Jain: Create a node group
+# Now we have the cluster set up and ready, but we don’t have any nodes yet to run our pods on. 
+# It’s possible to run your pods without any nodes. But you need to do some 
+# tweaking to the CoreDNS deployment (more on that here and here).
+# So instead, we’ll create a node group for the kube-system namespace, which is
+# used to run any pods necessary for operating the Kubernetes cluster. We can 
+# launch the node group in the public/private subnets. 
+# The setup looks as follows:
 #------------------------------------------------------------------------------
 
 resource "aws_eks_node_group" "eks_node_group" {
@@ -70,6 +54,13 @@ resource "aws_eks_node_group" "eks_node_group" {
 
 #------------------------------------------------------------------------------
 # Fargate profile
+#
+# Harshet Jain: In order to run pods in a Fargate (serverless) configuration, 
+# we first need to create a Fargate profile. This profile defines namespaces 
+# and selectors, which are used to identify which pods should be run on the 
+# Fargate nodes. Make sure Fargate pods can only run in private subnets. 
+#
+# The setup looks as follows:
 #------------------------------------------------------------------------------
 resource "aws_eks_fargate_profile" "eks_fargate" {
   cluster_name           = aws_eks_cluster.eks_cluster.name

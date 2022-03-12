@@ -4,7 +4,26 @@
 #
 # date: March-2022
 #
-# usage: build an EKS cluster load balancer that uses a Fargate Compute Cluster
+# usage: build an Application Load Balancer (ALB) to receive public traffic
+#        to route to the EKS.
+#
+# Harshet Jain
+# ------------
+# NOTE: Three load balancers are available: CLB, NLB, and ALB . 
+#       You can choose any one of them.
+# 
+#       explanations for implementing Classic Load Balancer and Network Load Balancer are 
+#       located here: https://betterprogramming.pub/with-latest-updates-create-amazon-eks-fargate-cluster-and-managed-node-group-using-terraform-bc5cfefd5773
+#
+#       Creating an ALB is a bit more complicated. We need an ALB to connect us 
+#       to any running pod and also to register the available target pods with 
+#       the ALB. We need an Ingress controller for this. 
+#------------------------------------------------------------------------------ 
+
+#------------------------------------------------------------------------------ 
+# Harshet Jain:
+# Once the Ingress controller has been deployed, now we can create the ALB 
+# for the web app using Kubernetes Ingress.
 #------------------------------------------------------------------------------ 
 resource "kubernetes_ingress" "app" {
   metadata {
@@ -41,7 +60,12 @@ resource "kubernetes_ingress" "app" {
   depends_on = [kubernetes_service.app]
 }
 
-
+#------------------------------------------------------------------------------ 
+# Harshet Jain: to deploy the Ingress controller into our cluster.
+#
+# mcdaniel:
+# FIX NOTE: might need to move this into Github Actions deploy script.
+#------------------------------------------------------------------------------ 
 resource "kubernetes_deployment" "ingress" {
   metadata {
     name      = "alb-ingress-controller"
@@ -109,38 +133,11 @@ resource "kubernetes_deployment" "ingress" {
 }
 
 
-resource "aws_iam_role" "eks_alb_ingress_controller" {
-  name        = "eks-alb-ingress-controller"
-  description = "Permissions required by the Kubernetes AWS ALB Ingress controller to do its job."
-
-  force_detach_policies = true
-
-  assume_role_policy = <<ROLE
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Federated": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/${replace(data.aws_eks_cluster.cluster.identity[0].oidc[0].issuer, "https://", "")}"
-      },
-      "Action": "sts:AssumeRoleWithWebIdentity",
-      "Condition": {
-        "StringEquals": {
-          "${replace(data.aws_eks_cluster.cluster.identity[0].oidc[0].issuer, "https://", "")}:sub": "system:serviceaccount:kube-system:alb-ingress-controller"
-        }
-      }
-    }
-  ]
-}
-ROLE
-}
-
-resource "aws_iam_role_policy_attachment" "ALB-policy_attachment" {
-  policy_arn = aws_iam_policy.ALB-policy.arn
-  role       = aws_iam_role.eks_alb_ingress_controller.name
-}
-
+#------------------------------------------------------------------------------ 
+# Harshet Jain: For the Ingress controller to have access rights to create the 
+# ALB and to register target pods on the ALB, we need to create a 
+# policy allowing that.
+#------------------------------------------------------------------------------
 
 resource "aws_iam_policy" "ALB-policy" {
   name   = "ALBIngressControllerIAMPolicy"
@@ -266,6 +263,53 @@ resource "aws_iam_policy" "ALB-policy" {
 POLICY
 }
 
+#------------------------------------------------------------------------------ 
+# Harshet Jain: create a role, and attach the policy defined above 
+# with this role.
+#------------------------------------------------------------------------------ 
+resource "aws_iam_role" "eks_alb_ingress_controller" {
+  name        = "eks-alb-ingress-controller"
+  description = "Permissions required by the Kubernetes AWS ALB Ingress controller to do its job."
+
+  force_detach_policies = true
+
+  assume_role_policy = <<ROLE
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/${replace(data.aws_eks_cluster.cluster.identity[0].oidc[0].issuer, "https://", "")}"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "${replace(data.aws_eks_cluster.cluster.identity[0].oidc[0].issuer, "https://", "")}:sub": "system:serviceaccount:kube-system:alb-ingress-controller"
+        }
+      }
+    }
+  ]
+}
+ROLE
+}
+
+resource "aws_iam_role_policy_attachment" "ALB-policy_attachment" {
+  policy_arn = aws_iam_policy.ALB-policy.arn
+  role       = aws_iam_role.eks_alb_ingress_controller.name
+}
+
+#------------------------------------------------------------------------------ 
+# Harshet Jain:
+# We also need a cluster role for the Ingress controller, a service account 
+# that’s bound to this role that has the previously created IAM role attached.
+#
+# mcdaniel:
+# we accomplish this by creating the following three resources:
+# - kubernetes_cluster_role
+# - kubernetes_cluster_role_binding
+# - kubernetes_service_account
+#------------------------------------------------------------------------------ 
 resource "kubernetes_cluster_role" "ingress" {
   metadata {
     name = "alb-ingress-controller"
@@ -324,4 +368,3 @@ resource "kubernetes_service_account" "ingress" {
     }
   }
 }
-
