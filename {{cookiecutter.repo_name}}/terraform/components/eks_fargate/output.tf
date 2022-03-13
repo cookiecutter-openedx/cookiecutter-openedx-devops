@@ -21,10 +21,6 @@ data "kubernetes_ingress" "address" {
   }
 }
 
-output "database_endpoint" {
-    value = "${data.aws_db_instance.database.address}"
-}
-
 output "server_dns" {
     value = "${data.kubernetes_ingress.address.load_balancer_ingress}"
 }

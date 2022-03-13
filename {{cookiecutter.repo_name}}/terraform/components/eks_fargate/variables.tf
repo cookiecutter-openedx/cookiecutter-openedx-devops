@@ -25,8 +25,6 @@ variable "private_subnets" {
   type        = list(string)
 }
 
-variable "eks_node_group_instance_types" {}
-
 variable "vpc_id" {
   description = "VPC where the cluster and workers will be deployed."
   type        = string
@@ -51,6 +49,16 @@ variable "enable_irsa" {
   description = "Whether to create OpenID Connect Provider for EKS to enable IRSA"
   type        = bool
   default     = false
+}
+
+variable "map_roles" {
+  description = "Additional IAM roles to add to the aws-auth configmap. See examples/basic/variables.tf for example format."
+  type = list(object({
+    rolearn  = string
+    username = string
+    groups   = list(string)
+  }))
+  default = []
 }
 
 variable "map_users" {
@@ -80,4 +88,23 @@ variable "tags" {
 variable "environment" {
   description = "environment name"
   type        = string
+}
+
+variable "eks_node_group_instance_types" {}
+
+variable "worker_group_instance_type" {
+  description = "Instance type for the worker group"
+  type        = string
+  default     = null
+}
+variable "worker_group_asg_max_size" {
+  description = "Max number of nodes on the worker group ASG"
+  type        = number
+  default     = 1
+}
+
+variable "worker_group_asg_min_size" {
+  description = "Min number of nodes on the worker group ASG"
+  type        = number
+  default     = 1
 }

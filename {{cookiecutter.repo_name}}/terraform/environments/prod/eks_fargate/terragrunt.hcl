@@ -72,6 +72,9 @@ inputs = {
   worker_group_asg_min_size  = 1
   worker_group_instance_type = local.eks_worker_group_instance_type
 
+
+  map_roles = []
+
   # TODO: Make this dynamic from list of users / ops user management
   map_users = [
     {
