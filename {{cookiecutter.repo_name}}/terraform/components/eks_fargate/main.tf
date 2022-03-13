@@ -117,7 +117,7 @@ resource "aws_eks_node_group" "eks_node_group" {
     min_size     = 2
   }
 
-  instance_types  = ["${var.eks_node_group_instance_types}"]
+  instance_types  = ["${var.worker_group_instance_type}"]
 }
 
 #------------------------------------------------------------------------------

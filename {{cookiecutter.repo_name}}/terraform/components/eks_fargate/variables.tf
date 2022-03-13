@@ -90,8 +90,6 @@ variable "environment" {
   type        = string
 }
 
-variable "eks_node_group_instance_types" {}
-
 variable "worker_group_instance_type" {
   description = "Instance type for the worker group"
   type        = string
