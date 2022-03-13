@@ -14,10 +14,6 @@ output "cluster_name" {
   value = aws_eks_cluster.eks_cluster.name
 }
 
-data "aws_db_instance" "database" {
-  db_instance_identifier = "${var.identifier}-${var.environment}"
-}
-
 data "kubernetes_ingress" "address" {
   metadata {
     name = "owncloud-lb"
