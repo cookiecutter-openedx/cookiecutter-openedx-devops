@@ -53,8 +53,6 @@ variable "enable_irsa" {
   default     = false
 }
 
-variable "map_role" {}
-
 variable "map_users" {
   description = "Additional IAM users to add to the aws-auth configmap. See examples/basic/variables.tf for example format."
   type = list(object({

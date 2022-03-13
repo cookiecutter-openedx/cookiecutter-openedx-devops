@@ -60,6 +60,7 @@ inputs = {
   #enable_irsa     = true
 
   # Subnets
+  subnets = dependency.vpc.outputs.private_subnets
   private_subnets = dependency.vpc.outputs.private_subnets
   public_subnets = dependency.vpc.outputs.public_subnets
   vpc_id  = dependency.vpc.outputs.vpc_id
@@ -70,7 +71,6 @@ inputs = {
   worker_group_asg_max_size  = 5
   worker_group_asg_min_size  = 1
   worker_group_instance_type = local.eks_worker_group_instance_type
-
 
   # TODO: Make this dynamic from list of users / ops user management
   map_users = [
