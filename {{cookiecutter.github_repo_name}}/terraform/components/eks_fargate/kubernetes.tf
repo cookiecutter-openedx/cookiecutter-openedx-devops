@@ -19,10 +19,12 @@ provider "kubernetes" {
 #------------------------------------------------------------------------------
 resource "kubernetes_namespace" "fargate" {
   metadata {
-    name = "openedx"
-  }
+    labels = {
+      app = "openedx"
+    }
     name = "fargate-node"
   }
+}
 
 
 resource "aws_eks_cluster" "eks_cluster" {

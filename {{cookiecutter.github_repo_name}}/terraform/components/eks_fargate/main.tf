@@ -25,6 +25,8 @@ data "aws_eks_cluster_auth" "cluster" {
   name = module.eks.cluster_id
 }
 
+data "aws_caller_identity" "current" {}
+
 resource "aws_security_group" "worker_group_mgmt" {
   name_prefix = "${var.environment_namespace}-eks_worker_group_mgmt"
   vpc_id      = var.vpc_id
@@ -63,10 +65,9 @@ resource "aws_security_group" "all_worker_mgmt" {
 
 }
 
-# FIX NOTE: THIS PROBABLY SHOULDN'T BE HERE.
 module "eks" {
   source          = "terraform-aws-modules/eks/aws"
-  version         = ">= 17.24.0, < 18.0.0"
+  version         = "~> 18"
   cluster_name    = local.name
   cluster_version = var.cluster_version
   subnets         = var.subnets
