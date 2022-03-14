@@ -15,8 +15,8 @@ cookiecutter --checkout $GITHUB_BRANCH \
              --overwrite-if-exists \
              --no-input \
              $GITHUB_REPO \
-             platform_name=sandbox \
-             platform_region=ohio \
+             global_platform_name=sandbox \
+             global_platform_region=ohio \
              global_root_domain=fargate.stepwisemath.ai \
              global_aws_route53_hosted_zone_id=Z01571883JOVK8JMPXTKA \
              global_aws_region=us-east-2 \
