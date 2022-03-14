@@ -47,6 +47,28 @@ data "aws_iam_role_policy_attachment" "AmazonEKSFargatePodExecutionRolePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSFargatePodExecutionRolePolicy"
 }
 
+data "aws_iam_role_policy_attachment" "AmazonEKSClusterPolicy1" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+  role       = data.aws_iam_role.eks_cluster_role.name
+}
+
+data "aws_iam_role_policy_attachment" "AmazonEKSVPCResourceController1" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
+  role       = data.aws_iam_role.eks_cluster_role.name
+}
+
+data "aws_iam_role_policy_attachment" "AmazonEKSCloudWatchMetricsPolicy" {
+  policy_arn = data.aws_iam_policy.AmazonEKSClusterCloudWatchMetricsPolicy.arn
+  role       = data.aws_iam_role.eks_cluster_role.name
+}
+
+data "aws_iam_role_policy_attachment" "AmazonEKS_CNI_Policy" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+  role       = data.aws_iam_role.eks_node_group_role.name
+}
+
+
+
 
 
 module "eks" {
@@ -90,9 +112,9 @@ module "eks" {
         GithubOrg  = "terraform-aws-modules"
       }
       depends_on = [
-        aws_iam_role_policy_attachment.AmazonEKSWorkerNodePolicy,
-        aws_iam_role_policy_attachment.AmazonEKS_CNI_Policy,
-        aws_iam_role_policy_attachment.AmazonEC2ContainerRegistryReadOnly,
+        data.aws_iam_role_policy_attachment.AmazonEKSWorkerNodePolicy,
+        data.aws_iam_role_policy_attachment.AmazonEKS_CNI_Policy,
+        data.aws_iam_role_policy_attachment.AmazonEC2ContainerRegistryReadOnly,
       ]
       tags = var.tags
     }
@@ -103,9 +125,9 @@ module "eks" {
   }
 
   depends_on = [
-    aws_iam_role_policy_attachment.AmazonEKSClusterPolicy1,
-    aws_iam_role_policy_attachment.AmazonEKSVPCResourceController1,
-    aws_cloudwatch_log_group.cloudwatch_log_group
+    data.aws_iam_role_policy_attachment.AmazonEKSClusterPolicy1,
+    data.aws_iam_role_policy_attachment.AmazonEKSVPCResourceController1,
+    data.aws_cloudwatch_log_group.cloudwatch_log_group
   ]
 
   tags = var.tags
@@ -147,33 +169,3 @@ resource "aws_eks_fargate_profile" "default" {
   tags = var.tags
 
 }
-
-
-#-----------------------------------------------------------------------------
-# IAM Policy Attachments
-#-----------------------------------------------------------------------------
-
-
-resource "aws_iam_role_policy_attachment" "AmazonEKSClusterPolicy1" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = aws_iam_role.eks_cluster_role.name
-}
-
-resource "aws_iam_role_policy_attachment" "AmazonEKSVPCResourceController1" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
-  role       = aws_iam_role.eks_cluster_role.name
-}
-
-
-resource "aws_iam_role_policy_attachment" "AmazonEKSCloudWatchMetricsPolicy" {
-  policy_arn = aws_iam_policy.AmazonEKSClusterCloudWatchMetricsPolicy.arn
-  role       = aws_iam_role.eks_cluster_role.name
-}
-
-
-
-resource "aws_iam_role_policy_attachment" "AmazonEKS_CNI_Policy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
-  role       = aws_iam_role.eks_node_group_role.name
-}
-
