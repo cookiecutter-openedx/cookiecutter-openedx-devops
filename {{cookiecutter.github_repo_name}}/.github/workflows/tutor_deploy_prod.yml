@@ -27,7 +27,7 @@ jobs:
       KUBECONFIG: /home/runner/.kube/config
       ENVIRONMENT_ID: prod
       NAMESPACE: {{ cookiecutter.prod_environment }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}
-      TUTOR_VERSION: {{ cookiecutter.ci_build_TUTOR_VERSION }}
+      TUTOR_VERSION: {{ cookiecutter.ci_build_tutor_version }}
       OPENEDX_COMMON_VERSION: {{ cookiecutter.ci_deploy_OPENEDX_COMMON_VERSION }}
 
     steps:

@@ -21,7 +21,7 @@ jobs:
     env:
       ECR_REPOSITORY: openedx
       ECR_REGISTRY: {{ cookiecutter.global_account_id }}.dkr.ecr.{{ cookiecutter.global_aws_region }}.amazonaws.com
-      TUTOR_VERSION: {{ cookiecutter.ci_build_TUTOR_VERSION }}
+      TUTOR_VERSION: {{ cookiecutter.ci_build_tutor_version }}
     steps:
       - uses: actions/checkout@v1
 

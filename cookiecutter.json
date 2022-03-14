@@ -1,7 +1,6 @@
 {
     "github_account_name": "lpm0073",
     "github_repo_name": "openedx_devops",
-    "project_slug": "{{ cookiecutter.github_repo_name }}",
     "terraform_required_version": "~> 1.1",
     "terraform_provider_kubernetes_version": "~> 2.8",
     "terraform_provider_hashicorp_aws_version": "~> 4.5",
@@ -16,7 +15,7 @@
     "global_account_id": "123456789012",
     "global_ec2_ssh_key_name": "any-valid-pem-key-file-name",
     "prod_environment": "courses",
-    "ci_build_TUTOR_VERSION": "v13.1.5", 
+    "ci_build_tutor_version": "v13.1.5", 
     "ci_build_theme_repository": "lpm0073/edx-theme-example",
     "ci_build_theme_ref": "main",
     "ci_build_plugin_repository": "lpm0073/openedx-plugin-example",

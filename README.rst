@@ -118,7 +118,7 @@ Answer the prompts with your own desired options. For example:
     global_account_id [123456789012]: 
     global_ec2_ssh_key_name [any-valid-pem-key-file-name]: 
     prod_environment [courses]: 
-    ci_build_TUTOR_VERSION [v13.1.5]: 
+    ci_build_tutor_version [v13.1.5]: 
     ci_build_theme_repository [lpm0073/edx-theme-example]: 
     ci_build_theme_ref [main]: 
     ci_build_plugin_repository [lpm0073/openedx-plugin-example]: 
