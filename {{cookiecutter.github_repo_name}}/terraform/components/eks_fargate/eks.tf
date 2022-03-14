@@ -27,6 +27,27 @@ data "aws_iam_policy" "AmazonEKSClusterCloudWatchMetricsPolicy" {
   name   = "${var.environment_namespace}-EKSClusterCloudWatchMetricsPolicy"
 }
 
+data "aws_iam_role_policy_attachment" "AmazonEKSClusterPolicy" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+}
+
+data "aws_iam_role_policy_attachment" "AmazonEKSVPCResourceController" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
+}
+
+data "aws_iam_role_policy_attachment" "AmazonEKSWorkerNodePolicy" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+}
+
+data "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+}
+
+data "aws_iam_role_policy_attachment" "AmazonEKSFargatePodExecutionRolePolicy" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSFargatePodExecutionRolePolicy"
+}
+
+
 
 module "eks" {
   source                          = "terraform-aws-modules/eks/aws"
@@ -131,49 +152,28 @@ resource "aws_eks_fargate_profile" "default" {
 #-----------------------------------------------------------------------------
 # IAM Policy Attachments
 #-----------------------------------------------------------------------------
-resource "aws_iam_role_policy_attachment" "AmazonEKSFargatePodExecutionRolePolicy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSFargatePodExecutionRolePolicy"
-  role       = data.aws_iam_role.eks_fargate_role.name
-}
 
-resource "aws_iam_role_policy_attachment" "AmazonEKSClusterPolicy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = data.aws_iam_role.eks_fargate_role.name
-}
 
 resource "aws_iam_role_policy_attachment" "AmazonEKSClusterPolicy1" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = data.aws_iam_role.eks_cluster_role.name
-}
-
-resource "aws_iam_role_policy_attachment" "AmazonEKSVPCResourceController" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
-  role       = data.aws_iam_role.eks_fargate_role.name
+  role       = aws_iam_role.eks_cluster_role.name
 }
 
 resource "aws_iam_role_policy_attachment" "AmazonEKSVPCResourceController1" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
-  role       = data.aws_iam_role.eks_cluster_role.name
+  role       = aws_iam_role.eks_cluster_role.name
 }
 
 
 resource "aws_iam_role_policy_attachment" "AmazonEKSCloudWatchMetricsPolicy" {
-  policy_arn = data.aws_iam_policy.AmazonEKSClusterCloudWatchMetricsPolicy.arn
-  role       = data.aws_iam_role.eks_cluster_role.name
+  policy_arn = aws_iam_policy.AmazonEKSClusterCloudWatchMetricsPolicy.arn
+  role       = aws_iam_role.eks_cluster_role.name
 }
 
 
-resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
-  role       = data.aws_iam_role.eks_node_group_role.name
-}
 
 resource "aws_iam_role_policy_attachment" "AmazonEKS_CNI_Policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
-  role       = data.aws_iam_role.eks_node_group_role.name
+  role       = aws_iam_role.eks_node_group_role.name
 }
 
-resource "aws_iam_role_policy_attachment" "AmazonEKSWorkerNodePolicy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
-  role       = data.aws_iam_role.eks_node_group_role.name
-}
