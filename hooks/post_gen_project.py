@@ -39,7 +39,7 @@ def main():
     if "{{ cookiecutter.eks_cluster_compute_type }}" == "Fargate":
         remove_eks_ec2_files()
 
-    print(SUCCESS + "Your Open edX devops repo has been initialized. Now is a good opportunity to 'git add / commit / push to GitHub'." + TERMINATOR)
+    print(SUCCESS + "Your Open edX devops repo has been initialized. Now is a good opportunity to 'git init / add / commit / push to GitHub'." + TERMINATOR)
 
 
 if __name__ == "__main__":

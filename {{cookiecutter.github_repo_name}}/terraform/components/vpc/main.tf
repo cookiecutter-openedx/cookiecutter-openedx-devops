@@ -8,7 +8,8 @@
 #------------------------------------------------------------------------------ 
 
 module "vpc" {
-  source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git//?ref=v3.0.0"
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "~> 3"
 
   name = var.name
   cidr = var.cidr
