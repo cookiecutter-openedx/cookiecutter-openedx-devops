@@ -48,10 +48,10 @@ resource "aws_eks_cluster" "eks_cluster" {
 #------------------------------------------------------------------------------ 
 resource "kubernetes_deployment" "app" {
   metadata {
-    name      = "owncloud-server"
+    name      = "openedx-server"
     namespace = "fargate-node"
     labels    = {
-      app = "owncloud"
+      app = "openedx"
     }
   }
 
@@ -60,21 +60,21 @@ resource "kubernetes_deployment" "app" {
 
     selector {
       match_labels = {
-        app = "owncloud"
+        app = "openedx"
       }
     }
 
     template {
       metadata {
         labels = {
-          app = "owncloud"
+          app = "openedx"
         }
       }
 
       spec {
         container {
-          image = "owncloud"
-          name  = "owncloud-server"
+          image = "openedx"
+          name  = "openedx-server"
 
           port {
             container_port = 80
@@ -91,12 +91,12 @@ resource "kubernetes_deployment" "app" {
 #------------------------------------------------------------------------------ 
 resource "kubernetes_service" "app" {
   metadata {
-    name      = "owncloud-service"
+    name      = "openedx-service"
     namespace = "fargate-node"
   }
   spec {
     selector = {
-      app = "owncloud"
+      app = "openedx"
     }
 
     port {

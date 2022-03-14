@@ -16,7 +16,7 @@ output "cluster_name" {
 
 data "kubernetes_ingress" "address" {
   metadata {
-    name = "owncloud-lb"
+    name = "openedx-lb"
     namespace = "fargate-node"
   }
 }

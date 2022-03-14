@@ -27,7 +27,7 @@
 #------------------------------------------------------------------------------ 
 resource "kubernetes_ingress" "app" {
   metadata {
-    name      = "owncloud-lb"
+    name      = "openedx-lb"
     namespace = "fargate-node"
     annotations = {
       "kubernetes.io/ingress.class"           = "alb"
@@ -35,13 +35,13 @@ resource "kubernetes_ingress" "app" {
       "alb.ingress.kubernetes.io/target-type" = "ip"
     }
     labels = {
-        "app" = "owncloud"
+        "app" = "openedx"
     }
   }
 
   spec {
       backend {
-        service_name = "owncloud-service"
+        service_name = "openedx-service"
         service_port = 80
       }
     rule {
@@ -49,7 +49,7 @@ resource "kubernetes_ingress" "app" {
         path {
           path = "/"
           backend {
-            service_name = "owncloud-service"
+            service_name = "openedx-service"
             service_port = 80
           }
         }
