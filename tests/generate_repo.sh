@@ -3,6 +3,7 @@
 # date:         mar-2022
 #
 # usage:        Cookiecut to a sandox VPC in the Stepwise AWS account.
+#               Add your own personalized cookiecutter.json to this folder
 #------------------------------------------------------------------------------
 
 GITHUB_REPO="https://github.com/lpm0073/cookiecutter-openedx-devops"
@@ -13,4 +14,5 @@ cookiecutter $GITHUB_REPO \
              --checkout $GITHUB_BRANCH \
              --output-dir $OUTPUT_FOLDER \
              --directory ./ \
-             --overwrite-if-exists
+             --overwrite-if-exists \
+             --no-input 

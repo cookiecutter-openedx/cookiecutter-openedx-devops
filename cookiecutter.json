@@ -1,6 +1,7 @@
 {
     "github_account_name": "lpm0073",
     "repo_name": "openedx_devops",
+    "project_slug": "{{ cookiecutter.repo_name }}",
     "global_platform_name": "yourschool",
     "global_platform_description": "Your School",
     "global_platform_region": "virginia",
