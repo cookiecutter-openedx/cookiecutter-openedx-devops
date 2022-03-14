@@ -19,8 +19,9 @@ cookiecutter --checkout $GITHUB_BRANCH \
              $GITHUB_REPO \
              global_platform_name=sandbox \
              global_platform_region=ohio \
-             global_root_domain=fargate.stepwisemath.ai \
-             global_aws_route53_hosted_zone_id=Z01571883JOVK8JMPXTKA \
              global_aws_region=us-east-2 \
-             global_account_id=320713933456
+             global_account_id=320713933456 \
+             global_root_domain=stepwisemath.ai \
+             global_aws_route53_hosted_zone_id=Z049210026A5G6XHV84CF \
+             prod_environment=fargate
 
