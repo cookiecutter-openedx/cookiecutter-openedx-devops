@@ -18,7 +18,7 @@ locals {
   platform_region                 = local.global_vars.locals.platform_region
   cluster_name                    = local.environment_vars.locals.environment_namespace
   account_id                      = local.global_vars.locals.account_id
-  eks_worker_group_instance_type  = local.environment_vars.locals.eks_worker_group_instance_type
+  eks_node_group_instance_type    = local.environment_vars.locals.eks_worker_group_instance_type
 
   tags = merge(
     local.environment_vars.locals.tags,
@@ -65,7 +65,7 @@ inputs = {
   public_subnets = dependency.vpc.outputs.public_subnets
   vpc_id  = dependency.vpc.outputs.vpc_id
 
-  eks_node_group_instance_types = local.eks_worker_group_instance_type
+  eks_node_group_instance_type = local.eks_node_group_instance_type
 
   map_roles = []
 

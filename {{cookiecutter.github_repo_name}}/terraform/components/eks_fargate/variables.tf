@@ -106,3 +106,8 @@ variable "worker_group_asg_min_size" {
   type        = number
   default     = 1
 }
+
+variable "eks_node_group_instance_type" {
+  type        = "string"
+  default     = null
+}
