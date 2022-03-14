@@ -108,7 +108,7 @@ Answer the prompts with your own desired options. For example:
     Receiving objects: 100% (550/550), 127.66 KiB | 58 KiB/s, done.
     Resolving deltas: 100% (283/283), done.
     github_account_name [lpm0073]: 
-    repo_name [openedx_devops]: 
+    github_repo_name [openedx_devops]: 
     global_platform_name [yourschool]: 
     global_platform_description [Your School]: 
     global_platform_region [virginia]: 
