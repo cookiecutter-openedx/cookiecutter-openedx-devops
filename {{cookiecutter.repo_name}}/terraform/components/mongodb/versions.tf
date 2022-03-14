@@ -5,16 +5,16 @@
 # date: Feb-2022
 #------------------------------------------------------------------------------ 
 terraform {
-  required_version = ">= 0.13.0"
+  required_version = "{{ cookiecutter.terraform_required_version }}"
 
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "{{ cookiecutter.terraform_hashicorp_aws_version }}"
+      version = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
     }
     local = {
       source  = "hashicorp/local"
-      version = ">= 1.3"
+      version = "{{ cookiecutter.terraform_provider_hashicorp_local_version }}"
     }
   }
 }
