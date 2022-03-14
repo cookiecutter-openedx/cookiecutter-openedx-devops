@@ -8,6 +8,25 @@
 # see: https://github.com/terraform-aws-modules/terraform-aws-eks/tree/master/examples/fargate_profile
 #------------------------------------------------------------------------------ 
 
+#-----------------------------------------------------------------------------
+# references to IAM roles created in the VPC module.
+#-----------------------------------------------------------------------------
+data "aws_iam_role" "eks_fargate_role" {
+  name = "${var.environment_namespace}-fargate_cluster_role"
+}
+
+data "aws_iam_role" "eks_cluster_role" {
+  name = "${var.environment_namespace}-cluster-role"
+}
+
+data "aws_iam_role" "eks_node_group_role" {
+  name = "${var.environment_namespace}-node-group_role"
+}
+
+data "aws_iam_policy" "AmazonEKSClusterCloudWatchMetricsPolicy" {
+  name   = "${var.environment_namespace}-EKSClusterCloudWatchMetricsPolicy"
+}
+
 
 module "eks" {
   source                          = "terraform-aws-modules/eks/aws"
@@ -92,7 +111,7 @@ resource "aws_cloudwatch_log_group" "cloudwatch_log_group" {
 resource "aws_eks_fargate_profile" "default" {
   cluster_name           = var.environment_namespace
   fargate_profile_name   = "default"
-  pod_execution_role_arn = aws_iam_role.eks_fargate_role.arn
+  pod_execution_role_arn = data.aws_iam_role.eks_fargate_role.arn
   subnet_ids             = var.private_subnets
 
   selector {
@@ -108,71 +127,53 @@ resource "aws_eks_fargate_profile" "default" {
 
 }
 
-#-----------------------------------------------------------------------------
-# references to IAM roles created in the VPC module.
-#-----------------------------------------------------------------------------
-data "aws_iam_role" "eks_fargate_role" {
-  name = "${var.environment_namespace}-fargate_cluster_role"
-}
-
-data "aws_iam_role" "eks_cluster_role" {
-  name = "${var.environment_namespace}-cluster-role"
-}
-
-data "aws_iam_role" "eks_node_group_role" {
-  name = "${var.environment_namespace}-node-group_role"
-}
-
-data "aws_iam_policy" "AmazonEKSClusterCloudWatchMetricsPolicy" {
-  name   = "${var.environment_namespace}-EKSClusterCloudWatchMetricsPolicy"
-}
 
 #-----------------------------------------------------------------------------
 # IAM Policy Attachments
 #-----------------------------------------------------------------------------
 resource "aws_iam_role_policy_attachment" "AmazonEKSFargatePodExecutionRolePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSFargatePodExecutionRolePolicy"
-  role       = aws_iam_role.eks_fargate_role.name
+  role       = data.aws_iam_role.eks_fargate_role.name
 }
 
 resource "aws_iam_role_policy_attachment" "AmazonEKSClusterPolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = aws_iam_role.eks_fargate_role.name
+  role       = data.aws_iam_role.eks_fargate_role.name
 }
 
 resource "aws_iam_role_policy_attachment" "AmazonEKSClusterPolicy1" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = aws_iam_role.eks_cluster_role.name
+  role       = data.aws_iam_role.eks_cluster_role.name
 }
 
 resource "aws_iam_role_policy_attachment" "AmazonEKSVPCResourceController" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
-  role       = aws_iam_role.eks_fargate_role.name
+  role       = data.aws_iam_role.eks_fargate_role.name
 }
 
 resource "aws_iam_role_policy_attachment" "AmazonEKSVPCResourceController1" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
-  role       = aws_iam_role.eks_cluster_role.name
+  role       = data.aws_iam_role.eks_cluster_role.name
 }
 
 
 resource "aws_iam_role_policy_attachment" "AmazonEKSCloudWatchMetricsPolicy" {
-  policy_arn = aws_iam_policy.AmazonEKSClusterCloudWatchMetricsPolicy.arn
-  role       = aws_iam_role.eks_cluster_role.name
+  policy_arn = data.aws_iam_policy.AmazonEKSClusterCloudWatchMetricsPolicy.arn
+  role       = data.aws_iam_role.eks_cluster_role.name
 }
 
 
 resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
-  role       = aws_iam_role.eks_node_group_role.name
+  role       = data.aws_iam_role.eks_node_group_role.name
 }
 
 resource "aws_iam_role_policy_attachment" "AmazonEKS_CNI_Policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
-  role       = aws_iam_role.eks_node_group_role.name
+  role       = data.aws_iam_role.eks_node_group_role.name
 }
 
 resource "aws_iam_role_policy_attachment" "AmazonEKSWorkerNodePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
-  role       = aws_iam_role.eks_node_group_role.name
+  role       = data.aws_iam_role.eks_node_group_role.name
 }
