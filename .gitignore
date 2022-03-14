@@ -1,2 +1,6 @@
 .terragrunt-cache
 .DS_Store
+
+# mcdaniel's tests
+tests/cookiecutter.json
+
