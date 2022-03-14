@@ -6,12 +6,8 @@
 #
 # usage: build an EKS cluster load balancer that uses a Fargate Compute Cluster
 #------------------------------------------------------------------------------ 
-variable "cluster_name" {
-  description = "Name of the EKS cluster. Also used as a prefix in names of related resources."
-  type        = string
-}
-
 variable "environment_namespace" {
+  description = "Name of the EKS cluster. Also used as a prefix in names of related resources."
   type        = string
 }
 

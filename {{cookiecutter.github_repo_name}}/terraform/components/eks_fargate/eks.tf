@@ -10,12 +10,14 @@
 
 
 module "eks" {
-  source          = "terraform-aws-modules/eks/aws"
-  version         = "~> 18"
-  cluster_name    = var.cluster_name
-  cluster_version = var.cluster_version
+  source                          = "terraform-aws-modules/eks/aws"
+  version                         = "~> 18"
+  cluster_name                    = var.environment_namespace
+  cluster_version                 = var.cluster_version
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = true
+  vpc_id                          =  var.vpc_id
+  subnet_ids                      = var.private_subnets
 
   cluster_addons = {
     # Note: https://docs.aws.amazon.com/eks/latest/userguide/fargate-getting-started.html#fargate-gs-coredns
@@ -33,8 +35,6 @@ module "eks" {
     resources        = ["secrets"]
   }]
 
-  vpc_id =  var.vpc_id
-  subnet_ids = var.private_subnets
 
   # You require a node group to schedule coredns which is critical for running correctly internal DNS.
   # If you want to use only fargate you must follow docs `(Optional) Update CoreDNS`
@@ -83,7 +83,7 @@ resource "aws_kms_key" "eks" {
 }
 
 resource "aws_eks_fargate_profile" "default" {
-  cluster_name           = var.cluster_name
+  cluster_name           = var.environment_namespace
   fargate_profile_name   = "default"
   pod_execution_role_arn = aws_iam_role.eks_fargate_role.arn
   subnet_ids             = var.private_subnets
@@ -103,7 +103,7 @@ resource "aws_eks_fargate_profile" "default" {
 
 
 resource "aws_iam_role" "eks_fargate_role" {
-  name = "${var.cluster_name}-fargate_cluster_role"
+  name = "${var.environment_namespace}-fargate_cluster_role"
   description = "Allow fargate cluster to allocate resources for running pods"
   force_detach_policies = true
   assume_role_policy = <<POLICY
@@ -126,7 +126,7 @@ POLICY
 }
 
 resource "aws_iam_role" "eks_cluster_role" {
-  name = "${var.cluster_name}-cluster-role"
+  name = "${var.environment_namespace}-cluster-role"
   description = "Allow cluster to manage node groups, fargate nodes and cloudwatch logs"
   force_detach_policies = true
   assume_role_policy = <<POLICY
@@ -234,4 +234,3 @@ resource "aws_iam_role_policy_attachment" "AmazonEKSWorkerNodePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
   role       = aws_iam_role.eks_node_group_role.name
 }
-

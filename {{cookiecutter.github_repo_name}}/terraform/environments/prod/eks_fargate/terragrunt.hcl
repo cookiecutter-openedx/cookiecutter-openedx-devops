@@ -16,7 +16,7 @@ locals {
   environment_domain              = local.environment_vars.locals.environment_domain
   platform_name                   = local.global_vars.locals.platform_name
   platform_region                 = local.global_vars.locals.platform_region
-  cluster_name                    = local.environment_vars.locals.environment_namespace
+  environment_namespace           = local.environment_vars.locals.environment_namespace
   account_id                      = local.global_vars.locals.account_id
   eks_node_group_instance_type    = local.environment_vars.locals.eks_worker_group_instance_type
 
@@ -56,6 +56,7 @@ inputs = {
   cluster_name    = "${local.cluster_name}"
   cluster_version = "1.21"
   environment_domain = local.environment_domain
+  environment_namespace = local.environment_namespace
 
   #enable_irsa     = true
 
