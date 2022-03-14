@@ -90,25 +90,25 @@ EOF
 
 resource "aws_iam_role_policy_attachment" "AmazonEKSClusterPolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = data.aws_iam_role.eks_fargate_role.name
+  role       = aws_iam_role.eks_fargate_role.name
 }
 
 resource "aws_iam_role_policy_attachment" "AmazonEKSVPCResourceController" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
-  role       = data.aws_iam_role.eks_fargate_role.name
+  role       = aws_iam_role.eks_fargate_role.name
 }
 
 resource "aws_iam_role_policy_attachment" "AmazonEKSWorkerNodePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
-  role       = data.aws_iam_role.eks_node_group_role.name
+  role       = aws_iam_role.eks_node_group_role.name
 }
 
 resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
-  role       = data.aws_iam_role.eks_node_group_role.name
+  role       = aws_iam_role.eks_node_group_role.name
 }
 
 resource "aws_iam_role_policy_attachment" "AmazonEKSFargatePodExecutionRolePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSFargatePodExecutionRolePolicy"
-  role       = data.aws_iam_role.eks_fargate_role.name
+  role       = aws_iam_role.eks_fargate_role.name
 }
