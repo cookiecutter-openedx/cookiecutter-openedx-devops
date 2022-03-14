@@ -65,10 +65,7 @@ inputs = {
   public_subnets = dependency.vpc.outputs.public_subnets
   vpc_id  = dependency.vpc.outputs.vpc_id
 
-  #worker group
-  worker_group_asg_max_size  = 5
-  worker_group_asg_min_size  = 1
-  worker_group_instance_type = local.eks_worker_group_instance_type
+  eks_node_group_instance_types = local.eks_worker_group_instance_type
 
   map_roles = []
 
