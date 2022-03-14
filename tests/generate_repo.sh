@@ -1,8 +1,10 @@
 #------------------------------------------------------------------------------
 # written by:   mcdaniel
+#               https://lawrencemcdaniel.com
+#
 # date:         mar-2022
 #
-# usage:        Cookiecut to a sandox VPC in the Stepwise AWS account.
+# usage:        Runs the Cookiecutter.
 #               Inject your own parameters to override cookiecutter.json defaults
 #------------------------------------------------------------------------------
 
