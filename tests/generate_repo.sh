@@ -13,6 +13,6 @@ OUTPUT_FOLDER="/Users/mcdaniel/cookiecutter/"
 cookiecutter $GITHUB_REPO \
              --checkout $GITHUB_BRANCH \
              --output-dir $OUTPUT_FOLDER \
-             --directory ./ \
+             --directory tests \
              --overwrite-if-exists \
              --no-input 
