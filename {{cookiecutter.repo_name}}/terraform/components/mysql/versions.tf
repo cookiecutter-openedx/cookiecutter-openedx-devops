@@ -12,7 +12,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 4.2"
+      version = "{{ cookiecutter.terraform_hashicorp_aws_version }}"
     }
   }
 }
