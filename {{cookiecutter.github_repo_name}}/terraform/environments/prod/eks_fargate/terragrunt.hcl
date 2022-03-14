@@ -53,7 +53,6 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  cluster_name    = "${local.cluster_name}"
   cluster_version = "1.21"
   environment_domain = local.environment_domain
   environment_namespace = local.environment_namespace
