@@ -6,13 +6,19 @@
 #               Add your own personalized cookiecutter.json to this folder
 #------------------------------------------------------------------------------
 
-GITHUB_REPO="https://github.com/lpm0073/cookiecutter-openedx-devops"
+GITHUB_REPO="gh:lpm0073/cookiecutter-openedx-devops"
 GITHUB_BRANCH="eks-fargate"
 OUTPUT_FOLDER="/Users/mcdaniel/cookiecutter/"
 
-cookiecutter $GITHUB_REPO \
-             --checkout $GITHUB_BRANCH \
+cookiecutter --checkout $GITHUB_BRANCH \
              --output-dir $OUTPUT_FOLDER \
-             --directory tests \
              --overwrite-if-exists \
-             --no-input 
+             --no-input \
+             $GITHUB_REPO \
+             platform_name=sandbox \
+             platform_region=ohio \
+             global_root_domain=fargate.stepwisemath.ai \
+             global_aws_route53_hosted_zone_id=Z01571883JOVK8JMPXTKA \
+             global_aws_region=us-east-2 \
+             global_account_id=320713933456
+
