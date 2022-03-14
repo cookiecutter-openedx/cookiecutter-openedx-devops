@@ -59,7 +59,7 @@ resource "aws_route53_record" "cdn_environment_domain" {
 
 module "cdn_environment_domain" {
   source  = "terraform-aws-modules/cloudfront/aws"
-  version = "2.9.2"
+  version = "~> 2"
 
   aliases = [local.cdn_name]
 

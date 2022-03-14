@@ -25,7 +25,7 @@ resource "helm_release" "nginx" {
 
   chart      = "ingress-nginx"
   repository = "https://kubernetes.github.io/ingress-nginx"
-  version    = "3.34.0"
+  version    = "~> 3"
 
   set {
     name  = "service.type"

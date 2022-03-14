@@ -8,7 +8,7 @@
 #------------------------------------------------------------------------------ 
 module "data_backup_s3_bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = ">= 2.14.1"
+  version = "~> 2"
 
   bucket = var.resource_name
   acl    = "private"

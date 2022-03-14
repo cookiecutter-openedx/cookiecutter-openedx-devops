@@ -63,7 +63,7 @@ resource "aws_security_group" "all_worker_mgmt" {
 
 }
 
-
+# FIX NOTE: THIS PROBABLY SHOULDN'T BE HERE.
 module "eks" {
   source          = "terraform-aws-modules/eks/aws"
   version         = ">= 17.24.0, < 18.0.0"
