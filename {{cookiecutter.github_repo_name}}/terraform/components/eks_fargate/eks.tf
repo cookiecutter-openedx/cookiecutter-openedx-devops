@@ -27,7 +27,7 @@ module "eks" {
   cluster_version                 = var.cluster_version
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = true
-  vpc_id                          =  var.vpc_id
+  vpc_id                          = var.vpc_id
   subnet_ids                      = var.private_subnets
 
   cluster_addons = {
@@ -50,12 +50,12 @@ module "eks" {
   # You require a node group to schedule coredns which is critical for running correctly internal DNS.
   # If you want to use only fargate you must follow docs `(Optional) Update CoreDNS`
   # available under https://docs.aws.amazon.com/eks/latest/userguide/fargate-getting-started.html
-  eks_managed_node_groups {
-    aws_eks_node_group.default
+  eks_managed_node_groups = {
+    default = aws_eks_node_group.default
   }
 
-  fargate_profiles {
-    aws_eks_fargate_profile.default    
+  fargate_profiles = {
+    default = aws_eks_fargate_profile.default
   }
 
   # mcdaniel: moving this to a for_each inside of each of these three 
@@ -119,9 +119,9 @@ resource "aws_eks_node_group" "default" {
     min_size     = 1
   }
 
-  update_config {
-    max_unavailable = 2
-  }
+  #update_config {
+  #  max_unavailable = 2
+  #}
 
   instance_types = [var.eks_node_group_instance_type]
   labels = {
@@ -140,6 +140,11 @@ resource "aws_eks_node_group" "default" {
   #  aws_iam_role_policy_attachment.EKS_CNI_Policy,
   #  aws_iam_role_policy_attachment.EC2_ContainerRegistry_ReadOnly,
   #]
+
+  timeouts {
+    create = "20m"
+    delete = "20m"
+  }
 
   tags = var.tags
 
