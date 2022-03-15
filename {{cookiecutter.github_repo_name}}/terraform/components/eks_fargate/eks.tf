@@ -5,30 +5,20 @@
 # date: March-2022
 #
 # usage: build an EKS cluster load balancer that uses a Fargate Compute Cluster
-# see: https://github.com/terraform-aws-modules/terraform-aws-eks/tree/master/examples/fargate_profile
+#
+# how this works, see: 
+# - https://betterprogramming.pub/with-latest-updates-create-amazon-eks-fargate-cluster-and-managed-node-group-using-terraform-bc5cfefd5773
+# - https://github.com/terraform-aws-modules/terraform-aws-eks/tree/master/examples/fargate_profile
+# - https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest
+#
+# Note:
+# --------------
+# I've added wonky code to this module in order to work around some buggy 
+# Terraform behavior related to dependencies that surfaces resource 
+# declaraationa like, `resource "aws_iam_role_policy_attachment"`.
+# see https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest
+# in the section about "Error: Invalid for_each argument ..."
 #------------------------------------------------------------------------------ 
-
-#-----------------------------------------------------------------------------
-# references to IAM roles created in the VPC module.
-#-----------------------------------------------------------------------------
-data "aws_iam_role" "eks_fargate_role" {
-  name = "${var.environment_namespace}-fargate_cluster_role"
-}
-
-data "aws_iam_role" "eks_cluster_role" {
-  name = "${var.environment_namespace}-cluster-role"
-}
-
-data "aws_iam_role" "eks_node_group_role" {
-  name = "${var.environment_namespace}-node-group_role"
-}
-
-data "aws_iam_policy" "AmazonEKSClusterCloudWatchMetricsPolicy" {
-  name   = "${var.environment_namespace}-EKSClusterCloudWatchMetricsPolicy"
-}
-
-
-
 
 module "eks" {
   source                          = "terraform-aws-modules/eks/aws"
@@ -70,12 +60,11 @@ module "eks" {
         GithubRepo = "terraform-aws-eks"
         GithubOrg  = "terraform-aws-modules"
       }
-      
-      #depends_on = [
-      #  data.aws_iam_role_policy_attachment.AmazonEKSWorkerNodePolicy,
-      #  data.aws_iam_role_policy_attachment.AmazonEKS_CNI_Policy,
-      #  data.aws_iam_role_policy_attachment.AmazonEC2ContainerRegistryReadOnly,
-      #]
+      depends_on = [
+        aws_iam_role_policy_attachment.AmazonEKSWorkerNodePolicy,
+        aws_iam_role_policy_attachment.AmazonEKS_CNI_Policy,
+        aws_iam_role_policy_attachment.AmazonEC2ContainerRegistryReadOnly,
+      ]
       tags = var.tags
     }
   }
@@ -84,11 +73,11 @@ module "eks" {
     default = resource.aws_eks_fargate_profile.default    
   }
 
-  #depends_on = [
-  #  data.aws_iam_role_policy_attachment.AmazonEKSClusterPolicy1,
-  #  data.aws_iam_role_policy_attachment.AmazonEKSVPCResourceController1,
-  #  data.aws_cloudwatch_log_group.cloudwatch_log_group
-  #]
+  depends_on = [
+    aws_iam_role_policy_attachment.AmazonEKSClusterPolicy1,
+    aws_iam_role_policy_attachment.AmazonEKSVPCResourceController1,
+    aws_cloudwatch_log_group.cloudwatch_log_group
+  ]
 
   tags = var.tags
 }
@@ -114,7 +103,7 @@ resource "aws_cloudwatch_log_group" "cloudwatch_log_group" {
 resource "aws_eks_fargate_profile" "default" {
   cluster_name           = var.environment_namespace
   fargate_profile_name   = "default"
-  pod_execution_role_arn = data.aws_iam_role.eks_fargate_role.arn
+  pod_execution_role_arn = aws_iam_role.eks_fargate_role.arn
   subnet_ids             = var.private_subnets
 
   selector {
@@ -128,4 +117,141 @@ resource "aws_eks_fargate_profile" "default" {
 
   tags = var.tags
 
+}
+
+################################################################################
+# IAM Roles and policies that are required in order for Fargate to manage its 
+# child resources.
+################################################################################
+
+resource "aws_iam_role" "eks_fargate_role" {
+  name = "${var.environment_namespace}-fargate_cluster_role"
+  description = "Allow fargate cluster to allocate resources for running pods"
+  force_detach_policies = true
+  assume_role_policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": [
+          "eks.amazonaws.com",
+          "eks-fargate-pods.amazonaws.com"
+          ]
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+POLICY
+}
+
+resource "aws_iam_role" "eks_cluster_role" {
+  name = "${var.environment_namespace}-cluster-role"
+  description = "Allow cluster to manage node groups, fargate nodes and cloudwatch logs"
+  force_detach_policies = true
+  assume_role_policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": [
+          "eks.amazonaws.com",
+          "eks-fargate-pods.amazonaws.com"
+          ]
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+POLICY
+}
+
+resource "aws_iam_role" "eks_node_group_role" {
+  name = "${var.environment_namespace}-node-group_role"
+
+  assume_role_policy = jsonencode({
+    Statement = [{
+      Action = "sts:AssumeRole"
+      Effect = "Allow"
+      Principal = {
+        Service = "ec2.amazonaws.com"
+      }
+    }]
+    Version = "2012-10-17"
+  })
+}
+
+
+
+resource "aws_iam_policy" "AmazonEKSClusterCloudWatchMetricsPolicy" {
+  name   = "AmazonEKSClusterCloudWatchMetricsPolicy"
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "cloudwatch:PutMetricData"
+            ],
+            "Resource": "*",
+            "Effect": "Allow"
+        }
+    ]
+}
+EOF
+}
+
+
+################################################################################
+# Attach the new policies the new roles
+################################################################################
+
+resource "aws_iam_role_policy_attachment" "AmazonEKSCloudWatchMetricsPolicy" {
+  policy_arn = aws_iam_policy.AmazonEKSClusterCloudWatchMetricsPolicy.arn
+  role       = aws_iam_role.eks_cluster_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+  role       = aws_iam_role.eks_node_group_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "AmazonEKS_CNI_Policy" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+  role       = aws_iam_role.eks_node_group_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "AmazonEKSWorkerNodePolicy" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+  role       = aws_iam_role.eks_node_group_role.name
+}
+
+
+resource "aws_iam_role_policy_attachment" "AmazonEKSFargatePodExecutionRolePolicy" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSFargatePodExecutionRolePolicy"
+  role       = aws_iam_role.eks_fargate_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "AmazonEKSClusterPolicy" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+  role       = aws_iam_role.eks_fargate_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "AmazonEKSClusterPolicy1" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+  role       = aws_iam_role.eks_cluster_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "AmazonEKSVPCResourceController" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
+  role       = aws_iam_role.eks_fargate_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "AmazonEKSVPCResourceController1" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
+  role       = aws_iam_role.eks_cluster_role.name
 }

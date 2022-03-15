@@ -14,6 +14,8 @@ terraform {
     local      = "{{ cookiecutter.terraform_provider_hashicorp_local_version }}"
     random     = "{{ cookiecutter.terraform_provider_hashicorp_random_version }}"
     kubernetes = "{{ cookiecutter.terraform_provider_kubernetes_version }}"
+    tls = ">= 2.2"
+    cloudinit = ">= 2.0"
   }
 }
 
