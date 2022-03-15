@@ -50,34 +50,22 @@ module "eks" {
   # You require a node group to schedule coredns which is critical for running correctly internal DNS.
   # If you want to use only fargate you must follow docs `(Optional) Update CoreDNS`
   # available under https://docs.aws.amazon.com/eks/latest/userguide/fargate-getting-started.html
-  eks_managed_node_groups = {
-    example = {
-      desired_size = 1
-
-      instance_types = [var.eks_node_group_instance_type]
-      labels = {
-        Example    = "managed_node_groups"
-        GithubRepo = "terraform-aws-eks"
-        GithubOrg  = "terraform-aws-modules"
-      }
-      depends_on = [
-        aws_iam_role_policy_attachment.AmazonEKSWorkerNodePolicy,
-        aws_iam_role_policy_attachment.AmazonEKS_CNI_Policy,
-        aws_iam_role_policy_attachment.AmazonEC2ContainerRegistryReadOnly,
-      ]
-      tags = var.tags
-    }
+  eks_managed_node_groups {
+    aws_eks_node_group.default
   }
 
-  fargate_profiles = {
-    default = resource.aws_eks_fargate_profile.default    
+  fargate_profiles {
+    aws_eks_fargate_profile.default    
   }
 
-  depends_on = [
-    aws_iam_role_policy_attachment.AmazonEKSClusterPolicy1,
-    aws_iam_role_policy_attachment.AmazonEKSVPCResourceController1,
-    aws_cloudwatch_log_group.cloudwatch_log_group
-  ]
+  # mcdaniel: moving this to a for_each inside of each of these three 
+  # aws_iam_role_policy_attachment references
+  # 
+  #depends_on = [
+  #  aws_iam_role_policy_attachment.EKS_Policy_Cluster,
+  #  aws_iam_role_policy_attachment.EKS_VPC_ResourceController_Cluster,
+  #  aws_cloudwatch_log_group.eks_cluster
+  #]
 
   tags = var.tags
 }
@@ -93,7 +81,7 @@ resource "aws_kms_key" "eks" {
   tags = var.tags
 }
 
-resource "aws_cloudwatch_log_group" "cloudwatch_log_group" {
+resource "aws_cloudwatch_log_group" "eks_cluster" {
   name              = "/aws/eks/${var.environment_namespace}/cluster"
   retention_in_days = 30
 
@@ -114,6 +102,44 @@ resource "aws_eks_fargate_profile" "default" {
     create = "20m"
     delete = "20m"
   }
+
+  tags = var.tags
+
+}
+
+resource "aws_eks_node_group" "default" {
+  cluster_name    = var.environment_namespace
+  node_group_name = "default"
+  node_role_arn   = aws_iam_role.eks_node_group_role.arn
+  subnet_ids      = var.private_subnets
+
+  scaling_config {
+    desired_size = 1
+    max_size     = 1
+    min_size     = 1
+  }
+
+  update_config {
+    max_unavailable = 2
+  }
+
+  instance_types = [var.eks_node_group_instance_type]
+  labels = {
+    Example    = "managed_node_groups"
+    GithubRepo = "terraform-aws-eks"
+    GithubOrg  = "terraform-aws-modules"
+  }
+
+  # Ensure that IAM Role permissions are created before and deleted after EKS Node Group handling.
+  # Otherwise, EKS will not be able to properly delete EC2 Instances and Elastic Network Interfaces.
+  # mcdaniel: moving this to a for_each inside of each of these three 
+  # aws_iam_role_policy_attachment references
+  # 
+  #depends_on = [
+  #  aws_iam_role_policy_attachment.EKSWorkerNodePolicy,
+  #  aws_iam_role_policy_attachment.EKS_CNI_Policy,
+  #  aws_iam_role_policy_attachment.EC2_ContainerRegistry_ReadOnly,
+  #]
 
   tags = var.tags
 
@@ -187,8 +213,8 @@ resource "aws_iam_role" "eks_node_group_role" {
 
 
 
-resource "aws_iam_policy" "AmazonEKSClusterCloudWatchMetricsPolicy" {
-  name   = "AmazonEKSClusterCloudWatchMetricsPolicy"
+resource "aws_iam_policy" "EKS_CloudWatchMetrics" {
+  name   = "EKS_CloudWatchMetrics"
   policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -207,51 +233,65 @@ EOF
 
 
 ################################################################################
-# Attach the new policies the new roles
+# I. EKS Cluster dependencies. Attach the new policies to the new roles
 ################################################################################
 
-resource "aws_iam_role_policy_attachment" "AmazonEKSCloudWatchMetricsPolicy" {
-  policy_arn = aws_iam_policy.AmazonEKSClusterCloudWatchMetricsPolicy.arn
+# for the eks module's dependencies: 1 of 2
+resource "aws_iam_role_policy_attachment" "EKS_Policy_Cluster" {
+  policy_arn = "arn:aws:iam::aws:policy/EKS_Policy_Fargate"
   role       = aws_iam_role.eks_cluster_role.name
 }
 
-resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
-  role       = aws_iam_role.eks_node_group_role.name
-}
-
-resource "aws_iam_role_policy_attachment" "AmazonEKS_CNI_Policy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
-  role       = aws_iam_role.eks_node_group_role.name
-}
-
-resource "aws_iam_role_policy_attachment" "AmazonEKSWorkerNodePolicy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
-  role       = aws_iam_role.eks_node_group_role.name
-}
-
-
-resource "aws_iam_role_policy_attachment" "AmazonEKSFargatePodExecutionRolePolicy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSFargatePodExecutionRolePolicy"
-  role       = aws_iam_role.eks_fargate_role.name
-}
-
-resource "aws_iam_role_policy_attachment" "AmazonEKSClusterPolicy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = aws_iam_role.eks_fargate_role.name
-}
-
-resource "aws_iam_role_policy_attachment" "AmazonEKSClusterPolicy1" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+# for the eks module's dependencies: 2 of 2
+resource "aws_iam_role_policy_attachment" "EKS_VPC_ResourceController_Cluster" {
+  policy_arn = "arn:aws:iam::aws:policy/EKS_VPC_ResourceController_Fargate"
   role       = aws_iam_role.eks_cluster_role.name
 }
 
-resource "aws_iam_role_policy_attachment" "AmazonEKSVPCResourceController" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
+# non-dependent attachment, also for the eks module
+resource "aws_iam_role_policy_attachment" "EKS_CloudWatchMetrics" {
+  policy_arn = aws_iam_policy.EKS_CloudWatchMetrics.arn
+  role       = aws_iam_role.eks_cluster_role.name
+}
+
+################################################################################
+# II. EKS Cluster Fargate Profile dependencies. 
+#     Attach the new policies to the new roles
+################################################################################
+
+
+# for the eks module's eks_managed_node_groups' dependencies: 1 of 3
+resource "aws_iam_role_policy_attachment" "EKSWorkerNodePolicy" {
+  policy_arn = "arn:aws:iam::aws:policy/EKSWorkerNodePolicy"
+  role       = aws_iam_role.eks_node_group_role.name
+}
+
+# for the eks module's eks_managed_node_groups' dependencies: 2 of 3
+resource "aws_iam_role_policy_attachment" "EKS_CNI_Policy" {
+  policy_arn = "arn:aws:iam::aws:policy/EKS_CNI_Policy"
+  role       = aws_iam_role.eks_node_group_role.name
+}
+
+# for the eks module's eks_managed_node_groups' dependencies: 3 of 3
+resource "aws_iam_role_policy_attachment" "EC2_ContainerRegistry_ReadOnly" {
+  policy_arn = "arn:aws:iam::aws:policy/EC2_ContainerRegistry_ReadOnly"
+  role       = aws_iam_role.eks_node_group_role.name
+}
+
+# non-dependent attachment, also for the Fargate profile
+resource "aws_iam_role_policy_attachment" "EKS_PodExecution_Fargate" {
+  policy_arn = "arn:aws:iam::aws:policy/EKS_PodExecution_Fargate"
   role       = aws_iam_role.eks_fargate_role.name
 }
 
-resource "aws_iam_role_policy_attachment" "AmazonEKSVPCResourceController1" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
-  role       = aws_iam_role.eks_cluster_role.name
+# non-dependent attachment, also for the Fargate profile
+resource "aws_iam_role_policy_attachment" "EKS_Policy_Fargate" {
+  policy_arn = "arn:aws:iam::aws:policy/EKS_Policy_Fargate"
+  role       = aws_iam_role.eks_fargate_role.name
+}
+
+# non-dependent attachment, also for the Fargate profile
+resource "aws_iam_role_policy_attachment" "EKS_VPC_ResourceController_Fargate" {
+  policy_arn = "arn:aws:iam::aws:policy/EKS_VPC_ResourceController_Fargate"
+  role       = aws_iam_role.eks_fargate_role.name
 }
