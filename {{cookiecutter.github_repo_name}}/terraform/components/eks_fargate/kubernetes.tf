@@ -4,7 +4,8 @@
 #
 # date: Mar-2022
 #
-# usage: temporary placeholder in lieue of Github Actions deployment
+# usage:  kubernetes configuration
+#         also, temporary placeholder in lieue of Github Actions deployment
 #------------------------------------------------------------------------------ 
 
 data "aws_eks_cluster" "cluster" {
@@ -23,7 +24,6 @@ provider "kubernetes" {
   token                  = data.aws_eks_cluster_auth.cluster.token
 }
 
-
 resource "kubernetes_namespace" "fargate" {
   metadata {
     labels = {
@@ -32,7 +32,6 @@ resource "kubernetes_namespace" "fargate" {
     name = "fargate-node"
   }
 }
-
 
 resource "kubernetes_deployment" "app" {
   metadata {
