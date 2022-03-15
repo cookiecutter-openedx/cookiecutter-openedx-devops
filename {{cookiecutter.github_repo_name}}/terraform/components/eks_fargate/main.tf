@@ -1,10 +1,11 @@
 #------------------------------------------------------------------------------ 
-# written by: Miguel Afonso
-#             https://www.linkedin.com/in/mmafonso/
+# written by: Lawrence McDaniel
+#             https://lawrencemcdaniel.com/
 #
-# date: Aug-2021
+# date: Mar-2022
 #
-# usage: build an EKS cluster load balancer
+# usage: build an EKS cluster with a Fargate Compute Cluster and
+#        a public-facing Application Load Balancer (ALB)
 #------------------------------------------------------------------------------ 
 locals {
   name = var.environment_namespace
@@ -22,7 +23,89 @@ provider "kubernetes" {
   host                   = data.aws_eks_cluster.cluster.endpoint
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
   token                  = data.aws_eks_cluster_auth.cluster.token
-  #load_config_file       = false
+}
+
+
+module "eks" {
+  source                          = "terraform-aws-modules/eks/aws"
+  version                         = "~> 18.0"
+
+  cluster_name                    = var.environment_namespace
+  cluster_version                 = "1.21"
+  cluster_endpoint_private_access = true
+
+  # FIX NOTE: FIND OUT WHAT THIS MEANS.
+  cluster_endpoint_public_access  = true
+
+  cluster_addons = {
+    coredns = {
+      resolve_conflicts = "OVERWRITE"
+    }
+    kube-proxy = {}
+    vpc-cni = {
+      resolve_conflicts = "OVERWRITE"
+    }
+  }
+
+  cluster_encryption_config = [{
+    provider_key_arn = aws_kms_key.eks.arn
+    resources        = ["secrets"]
+  }]
+
+  subnet_ids      = var.subnet_ids
+  vpc_id          = var.vpc_id
+  enable_irsa     = var.enable_irsa
+
+  self_managed_node_groups = {
+    one = {
+      name                          = "remove-me"
+      subnet_ids                    = var.subnet_ids
+      additional_security_group_ids = [aws_security_group.worker_group_mgmt.id]
+      instance_type                 = "t2.medium"
+      max_size                      = 1
+      min_size                      = 1
+      desired_size                  = 1
+    }
+  }
+
+  fargate_profiles = {
+    default = {
+      name = "default"
+      selectors = [
+        {
+          namespace = "kube-system"
+          labels = {
+            k8s-app = "kube-dns"
+          }
+        },
+        {
+          namespace = "default"
+        }
+      ]
+
+      tags = {
+        Owner = "test"
+      }
+
+      timeouts = {
+        create = "20m"
+        delete = "20m"
+      }
+    }
+  }
+
+  tags = var.tags
+}
+
+################################################################################
+# Supporting Resources
+################################################################################
+resource "aws_kms_key" "eks" {
+  description             = "EKS Secret Encryption Key"
+  deletion_window_in_days = 7
+  enable_key_rotation     = true
+
+  tags = var.tags
 }
 
 resource "aws_security_group" "worker_group_mgmt" {
@@ -72,29 +155,4 @@ resource "kubernetes_namespace" "namespace" {
   metadata {
     name = "openedx"
   }
-}
-
-module "eks" {
-  source          = "terraform-aws-modules/eks/aws"
-  version         = "~> 18.0"
-  cluster_version = "1.21"
-
-  cluster_name    = var.environment_namespace
-  subnet_ids      = var.subnet_ids
-  vpc_id          = var.vpc_id
-  enable_irsa     = var.enable_irsa
-
-  self_managed_node_groups = {
-    one = {
-      name = "remove-me"
-      instance_type   = "t2.medium"
-      subnet_ids      = var.subnet_ids
-      additional_security_group_ids = [aws_security_group.worker_group_mgmt.id]
-
-      max_size     = 1
-      min_size     = 1
-      desired_size = 1
-    }
-  }
-  tags = var.tags
 }

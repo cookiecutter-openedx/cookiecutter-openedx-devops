@@ -4,7 +4,7 @@
 #
 # date: Feb-2022
 #
-# usage: Add tls certs to us-east-1 for Cloudfront distributions.
+# usage: Add DNS records and tls certs to us-east-1 for Cloudfront distributions.
 #
 # we have to add these here, inside of eks because we 
 # need to iterate the subdomains, and this is only possible
