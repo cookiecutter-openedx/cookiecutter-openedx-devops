@@ -16,13 +16,6 @@ module "cert_manager_irsa" {
   oidc_fully_qualified_subjects = ["system:serviceaccount:cert-manager:cert-manager"]
 }
 
-data "template_file" "cert-manager-values" {
-  template = file("${path.module}/cert-manager-values.yaml.tpl")
-  vars = {
-    role_arn = module.cert_manager_irsa.iam_role_arn
-  }
-}
-
 resource "helm_release" "cert-manager" {
   name             = "cert-manager"
   namespace        = "cert-manager"
@@ -31,7 +24,8 @@ resource "helm_release" "cert-manager" {
   chart      = "cert-manager"
   repository = "https://charts.jetstack.io"
   version    = "v1.4.0"
-  values = [data.template_file.cert-manager-values.rendered
+  values = [
+    templatefile("${path.module}/cert-manager-values.yaml.tpl")
   ]
 }
 
