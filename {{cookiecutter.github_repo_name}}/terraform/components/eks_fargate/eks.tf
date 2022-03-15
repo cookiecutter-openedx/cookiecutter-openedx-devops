@@ -27,47 +27,6 @@ data "aws_iam_policy" "AmazonEKSClusterCloudWatchMetricsPolicy" {
   name   = "${var.environment_namespace}-EKSClusterCloudWatchMetricsPolicy"
 }
 
-data "aws_iam_role_policy_attachment" "AmazonEKSClusterPolicy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-}
-
-data "aws_iam_role_policy_attachment" "AmazonEKSVPCResourceController" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
-}
-
-data "aws_iam_role_policy_attachment" "AmazonEKSWorkerNodePolicy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
-}
-
-data "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
-}
-
-data "aws_iam_role_policy_attachment" "AmazonEKSFargatePodExecutionRolePolicy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSFargatePodExecutionRolePolicy"
-}
-
-data "aws_iam_role_policy_attachment" "AmazonEKSClusterPolicy1" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = data.aws_iam_role.eks_cluster_role.name
-}
-
-data "aws_iam_role_policy_attachment" "AmazonEKSVPCResourceController1" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
-  role       = data.aws_iam_role.eks_cluster_role.name
-}
-
-data "aws_iam_role_policy_attachment" "AmazonEKSCloudWatchMetricsPolicy" {
-  policy_arn = data.aws_iam_policy.AmazonEKSClusterCloudWatchMetricsPolicy.arn
-  role       = data.aws_iam_role.eks_cluster_role.name
-}
-
-data "aws_iam_role_policy_attachment" "AmazonEKS_CNI_Policy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
-  role       = data.aws_iam_role.eks_node_group_role.name
-}
-
-
 
 
 
@@ -111,11 +70,12 @@ module "eks" {
         GithubRepo = "terraform-aws-eks"
         GithubOrg  = "terraform-aws-modules"
       }
-      depends_on = [
-        data.aws_iam_role_policy_attachment.AmazonEKSWorkerNodePolicy,
-        data.aws_iam_role_policy_attachment.AmazonEKS_CNI_Policy,
-        data.aws_iam_role_policy_attachment.AmazonEC2ContainerRegistryReadOnly,
-      ]
+      
+      #depends_on = [
+      #  data.aws_iam_role_policy_attachment.AmazonEKSWorkerNodePolicy,
+      #  data.aws_iam_role_policy_attachment.AmazonEKS_CNI_Policy,
+      #  data.aws_iam_role_policy_attachment.AmazonEC2ContainerRegistryReadOnly,
+      #]
       tags = var.tags
     }
   }
@@ -124,11 +84,11 @@ module "eks" {
     default = resource.aws_eks_fargate_profile.default    
   }
 
-  depends_on = [
-    data.aws_iam_role_policy_attachment.AmazonEKSClusterPolicy1,
-    data.aws_iam_role_policy_attachment.AmazonEKSVPCResourceController1,
-    data.aws_cloudwatch_log_group.cloudwatch_log_group
-  ]
+  #depends_on = [
+  #  data.aws_iam_role_policy_attachment.AmazonEKSClusterPolicy1,
+  #  data.aws_iam_role_policy_attachment.AmazonEKSVPCResourceController1,
+  #  data.aws_cloudwatch_log_group.cloudwatch_log_group
+  #]
 
   tags = var.tags
 }
