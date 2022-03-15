@@ -24,9 +24,6 @@ variable "subdomains" {
   type        = list(string)
 }
 
-variable "worker_group_asg_max_size" {}
-variable "worker_group_asg_min_size" {}
-variable "worker_group_instance_type" {}
 
 #------------------------------------------------------------------------------
 
