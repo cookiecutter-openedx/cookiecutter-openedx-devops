@@ -24,6 +24,11 @@ variable "subdomains" {
   type        = list(string)
 }
 
+variable "aws_region" {
+  description = "the AWS region in which the S3 bucket was created"
+  type        = string
+}
+
 
 #------------------------------------------------------------------------------
 
