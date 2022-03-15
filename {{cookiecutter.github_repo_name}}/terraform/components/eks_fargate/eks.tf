@@ -51,16 +51,80 @@ module "eks" {
   # If you want to use only fargate you must follow docs `(Optional) Update CoreDNS`
   # available under https://docs.aws.amazon.com/eks/latest/userguide/fargate-getting-started.html
   eks_managed_node_groups = {
-    default = aws_eks_node_group.default
+    example = {
+      node_group_name = "default"
+      node_role_arn   = aws_iam_role.eks_node_group_role.arn
+      subnet_ids      = var.private_subnets
+
+      desired_size = 1
+      max_size     = 1
+      min_size     = 1
+
+      instance_types = ["t3.small"]
+
+      labels = {
+        Example    = "managed_node_groups"
+        GithubRepo = "terraform-aws-eks"
+        GithubOrg  = "terraform-aws-modules"
+      }
+
+      # mcdaniel mar-2022: i had to bail on this. Terraform cannot correctly
+      # determinte the dependency chain. you end up with
+      # a "Terrform error: Cycle ..." no matter how you approach this.
+      # -----------------------------------------------------------------------
+      # Ensure that IAM Role permissions are created before and deleted after EKS Node Group handling.
+      # Otherwise, EKS will not be able to properly delete EC2 Instances and Elastic Network Interfaces.
+      #depends_on = [
+      #  aws_iam_role_policy_attachment.EKSWorkerNodePolicy,
+      #  aws_iam_role_policy_attachment.EKS_CNI_Policy,
+      #  aws_iam_role_policy_attachment.EC2_ContainerRegistry_ReadOnly,
+      #]
+
+      timeouts = {
+        create = "20m"
+        delete = "20m"
+      }
+
+      tags = var.tags
+    }
   }
 
+  # mcdaniel mar-2002: i tried to move this to its own resource
+  # declaration using `resource "aws_eks_fargate_profile" "yadda-yadda" {}`
+  # but went in circles due to an arcane Terraform compiler bug.
   fargate_profiles = {
-    default = aws_eks_fargate_profile.default
+    default = {
+      name = "default"
+      selectors = [
+        {
+          namespace = "backend"
+          labels = {
+            Application = "backend"
+          }
+        },
+        {
+          namespace = "default"
+          labels = {
+            WorkerType = "fargate"
+          }
+        }
+      ]
+
+      tags = {
+        Owner = "default"
+      }
+
+      timeouts = {
+        create = "20m"
+        delete = "20m"
+      }
+
+    }
   }
 
-  # mcdaniel: moving this to a for_each inside of each of these three 
-  # aws_iam_role_policy_attachment references
-  # 
+  # mcdaniel mar-2022:
+  # see https://github.com/terraform-aws-modules/terraform-aws-eks/tree/master/examples/fargate_profile
+  # Error: Invalid for_each argument ...
   #depends_on = [
   #  aws_iam_role_policy_attachment.EKS_Policy_Cluster,
   #  aws_iam_role_policy_attachment.EKS_VPC_ResourceController_Cluster,
@@ -86,68 +150,6 @@ resource "aws_cloudwatch_log_group" "eks_cluster" {
   retention_in_days = 30
 
   tags = var.tags
-}
-
-resource "aws_eks_fargate_profile" "default" {
-  cluster_name           = var.environment_namespace
-  fargate_profile_name   = "default"
-  pod_execution_role_arn = aws_iam_role.eks_fargate_role.arn
-  subnet_ids             = var.private_subnets
-
-  selector {
-    namespace = var.environment_namespace
-  }
-
-  timeouts {
-    create = "20m"
-    delete = "20m"
-  }
-
-  tags = var.tags
-
-}
-
-resource "aws_eks_node_group" "default" {
-  cluster_name    = var.environment_namespace
-  node_group_name = "default"
-  node_role_arn   = aws_iam_role.eks_node_group_role.arn
-  subnet_ids      = var.private_subnets
-
-  scaling_config {
-    desired_size = 1
-    max_size     = 1
-    min_size     = 1
-  }
-
-  #update_config {
-  #  max_unavailable = 2
-  #}
-
-  instance_types = [var.eks_node_group_instance_type]
-  labels = {
-    Example    = "managed_node_groups"
-    GithubRepo = "terraform-aws-eks"
-    GithubOrg  = "terraform-aws-modules"
-  }
-
-  # Ensure that IAM Role permissions are created before and deleted after EKS Node Group handling.
-  # Otherwise, EKS will not be able to properly delete EC2 Instances and Elastic Network Interfaces.
-  # mcdaniel: moving this to a for_each inside of each of these three 
-  # aws_iam_role_policy_attachment references
-  # 
-  #depends_on = [
-  #  aws_iam_role_policy_attachment.EKSWorkerNodePolicy,
-  #  aws_iam_role_policy_attachment.EKS_CNI_Policy,
-  #  aws_iam_role_policy_attachment.EC2_ContainerRegistry_ReadOnly,
-  #]
-
-  timeouts {
-    create = "20m"
-    delete = "20m"
-  }
-
-  tags = var.tags
-
 }
 
 ################################################################################
