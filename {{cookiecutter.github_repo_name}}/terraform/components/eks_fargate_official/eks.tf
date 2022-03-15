@@ -6,6 +6,8 @@
 #
 # usage: build an EKS cluster load balancer that uses a Fargate Compute Cluster
 #
+# TO DO: remove eks_managed_node_groups
+#
 # how this works, see: 
 # - https://betterprogramming.pub/with-latest-updates-create-amazon-eks-fargate-cluster-and-managed-node-group-using-terraform-bc5cfefd5773
 # - https://github.com/terraform-aws-modules/terraform-aws-eks/tree/master/examples/fargate_profile
@@ -146,7 +148,7 @@ resource "aws_kms_key" "eks" {
 }
 
 resource "aws_cloudwatch_log_group" "eks_cluster" {
-  name              = "/aws/eks/${var.environment_namespace}/cluster"
+  name              = "/aws/eks/${var.environment_namespace}/eks_cluster"
   retention_in_days = 30
 
   tags = var.tags
