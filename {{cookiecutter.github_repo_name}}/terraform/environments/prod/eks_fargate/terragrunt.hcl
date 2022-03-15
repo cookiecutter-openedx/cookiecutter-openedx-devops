@@ -18,6 +18,7 @@ locals {
   platform_region                 = local.global_vars.locals.platform_region
   environment_namespace           = local.environment_vars.locals.environment_namespace
   account_id                      = local.global_vars.locals.account_id
+  aws_region                      = local.global_vars.locals.aws_region
 
   tags = merge(
     local.environment_vars.locals.tags,
@@ -52,6 +53,7 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
+  aws_region = local.aws_region
   environment_domain = local.environment_domain
   environment_namespace = local.environment_namespace
 
