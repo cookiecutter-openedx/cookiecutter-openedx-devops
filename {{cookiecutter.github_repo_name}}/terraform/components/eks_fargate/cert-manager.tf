@@ -25,7 +25,7 @@ resource "helm_release" "cert-manager" {
   repository = "https://charts.jetstack.io"
   version    = "v1.4.0"
   values = [
-    templatefile("${path.module}/cert-manager-values.yaml.tpl")
+    templatefile("${path.module}/cert-manager-values.yaml.tpl", {role_arn = module.cert_manager_irsa.iam_role_arn})
   ]
 }
 

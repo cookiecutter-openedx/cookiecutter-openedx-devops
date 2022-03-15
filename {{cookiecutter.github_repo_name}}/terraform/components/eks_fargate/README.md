@@ -1,2 +1,2 @@
-## Elastic Kubernetes with EC2 Worker Nodes + Classic Load Balancer
+## Elastic Kubernetes with Fargate Compute Cluster
 

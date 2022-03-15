@@ -18,7 +18,6 @@ locals {
   platform_region                 = local.global_vars.locals.platform_region
   environment_namespace           = local.environment_vars.locals.environment_namespace
   account_id                      = local.global_vars.locals.account_id
-  eks_node_group_instance_type    = local.environment_vars.locals.eks_worker_group_instance_type
 
   tags = merge(
     local.environment_vars.locals.tags,
@@ -57,39 +56,18 @@ inputs = {
   environment_domain = local.environment_domain
   environment_namespace = local.environment_namespace
 
-  #enable_irsa     = true
-
   # Subnets
-  subnets = dependency.vpc.outputs.private_subnets
+  subnet_ids = dependency.vpc.outputs.private_subnets
   private_subnets = dependency.vpc.outputs.private_subnets
   public_subnets = dependency.vpc.outputs.public_subnets
   vpc_id  = dependency.vpc.outputs.vpc_id
 
-  eks_node_group_instance_type = local.eks_node_group_instance_type
+  #worker group
+  worker_group_asg_max_size  = 5
+  worker_group_asg_min_size  = 1
+  worker_group_instance_type = "t2.large"
 
-  map_roles = []
-
-  # TODO: Make this dynamic from list of users / ops user management
-  map_users = [
-    {
-      userarn  = "arn:aws:iam::${local.account_id}:user/ci"
-      username = "ci"
-      groups   = ["system:masters"]
-    }
-
-    # -------------------------------------------------------------------------
-    # Add more users here, if you'd like. This will give the user the ability
-    # to connect to the Elastic Kubernetes Cluster via a tool like K9s.
-    #
-    # Un-comment this example:
-    # -------------------------------------------------------------------------
-    #{
-    #  userarn  = "arn:aws:iam::${local.account_id}:user/mcdaniel"
-    #  username = "mcdaniel"
-    #  groups   = ["system:masters"]
-    #}
-  ]
-
+  
   tags = local.tags
 }
 
