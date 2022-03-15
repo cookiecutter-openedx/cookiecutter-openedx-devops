@@ -8,11 +8,6 @@
 #        a public-facing Application Load Balancer (ALB)
 #------------------------------------------------------------------------------ 
 
-provider "kubernetes" {
-  host                   = module.eks.cluster_id.cluster.endpoint
-  cluster_ca_certificate = base64decode(module.eks.cluster_id.cluster.certificate_authority.0.data)
-  token                  = module.eks.cluster_id.cluster.token
-}
 
 module "eks" {
   source                          = "terraform-aws-modules/eks/aws"
