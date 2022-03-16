@@ -6,6 +6,9 @@
 #
 # usage: create an Application Load Balancer (ALB)
 #
+# note: references to the "Fargate pod" in AWS documentation are in fact,
+#       this ALB.
+#
 # see:
 # - https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.2/guide/ingress/annotations/
 # - https://aws.amazon.com/premiumsupport/knowledge-center/eks-alb-ingress-controller-fargate/
@@ -22,8 +25,16 @@ data "aws_acm_certificate" "environment_domain" {
 ################################################################################
 # Supporting Resources
 ################################################################################
+
+#
 resource "aws_iam_policy" "ALB-policy" {
-  name   = "ALBIngressControllerIAMPolicy"
+  name = "ALBIngressControllerIAMPolicy"
+
+  # note: this IAM policy json comes directly from the AWS support web site.
+  # see https://aws.amazon.com/premiumsupport/knowledge-center/eks-alb-ingress-controller-fargate/
+  #
+  # source:
+  # $ curl -o iam_policy_alb.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.2.0/docs/install/iam_policy.json
   policy = file("./json/iam_policy_alb.json")
 }
 
