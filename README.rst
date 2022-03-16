@@ -77,6 +77,7 @@ Important Considerations
 - the Github Actions workflows in your new repository will use an AWS IAM key pair from an IAM user named *ci* that you must manually create.
 - the collection of resources created by these scripts **will generate AWS costs of around $0.41 USD per hour ($10.00 USD per day)** while the platform is in a mostly-idle pre-production state. This cost will grow proportionally to your production work loads.
 - **BE ADVISED** that MySQL RDS, MongoDB and Redis ElastiCache are vertically scaled **manually** and therefore require some insight and potential adjustments on your part. All of these services are defaulted to their minimum instance sizes which you can modify in the environment configuration file.
+- TO DO: `NSA Updated: Kubernetes Hardening Guide <https://www.cisa.gov/uscert/ncas/current-activity/2022/03/15/updated-kubernetes-hardening-guide>`_
 
 Usage
 -----
