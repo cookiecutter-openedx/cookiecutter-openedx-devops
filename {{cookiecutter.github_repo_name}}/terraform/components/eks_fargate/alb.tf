@@ -11,6 +11,14 @@
 # - https://aws.amazon.com/premiumsupport/knowledge-center/eks-alb-ingress-controller-fargate/
 #------------------------------------------------------------------------------ 
 
+# see eks_ec2/acm.tf or eks_fargate/acm.tf for creation of this certificate
+# as well as the definition for the provider "aws.us-east-1"
+data "aws_acm_certificate" "environment_domain" {
+  domain   = var.environment_domain
+  statuses = ["ISSUED"]
+  provider = "aws.environment_region"
+}
+
 
 ################################################################################
 # Supporting Resources
@@ -100,23 +108,24 @@ resource "kubernetes_ingress" "app" {
     name      = "owncloud-lb"
     namespace = var.fargate_namespace
     annotations = {
-      "kubernetes.io/ingress.class"                   = "alb"
-      "alb.ingress.kubernetes.io/scheme"              = "internet-facing"
-      "alb.ingress.kubernetes.io/target-type"         = "ip"
-      "alb.ingress.kubernetes.io/ip-address-type"     = "ipv4"
+      "kubernetes.io/ingress.class"                         = "alb"
+      "alb.ingress.kubernetes.io/scheme"                    = "internet-facing"
+      "alb.ingress.kubernetes.io/target-type"               = "ip"
+      "alb.ingress.kubernetes.io/ip-address-type"           = "ipv4"
 
-      "alb.ingress.kubernetes.io/load-balancer-name"  = "${var.environment_namespace}"
-      "alb.ingress.kubernetes.io/group.name"          = "${var.environment_namespace}"
-      "alb.ingress.kubernetes.io/subnets"             = "${var.subnet_ids}"
-      "alb.ingress.kubernetes.io/security-groups"     = "SET ME PLEEASE"
-      "alb.ingress.kubernetes.io/load-balancer-attributes" = "stringMap"
-      "alb.ingress.kubernetes.io/listen-ports"        = jsonencode([{"HTTP": 80}, {"HTTPS": 443}, {"HTTP": 8080}, {"HTTPS": 8443}])
-      "alb.ingress.kubernetes.io/ssl-redirect"        = "443"
-      "alb.ingress.kubernetes.io/certificate-arn"     = "SET ME PLEASE"
-      "alb.ingress.kubernetes.io/backend-protocol"    = "HTTP"
-      "alb.ingress.kubernetes.io/success-codes"       = "'200' | '301'"
-      "alb.ingress.kubernetes.io/auth-session-cookie" = "AWSELBAuthSessionCookie"
-      "alb.ingress.kubernetes.io/auth-session-timeout" = "604800"
+      "alb.ingress.kubernetes.io/security-groups"           = "SET ME PLEEASE"
+      "alb.ingress.kubernetes.io/load-balancer-attributes"  = "stringMap"
+      "alb.ingress.kubernetes.io/listen-ports"              = jsonencode([{"HTTP": 80}, {"HTTPS": 443}, {"HTTP": 8080}, {"HTTPS": 8443}])
+      "alb.ingress.kubernetes.io/ssl-redirect"              = 443
+      "alb.ingress.kubernetes.io/certificate-arn"           = data.aws_acm_certificate.environment_domain.arn
+      "alb.ingress.kubernetes.io/backend-protocol"          = "HTTP"
+      "alb.ingress.kubernetes.io/success-codes"             = "'200' | '301'"
+      "alb.ingress.kubernetes.io/auth-session-cookie"       = "AWSELBAuthSessionCookie"
+      "alb.ingress.kubernetes.io/auth-session-timeout"      = 604800
+
+      "alb.ingress.kubernetes.io/load-balancer-name"        = "${var.environment_namespace}"
+      "alb.ingress.kubernetes.io/group.name"                = "${var.environment_namespace}"
+      "alb.ingress.kubernetes.io/subnets"                   = "${var.subnet_ids}"
 
     }
     labels = {
