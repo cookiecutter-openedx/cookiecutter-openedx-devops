@@ -1,11 +1,11 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Miguel Afonso
 #             https://www.linkedin.com/in/mmafonso/
 #
 # date: Aug-2021
 #
 # usage: create DNS records for EKS cluster load balancer
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 data "aws_route53_zone" "root_domain" {
   name = var.root_domain
 }
@@ -51,4 +51,3 @@ resource "aws_route53_record" "wildcard" {
     evaluate_target_health = true
   }
 }
-

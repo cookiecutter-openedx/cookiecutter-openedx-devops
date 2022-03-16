@@ -1,14 +1,14 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Miguel Afonso
 #             https://www.linkedin.com/in/mmafonso/
 #
 # date: Aug-2021
 #
-# usage: create a non-public S3 Bucket to store data backups from any backend 
+# usage: create a non-public S3 Bucket to store data backups from any backend
 #        service.
 #
 #        store S3 credentials (key/secret pair) in EKS Kubernetes Secrets.
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 data "aws_eks_cluster" "eks" {
   name = var.environment_namespace
 }

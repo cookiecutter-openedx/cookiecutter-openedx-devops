@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Miguel Afonso
 #             https://www.linkedin.com/in/mmafonso/
 #
@@ -6,7 +6,7 @@
 #
 # usage: create an ElastiCache Redis cache
 #        stored cache credentials in Kubernetes Secrets.
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 data "aws_eks_cluster" "eks" {
   name = var.environment_namespace
 }

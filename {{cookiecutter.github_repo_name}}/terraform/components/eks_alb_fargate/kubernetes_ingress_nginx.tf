@@ -1,11 +1,11 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Miguel Afonso
 #             https://www.linkedin.com/in/mmafonso/
 #
 # date: Aug-2021
 #
 # usage: Add nginx proxy for EKS cluster load balancer
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 locals {
   external_dns_annotation = "*.${var.environment_domain}"
 }
@@ -68,5 +68,3 @@ resource "aws_route53_record" "ingress_domains_naked" {
     evaluate_target_health = true
   }
 }
-
-

@@ -1,18 +1,18 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Miguel Afonso
 #             https://www.linkedin.com/in/mmafonso/
 #
 # date: Aug-2021
 #
 # usage: setup nginx for EKS load balancer.
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: openedx
   namespace: {{ cookiecutter.prod_environment }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}
   annotations:
-    # mcdaniel 
+    # mcdaniel
     # https://www.cyberciti.biz/faq/nginx-upstream-sent-too-big-header-while-reading-response-header-from-upstream/
     # to fix "[error] 199#199: *15739 upstream sent too big header while reading response header from upstream"
     # ---------------------

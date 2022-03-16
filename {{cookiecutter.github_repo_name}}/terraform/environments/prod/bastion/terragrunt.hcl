@@ -1,11 +1,11 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Lawrence McDaniel
 #             https://lawrencemcdaniel.com/
 #
 # date: Feb-2022
 #
 # usage: create an EC2 instance with ssh access and a DNS record.
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 locals {
   # Automatically load environment-level variables
   environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
@@ -78,4 +78,3 @@ inputs = {
   tags      = local.tags
 
 }
-

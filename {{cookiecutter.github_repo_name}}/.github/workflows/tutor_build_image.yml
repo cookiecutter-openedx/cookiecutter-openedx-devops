@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Miguel Afonso
 #             https://www.linkedin.com/in/mmafonso/
 #
@@ -10,7 +10,7 @@
 #        - plugin
 #        - various Xblocks
 #        Registers the new container in AWS ECR.
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 name: Tutor Build Image
 
 on: workflow_dispatch
@@ -117,4 +117,3 @@ jobs:
       - name: Docker image:tag
         run: |
           echo "Docker image: ${ECR_REGISTRY}/${ECR_REPOSITORY}:${REPOSITORY_TAG}"
-

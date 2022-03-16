@@ -1,11 +1,11 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Miguel Afonso
 #             https://www.linkedin.com/in/mmafonso/
 #
 # date: Aug-2021
 #
 # usage: create a VPC to contain all Open edX backend resources.
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
@@ -30,4 +30,3 @@ module "vpc" {
 
   tags = var.tags
 }
-

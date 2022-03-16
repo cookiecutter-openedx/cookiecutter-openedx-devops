@@ -26,4 +26,3 @@ The docker image tag will be automatically suffixed with a timestamp. The full l
 unique docker tag can be visualised in the last user defined step of the workflow.
 
 This value then needs to be updated on the target environment's configuration on the [deployment repository](https://github.com/{{ cookiecutter.github_account_name }}/tutor-deploy).
-

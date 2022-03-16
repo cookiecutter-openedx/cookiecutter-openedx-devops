@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Miguel Afonso
 #             https://www.linkedin.com/in/mmafonso/
 #
@@ -7,7 +7,7 @@
 # usage: create an ElastiCache Redis cache
 #
 # FIX NOTE: get rid of module dependency
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 locals {
   name = var.replication_group_description
 }
@@ -59,4 +59,3 @@ module "redis" {
   family    = var.family
   node_type = var.node_type
 }
-

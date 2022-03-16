@@ -12,12 +12,12 @@ repos:
       - id: check-executables-have-shebangs
       - id: check-json
       - id: check-shebang-scripts-are-executable
-      - id: pretty-format-json
+    #  - id: pretty-format-json
       - id: check-merge-conflict
       - id: check-symlinks
       - id: check-toml
       - id: check-xml
-      - id: check-yaml
+    #  - id: check-yaml
       - id: destroyed-symlinks
       - id: detect-aws-credentials
       - id: detect-private-key
@@ -28,10 +28,10 @@ repos:
     rev: v0.1.17 # Get the latest from: https://github.com/gruntwork-io/pre-commit/releases
     hooks:
       - id: terraform-fmt
-    #  - id: terraform-validate
-      - id: terragrunt-hclfmt
-    #  - id: tflint
-      - id: shellcheck
-      - id: yapf
       - id: helmlint
-      - id: markdown-link-check
+    #  - id: terraform-validate
+    #  - id: terragrunt-hclfmt
+    #  - id: tflint
+    #  - id: shellcheck
+    #  - id: yapf
+    #  - id: markdown-link-check

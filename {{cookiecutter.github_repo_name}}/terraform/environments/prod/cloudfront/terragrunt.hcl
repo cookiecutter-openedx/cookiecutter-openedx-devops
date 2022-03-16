@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Lawrence McDaniel
 #             https://lawrencemcdaniel.com/
 #
@@ -6,7 +6,7 @@
 #
 # usage: create one Cloudfront distribution for the environment, plus one more
 #        for each subdomain.
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 locals {
   # Automatically load environment-level variables
   environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
@@ -51,4 +51,3 @@ inputs = {
   resource_name         = local.resource_name
   tags                  = local.tags
 }
-

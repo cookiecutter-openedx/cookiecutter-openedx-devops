@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Lawrence McDaniel
 #             https://lawrencemcdaniel.com/
 #
@@ -6,7 +6,7 @@
 #
 # usage: create global parameters, exposed to all
 #        Terragrunt modules in this repository.
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 locals {
   platform_name    = "{{ cookiecutter.global_platform_name }}"
   platform_region  = "{{ cookiecutter.global_platform_region }}"

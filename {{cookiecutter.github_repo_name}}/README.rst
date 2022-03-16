@@ -56,7 +56,7 @@ The Terraform scripts in this repo provide a 1-click means of creating / updatin
 - public ssh access via a t2.micro Ubuntu 20.04 LTS bastion EC2 instance at bastion.{{ cookiecutter.prod_environment }}.{{ cookiecutter.global_root_domain }}
 - daily data backups archived into a private S3 bucket named {{ cookiecutter.prod_environment }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-mongodb-backup
 
-You can also optionally automatically create additional environments for say, dev and test and QA and so forth. 
+You can also optionally automatically create additional environments for say, dev and test and QA and so forth.
 These would result in environments like the following:
 
 - LMS at https://dev.{{ cookiecutter.prod_environment }}.{{ cookiecutter.global_root_domain }}
@@ -82,7 +82,7 @@ Quick Start
 I. Add Your Secret Credentials To This Repository
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Github Actions workflows in this repository depend on several `workflow secrets <settings>`_ including two sets of AWS IAM keypairs, one for CI workflows and another for the AWS Simple Email Service. 
+The Github Actions workflows in this repository depend on several `workflow secrets <settings>`_ including two sets of AWS IAM keypairs, one for CI workflows and another for the AWS Simple Email Service.
 Additionally, they require a Github Personal Access Token (PAT) for a Github user account with all requisite privileges in this repository as well as any other repositories that are cloned during any of the build / installation pipelines.
 
 .. image:: doc/repository-secrets.png
@@ -130,7 +130,7 @@ Set your `production environment parameters <terraform/environments/prod/env.hcl
   redis_node_type                 = "cache.t2.small"
 
                                     # 2 vCPU 8gb
-  eks_worker_group_instance_type  = "t3.large" 
+  eks_worker_group_instance_type  = "t3.large"
 
   }
 
@@ -139,10 +139,10 @@ Set your `production environment parameters <terraform/environments/prod/env.hcl
 III. Build Your Open edX Backend
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The backend build procedure is automated using `Terragrunt <https://terragrunt.gruntwork.io/>`_ for `Terraform <https://www.terraform.io/>`_. 
-Installation instructions are avilable at both of these web sites. 
+The backend build procedure is automated using `Terragrunt <https://terragrunt.gruntwork.io/>`_ for `Terraform <https://www.terraform.io/>`_.
+Installation instructions are avilable at both of these web sites.
 
-Terraform scripts rely on the `AWS CLI (Command Line Interface) Tools <https://aws.amazon.com/cli/>`_. Installation instructions for Windows, macOS and Linux are available on this site. 
+Terraform scripts rely on the `AWS CLI (Command Line Interface) Tools <https://aws.amazon.com/cli/>`_. Installation instructions for Windows, macOS and Linux are available on this site.
 We also recommend that you install `k9s <https://k9scli.io/>`_, a popular tool for adminstering a Kubernetes cluster.
 
 .. code-block:: shell
@@ -208,7 +208,7 @@ I. Build your Tutor Docker Image
 
 Use `this automated Github Actions workflow <https://github.com/{{ cookiecutter.github_account_name }}/{{ cookiecutter.github_repo_name }}/actions/workflows/tutor_build_image.yml>`_ to build a customized Open edX Docker container based on the latest stable version of Open edX (current maple.2) and
 your Open edX custom theme repository and Open edX plugin repository. Your new Docker image will be automatically uploaded to `AWS Amazon Elastic Container Registry <https://{{ cookiecutter.global_aws_region }}.console.aws.amazon.com/ecr/repositories?region={{ cookiecutter.global_aws_region }}>`_
- 
+
 
 II. Deploy your Docker Image to a Kubernetes Cluster
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -220,9 +220,9 @@ Open edX LMS and Studio configuration parameters are located `here <ci/tutor-dep
 About The Open edX Platform Back End
 ------------------------------------
 
-The scripts in the `terraform <terraform>`_ folder provide 1-click functionality to create and manage all resources in your AWS account. 
+The scripts in the `terraform <terraform>`_ folder provide 1-click functionality to create and manage all resources in your AWS account.
 These scripts generally follow current best practices for implementing a large Python Django web platform like Open edX in a secure, cloud-hosted environment.
-Besides reducing human error, there are other tangible improvements to managing your cloud infrastructure with Terraform as opposed to creating and managing your cloud infrastructure resources manually from the AWS console. 
+Besides reducing human error, there are other tangible improvements to managing your cloud infrastructure with Terraform as opposed to creating and managing your cloud infrastructure resources manually from the AWS console.
 For example, all AWS resources are systematically tagged which in turn facilitates use of CloudWatch and improved consolidated logging and AWS billing expense reporting.
 
 These scripts will create the following resources in your AWS account:
@@ -262,7 +262,7 @@ Why Use Docker?
 In a word, `Docker <https://docs.docker.com/get-started/>`_ is about "Packaging" your software in a way that simplifies how it is installed and managed so that you benefit from fast, consistent delivery of your applications.
 A Docker container image is a lightweight, standalone, executable package of software that includes everything needed to run an application: code, runtime, system tools, system libraries and settings. Meanwhile, Docker is an open platform for developing, shipping, and running applications.
 
-For context, any software which you traditionally relied on Linux package managers like apt, snap or yum can alternativley be installed and run as a Docker container. 
+For context, any software which you traditionally relied on Linux package managers like apt, snap or yum can alternativley be installed and run as a Docker container.
 Some examples of stuff which an Open edX platform depends: Nginx, MySQL, MongoDB, Redis, and the Open edX application software itself which Tutor bundles into a container using `Docker Compose <https://en.wikipedia.org/wiki/Infrastructure_as_code>`_.
 
 Why Use Kubernetes?
@@ -270,9 +270,9 @@ Why Use Kubernetes?
 `Kubernetes <https://kubernetes.io/>`_ manages Docker containers in a deployment enviornment. It provides an easy way to scale your application, and is a superior, cost-effective alternative to you manually creating and maintaing individual virtual servers for each of your backend services.
 It keeps code operational and speeds up the delivery process. Kubernetes enables automating a lot of resource management and provisioning tasks.
 
-Your Open edX platform runs via multiple Docker containers: the LMS Django application , CMS Django application, one or more Celery-based worker nodes for each of these applications, nginx, Caddy, and any backend services that tutor manages like Nginx and SMTP for example. 
-Kubernetes creates EC2 instances and then decides where to place each of these containers based on various real-time resource-based factors. 
-This leads to your EC2 instances carrying optimal workloads, all the time. 
+Your Open edX platform runs via multiple Docker containers: the LMS Django application , CMS Django application, one or more Celery-based worker nodes for each of these applications, nginx, Caddy, and any backend services that tutor manages like Nginx and SMTP for example.
+Kubernetes creates EC2 instances and then decides where to place each of these containers based on various real-time resource-based factors.
+This leads to your EC2 instances carrying optimal workloads, all the time.
 Behind the scenes Kubernetes (EKS in our case) uses an EC2 Elastic Load Balancer (ELB) with an auto-scaling policy, both of which you can see from the AWS EC2 dashboard.
 
 

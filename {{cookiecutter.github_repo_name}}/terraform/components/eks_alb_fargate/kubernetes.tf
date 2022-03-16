@@ -1,11 +1,11 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Lawrence McDaniel
 #             https://lawrencemcdaniel.com/
 #
 # date: Mar-2022
 #
 # usage:  kubernetes configuration
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 
 data "aws_eks_cluster" "cluster" {
   name = module.eks.cluster_id
@@ -31,4 +31,3 @@ resource "kubernetes_namespace" "fargate" {
     name = var.fargate_namespace
   }
 }
-

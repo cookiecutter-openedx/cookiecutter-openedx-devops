@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Miguel Afonso
 #             https://www.linkedin.com/in/mmafonso/
 #
@@ -6,7 +6,7 @@
 #
 # usage: create a JWT for Open edX configuration.
 #        association happens during Github Action deployment workflow.
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 resource "tls_private_key" "jwt_rsa_private_key" {
   algorithm = "RSA"
   rsa_bits  = "2048"

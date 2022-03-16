@@ -28,7 +28,7 @@ The Terraform stack will create all of the resources needed for this deployment 
 
 
 ## Deployment process
-Once the Terraform stack with the Open edX dependencies has been successfully applied for a particular Open edX environment (one-off) we just need to trigger the desired environment's workflow dispatch. 
+Once the Terraform stack with the Open edX dependencies has been successfully applied for a particular Open edX environment (one-off) we just need to trigger the desired environment's workflow dispatch.
 
 ### Repository structure
 This repository contains a directory `environemnts` with the following structure
@@ -56,13 +56,12 @@ This is a directory that contains predefined Kubernetes resources to deploy edX
      ├── cluster-issuer.yml
      └── ingress.yml
 
-This is a definition of a ClusterIssuer and a TLS Certificate. 
+This is a definition of a ClusterIssuer and a TLS Certificate.
 These resources create a Kubernetes ingress with TLS support and generate a TLS certificate to match the associated domain.
-They are applied and enforced during the deployment.  
+They are applied and enforced during the deployment.
 
 #### settings_merge.json
 This file contains custom configuration that is not managed by Tutor, but that we need to add to the running Open edX services so that our plugin can work.
 
-We cannot tell Tutor to include extra configuration or settings that it does not manage, 
+We cannot tell Tutor to include extra configuration or settings that it does not manage,
 so we will merge this JSON block to the final rendered configuration that will be passed on to the edX services ,the LMS and the CMS.
-

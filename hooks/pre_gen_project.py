@@ -16,4 +16,3 @@ if hasattr(github_repo_name, "isidentifier"):
 assert (
     github_repo_name == github_repo_name.lower()
 ), "'{}' project slug should be all lowercase".format(github_repo_name)
-

@@ -1,11 +1,11 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Miguel Afonso
 #             https://www.linkedin.com/in/mmafonso/
 #
 # date: Aug-2021
 #
 # usage: create an AWS S3 bucket to offload Open edX file storage.
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 output "s3_bucket_id" {
   description = "The name of the bucket."
   value       = module.data_backup_s3_bucket.s3_bucket_id

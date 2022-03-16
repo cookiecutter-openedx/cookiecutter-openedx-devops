@@ -128,7 +128,7 @@ jobs:
           echo "TUTOR_RUN_CADDY=false" >> $GITHUB_ENV
           echo "TUTOR_RUN_NGINX=false" >> $GITHUB_ENV
 
-      # note that the Kubernetes additional config data is locally 
+      # note that the Kubernetes additional config data is locally
       # stored in ci/tutor-deploy/environments/prod/k8s/
       - name: Create Kubernetes add-on resources
         run:  |-
@@ -136,14 +136,14 @@ jobs:
           kubectl apply -f "ci/tutor-deploy/environments/$ENVIRONMENT_ID/k8s"
 
       # Notes: OPENEDX_AWS_ACCESS_KEY, OPENEDX_AWS_SECRET_ACCESS_KEY and S3_STORAGE_BUCKET
-      #        are stored in EKS kubernetes secrets, viewable from k9s. 
+      #        are stored in EKS kubernetes secrets, viewable from k9s.
       #        example values:
       #          OPENEDX_AWS_ACCESS_KEY: ABDCE123456789OHBBGQ
       #          OPENEDX_AWS_SECRET_ACCESS_KEY: A123456789srJ8lgel+ABCDEFGHIJKabcdefghijk
       #          S3_STORAGE_BUCKET: {{ cookiecutter.prod_environment }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-storage
       #          S3_CUSTOM_DOMAIN: cdn.{{ cookiecutter.prod_environment }}.{{ cookiecutter.global_root_domain }}
       #          S3_REGION: {{ cookiecutter.global_aws_region }}
-      # 
+      #
       # this config depends on a public read-only AWS S3 bucket policy like this:
       # https://github.com/{{ cookiecutter.github_account_name }}/terraform-openedx/blob/main/components/s3/main.tf#L19
       #
@@ -191,8 +191,8 @@ jobs:
           tutor config save
           cat $TUTOR_ROOT/config.yml
 
-      # in this step we're combining our custom configuration data 
-      # from ci/tutor-deploy/environments/prod/settings_merge.json with the default 
+      # in this step we're combining our custom configuration data
+      # from ci/tutor-deploy/environments/prod/settings_merge.json with the default
       # config that was created when we built the openedx docker image with tutor
       - name: Patch Generated Configuration (Static)
         run:  |-
@@ -200,7 +200,7 @@ jobs:
           cat "$(tutor config printroot)/config.yml"
           echo ""
           echo ""
-          
+
 
           cd $TUTOR_ROOT/env/apps/openedx/config/
 

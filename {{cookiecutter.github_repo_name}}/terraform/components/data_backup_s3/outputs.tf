@@ -1,12 +1,12 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Miguel Afonso
 #             https://www.linkedin.com/in/mmafonso/
 #
 # date: Aug-2021
 #
-# usage: create a non-public S3 Bucket to store data backups from any backend 
+# usage: create a non-public S3 Bucket to store data backups from any backend
 #        service.
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 output "s3_bucket_id" {
   description = "The name of the bucket."
   value       = module.data_backup_s3_bucket.s3_bucket_id

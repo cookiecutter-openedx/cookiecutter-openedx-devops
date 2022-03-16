@@ -1,11 +1,11 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Miguel Afonso
 #             https://www.linkedin.com/in/mmafonso/
 #
 # date: Aug-2021
 #
 # usage: build an EKS Fargate cluster
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 locals {
   # Automatically load environment-level variables
   environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
@@ -62,4 +62,3 @@ inputs = {
   vpc_id  = dependency.vpc.outputs.vpc_id
   tags = local.tags
 }
-

@@ -412,7 +412,7 @@ Local Development Quick Start
 
   pip install pre-commit
   pre-commit install
-
+  npm install -g markdown-link-check
 
 Special Thanks
 ~~~~~~~~~~~~~~

@@ -1,11 +1,11 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Miguel Afonso
 #             https://www.linkedin.com/in/mmafonso/
 #
 # date: Aug-2021
 #
 # usage: create an RDS MySQL instance.
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 output "db_instance_address" {
   description = "The address of the RDS instance"
   value       = module.db.db_instance_address
@@ -92,4 +92,3 @@ output "db_enhanced_monitoring_iam_role_arn" {
   description = "The Amazon Resource Name (ARN) specifying the monitoring role"
   value       = module.db.enhanced_monitoring_iam_role_arn
 }
-

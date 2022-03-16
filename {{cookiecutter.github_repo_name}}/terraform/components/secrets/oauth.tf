@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Miguel Afonso
 #             https://www.linkedin.com/in/mmafonso/
 #
@@ -6,7 +6,7 @@
 #
 # usage: create user credentials for oAuth provider in Open edX
 #        association occurs during Github Actions deployment workflow.
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 resource "random_password" "clientid_edx" {
   length  = 40
   special = false
@@ -35,4 +35,3 @@ resource "kubernetes_secret" "openedx" {
     CLIENT_SECRET = random_password.clientsecret_edx.result
   }
 }
-

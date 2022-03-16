@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Miguel Afonso
 #             https://www.linkedin.com/in/mmafonso/
 #
@@ -6,7 +6,7 @@
 #
 # usage: create a Javascript Web Token (JWT) to be added
 #        to the Open edX build configuration.
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 variable "environment_namespace" {
   description = "kubernetes namespace where to place resources"
   type        = string

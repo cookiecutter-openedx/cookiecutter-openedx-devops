@@ -18,4 +18,3 @@ output "auth_token" {
   value       = aws_elasticache_replication_group.this.auth_token
   sensitive   = true
 }
-

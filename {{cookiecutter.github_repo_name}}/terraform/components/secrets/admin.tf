@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Miguel Afonso
 #             https://www.linkedin.com/in/mmafonso/
 #
@@ -6,7 +6,7 @@
 #
 # usage: create an admin password for an Open edX superuser account.
 #        association happens during Github Action deployment workflow.
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 resource "random_password" "admin_edx" {
   length  = 16
   special = false
@@ -26,4 +26,3 @@ resource "kubernetes_secret" "admin_edx" {
     ADMIN_PASSWORD = random_password.admin_edx.result
   }
 }
-

@@ -1,3 +1,4 @@
+#!/bin/sh
 #------------------------------------------------------------------------------
 # written by:   mcdaniel
 #               https://lawrencemcdaniel.com
@@ -24,4 +25,3 @@ cookiecutter --checkout $GITHUB_BRANCH \
              global_root_domain=stepwisemath.ai \
              global_aws_route53_hosted_zone_id=Z049210026A5G6XHV84CF \
              prod_environment=fargate
-

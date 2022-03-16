@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Lawrence McDaniel
 #             https://lawrencemcdaniel.com/
 #
@@ -6,7 +6,7 @@
 #
 # usage: setup a DocumentDB MongoDB cluster with connectivity
 #        to anything inside the VPN. create DNS records for master and reader.
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 locals {
   # Automatically load environment-level variables
   environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
@@ -103,7 +103,7 @@ inputs = {
   vpc_cidr_block        = dependency.vpc.outputs.vpc_cidr_block
   ingress_cidr_blocks   = [dependency.vpc.outputs.vpc_cidr_block]
   subnet_ids            = dependency.vpc.outputs.database_subnets
-  
+
   enabled_cloudwatch_logs_exports = []
   storage_encrypted = false
   apply_immediately = false
@@ -115,4 +115,3 @@ inputs = {
   tags                  = local.tags
 
 }
-

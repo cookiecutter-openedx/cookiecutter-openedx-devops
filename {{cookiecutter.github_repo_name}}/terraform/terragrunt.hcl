@@ -67,4 +67,3 @@ inputs = merge(
   local.global_vars.locals,
   local.environment_vars.locals,
 )
-

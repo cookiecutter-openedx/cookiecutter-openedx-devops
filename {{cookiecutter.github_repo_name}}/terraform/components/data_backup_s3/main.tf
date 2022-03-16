@@ -1,12 +1,12 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Miguel Afonso
 #             https://www.linkedin.com/in/mmafonso/
 #
 # date: Aug-2021
 #
-# usage: create a non-public S3 Bucket to store data backups from any backend 
+# usage: create a non-public S3 Bucket to store data backups from any backend
 #        service.
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 module "data_backup_s3_bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "~> 2"
