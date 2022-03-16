@@ -410,9 +410,19 @@ Local Development Quick Start
 
 .. code-block:: shell
 
+  # clone this repository
+  git clone https://github.com/lpm0073/cookiecutter-openedx-devops
+
+  # install the pre-commit command-line tools
   pip install pre-commit
   pre-commit install
   npm install -g markdown-link-check
+
+  # Lint your Terraform code
+  terraform fmt -recursive
+  pre-commit run --all-files
+
+  # make some improvements and then create a pull request!!!!
 
 Special Thanks
 ~~~~~~~~~~~~~~
