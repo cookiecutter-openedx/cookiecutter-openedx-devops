@@ -7,7 +7,7 @@
 # usage: Add DNS records and tls certs to us-east-1 for Cloudfront distributions.
 #        and to environment region for ALB.
 #
-# we have to add these here, inside of eks because we 
+# we have to add these here, inside of eks_fargate because we 
 # need to iterate the subdomains, and this is only possible
 # within the terragrunt module in which the subdomain
 # resources are created.
