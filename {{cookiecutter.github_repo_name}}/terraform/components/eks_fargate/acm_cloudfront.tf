@@ -20,14 +20,12 @@
 # than as data
 #------------------------------------------------------------------------------ 
 
+#------------------------------------------------------------------------------
+# SSL/TLS certs issued in us-east-1 for Cloudfront
+#------------------------------------------------------------------------------
 provider "aws" {
   alias  = "us-east-1"
   region = "us-east-1"
-}
-
-provider "aws" {
-  alias  = "environment_region"
-  region = "${var.aws_region}"
 }
 
 module "acm_root_domain" {
@@ -89,10 +87,14 @@ module "acm_subdomains" {
 }
 
 #------------------------------------------------------------------------------
-# SSL/TLS certs issued in the AWS region
+# SSL/TLS certs issued in the AWS region for ALB
 #------------------------------------------------------------------------------
+provider "aws" {
+  alias  = "environment_region"
+  region = "${var.aws_region}"
+}
 
-module "acm_root_domain_regional" {
+module "acm_root_domain_environment_region" {
     source    = "terraform-aws-modules/acm/aws"
     version   = "~> 3.0"
 
@@ -111,7 +113,7 @@ module "acm_root_domain_regional" {
     tags = var.tags
 }
 
-module "acm_environment_domain_regional" {
+module "acm_environment_environment_region" {
     source    = "terraform-aws-modules/acm/aws"
     version   = "~> 3.0"
 
@@ -130,7 +132,7 @@ module "acm_environment_domain_regional" {
     tags = var.tags
 }
 
-module "acm_subdomains_regional" {
+module "acm_subdomains_environment_region" {
     source    = "terraform-aws-modules/acm/aws"
     version   = "~> 3.0"
 
