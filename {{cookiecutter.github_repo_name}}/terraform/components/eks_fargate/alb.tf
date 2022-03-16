@@ -24,14 +24,14 @@ data "aws_acm_certificate" "environment_domain" {
 ################################################################################
 resource "aws_iam_policy" "ALB-policy" {
   name   = "ALBIngressControllerIAMPolicy"
-  policy = file("./iam/iam_policy_alb.json")
+  policy = file("./json/iam_policy_alb.json")
 }
 
 resource "aws_iam_role" "eks_alb_ingress_controller" {
   name        = "eks-alb-ingress-controller"
   description = "Permissions required by the Kubernetes AWS ALB Ingress controller to do its job."
   force_detach_policies = true
-  assume_role_policy = file(".iam/iam_policy_alb_controller.json")
+  assume_role_policy = file(".json/iam_policy_alb_controller.json")
 }
 
 resource "aws_iam_role_policy_attachment" "ALB-policy_attachment" {
