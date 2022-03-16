@@ -1,2 +1,7 @@
-## Elastic Kubernetes with Fargate Compute Cluster
+## Elastic Kubernetes Service with Fargate Compute Cluster and Application Load Balancer
 
+This is an alternative implementation of an [Elastic Kubernetes Cluster (EKS)](https://aws.amazon.com/eks/) using [AWS Fargate](https://aws.amazon.com/fargate/) as a replacement to more traditional [AWS EC2 compute instances](https://aws.amazon.com/ec2/). This Terraform component implements an [Application Load Balancer (ALB)](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html) that routes traffic to an EKS cluser that in turn manages its pods inside of a Fargate cluster.
+
+**In theory at least, this should lead to lower long-term compute costs since you're paying for compute cycles rather than entire EC2 instances. It should also provide smoother and more responsive scaling since auto-scaling is managed directly by AWS rather than via your own Auto-scaling policy.**
+
+This implementation is largely modeled around this blog post, ["Create an Amazon EKS Fargate Cluster and Managed Node Group Using Terraform"](https://betterprogramming.pub/with-latest-updates-create-amazon-eks-fargate-cluster-and-managed-node-group-using-terraform-bc5cfefd5773) published January 2021 and written by [Harshet Jain](https://www.linkedin.com/in/harshet-jain/). You can review Harshet's example implementation more closely here: [https://github.com/Harshetjain666/terraform-aws-eks-fargate-cluster](https://github.com/Harshetjain666/terraform-aws-eks-fargate-cluster).
