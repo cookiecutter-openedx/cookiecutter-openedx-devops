@@ -113,7 +113,8 @@ resource "aws_eks_node_group" "nodes_general" {
   }
 
   # Type of Amazon Machine Image (AMI) associated with the EKS Node Group.
-  ami_type = data.aws_ami.ubuntu.id
+  # one of [AL2_x86_64 AL2_x86_64_GPU AL2_ARM_64 CUSTOM BOTTLEROCKET_ARM_64 BOTTLEROCKET_x86_64]
+  ami_type = "AL2_ARM_64"
 
   # Type of capacity associated with the EKS Node Group.
   # Valid values: ON_DEMAND, SPOT

@@ -15,10 +15,8 @@ module "eks" {
 
   cluster_name                    = var.environment_namespace
   cluster_version                 = "1.21"
-  cluster_endpoint_private_access = true
-
-  # FIX NOTE: FIND OUT WHAT THIS MEANS.
-  cluster_endpoint_public_access = true
+  cluster_endpoint_public_access  = true
+  cluster_endpoint_private_access = false
 
   cluster_addons = {
     coredns = {
