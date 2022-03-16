@@ -13,20 +13,20 @@ SUCCESS = "\x1b[1;32m [SUCCESS]: "
 
 
 def remove_eks_ec2_files():
-    component_dir_path = os.path.join("terraform", "components", "eks_ec2")
+    component_dir_path = os.path.join("terraform", "components", "eks_clb_ec2")
     if os.path.exists(component_dir_path):
         shutil.rmtree(component_dir_path)
 
-    terragrunt_dir_path = os.path.join("terraform", "environments", "prod", "eks_ec2")
+    terragrunt_dir_path = os.path.join("terraform", "environments", "prod", "eks_clb_ec2")
     if os.path.exists(terragrunt_dir_path):
         shutil.rmtree(terragrunt_dir_path)
 
 def remove_eks_fargate_files():
-    component_dir_path = os.path.join("terraform", "components", "eks_fargate")
+    component_dir_path = os.path.join("terraform", "components", "eks_alb_fargate")
     if os.path.exists(component_dir_path):
         shutil.rmtree(component_dir_path)
 
-    terragrunt_dir_path = os.path.join("terraform", "environments", "prod", "eks_fargate")
+    terragrunt_dir_path = os.path.join("terraform", "environments", "prod", "eks_alb_fargate")
     if os.path.exists(terragrunt_dir_path):
         shutil.rmtree(terragrunt_dir_path)
 
