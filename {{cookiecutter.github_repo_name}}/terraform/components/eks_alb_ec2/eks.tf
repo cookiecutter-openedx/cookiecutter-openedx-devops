@@ -1,6 +1,14 @@
+#------------------------------------------------------------------------------
+# written by: Lawrence McDaniel
+#             https://lawrencemcdaniel.com/
+#
+# date: Mar-2022
+#
+# usage: Create EKS
+#------------------------------------------------------------------------------
+
 # Resource: aws_iam_role
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role
-
 resource "aws_iam_role" "eks_cluster" {
   # The name of the role
   name = "eks-cluster"
@@ -41,14 +49,14 @@ resource "aws_iam_role_policy_attachment" "amazon_eks_cluster_policy" {
 
 resource "aws_eks_cluster" "eks" {
   # Name of the cluster.
-  name = "eks"
+  name = var.environment_namespace
 
   # The Amazon Resource Name (ARN) of the IAM role that provides permissions for
   # the Kubernetes control plane to make calls to AWS API operations on your behalf
   role_arn = aws_iam_role.eks_cluster.arn
 
   # Desired Kubernetes master version
-  version = "1.18"
+  version = "1.21"
 
   vpc_config {
     # Indicates whether or not the Amazon EKS private API server endpoint is enabled
@@ -58,12 +66,7 @@ resource "aws_eks_cluster" "eks" {
     endpoint_public_access = true
 
     # Must be in at least two different availability zones
-    subnet_ids = [
-      aws_subnet.public_1.id,
-      aws_subnet.public_2.id,
-      aws_subnet.private_1.id,
-      aws_subnet.private_2.id
-    ]
+    subnet_ids = [var.private_subnet_ids, var.public_subnet_ids]
   }
 
   # Ensure that IAM Role permissions are created before and deleted after EKS Cluster handling.

@@ -4,7 +4,7 @@
 #
 # date: Mar-2022
 #
-# usage: build an EKS with Fargate cluster and ALB
+# usage: build an EKS with EC2 worker nodes and ALB
 #------------------------------------------------------------------------------
 locals {
   # Automatically load environment-level variables
@@ -19,6 +19,11 @@ locals {
   environment_namespace           = local.environment_vars.locals.environment_namespace
   account_id                      = local.global_vars.locals.account_id
   aws_region                      = local.global_vars.locals.aws_region
+
+  eks_worker_group_instance_type  = local.environment_vars.locals.eks_worker_group_instance_type
+  eks_worker_group_min_size       = local.environment_vars.locals.eks_worker_group_min_size
+  eks_worker_group_max_size       = local.environment_vars.locals.eks_worker_group_max_size
+  eks_worker_group_desired_size   = local.environment_vars.locals.eks_worker_group_desired_size
 
   tags = merge(
     local.environment_vars.locals.tags,
@@ -43,7 +48,7 @@ dependency "vpc" {
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
-  source = "../../../components//eks_alb_fargate"
+  source = "../../../components//eks_alb_ec2"
 }
 
 # Include all settings from the root terragrunt.hcl file
@@ -56,9 +61,15 @@ inputs = {
   aws_region = local.aws_region
   environment_domain = local.environment_domain
   environment_namespace = local.environment_namespace
-  fargate_namespace = "fargate-node"
 
-  subnet_ids = dependency.vpc.outputs.private_subnets
+  private_subnet_ids = dependency.vpc.outputs.private_subnets
+  public_subnet_ids = dependency.vpc.outputs.public_subnets
   vpc_id  = dependency.vpc.outputs.vpc_id
+
+  eks_worker_group_instance_type  = local.eks_worker_group_instance_type
+  eks_worker_group_min_size = local.eks_worker_group_min_size
+  eks_worker_group_max_size = local.eks_worker_group_max_size
+  eks_worker_group_desired_size = local.eks_worker_group_desired_size
+
   tags = local.tags
 }

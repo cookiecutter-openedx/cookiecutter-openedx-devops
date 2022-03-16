@@ -1,6 +1,35 @@
+#------------------------------------------------------------------------------
+# written by: Lawrence McDaniel
+#             https://lawrencemcdaniel.com/
+#
+# date: Mar-2022
+#
+# usage: Create EKS Node Group (aka workers)
+#------------------------------------------------------------------------------
+
+
+# Ubuntu 20.04 LTS AMI
+# see: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami_ids
+data "aws_ami" "ubuntu" {
+
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["099720109477"]
+}
+
+
 # Resource: aws_iam_role
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role
-
 # Create IAM role for EKS Node Group
 resource "aws_iam_role" "nodes_general" {
   # The name of the role
@@ -55,7 +84,6 @@ resource "aws_iam_role_policy_attachment" "amazon_ec2_container_registry_read_on
 
 # Resource: aws_eks_node_group
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eks_node_group
-
 resource "aws_eks_node_group" "nodes_general" {
   # Name of the EKS Cluster.
   cluster_name = aws_eks_cluster.eks.name
@@ -69,39 +97,36 @@ resource "aws_eks_node_group" "nodes_general" {
   # Identifiers of EC2 Subnets to associate with the EKS Node Group.
   # These subnets must have the following resource tag: kubernetes.io/cluster/CLUSTER_NAME
   # (where CLUSTER_NAME is replaced with the name of the EKS Cluster).
-  subnet_ids = [
-    aws_subnet.private_1.id,
-    aws_subnet.private_2.id
-  ]
+  subnet_ids = var.private_subnet_ids
 
   # Configuration block with scaling settings
+
   scaling_config {
     # Desired number of worker nodes.
-    desired_size = 1
+    desired_size = var.eks_worker_group_desired_size
 
     # Maximum number of worker nodes.
-    max_size = 1
+    max_size = var.eks_worker_group_max_size
 
     # Minimum number of worker nodes.
-    min_size = 1
+    min_size = var.eks_worker_group_min_size
   }
 
   # Type of Amazon Machine Image (AMI) associated with the EKS Node Group.
-  # Valid values: AL2_x86_64, AL2_x86_64_GPU, AL2_ARM_64
-  ami_type = "AL2_x86_64"
+  ami_type = data.aws_ami.ubuntu.id
 
   # Type of capacity associated with the EKS Node Group.
   # Valid values: ON_DEMAND, SPOT
   capacity_type = "ON_DEMAND"
 
   # Disk size in GiB for worker nodes
-  disk_size = 20
+  disk_size = 25
 
   # Force version update if existing pods are unable to be drained due to a pod disruption budget issue.
   force_update_version = false
 
   # List of instance types associated with the EKS Node Group
-  instance_types = ["t3.small"]
+  instance_types = [var.eks_worker_group_instance_type]
 
   labels = {
     role = "nodes-general"
