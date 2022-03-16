@@ -79,7 +79,7 @@ resource "kubernetes_deployment" "ingress" {
 resource "kubernetes_deployment" "app" {
   metadata {
     name      = "owncloud-server"
-    namespace = "fargate-node"
+    namespace = var.fargate_namespace
     labels    = {
       app = "owncloud"
     }
@@ -120,7 +120,7 @@ resource "kubernetes_deployment" "app" {
 resource "kubernetes_service" "app" {
   metadata {
     name      = "owncloud-service"
-    namespace = "fargate-node"
+    namespace = var.fargate_namespace
   }
   spec {
     selector = {

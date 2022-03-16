@@ -28,7 +28,7 @@ resource "kubernetes_namespace" "fargate" {
     labels = {
       app = "my-app"
     }
-    name = "fargate-node"
+    name = var.fargate_namespace
   }
 }
 

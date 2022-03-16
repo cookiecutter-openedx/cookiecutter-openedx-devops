@@ -56,6 +56,7 @@ inputs = {
   aws_region = local.aws_region
   environment_domain = local.environment_domain
   environment_namespace = local.environment_namespace
+  fargate_namespace = "fargate-node"
 
   subnet_ids = dependency.vpc.outputs.private_subnets
   vpc_id  = dependency.vpc.outputs.vpc_id

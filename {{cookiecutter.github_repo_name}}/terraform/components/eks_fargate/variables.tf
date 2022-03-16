@@ -29,6 +29,9 @@ variable "aws_region" {
   type        = string
 }
 
+variable "fargate_namespace" {
+  type = string
+}
 
 #------------------------------------------------------------------------------
 
