@@ -12,18 +12,18 @@ repos:
       - id: check-executables-have-shebangs
       - id: check-json
       - id: check-shebang-scripts-are-executable
-    #  - id: pretty-format-json
       - id: check-merge-conflict
       - id: check-symlinks
       - id: check-toml
       - id: check-xml
-    #  - id: check-yaml
       - id: destroyed-symlinks
       - id: detect-aws-credentials
       - id: detect-private-key
       - id: end-of-file-fixer
       - id: forbid-new-submodules
       - id: trailing-whitespace
+    #  - id: pretty-format-json
+    #  - id: check-yaml
   - repo: https://github.com/gruntwork-io/pre-commit
     rev: v0.1.17 # Get the latest from: https://github.com/gruntwork-io/pre-commit/releases
     hooks:

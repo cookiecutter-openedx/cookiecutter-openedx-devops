@@ -1,5 +1,6 @@
----
-
+default_language_version:
+  # default language version for each language
+  python: python3.9
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.1.0
@@ -11,26 +12,26 @@ repos:
       - id: check-executables-have-shebangs
       - id: check-json
       - id: check-shebang-scripts-are-executable
-      - id: pretty-format-json
       - id: check-merge-conflict
       - id: check-symlinks
       - id: check-toml
       - id: check-xml
-      - id: check-yaml
       - id: destroyed-symlinks
       - id: detect-aws-credentials
       - id: detect-private-key
       - id: end-of-file-fixer
       - id: forbid-new-submodules
       - id: trailing-whitespace
+      - id: pretty-format-json
+      - id: check-yaml
   - repo: https://github.com/gruntwork-io/pre-commit
     rev: v0.1.17 # Get the latest from: https://github.com/gruntwork-io/pre-commit/releases
     hooks:
       - id: terraform-fmt
-    #  - id: terraform-validate
+      - id: helmlint
+      - id: terraform-validate
       - id: terragrunt-hclfmt
       - id: tflint
-      - id: shellcheck
-      - id: yapf
-      - id: helmlint
-      - id: markdown-link-check
+    #  - id: shellcheck
+    #  - id: yapf
+    #  - id: markdown-link-check
