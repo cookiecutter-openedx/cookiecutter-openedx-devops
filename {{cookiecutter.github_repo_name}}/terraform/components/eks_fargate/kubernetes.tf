@@ -5,7 +5,6 @@
 # date: Mar-2022
 #
 # usage:  kubernetes configuration
-#         also, temporary placeholder in lieue of Github Actions deployment
 #------------------------------------------------------------------------------ 
 
 data "aws_eks_cluster" "cluster" {
@@ -33,65 +32,3 @@ resource "kubernetes_namespace" "fargate" {
   }
 }
 
-resource "kubernetes_deployment" "app" {
-  metadata {
-    name      = "owncloud-server"
-    namespace = "fargate-node"
-    labels    = {
-      app = "owncloud"
-    }
-  }
-
-  spec {
-    replicas = 2
-
-    selector {
-      match_labels = {
-        app = "owncloud"
-      }
-    }
-
-    template {
-      metadata {
-        labels = {
-          app = "owncloud"
-        }
-      }
-
-      spec {
-        container {
-          image = "owncloud"
-          name  = "owncloud-server"
-
-          port {
-            container_port = 80
-          }
-        }
-      }
-    }
-  }
-   depends_on = [kubernetes_namespace.fargate]
-
-}
-
-resource "kubernetes_service" "app" {
-  metadata {
-    name      = "owncloud-service"
-    namespace = "fargate-node"
-  }
-  spec {
-    selector = {
-      app = "owncloud"
-    }
-
-    port {
-      port        = 80
-      target_port = 80
-      protocol    = "TCP"
-    }
-
-    type = "NodePort"
-  }
-
-  depends_on = [kubernetes_deployment.app]
-}
