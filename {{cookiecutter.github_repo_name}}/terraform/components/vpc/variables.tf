@@ -1,11 +1,11 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Miguel Afonso
 #             https://www.linkedin.com/in/mmafonso/
 #
 # date: Aug-2021
 #
 # usage: create a VPC to contain all Open edX backend resources.
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 
 variable "azs" {
   description = "A list of availability zones names or ids in the region"
@@ -50,12 +50,12 @@ variable "enable_dns_hostnames" {
 }
 
 variable "environment_domain" {
-  type        = string
+  type = string
 }
 
 
 variable "environment_namespace" {
-  type        = string
+  type = string
 }
 
 variable "name" {
@@ -89,7 +89,7 @@ variable "public_subnet_tags" {
 }
 
 variable "root_domain" {
-  type        = string
+  type = string
 }
 
 variable "single_nat_gateway" {
@@ -103,6 +103,3 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
-
-
-

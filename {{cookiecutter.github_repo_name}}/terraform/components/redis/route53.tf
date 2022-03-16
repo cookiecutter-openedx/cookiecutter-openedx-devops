@@ -11,5 +11,4 @@ resource "aws_route53_record" "primary" {
   ttl     = "300"
   records = ["${module.redis.primary_endpoint_address}"]
 
-  }
-
+}

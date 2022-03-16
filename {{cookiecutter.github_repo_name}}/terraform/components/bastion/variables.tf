@@ -1,11 +1,11 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Lawrence McDaniel
 #             https://lawrencemcdaniel.com/
 #
 # date: Feb-2022
 #
 # usage: create an EC2 instance with ssh access and a DNS record.
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 variable "vpc_id" {
   description = "VPC where the cluster and workers will be deployed."
   type        = string
@@ -35,23 +35,23 @@ variable "tags" {
   default     = {}
 }
 variable "environment_domain" {
-  type        = string
+  type = string
 }
 
 variable "environment_namespace" {
-  type        = string
+  type = string
 }
 
 variable "platform_name" {
-  type        = string
+  type = string
 }
 variable "platform_region" {
-  type        = string
+  type = string
 }
 variable "environment" {
-  type        = string
+  type = string
 }
 
 variable "ec2_ssh_key_name" {
-  type        = string
+  type = string
 }

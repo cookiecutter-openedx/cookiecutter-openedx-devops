@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Lawrence McDaniel
 #             https://lawrencemcdaniel.com/
 #
@@ -6,7 +6,7 @@
 #
 # usage: setup a DocumentDB MongoDB cluster with connectivity
 #        to anything inside the VPN. create DNS records for master and reader.
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 locals {
 
 }
@@ -30,13 +30,13 @@ resource "aws_security_group" "mongo_cluster" {
 #}
 
 resource "aws_security_group_rule" "ingress_security_groups" {
-  type                     = "ingress"
-  description              = "Allow inbound traffic from the VPC"
-  from_port                = var.db_port
-  to_port                  = var.db_port
-  protocol                 = "tcp"
-  cidr_blocks              = [var.vpc_cidr_block]
-  security_group_id        = aws_security_group.mongo_cluster.id
+  type              = "ingress"
+  description       = "Allow inbound traffic from the VPC"
+  from_port         = var.db_port
+  to_port           = var.db_port
+  protocol          = "tcp"
+  cidr_blocks       = [var.vpc_cidr_block]
+  security_group_id = aws_security_group.mongo_cluster.id
 }
 
 
@@ -91,9 +91,8 @@ resource "aws_docdb_cluster_parameter_group" "no_tls" {
 
   parameter {
     apply_method = "pending-reboot"
-    name="tls"
-    value="disabled"
-    }
+    name         = "tls"
+    value        = "disabled"
+  }
 
 }
-

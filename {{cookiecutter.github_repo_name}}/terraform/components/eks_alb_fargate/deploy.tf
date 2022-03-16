@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Lawrence McDaniel
 #             https://lawrencemcdaniel.com/
 #
@@ -8,13 +8,13 @@
 #
 # see:
 # - https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.2/guide/ingress/annotations/
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 
 resource "kubernetes_deployment" "ingress" {
   metadata {
     name      = "alb-ingress-controller"
     namespace = "kube-system"
-    labels    = {
+    labels = {
       "app.kubernetes.io/name"       = "alb-ingress-controller"
       "app.kubernetes.io/version"    = "v1.1.6"
       "app.kubernetes.io/managed-by" = "terraform"
@@ -48,15 +48,15 @@ resource "kubernetes_deployment" "ingress" {
           name              = "alb-ingress-controller"
           image             = "docker.io/amazon/aws-alb-ingress-controller:v1.1.6"
           image_pull_policy = "Always"
-          
+
           args = [
             "--ingress-class=alb",
             "--cluster-name=${var.environment_namespace}",
             "--aws-vpc-id=${var.vpc_id}",
             "--aws-region=${var.aws_region}",
             "--aws-max-retries=10",
-          ] 
-           volume_mount {
+          ]
+          volume_mount {
             mount_path = "/var/run/secrets/kubernetes.io/serviceaccount"
             name       = kubernetes_service_account.ingress.default_secret_name
             read_only  = true
@@ -67,8 +67,8 @@ resource "kubernetes_deployment" "ingress" {
 
           secret {
             secret_name = kubernetes_service_account.ingress.default_secret_name
-           }
-         }
+          }
+        }
       }
     }
   }
@@ -80,7 +80,7 @@ resource "kubernetes_deployment" "app" {
   metadata {
     name      = "owncloud-server"
     namespace = var.fargate_namespace
-    labels    = {
+    labels = {
       app = "owncloud"
     }
   }
@@ -113,7 +113,7 @@ resource "kubernetes_deployment" "app" {
       }
     }
   }
-   depends_on = [kubernetes_namespace.fargate]
+  depends_on = [kubernetes_namespace.fargate]
 
 }
 

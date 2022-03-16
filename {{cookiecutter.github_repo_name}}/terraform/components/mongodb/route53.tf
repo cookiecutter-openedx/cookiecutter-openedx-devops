@@ -12,7 +12,7 @@ resource "aws_route53_record" "master" {
   ttl     = "300"
   records = ["${aws_docdb_cluster.default.endpoint}"]
 
-  }
+}
 
 
 resource "aws_route53_record" "replica" {

@@ -1,11 +1,11 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Miguel Afonso
 #             https://www.linkedin.com/in/mmafonso/
 #
 # date: Aug-2021
 #
 # usage: build an EKS cluster load balancer
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 variable "cluster_name" {
   description = "Name of the EKS cluster. Also used as a prefix in names of related resources."
   type        = string
@@ -24,7 +24,7 @@ variable "enable_irsa" {
 
 
 variable "environment_domain" {
-  type        = string
+  type = string
 }
 
 variable "map_users" {
@@ -40,7 +40,7 @@ variable "map_users" {
 
 
 variable "environment_namespace" {
-  type        = string
+  type = string
 }
 
 variable "map_roles" {

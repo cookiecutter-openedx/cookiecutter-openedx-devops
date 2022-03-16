@@ -1,19 +1,19 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Lawrence McDaniel
 #             https://lawrencemcdaniel.com/
 #
 # date: Feb-2022
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 variable "environment_domain" {
-  type        = string
+  type = string
 }
 
 variable "environment_namespace" {
-  type        = string
+  type = string
 }
 
 variable "resource_name" {
-    type = string
+  type = string
 }
 
 variable "tags" {
@@ -24,5 +24,5 @@ variable "tags" {
 
 variable "aws_region" {
   description = "The region in which the origin S3 bucket was created."
-  type = string
+  type        = string
 }

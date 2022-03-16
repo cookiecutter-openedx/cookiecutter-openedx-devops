@@ -11,4 +11,4 @@ resource "aws_route53_record" "mysql" {
   ttl     = "300"
   records = ["${module.db.db_instance_address}"]
 
-  }
+}

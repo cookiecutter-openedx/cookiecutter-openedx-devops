@@ -1,43 +1,43 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Lawrence McDaniel
 #             https://lawrencemcdaniel.com/
 #
 # date: Feb-2022
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 variable "storage_encrypted" {
-  type = bool
-  default = false
+  type        = bool
+  default     = false
   description = "Specifies whether the DB cluster is encrypted. "
 }
 variable "apply_immediately" {
-  type = bool
-  default = false
+  type        = bool
+  default     = false
   description = "Specifies whether any cluster modifications are applied immediately, or during the next maintenance window. "
 }
 variable "skip_final_snapshot" {
-  type = bool
-  default = true
+  type        = bool
+  default     = true
   description = "Determines whether a final DB snapshot is created before the DB cluster is deleted. If true is specified, no DB snapshot is created. If false is specified, a DB snapshot is created before the DB cluster is deleted, using the value from final_snapshot_identifier."
 }
 variable "preferred_maintenance_window" {
-  type = string
-  default = ""
+  type        = string
+  default     = ""
   description = "The weekly time range during which system maintenance can occur, in (UTC) e.g., wed:04:00-wed:04:30"
 }
 variable "preferred_backup_window" {
-  type = string
+  type    = string
   default = "The daily time range during which automated backups are created if automated backups are enabled using the BackupRetentionPeriod parameter.Time in UTC Default: A 30-minute window selected at random from an 8-hour block of time per regionE.g., 04:00-09:00"
 }
 
 
 variable "auto_minor_version_upgrade" {
-  type = bool
+  type    = bool
   default = true
 }
 
 
 variable "vpc_cidr_block" {
-  type = string
+  type    = string
   default = "CIDR for the VPC. example: 192.168.0.0/20"
 }
 
@@ -211,12 +211,12 @@ variable "environment_namespace" {
   description = ""
   type        = string
 }
-variable "environment_domain"{
+variable "environment_domain" {
   description = ""
   type        = string
 }
 
 variable "resource_name" {
-  type = string
+  type    = string
   default = ""
 }

@@ -403,7 +403,7 @@ Why Use Terragrunt?
 Get Involved!
 -------------
 
-Contributors are welcome. Contact me here: `lawrencemcdaniel.com <https://lawrencemcdaniel.com/contact>`_ if you're interested in becomming a core-committer to this project.
+Contributors are welcome. Contact me here: `lawrencemcdaniel.com <https://lawrencemcdaniel.com/contact>`_ if you're interested in becomming a contributor to this project.
 
 Local Development Quick Start
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

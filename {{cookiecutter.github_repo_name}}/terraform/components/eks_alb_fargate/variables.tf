@@ -1,17 +1,17 @@
-#------------------------------------------------------------------------------ 
-# written by: Miguel Afonso
-#             https://www.linkedin.com/in/mmafonso/
+#------------------------------------------------------------------------------
+# written by: Lawrence McDaniel
+#             https://lawrencemcdaniel.com/
 #
-# date: Aug-2021
+# date: Mar-2022
 #
 # usage: build an EKS cluster load balancer
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 variable "environment_domain" {
-  type        = string
+  type = string
 }
 
 variable "environment_namespace" {
-  type        = string
+  type = string
 }
 
 variable "root_domain" {

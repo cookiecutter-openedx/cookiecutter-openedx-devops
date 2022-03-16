@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 # written by: Lawrence McDaniel
 #             https://lawrencemcdaniel.com/
 #
@@ -6,19 +6,19 @@
 #
 # usage: build an EKS cluster with a Fargate Compute Cluster and
 #        a public-facing Application Load Balancer (ALB)
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 
 
 module "eks" {
-  source                          = "terraform-aws-modules/eks/aws"
-  version                         = "~> 18.0"
+  source  = "terraform-aws-modules/eks/aws"
+  version = "~> 18.0"
 
   cluster_name                    = var.environment_namespace
   cluster_version                 = "1.21"
   cluster_endpoint_private_access = true
 
   # FIX NOTE: FIND OUT WHAT THIS MEANS.
-  cluster_endpoint_public_access  = true
+  cluster_endpoint_public_access = true
 
   cluster_addons = {
     coredns = {
@@ -35,9 +35,9 @@ module "eks" {
     resources        = ["secrets"]
   }]
 
-  subnet_ids      = var.subnet_ids
-  vpc_id          = var.vpc_id
-  enable_irsa     = var.enable_irsa
+  subnet_ids  = var.subnet_ids
+  vpc_id      = var.vpc_id
+  enable_irsa = var.enable_irsa
 
   self_managed_node_groups = {
     one = {
