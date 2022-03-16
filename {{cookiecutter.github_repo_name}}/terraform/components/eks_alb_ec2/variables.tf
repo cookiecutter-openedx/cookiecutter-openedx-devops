@@ -62,3 +62,9 @@ variable "eks_worker_group_max_size" {
 variable "eks_worker_group_instance_type" {
   type = string
 }
+
+variable "tags" {
+  description = "tags"
+  type        = any
+  default     = {}
+}
