@@ -41,12 +41,6 @@ variable "public_subnet_ids" {
   default     = []
 }
 
-variable "subnet_ids" {
-  description = "A list of all subnets in the VPC"
-  type        = list(string)
-  default     = []
-}
-
 variable "eks_worker_group_desired_size" {
   type = number
 }

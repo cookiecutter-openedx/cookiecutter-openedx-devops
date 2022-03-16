@@ -64,7 +64,6 @@ inputs = {
 
   private_subnet_ids = dependency.vpc.outputs.private_subnets
   public_subnet_ids = dependency.vpc.outputs.public_subnets
-  subnet_ids = [dependency.vpc.outputs.public_subnets, dependency.vpc.outputs.private_subnets]
   vpc_id  = dependency.vpc.outputs.vpc_id
 
   eks_worker_group_instance_type  = local.eks_worker_group_instance_type
