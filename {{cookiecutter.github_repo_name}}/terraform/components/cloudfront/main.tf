@@ -30,8 +30,8 @@ data "aws_route53_zone" "environment_domain" {
 }
 
 
-# see ./acm.tf for creation of this certificate as well as 
-# the definition for the provider "aws.us-east-1"
+# see eks_ec2/acm.tf or eks_fargate/acm.tf for creation of this certificate
+# as well as the definition for the provider "aws.us-east-1"
 data "aws_acm_certificate" "environment_domain" {
   domain   = var.environment_domain
   statuses = ["ISSUED"]

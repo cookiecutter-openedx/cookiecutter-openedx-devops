@@ -1,38 +1,153 @@
 #------------------------------------------------------------------------------ 
-# written by: Miguel Afonso
-#             https://www.linkedin.com/in/mmafonso/
+# written by: Lawrence McDaniel
+#             https://lawrencemcdaniel.com/
 #
-# date: Aug-2021
+# date: Feb-2022
 #
-# usage:  Amazon Certificate Manager (ACM)
-#         Add tls certs for EKS cluster load balancer
+# usage: Add DNS records and tls certs to us-east-1 for Cloudfront distributions.
+#        and to environment region for ALB.
+#
+# we have to add these here, inside of eks_fargate because we 
+# need to iterate the subdomains, and this is only possible
+# within the terragrunt module in which the subdomain
+# resources are created.
+#
+# that is, the following line only works from 
+# inside eks: 
+#     aws_route53_zone.subdomain[count.index].name
+#
+# where aws_route53_zone was declared as a resource rather
+# than as data
 #------------------------------------------------------------------------------ 
-module "cert_manager_irsa" {
-  source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "~> 4.1"
-  create_role                   = true
-  role_name                     = "${var.environment_namespace}-cert_manager-irsa"
-  provider_url                  = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
-  role_policy_arns              = [aws_iam_policy.cert_manager_policy.arn]
-  oidc_fully_qualified_subjects = ["system:serviceaccount:cert-manager:cert-manager"]
+
+#------------------------------------------------------------------------------
+# SSL/TLS certs issued in us-east-1 for Cloudfront
+#------------------------------------------------------------------------------
+provider "aws" {
+  alias  = "us-east-1"
+  region = "us-east-1"
 }
 
-resource "helm_release" "cert-manager" {
-  name             = "cert-manager"
-  namespace        = "cert-manager"
-  create_namespace = true
+module "acm_root_domain" {
+    source    = "terraform-aws-modules/acm/aws"
+    version   = "~> 3.0"
 
-  chart      = "cert-manager"
-  repository = "https://charts.jetstack.io"
-  version    = "v1.4.0"
-  values = [
-    templatefile("${path.module}/acm-values.yaml.tpl", {role_arn = module.cert_manager_irsa.iam_role_arn})
-  ]
+    providers = {
+      aws = aws.us-east-1
+    }
+
+    domain_name  = var.root_domain
+    zone_id      = data.aws_route53_zone.root_domain.id
+
+    subject_alternative_names = [
+        "*.${var.root_domain}",
+    ]
+
+    wait_for_validation = true
+    tags = var.tags
 }
 
-resource "aws_iam_policy" "cert_manager_policy" {
-  name        = "${var.environment_namespace}-cert-manager-policy"
-  path        = "/"
-  description = "Policy, which allows CertManager to create Route53 records"
-  policy = file("./iam/iam_policy_cert_manager.json")
+module "acm_environment_domain" {
+    source    = "terraform-aws-modules/acm/aws"
+    version   = "~> 3.0"
+
+    providers = {
+      aws = aws.us-east-1
+    }
+
+    domain_name  = var.environment_domain
+    zone_id      = data.aws_route53_zone.environment_domain.id
+
+    subject_alternative_names = [
+        "*.${var.environment_domain}",
+    ]
+
+    wait_for_validation = true
+    tags = var.tags
+}
+
+module "acm_subdomains" {
+    source    = "terraform-aws-modules/acm/aws"
+    version   = "~> 3.0"
+
+    providers = {
+      aws = aws.us-east-1
+    }
+
+    count        = length(var.subdomains)
+    domain_name  = aws_route53_zone.subdomain[count.index].name
+    zone_id      = aws_route53_zone.subdomain[count.index].id
+
+    subject_alternative_names = [
+        "*.${aws_route53_zone.subdomain[count.index].name}",
+    ]
+
+    wait_for_validation = true
+    tags = var.tags
+}
+
+#------------------------------------------------------------------------------
+# SSL/TLS certs issued in the AWS region for ALB
+#------------------------------------------------------------------------------
+provider "aws" {
+  alias  = "environment_region"
+  region = "${var.aws_region}"
+}
+
+module "acm_root_domain_environment_region" {
+    source    = "terraform-aws-modules/acm/aws"
+    version   = "~> 3.0"
+
+    providers = {
+      aws = aws.environment_region
+    }
+
+    domain_name  = var.root_domain
+    zone_id      = data.aws_route53_zone.root_domain.id
+
+    subject_alternative_names = [
+        "*.${var.root_domain}",
+    ]
+
+    wait_for_validation = true
+    tags = var.tags
+}
+
+module "acm_environment_environment_region" {
+    source    = "terraform-aws-modules/acm/aws"
+    version   = "~> 3.0"
+
+    providers = {
+      aws = aws.environment_region
+    }
+
+    domain_name  = var.environment_domain
+    zone_id      = data.aws_route53_zone.environment_domain.id
+
+    subject_alternative_names = [
+        "*.${var.environment_domain}",
+    ]
+
+    wait_for_validation = true
+    tags = var.tags
+}
+
+module "acm_subdomains_environment_region" {
+    source    = "terraform-aws-modules/acm/aws"
+    version   = "~> 3.0"
+
+    providers = {
+      aws = aws.environment_region
+    }
+
+    count        = length(var.subdomains)
+    domain_name  = aws_route53_zone.subdomain[count.index].name
+    zone_id      = aws_route53_zone.subdomain[count.index].id
+
+    subject_alternative_names = [
+        "*.${aws_route53_zone.subdomain[count.index].name}",
+    ]
+
+    wait_for_validation = true
+    tags = var.tags
 }
