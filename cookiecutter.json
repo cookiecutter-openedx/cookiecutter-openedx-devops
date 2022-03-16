@@ -24,7 +24,7 @@
     "ci_build_xblock_repository": "edx-ora2",
     "ci_build_xblock_ref": "master",
     "ci_deploy_OPENEDX_COMMON_VERSION": "open-release/maple.2",
-    "eks_cluster_compute_type": ["Fargate", "EC2"],
+    "eks_cluster_compute_type": ["ALB_EC2", "ALB_Fargate", "CLB_EC2"],
     "mongodb_master_username": "root",
     "mongodb_db_port": 27017,
     "mongodb_deletion_protection": false,
