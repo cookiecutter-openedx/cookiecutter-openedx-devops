@@ -143,7 +143,7 @@ resource "kubernetes_deployment" "ingress" {
             "--ingress-class=alb",
             "--cluster-name=${var.environment_namespace}",
             "--aws-vpc-id=${var.vpc_id}",
-            "--aws-region=us-east-1",
+            "--aws-region=${var.aws_region}",
             "--aws-max-retries=10",
           ]
           volume_mount {
