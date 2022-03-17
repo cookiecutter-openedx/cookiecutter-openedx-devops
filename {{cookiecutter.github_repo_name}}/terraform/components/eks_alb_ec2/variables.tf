@@ -6,6 +6,12 @@
 #
 # usage: build an EKS cluster load balancer
 #------------------------------------------------------------------------------
+variable "vpc_id" {
+  description = "ID of  the VPC where to create security groups"
+  type        = string
+  default     = null
+}
+
 variable "environment_domain" {
   type = string
 }

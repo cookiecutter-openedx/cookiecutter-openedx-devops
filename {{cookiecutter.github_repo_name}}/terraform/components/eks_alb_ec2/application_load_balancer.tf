@@ -141,7 +141,7 @@ resource "kubernetes_deployment" "ingress" {
 
           args = [
             "--ingress-class=alb",
-            "--cluster-name=${var.cluster_name}",
+            "--cluster-name=${var.environment_namespace}",
             "--aws-vpc-id=${var.vpc_id}",
             "--aws-region=us-east-1",
             "--aws-max-retries=10",
