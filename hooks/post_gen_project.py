@@ -17,11 +17,11 @@ def remove_eks_clb_ec2_files():
     if os.path.exists(component_dir_path):
         shutil.rmtree(component_dir_path)
 
-    terragrunt_dir_path = os.path.join("terraform", "environments", "prod", "eks_clb_ec2")
+    terragrunt_dir_path = os.path.join("terraform", "environments", "{{ cookiecutter.prod_environment }}", "eks_clb_ec2")
     if os.path.exists(terragrunt_dir_path):
         shutil.rmtree(terragrunt_dir_path)
 
-    ci_dir_path = os.path.join("ci", "tutor-deploy", "environments", "prod", "k8s", "eks_clb_ec2")
+    ci_dir_path = os.path.join("ci", "tutor-deploy", "environments", "{{ cookiecutter.prod_environment }}", "k8s", "eks_clb_ec2")
     if os.path.exists(ci_dir_path):
         shutil.rmtree(ci_dir_path)
 
@@ -30,11 +30,11 @@ def remove_eks_alb_ec2_files():
     if os.path.exists(component_dir_path):
         shutil.rmtree(component_dir_path)
 
-    terragrunt_dir_path = os.path.join("terraform", "environments", "prod", "eks_alb_ec2")
+    terragrunt_dir_path = os.path.join("terraform", "environments", "{{ cookiecutter.prod_environment }}", "eks_alb_ec2")
     if os.path.exists(terragrunt_dir_path):
         shutil.rmtree(terragrunt_dir_path)
 
-    ci_dir_path = os.path.join("ci", "tutor-deploy", "environments", "prod", "k8s", "eks_alb_ec2")
+    ci_dir_path = os.path.join("ci", "tutor-deploy", "environments", "{{ cookiecutter.prod_environment }}", "k8s", "eks_alb_ec2")
     if os.path.exists(ci_dir_path):
         shutil.rmtree(ci_dir_path)
 
@@ -43,11 +43,11 @@ def remove_eks_abl_fargate_files():
     if os.path.exists(component_dir_path):
         shutil.rmtree(component_dir_path)
 
-    terragrunt_dir_path = os.path.join("terraform", "environments", "prod", "eks_alb_fargate")
+    terragrunt_dir_path = os.path.join("terraform", "environments", "{{ cookiecutter.prod_environment }}", "eks_alb_fargate")
     if os.path.exists(terragrunt_dir_path):
         shutil.rmtree(terragrunt_dir_path)
 
-    ci_dir_path = os.path.join("ci", "tutor-deploy", "environments", "prod", "k8s", "eks_alb_fargate")
+    ci_dir_path = os.path.join("ci", "tutor-deploy", "environments", "{{ cookiecutter.prod_environment }}", "k8s", "eks_alb_fargate")
     if os.path.exists(ci_dir_path):
         shutil.rmtree(ci_dir_path)
 

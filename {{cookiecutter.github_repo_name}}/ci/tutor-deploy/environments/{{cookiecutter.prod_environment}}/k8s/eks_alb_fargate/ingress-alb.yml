@@ -1,0 +1,47 @@
+#------------------------------------------------------------------------------
+# written by: Lawrence McDaniel
+#             https://lawrencemcdaniel.com
+#
+# date: Mar-2022
+#
+# usage: setup ALB for EKS Fargate
+#
+# - assuming that we do not need to explicitely a create a security group
+#         "alb.ingress.kubernetes.io/security-groups" = "SET ME PLEEASE"
+#
+# - TO DO: investigate these
+#         "alb.ingress.kubernetes.io/load-balancer-attributes"
+#         "alb.ingress.kubernetes.io/auth-session-cookie"
+#         "alb.ingress.kubernetes.io/group.name"
+#------------------------------------------------------------------------------
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: owncloud
+  namespace: {{ cookiecutter.prod_environment }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}
+  annotations:
+    kubernetes.io/ingress.class: "alb"
+    alb.ingress.kubernetes.io/scheme: "internet-facing"
+    alb.ingress.kubernetes.io/target-type: "ip"
+    alb.ingress.kubernetes.io/ip-address-type: "ipv4"
+    alb.ingress.kubernetes.io/listen-ports: [{ "HTTP" : 80 }, { "HTTPS" : 443 }, { "HTTP" : 8080 }, { "HTTPS" : 8443 }]
+    alb.ingress.kubernetes.io/ssl-redirect: 443
+    alb.ingress.kubernetes.io/certificate-arn: module.acm_root_domain_environment_region.arn
+    alb.ingress.kubernetes.io/backend-protocol: "HTTP"
+    alb.ingress.kubernetes.io/success-codes: "'200' | '301'"
+    alb.ingress.kubernetes.io/auth-session-timeout: 604800
+    alb.ingress.kubernetes.io/load-balancer-name: "eks_alb_fargate"
+  labels:
+    app: "owncloud"
+
+spec:
+  backend:
+    service_name: "owncloud-service"
+    service_port: 80
+  rule:
+    http:
+      path:
+        path: "/*"
+        backend:
+          service_name: kubernetes_service.app.metadata.0.name
+          service_port: 80
