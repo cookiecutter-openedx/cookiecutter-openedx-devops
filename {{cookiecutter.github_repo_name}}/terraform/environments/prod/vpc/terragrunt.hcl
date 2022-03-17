@@ -50,8 +50,12 @@ inputs = {
   elasticache_subnets = ["192.168.10.0/24", "192.168.11.0/24"]
 
   enable_ipv6          = false
+
+  # NAT Gateway configuration
   enable_nat_gateway   = true
   single_nat_gateway   = true
+  one_nat_gateway_per_az = false
+
   enable_dns_hostnames = true
 
   # a bit of foreshadowing:

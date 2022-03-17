@@ -20,10 +20,11 @@ module "vpc" {
   database_subnets    = var.database_subnets
   elasticache_subnets = var.elasticache_subnets
 
-  enable_ipv6          = var.enable_ipv6
-  enable_dns_hostnames = var.enable_dns_hostnames
-  enable_nat_gateway   = var.enable_nat_gateway
-  single_nat_gateway   = var.single_nat_gateway
+  enable_ipv6            = var.enable_ipv6
+  enable_dns_hostnames   = var.enable_dns_hostnames
+  enable_nat_gateway     = var.enable_nat_gateway
+  single_nat_gateway     = var.single_nat_gateway
+  one_nat_gateway_per_az = var.one_nat_gateway_per_az
 
   public_subnet_tags  = var.public_subnet_tags
   private_subnet_tags = var.private_subnet_tags

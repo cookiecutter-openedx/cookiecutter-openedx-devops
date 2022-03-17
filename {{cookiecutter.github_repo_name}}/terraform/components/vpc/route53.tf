@@ -18,9 +18,3 @@ data "aws_route53_zone" "root_domain" {
 data "aws_route53_zone" "environment" {
   name = var.environment_domain
 }
-
-# -----------------------------------------------------------------------------
-# Terraform-managed resources begin here.
-# -----------------------------------------------------------------------------
-
-# mcdaniel: i moved these to their respective stacks.

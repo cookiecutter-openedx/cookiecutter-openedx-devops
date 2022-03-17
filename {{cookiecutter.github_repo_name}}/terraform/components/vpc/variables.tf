@@ -43,6 +43,12 @@ variable "enable_nat_gateway" {
   default     = false
 }
 
+variable "one_nat_gateway_per_az" {
+  description = "Should be true if you want only one NAT Gateway per availability zone. Requires var.azs to be set, and the number of public_subnets created to be greater than or equal to the number of availability zones specified in var.azs"
+  type        = bool
+  default     = false
+}
+
 variable "enable_dns_hostnames" {
   description = "Should be true to enable DNS hostnames in the VPC"
   type        = bool
