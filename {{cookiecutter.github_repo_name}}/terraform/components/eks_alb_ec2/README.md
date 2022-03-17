@@ -6,3 +6,4 @@ see:
 
     https://www.youtube.com/watch?v=MZyrxzb7yAU
     https://antonputra.com/terraform/how-to-create-eks-cluster-using-terraform/
+    https://github.com/antonputra/tutorials/tree/main/lessons/102

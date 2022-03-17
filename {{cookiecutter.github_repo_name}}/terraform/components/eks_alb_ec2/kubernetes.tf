@@ -8,11 +8,11 @@
 #------------------------------------------------------------------------------
 
 data "aws_eks_cluster" "eks" {
-  name = resource.aws_eks_cluster.eks.arn
+  name = var.environment_namespace
 }
 
 data "aws_eks_cluster_auth" "eks" {
-  name = resource.aws_eks_cluster.eks.arn
+  name = var.environment_namespace
 }
 
 data "aws_caller_identity" "current" {}
