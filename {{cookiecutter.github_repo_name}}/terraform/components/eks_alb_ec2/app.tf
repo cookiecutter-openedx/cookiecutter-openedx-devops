@@ -112,7 +112,6 @@ resource "kubernetes_ingress" "app" {
 
 
 resource "aws_route53_record" "app" {
-  count   = length(var.subdomains)
   zone_id = data.aws_route53_zone.environment_domain.id
   name    = var.environment_domain
   type    = "CNAME"

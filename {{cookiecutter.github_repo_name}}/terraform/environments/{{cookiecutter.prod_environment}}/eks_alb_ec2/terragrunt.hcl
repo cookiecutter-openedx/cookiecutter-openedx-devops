@@ -14,9 +14,10 @@ locals {
   # Extract out common variables for reuse
   env                             = local.environment_vars.locals.environment
   environment_domain              = local.environment_vars.locals.environment_domain
+  environment_namespace           = local.environment_vars.locals.environment_namespace
+  subdomains                      = local.environment_vars.locals.subdomains
   platform_name                   = local.global_vars.locals.platform_name
   platform_region                 = local.global_vars.locals.platform_region
-  environment_namespace           = local.environment_vars.locals.environment_namespace
   account_id                      = local.global_vars.locals.account_id
   aws_region                      = local.global_vars.locals.aws_region
 
@@ -62,6 +63,7 @@ inputs = {
   aws_region = local.aws_region
   environment_domain = local.environment_domain
   environment_namespace = local.environment_namespace
+  subdomains = local.subdomains
 
   private_subnet_ids = dependency.vpc.outputs.private_subnets
   public_subnet_ids = dependency.vpc.outputs.public_subnets

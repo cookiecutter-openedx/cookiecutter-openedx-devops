@@ -12,12 +12,13 @@ locals {
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
-  env                             = local.environment_vars.locals.environment
-  environment_domain              = local.environment_vars.locals.environment_domain
   platform_name                   = local.global_vars.locals.platform_name
   platform_region                 = local.global_vars.locals.platform_region
-  cluster_name                    = local.environment_vars.locals.environment_namespace
   account_id                      = local.global_vars.locals.account_id
+  env                             = local.environment_vars.locals.environment
+  environment_domain              = local.environment_vars.locals.environment_domain
+  cluster_name                    = local.environment_vars.locals.environment_namespace
+  subdomains                      = local.environment_vars.locals.subdomains
   eks_worker_group_instance_type  = local.environment_vars.locals.eks_worker_group_instance_type
 
   tags = merge(
@@ -53,6 +54,7 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
+  subdomains = local.subdomains
   cluster_name    = "${local.cluster_name}"
   cluster_version = "1.21"
   enable_irsa     = true
