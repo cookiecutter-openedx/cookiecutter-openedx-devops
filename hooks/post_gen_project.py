@@ -55,7 +55,11 @@ def remove_eks_abl_fargate_files():
 def move_manifests(folder = ""):
     source = os.path.join("ci", "tutor-deploy", "environments", "{{ cookiecutter.environment_name }}", "k8s", folder)
     destination = os.path.join("ci", "tutor-deploy", "environments", "{{ cookiecutter.environment_name }}", "k8s")
-    shutil.copy(source + "/app.yaml", destination)
+    src_files = os.listdir(source)
+    for file_name in src_files:
+        full_file_name = os.path.join(source, file_name)
+        if os.path.isfile(full_file_name):
+            shutil.copy(full_file_name, destination)
     shutil.rmtree(source)
 
 def main():
