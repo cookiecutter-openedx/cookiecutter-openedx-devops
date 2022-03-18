@@ -51,20 +51,29 @@ def remove_eks_abl_fargate_files():
     if os.path.exists(ci_dir_path):
         shutil.rmtree(ci_dir_path)
 
+# move kubernetes manifests into the k8s folder and remove the original source folder.
+def move_manifests(folder = ""):
+    source = os.path.join("ci", "tutor-deploy", "environments", "{{ cookiecutter.environment_name }}", "k8s", folder)
+    destination = os.path.join("ci", "tutor-deploy", "environments", "{{ cookiecutter.environment_name }}", "k8s")
+    shutil.copy(source + "*.yaml", destination)
+    shutil.rmtree(source)
 
 def main():
 
     if "{{ cookiecutter.eks_cluster_compute_type }}" == "CLB_EC2":
         remove_eks_abl_fargate_files()
         remove_eks_alb_ec2_files()
+        move_manifests("eks_clb_ec2")
 
     if "{{ cookiecutter.eks_cluster_compute_type }}" == "ALB_EC2":
         remove_eks_abl_fargate_files()
         remove_eks_clb_ec2_files()
+        move_manifests("eks_alb_ec2")
 
     if "{{ cookiecutter.eks_cluster_compute_type }}" == "ALB_Fargate":
         remove_eks_clb_ec2_files()
         remove_eks_alb_ec2_files()
+        move_manifests("eks_alb_fargate")
 
     print(SUCCESS + "Your Open edX devops repo has been initialized." + TERMINATOR)
 
