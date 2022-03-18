@@ -75,6 +75,7 @@ resource "kubernetes_service" "app" {
   depends_on = [kubernetes_deployment.app]
 }
 
+# https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/ingress#example-usage
 resource "kubernetes_ingress" "app" {
   metadata {
     name      = "owncloud-lb"
@@ -115,5 +116,5 @@ resource "aws_route53_record" "app" {
   zone_id = data.aws_route53_zone.environment_domain.id
   name    = var.environment_domain
   type    = "CNAME"
-  records = [kubernetes_ingress.app.dns_name]
+  records = [kubernetes_ingress.app.status.0.load_balancer.0.ingress.0.hostname]
 }
