@@ -12,6 +12,5 @@ terraform {
   required_providers {
     aws        = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
     kubernetes = "{{ cookiecutter.terraform_provider_kubernetes_version }}"
-    helm       = ">= 2.4.1"
   }
 }

@@ -7,8 +7,6 @@
 # usage: Create EKS Node Group (aka workers)
 #------------------------------------------------------------------------------
 
-
-
 # allow ssh access to anything inside the VPC
 resource "aws_security_group" "worker_group_mgmt" {
   name_prefix = "${var.environment_namespace}-eks_worker_group_mgmt"
@@ -28,7 +26,6 @@ resource "aws_security_group" "worker_group_mgmt" {
   tags = var.tags
 
 }
-
 
 # Resource: aws_iam_role
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role
@@ -73,13 +70,12 @@ resource "aws_iam_role_policy_attachment" "amazon_ec2_container_registry_read_on
   role       = aws_iam_role.nodes_general.name
 }
 
-
 resource "aws_launch_template" "eks_node" {
   name                                 = "eks_node"
   instance_initiated_shutdown_behavior = "terminate"
   kernel_id                            = "eks_node"
   key_name                             = "eks_node"
-  vpc_security_group_ids               = [aws_security_group.worker_group_mgmt]
+  vpc_security_group_ids               = [aws_security_group.worker_group_mgmt.id]
 
   block_device_mappings {
     device_name = "/dev/sda1"
@@ -140,32 +136,18 @@ resource "aws_launch_template" "eks_node" {
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eks_node_group
 # FIX NOTE. name doesn't appear in AWS Console
 resource "aws_eks_node_group" "nodes_general" {
-  # Name of the EKS Cluster.
-  cluster_name = aws_eks_cluster.eks.name
-
-  # Name of the EKS Node Group.
+  cluster_name    = aws_eks_cluster.eks.name
   node_group_name = "nodes-general"
-  launch_template = aws_launch_template.eks_node
-
-  # Amazon Resource Name (ARN) of the IAM Role that provides permissions for the EKS Node Group.
-  node_role_arn = aws_iam_role.nodes_general.arn
-
-  # Identifiers of EC2 Subnets to associate with the EKS Node Group.
-  # These subnets must have the following resource tag: kubernetes.io/cluster/CLUSTER_NAME
-  # (where CLUSTER_NAME is replaced with the name of the EKS Cluster).
-  subnet_ids = var.private_subnet_ids
-
-  # Configuration block with scaling settings
-
+  node_role_arn   = aws_iam_role.nodes_general.arn
+  subnet_ids      = var.private_subnet_ids
+  launch_template {
+    id      = aws_launch_template.eks_node.id
+    version = "1"
+  }
   scaling_config {
-    # Desired number of worker nodes.
     desired_size = var.eks_worker_group_desired_size
-
-    # Maximum number of worker nodes.
-    max_size = var.eks_worker_group_max_size
-
-    # Minimum number of worker nodes.
-    min_size = var.eks_worker_group_min_size
+    max_size     = var.eks_worker_group_max_size
+    min_size     = var.eks_worker_group_min_size
   }
 
   # Type of Amazon Machine Image (AMI) associated with the EKS Node Group.
@@ -185,8 +167,8 @@ resource "aws_eks_node_group" "nodes_general" {
   # List of instance types associated with the EKS Node Group
   # FIX NOTE: WHY DOES THIS BREAK FOR t3.large?
   #instance_types = [var.eks_worker_group_instance_type]
-  # Optional: Allow external changes without Terraform plan difference
 
+  # Optional: Allow external changes without Terraform plan difference
   lifecycle {
     ignore_changes = [scaling_config[0].desired_size]
   }
