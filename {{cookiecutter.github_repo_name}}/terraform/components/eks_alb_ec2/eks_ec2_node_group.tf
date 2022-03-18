@@ -101,10 +101,10 @@ resource "aws_eks_node_group" "nodes_general" {
   node_role_arn   = aws_iam_role.nodes_general.arn
   subnet_ids      = var.private_subnet_ids
 
-  launch_template {
-    id      = aws_launch_template.eks_node.id
-    version = "1"
-  }
+  #launch_template {
+  #  id      = aws_launch_template.eks_node.id
+  #  version = "1"
+  #}
 
   scaling_config {
     desired_size = var.eks_worker_group_desired_size

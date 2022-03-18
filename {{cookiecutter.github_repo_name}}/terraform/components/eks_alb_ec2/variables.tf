@@ -6,6 +6,12 @@
 #
 # usage: build an EKS cluster load balancer
 #------------------------------------------------------------------------------
+variable "eks_cluster_version" {
+  description = "Kubernetes cluster version."
+  type        = string
+  default     = "1.21"
+}
+
 variable "vpc_id" {
   description = "ID of  the VPC where to create security groups"
   type        = string

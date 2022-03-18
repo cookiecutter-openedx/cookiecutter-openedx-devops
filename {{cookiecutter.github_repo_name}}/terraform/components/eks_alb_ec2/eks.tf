@@ -58,7 +58,7 @@ resource "aws_iam_role_policy_attachment" "amazon_eks_cluster_policy" {
 
 resource "aws_eks_cluster" "eks" {
   name    = var.environment_namespace
-  version = "1.21"
+  version = var.eks_cluster_version
 
   # The Amazon Resource Name (ARN) of the IAM role that provides permissions for
   # the Kubernetes control plane to make calls to AWS API operations on your behalf
