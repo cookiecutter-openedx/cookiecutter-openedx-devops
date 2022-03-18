@@ -8,25 +8,44 @@
 #------------------------------------------------------------------------------
 
 
-# Ubuntu 20.04 LTS AMI
-# see: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami_ids
-data "aws_ami" "ubuntu" {
 
-  most_recent = true
+resource "aws_security_group" "worker_group_mgmt" {
+  name_prefix = "${var.environment_namespace}-eks_worker_group_mgmt"
+  vpc_id      = var.vpc_id
 
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  ingress {
+    from_port = 22
+    to_port   = 22
+    protocol  = "tcp"
+
+    cidr_blocks = [
+      "10.0.0.0/8",
+    ]
   }
 
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
+  tags = var.tags
 
-  owners = ["099720109477"]
 }
 
+resource "aws_security_group" "all_worker_mgmt" {
+  name_prefix = "${var.environment_namespace}-eks_all_worker_management"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    from_port = 22
+    to_port   = 22
+    protocol  = "tcp"
+
+    cidr_blocks = [
+      "10.0.0.0/8",
+      "172.16.0.0/12",
+      "192.168.0.0/16",
+    ]
+  }
+
+  tags = var.tags
+
+}
 
 # Resource: aws_iam_role
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role
@@ -82,6 +101,73 @@ resource "aws_iam_role_policy_attachment" "amazon_ec2_container_registry_read_on
   role = aws_iam_role.nodes_general.name
 }
 
+
+resource "aws_launch_template" "eks_node" {
+  name                                 = "eks_node"
+  ebs_optimized                        = true
+  instance_initiated_shutdown_behavior = "terminate"
+  instance_type                        = "a1.medium"
+  kernel_id                            = "eks_node"
+  key_name                             = "eks_node"
+  vpc_security_group_ids = [
+    aws_security_group.worker_group_mgmt,
+    aws_security_group.all_worker_mgmt
+  ]
+
+  block_device_mappings {
+    device_name = "/dev/sda1"
+
+    ebs {
+      volume_size = 25
+    }
+  }
+
+  monitoring {
+    enabled = false
+  }
+
+  network_interfaces {
+    associate_public_ip_address = false
+  }
+
+  placement {
+    availability_zone = var.aws_region
+  }
+
+  #ram_disk_id = "test"
+
+  #cpu_options {
+  #  core_count       = 4
+  #  threads_per_core = 2
+  #}
+
+  #credit_specification {
+  #  cpu_credits = "standard"
+  #}
+  #instance_market_options {
+  #  market_type = "spot"
+  #}
+
+  #license_specification {
+  #  license_configuration_arn = "arn:aws:license-manager:eu-west-1:123456789012:license-configuration:lic-0123456789abcdef0123456789abcdef"
+  #}
+
+  #metadata_options {
+  #  http_endpoint               = "enabled"
+  #  http_tokens                 = "required"
+  #  http_put_response_hop_limit = 1
+  #  instance_metadata_tags      = "enabled"
+  #}
+
+  #user_data = filebase64("${path.module}/example.sh")
+
+  tag_specifications {
+    resource_type = "instance"
+    tags          = var.tags
+  }
+
+}
+
 # Resource: aws_eks_node_group
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eks_node_group
 # FIX NOTE. name doesn't appear in AWS Console
@@ -91,6 +177,7 @@ resource "aws_eks_node_group" "nodes_general" {
 
   # Name of the EKS Node Group.
   node_group_name = "nodes-general"
+  launch_template = aws_launch_template.eks_node
 
   # Amazon Resource Name (ARN) of the IAM Role that provides permissions for the EKS Node Group.
   node_role_arn = aws_iam_role.nodes_general.arn
@@ -130,6 +217,11 @@ resource "aws_eks_node_group" "nodes_general" {
   # List of instance types associated with the EKS Node Group
   # FIX NOTE: WHY DOES THIS BREAK FOR t3.large?
   #instance_types = [var.eks_worker_group_instance_type]
+  # Optional: Allow external changes without Terraform plan difference
+
+  lifecycle {
+    ignore_changes = [scaling_config[0].desired_size]
+  }
 
   labels = {
     role = "nodes-general"
