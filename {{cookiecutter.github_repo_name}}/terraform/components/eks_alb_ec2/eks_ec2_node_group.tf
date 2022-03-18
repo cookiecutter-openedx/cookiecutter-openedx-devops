@@ -71,9 +71,8 @@ resource "aws_iam_role_policy_attachment" "amazon_ec2_container_registry_read_on
 }
 
 resource "aws_launch_template" "eks_node" {
-  name                                 = "eks_node"
-  instance_initiated_shutdown_behavior = "terminate"
-  vpc_security_group_ids               = [aws_security_group.worker_group_mgmt.id]
+  name                   = "${var.environment_namespace}-eks_node"
+  vpc_security_group_ids = [aws_security_group.worker_group_mgmt.id]
 
   block_device_mappings {
     device_name = "/dev/sda1"
@@ -83,48 +82,8 @@ resource "aws_launch_template" "eks_node" {
     }
   }
 
-  #network_interfaces {
-  #  associate_public_ip_address = false
-  #}
-
-  #key_name                             = "eks_node"
-  #kernel_id                            = "eks_node"
-
-  #placement {
-  #  availability_zone = "${var.aws_region}a"
-  #}
-
-  #monitoring {
-  #  enabled = false
-  #}
-
-  #instance_type = "a1.medium"
-  #ebs_optimized = true
-  #ram_disk_id = "test"
-  #user_data = filebase64("${path.module}/example.sh")
-
-  #cpu_options {
-  #  core_count       = 4
-  #  threads_per_core = 2
-  #}
-
-  #credit_specification {
-  #  cpu_credits = "standard"
-  #}
-  #instance_market_options {
-  #  market_type = "spot"
-  #}
-
-  #license_specification {
-  #  license_configuration_arn = "arn:aws:license-manager:eu-west-1:123456789012:license-configuration:lic-0123456789abcdef0123456789abcdef"
-  #}
-
-  #metadata_options {
-  #  http_endpoint               = "enabled"
-  #  http_tokens                 = "required"
-  #  http_put_response_hop_limit = 1
-  #  instance_metadata_tags      = "enabled"
-  #}
+  # InvalidParameterException: You cannot configure shutdown behavior. Amazon EKS will always terminate instances.
+  #instance_initiated_shutdown_behavior = "terminate"
 
   tag_specifications {
     resource_type = "instance"
@@ -141,10 +100,12 @@ resource "aws_eks_node_group" "nodes_general" {
   node_group_name = "nodes-general"
   node_role_arn   = aws_iam_role.nodes_general.arn
   subnet_ids      = var.private_subnet_ids
+
   launch_template {
     id      = aws_launch_template.eks_node.id
     version = "1"
   }
+
   scaling_config {
     desired_size = var.eks_worker_group_desired_size
     max_size     = var.eks_worker_group_max_size
@@ -159,8 +120,9 @@ resource "aws_eks_node_group" "nodes_general" {
   # Valid values: ON_DEMAND, SPOT
   capacity_type = "ON_DEMAND"
 
-  # Disk size in GiB for worker nodes
-  disk_size = 25
+  # mcdaniel: pretty unintuitive error whenever you try to set this.
+  # Error: error creating EKS Node Group (fargate-sandbox-ohio:nodes-general): InvalidParameterException: Disk size must be specified within the launch template.
+  #disk_size = 25
 
   # Force version update if existing pods are unable to be drained due to a pod disruption budget issue.
   force_update_version = false
