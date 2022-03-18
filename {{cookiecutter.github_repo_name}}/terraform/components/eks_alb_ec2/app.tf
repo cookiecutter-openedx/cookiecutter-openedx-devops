@@ -1,3 +1,9 @@
+#------------------------------------------------------------------------------
+# written by: Lawrence McDaniel
+#
+# usage: this is a temporary module, for development and testing purposes.
+#        creates a simple placeholder app using the `owncloud` container
+#------------------------------------------------------------------------------
 
 data "aws_route53_zone" "environment_domain" {
   name = var.environment_domain
