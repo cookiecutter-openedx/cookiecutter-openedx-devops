@@ -13,10 +13,10 @@ see:
 
 
 .. image:: doc/aws-vpc-eks.png
-  :width: 700
+  :width: 100%
   :alt: AWS VPC EKS Diagram
 
 
 .. image:: doc/node_group-diagram.jpeg
-  :width: 700
+  :width: 100%
   :alt: AWS EKS Node Group Diagram
