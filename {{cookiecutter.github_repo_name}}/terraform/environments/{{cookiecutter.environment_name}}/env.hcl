@@ -28,9 +28,19 @@ locals {
   # 1 vCPU 1.55gb
   redis_node_type = "cache.t2.small"
 
-  # 2 vCPU 8gb
-  eks_worker_group_instance_type = "t3.small"
-
+  #----------------------------------------------------------------------------
+  # AWS Elastic Kubernetes service
+  # Scaling options
+  #
+  # valid options: a1.medium, a1.large, a1.xlarge, a1.2xlarge, a1.4xlarge, a1.metal
+  # a1.medium:   1 vCPU 2gb
+  # a1.large:    2 vCPU 4gb
+  # a1.xlarge:   4 vCPU 8gb
+  # a1.2xlarge:  8 vCPU 16gb
+  # a1.4xlarge: 16 vCPU 32gb
+  # a1.metal:   16 physical cpus 32gb
+  #----------------------------------------------------------------------------
+  eks_worker_group_instance_type = "a1.medium"
   eks_worker_group_min_size = 1
   eks_worker_group_max_size = 2
   eks_worker_group_desired_size = 1
