@@ -73,8 +73,6 @@ resource "aws_iam_role_policy_attachment" "amazon_ec2_container_registry_read_on
 resource "aws_launch_template" "eks_node" {
   name                                 = "eks_node"
   instance_initiated_shutdown_behavior = "terminate"
-  kernel_id                            = "eks_node"
-  key_name                             = "eks_node"
   vpc_security_group_ids               = [aws_security_group.worker_group_mgmt.id]
 
   block_device_mappings {
@@ -85,9 +83,12 @@ resource "aws_launch_template" "eks_node" {
     }
   }
 
-  network_interfaces {
-    associate_public_ip_address = false
-  }
+  #network_interfaces {
+  #  associate_public_ip_address = false
+  #}
+
+  #key_name                             = "eks_node"
+  #kernel_id                            = "eks_node"
 
   #placement {
   #  availability_zone = "${var.aws_region}a"
