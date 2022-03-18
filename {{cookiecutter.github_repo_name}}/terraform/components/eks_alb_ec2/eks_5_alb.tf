@@ -14,10 +14,7 @@
 # - https://aws.amazon.com/premiumsupport/knowledge-center/eks-alb-ingress-controller-fargate/
 #------------------------------------------------------------------------------
 
-################################################################################
-# Supporting Resources
-################################################################################
-
+# This becomes arn:aws:iam::320713933456:policy/ALBIngressControllerIAMPolicy
 resource "aws_iam_policy" "ALB-policy" {
   name = "ALBIngressControllerIAMPolicy"
 
@@ -33,8 +30,7 @@ resource "aws_iam_role" "eks_alb_ingress_controller" {
   name                  = "eks-alb-ingress-controller"
   description           = "Permissions required by the Kubernetes AWS ALB Ingress controller to do its job."
   force_detach_policies = true
-  # arn:aws:iam::320713933456:policy/ALBIngressControllerIAMPolicy
-  assume_role_policy = <<ROLE
+  assume_role_policy    = <<ROLE
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -82,6 +78,21 @@ resource "kubernetes_cluster_role" "ingress" {
   }
 }
 
+resource "kubernetes_service_account" "ingress" {
+  automount_service_account_token = true
+  metadata {
+    name      = "alb-ingress-controller"
+    namespace = "kube-system"
+    labels = {
+      "app.kubernetes.io/name"       = "alb-ingress-controller"
+      "app.kubernetes.io/managed-by" = "terraform"
+    }
+    annotations = {
+      "eks.amazonaws.com/role-arn" = aws_iam_role.eks_alb_ingress_controller.arn
+    }
+  }
+}
+
 resource "kubernetes_cluster_role_binding" "ingress" {
   metadata {
     name = "alb-ingress-controller"
@@ -104,20 +115,6 @@ resource "kubernetes_cluster_role_binding" "ingress" {
   depends_on = [kubernetes_cluster_role.ingress]
 }
 
-resource "kubernetes_service_account" "ingress" {
-  automount_service_account_token = true
-  metadata {
-    name      = "alb-ingress-controller"
-    namespace = "kube-system"
-    labels = {
-      "app.kubernetes.io/name"       = "alb-ingress-controller"
-      "app.kubernetes.io/managed-by" = "terraform"
-    }
-    annotations = {
-      "eks.amazonaws.com/role-arn" = aws_iam_role.eks_alb_ingress_controller.arn
-    }
-  }
-}
 
 resource "kubernetes_deployment" "ingress" {
   metadata {

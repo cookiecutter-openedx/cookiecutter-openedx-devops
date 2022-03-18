@@ -24,3 +24,12 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
   token                  = data.aws_eks_cluster_auth.eks.token
 }
+
+resource "kubernetes_namespace" "ec2" {
+  metadata {
+    labels = {
+      app = "my-app"
+    }
+    name = "ec2-node"
+  }
+}

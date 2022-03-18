@@ -11,6 +11,10 @@ see:
     https://antonputra.com/terraform/how-to-create-eks-cluster-using-terraform/
     https://github.com/antonputra/tutorials/tree/main/lessons/102
 
+.. image:: doc/aws-eks_fargate.png
+  :width: 100%
+  :alt: AWS EKS Fargate Diagram
+
 
 .. image:: doc/aws-vpc-eks.png
   :width: 100%

@@ -94,7 +94,7 @@ resource "aws_launch_template" "eks_node" {
 # FIX NOTE. name doesn't appear in AWS Console
 resource "aws_eks_node_group" "nodes_general" {
   cluster_name    = aws_eks_cluster.eks.name
-  node_group_name = "nodes-general"
+  node_group_name = "ec2-node"
   node_role_arn   = aws_iam_role.nodes_general.arn
   subnet_ids      = var.private_subnet_ids
 
@@ -118,7 +118,7 @@ resource "aws_eks_node_group" "nodes_general" {
   capacity_type = "ON_DEMAND"
 
   # mcdaniel: pretty unintuitive error whenever you try to set this.
-  # Error: error creating EKS Node Group (fargate-sandbox-ohio:nodes-general): InvalidParameterException: Disk size must be specified within the launch template.
+  # Error: error creating EKS Node Group (fargate-sandbox-ohio:ec2-node): InvalidParameterException: Disk size must be specified within the launch template.
   disk_size = 25
 
   # Force version update if existing pods are unable to be drained due to a pod disruption budget issue.
@@ -134,7 +134,7 @@ resource "aws_eks_node_group" "nodes_general" {
   }
 
   labels = {
-    role = "nodes-general"
+    role = "ec2-node"
   }
 
   # Ensure that IAM Role permissions are created before and deleted after EKS Node Group handling.
