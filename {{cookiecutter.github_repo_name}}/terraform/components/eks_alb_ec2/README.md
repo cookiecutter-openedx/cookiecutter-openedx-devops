@@ -10,3 +10,13 @@ see:
     https://www.youtube.com/watch?v=MZyrxzb7yAU
     https://antonputra.com/terraform/how-to-create-eks-cluster-using-terraform/
     https://github.com/antonputra/tutorials/tree/main/lessons/102
+
+
+.. image:: doc/aws-vpc-eks.png
+  :width: 700
+  :alt: AWS VPC EKS Diagram
+
+
+.. image:: doc/node_group-diagram.jpeg
+  :width: 700
+  :alt: AWS EKS Node Group Diagram
