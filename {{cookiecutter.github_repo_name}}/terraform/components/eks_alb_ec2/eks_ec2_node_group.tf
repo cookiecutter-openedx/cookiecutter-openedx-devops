@@ -9,6 +9,7 @@
 
 
 
+# allow ssh access to anything inside the VPC
 resource "aws_security_group" "worker_group_mgmt" {
   name_prefix = "${var.environment_namespace}-eks_worker_group_mgmt"
   vpc_id      = var.vpc_id
@@ -20,25 +21,6 @@ resource "aws_security_group" "worker_group_mgmt" {
 
     cidr_blocks = [
       "10.0.0.0/8",
-    ]
-  }
-
-  tags = var.tags
-
-}
-
-resource "aws_security_group" "all_worker_mgmt" {
-  name_prefix = "${var.environment_namespace}-eks_all_worker_management"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    from_port = 22
-    to_port   = 22
-    protocol  = "tcp"
-
-    cidr_blocks = [
-      "10.0.0.0/8",
-      "172.16.0.0/12",
       "192.168.0.0/16",
     ]
   }
@@ -47,14 +29,13 @@ resource "aws_security_group" "all_worker_mgmt" {
 
 }
 
+
 # Resource: aws_iam_role
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role
 # Create IAM role for EKS Node Group
 resource "aws_iam_role" "nodes_general" {
-  # The name of the role
   name = "eks-node-group-general"
 
-  # The policy that grants an entity permission to assume the role.
   assume_role_policy = <<POLICY
 {
   "Version": "2012-10-17",
@@ -75,44 +56,30 @@ POLICY
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment
 
 resource "aws_iam_role_policy_attachment" "amazon_eks_worker_node_policy_general" {
-  # The ARN of the policy you want to apply.
   # https://github.com/SummitRoute/aws_managed_policies/blob/master/policies/AmazonEKSWorkerNodePolicy
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
-
-  # The role the policy should be applied to
-  role = aws_iam_role.nodes_general.name
+  role       = aws_iam_role.nodes_general.name
 }
 
 resource "aws_iam_role_policy_attachment" "amazon_eks_cni_policy_general" {
-  # The ARN of the policy you want to apply.
   # https://github.com/SummitRoute/aws_managed_policies/blob/master/policies/AmazonEKS_CNI_Policy
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
-
-  # The role the policy should be applied to
-  role = aws_iam_role.nodes_general.name
+  role       = aws_iam_role.nodes_general.name
 }
 
 resource "aws_iam_role_policy_attachment" "amazon_ec2_container_registry_read_only" {
-  # The ARN of the policy you want to apply.
   # https://github.com/SummitRoute/aws_managed_policies/blob/master/policies/AmazonEC2ContainerRegistryReadOnly
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
-
-  # The role the policy should be applied to
-  role = aws_iam_role.nodes_general.name
+  role       = aws_iam_role.nodes_general.name
 }
 
 
 resource "aws_launch_template" "eks_node" {
   name                                 = "eks_node"
-  ebs_optimized                        = true
   instance_initiated_shutdown_behavior = "terminate"
-  instance_type                        = "a1.medium"
   kernel_id                            = "eks_node"
   key_name                             = "eks_node"
-  vpc_security_group_ids = [
-    aws_security_group.worker_group_mgmt,
-    aws_security_group.all_worker_mgmt
-  ]
+  vpc_security_group_ids               = [aws_security_group.worker_group_mgmt]
 
   block_device_mappings {
     device_name = "/dev/sda1"
@@ -122,19 +89,22 @@ resource "aws_launch_template" "eks_node" {
     }
   }
 
-  monitoring {
-    enabled = false
-  }
-
   network_interfaces {
     associate_public_ip_address = false
   }
 
-  placement {
-    availability_zone = var.aws_region
-  }
+  #placement {
+  #  availability_zone = "${var.aws_region}a"
+  #}
 
+  #monitoring {
+  #  enabled = false
+  #}
+
+  #instance_type = "a1.medium"
+  #ebs_optimized = true
   #ram_disk_id = "test"
+  #user_data = filebase64("${path.module}/example.sh")
 
   #cpu_options {
   #  core_count       = 4
@@ -158,8 +128,6 @@ resource "aws_launch_template" "eks_node" {
   #  http_put_response_hop_limit = 1
   #  instance_metadata_tags      = "enabled"
   #}
-
-  #user_data = filebase64("${path.module}/example.sh")
 
   tag_specifications {
     resource_type = "instance"
