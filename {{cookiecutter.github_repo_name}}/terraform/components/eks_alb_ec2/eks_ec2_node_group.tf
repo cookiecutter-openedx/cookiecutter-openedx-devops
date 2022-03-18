@@ -33,20 +33,17 @@ resource "aws_security_group" "worker_group_mgmt" {
 resource "aws_iam_role" "nodes_general" {
   name = "eks-node-group-general"
 
-  assume_role_policy = <<POLICY
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "ec2.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-POLICY
+  assume_role_policy = jsonencode({
+    Statement = [{
+      Action = "sts:AssumeRole"
+      Effect = "Allow"
+      Principal = {
+        Service = "ec2.amazonaws.com"
+      }
+    }]
+    Version = "2012-10-17"
+  })
+
 }
 
 # Resource: aws_iam_role_policy_attachment
@@ -122,14 +119,14 @@ resource "aws_eks_node_group" "nodes_general" {
 
   # mcdaniel: pretty unintuitive error whenever you try to set this.
   # Error: error creating EKS Node Group (fargate-sandbox-ohio:nodes-general): InvalidParameterException: Disk size must be specified within the launch template.
-  #disk_size = 25
+  disk_size = 25
 
   # Force version update if existing pods are unable to be drained due to a pod disruption budget issue.
   force_update_version = false
 
   # List of instance types associated with the EKS Node Group
   # FIX NOTE: WHY DOES THIS BREAK FOR t3.large?
-  #instance_types = [var.eks_worker_group_instance_type]
+  instance_types = [var.eks_worker_group_instance_type]
 
   # Optional: Allow external changes without Terraform plan difference
   lifecycle {
