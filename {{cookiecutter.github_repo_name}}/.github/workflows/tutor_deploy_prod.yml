@@ -26,7 +26,7 @@ jobs:
     env:
       KUBECONFIG: /home/runner/.kube/config
       ENVIRONMENT_ID: prod
-      NAMESPACE: {{ cookiecutter.prod_environment }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}
+      NAMESPACE: {{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}
       TUTOR_VERSION: {{ cookiecutter.ci_build_tutor_version }}
       OPENEDX_COMMON_VERSION: {{ cookiecutter.ci_deploy_OPENEDX_COMMON_VERSION }}
 
@@ -44,7 +44,7 @@ jobs:
           aws-region: {{ cookiecutter.global_aws_region }}
 
       - name: Get Kube config
-        run: aws eks --region {{ cookiecutter.global_aws_region }} update-kubeconfig --name {{ cookiecutter.prod_environment }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }} --alias eks-prod
+        run: aws eks --region {{ cookiecutter.global_aws_region }} update-kubeconfig --name {{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }} --alias eks-prod
 
       - name: Install kubectl
         uses: azure/setup-kubectl@v1
@@ -140,8 +140,8 @@ jobs:
       #        example values:
       #          OPENEDX_AWS_ACCESS_KEY: ABDCE123456789OHBBGQ
       #          OPENEDX_AWS_SECRET_ACCESS_KEY: A123456789srJ8lgel+ABCDEFGHIJKabcdefghijk
-      #          S3_STORAGE_BUCKET: {{ cookiecutter.prod_environment }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-storage
-      #          S3_CUSTOM_DOMAIN: cdn.{{ cookiecutter.prod_environment }}.{{ cookiecutter.global_root_domain }}
+      #          S3_STORAGE_BUCKET: {{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-storage
+      #          S3_CUSTOM_DOMAIN: cdn.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
       #          S3_REGION: {{ cookiecutter.global_aws_region }}
       #
       # this config depends on a public read-only AWS S3 bucket policy like this:
@@ -158,7 +158,7 @@ jobs:
       #                      "s3:GetObject*",
       #                      "s3:List*"
       #                  ],
-      #                  "Resource": "arn:aws:s3:::{{ cookiecutter.prod_environment }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-storage/*"
+      #                  "Resource": "arn:aws:s3:::{{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-storage/*"
       #              }
       #          ]
       #      }

@@ -12,7 +12,7 @@ So, to be clear, creating additional Terragrunt environments might be more separ
 locals {
   global_vars = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
-  environment           = "{{ cookiecutter.prod_environment }}"
+  environment           = "{{ cookiecutter.environment_name }}"
   subdomains            = ["dev", "test", "qa", "lawrence-dev", "frank-dev"]
 }```
 

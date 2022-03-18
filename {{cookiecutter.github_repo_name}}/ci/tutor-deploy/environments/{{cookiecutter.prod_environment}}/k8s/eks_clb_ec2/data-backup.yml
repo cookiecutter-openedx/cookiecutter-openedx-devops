@@ -10,7 +10,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: data-backup
-  namespace: {{ cookiecutter.prod_environment }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}
+  namespace: {{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}
 spec:
   schedule: "0 8 * * *"
   jobTemplate:

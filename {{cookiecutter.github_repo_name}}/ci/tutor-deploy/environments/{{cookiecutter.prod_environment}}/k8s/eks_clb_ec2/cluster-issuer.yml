@@ -33,6 +33,6 @@ spec:
   issuerRef:
     kind: ClusterIssuer
     name: letsencrypt
-  commonName: {{ cookiecutter.prod_environment }}.{{ cookiecutter.global_root_domain }}
+  commonName: {{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
   dnsNames:
-    - "*.{{ cookiecutter.prod_environment }}.{{ cookiecutter.global_root_domain }}"
+    - "*.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}"

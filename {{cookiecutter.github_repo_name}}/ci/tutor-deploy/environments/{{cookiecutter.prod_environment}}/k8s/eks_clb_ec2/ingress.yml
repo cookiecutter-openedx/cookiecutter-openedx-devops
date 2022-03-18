@@ -10,7 +10,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: openedx
-  namespace: {{ cookiecutter.prod_environment }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}
+  namespace: {{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}
   annotations:
     # mcdaniel
     # https://www.cyberciti.biz/faq/nginx-upstream-sent-too-big-header-while-reading-response-header-from-upstream/
@@ -26,11 +26,11 @@ metadata:
 spec:
   tls:
   - hosts:
-    - "{{ cookiecutter.prod_environment }}.{{ cookiecutter.global_root_domain }}"
-    - "*.{{ cookiecutter.prod_environment }}.{{ cookiecutter.global_root_domain }}"
+    - "{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}"
+    - "*.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}"
     secretName: wild-openedx-prod-tls
   rules:
-  - host: {{ cookiecutter.prod_environment }}.{{ cookiecutter.global_root_domain }}
+  - host: {{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
     http:
       paths:
       - path: /
@@ -40,7 +40,7 @@ spec:
             name: lms
             port:
               number: 8000
-  - host: studio.{{ cookiecutter.prod_environment }}.{{ cookiecutter.global_root_domain }}
+  - host: studio.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
     http:
       paths:
       - path: /
