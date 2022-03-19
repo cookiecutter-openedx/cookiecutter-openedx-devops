@@ -29,17 +29,15 @@ The following diagram details the AWS components this controller creates. It als
 Ingress Creation
 ~~~~~~~~~~~~~~~~
 
-This section describes each step (circle) above. This example demonstrates satisfying 1 ingress resource.
+**[1]**: The controller watches for ingress events from the API server. When it finds ingress resources that satisfy its requirements, it begins the creation of AWS resources.
 
-[1]: The controller watches for ingress events from the API server. When it finds ingress resources that satisfy its requirements, it begins the creation of AWS resources.
+**[2]**: An ALB (ELBv2) is created in AWS for the new ingress resource. This ALB can be internet-facing or internal. You can also specify the subnets it's created in using annotations.
 
-[2]: An ALB (ELBv2) is created in AWS for the new ingress resource. This ALB can be internet-facing or internal. You can also specify the subnets it's created in using annotations.
+**[3]**: Target Groups are created in AWS for each unique Kubernetes service described in the ingress resource.
 
-[3]: Target Groups are created in AWS for each unique Kubernetes service described in the ingress resource.
+**[4]**: Listeners are created for every port detailed in your ingress resource annotations. When no port is specified, sensible defaults (80 or 443) are used. Certificates may also be attached via annotations.
 
-[4]: Listeners are created for every port detailed in your ingress resource annotations. When no port is specified, sensible defaults (80 or 443) are used. Certificates may also be attached via annotations.
-
-[5]: Rules are created for each path specified in your ingress resource. This ensures traffic to a specific path is routed to the correct Kubernetes Service.
+**[5]**: Rules are created for each path specified in your ingress resource. This ensures traffic to a specific path is routed to the correct Kubernetes Service.
 
 Along with the above, the controller also...
 
