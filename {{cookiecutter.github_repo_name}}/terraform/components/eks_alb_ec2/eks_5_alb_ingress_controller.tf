@@ -4,10 +4,7 @@
 #
 # date: Mar-2022
 #
-# usage: create an Application Load Balancer (ALB)
-#
-# note: references to the "Fargate pod" in AWS documentation are in fact,
-#       this ALB.
+# usage: create an Application Load Balancer (ALB) Ingress Controller
 #
 # see:
 # - https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.2/guide/ingress/annotations/
@@ -49,11 +46,19 @@ resource "aws_iam_role" "eks_alb_ingress_controller" {
   ]
 }
 ROLE
+
+  depends_on = [
+    aws_eks_cluster.eks
+  ]
 }
 
 resource "aws_iam_role_policy_attachment" "ALB-policy_attachment" {
   policy_arn = aws_iam_policy.ALB-policy.arn
   role       = aws_iam_role.eks_alb_ingress_controller.name
+
+  depends_on = [
+    aws_iam_role.eks_alb_ingress_controller
+  ]
 }
 
 resource "kubernetes_cluster_role" "ingress" {
@@ -91,6 +96,10 @@ resource "kubernetes_service_account" "ingress" {
       "eks.amazonaws.com/role-arn" = aws_iam_role.eks_alb_ingress_controller.arn
     }
   }
+
+  depends_on = [
+    aws_iam_role.eks_alb_ingress_controller
+  ]
 }
 
 resource "kubernetes_cluster_role_binding" "ingress" {
@@ -112,10 +121,24 @@ resource "kubernetes_cluster_role_binding" "ingress" {
     namespace = kubernetes_service_account.ingress.metadata[0].namespace
   }
 
-  depends_on = [kubernetes_cluster_role.ingress]
+  depends_on = [
+    kubernetes_service_account.ingress,
+    kubernetes_cluster_role.ingress
+  ]
 }
 
-
+#------------------------------------------------------------------------------
+# Deploy the following container to the Kubernetes cluster
+# https://hub.docker.com/r/amazon/aws-alb-ingress-controller/
+#
+# notes: The AWS ALB Ingress Controller satisfies Kubernetes ingress resources
+#        by provisioning Application Load Balancers.
+#
+#        mcdaniel: provisions an AWS Elastic Load Balancer
+#
+# Project Repo: https://github.com/kubernetes-sigs/aws-alb-ingress-controller
+#               https://github.com/kubernetes-sigs/aws-load-balancer-controller
+#------------------------------------------------------------------------------
 resource "kubernetes_deployment" "ingress" {
   metadata {
     name      = "alb-ingress-controller"
@@ -152,7 +175,7 @@ resource "kubernetes_deployment" "ingress" {
 
         container {
           name              = "alb-ingress-controller"
-          image             = "docker.io/amazon/aws-alb-ingress-controller:v1.1.6"
+          image             = "docker.io/amazon/aws-alb-ingress-controller:{{ cookiecutter.eks_cluster_alb_¡ngress_controller_version }}"
           image_pull_policy = "Always"
 
           args = [
@@ -179,5 +202,8 @@ resource "kubernetes_deployment" "ingress" {
     }
   }
 
-  depends_on = [kubernetes_cluster_role_binding.ingress]
+  depends_on = [
+    aws_eks_cluster.eks,
+    kubernetes_cluster_role_binding.ingress
+  ]
 }
