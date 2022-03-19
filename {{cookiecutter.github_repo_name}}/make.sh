@@ -10,7 +10,7 @@
 
 GITHUB_REPO="gh:lpm0073/cookiecutter-openedx-devops"
 GITHUB_BRANCH="main"
-OUTPUT_FOLDER="./"
+OUTPUT_FOLDER="../"
 
 cookiecutter --checkout $GITHUB_BRANCH \
              --output-dir $OUTPUT_FOLDER \

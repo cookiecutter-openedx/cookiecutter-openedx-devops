@@ -75,11 +75,11 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
 
   * - Software
     - Version
-  * - Open edX release
+  * - `Open edX Named Release <https://edx.readthedocs.io/projects/edx-developer-docs/en/latest/named_releases.html>`_
     - {{ cookiecutter.ci_build_open_edx_version }}
-  * - Tutor version
+  * - `Tutor <https://docs.tutor.overhang.io/>`_ version
     - {{ cookiecutter.ci_build_tutor_version }}
-  * - Kubernetes Cluster version
+  * - `Kubernetes Cluster <https://kubernetes.io/>`_ version
     - {{ cookiecutter.eks_cluster_version }}
   * - `amazon/aws-alb-ingress-controller Docker container <https://hub.docker.com/r/amazon/aws-alb-ingress-controller/>`_ version
     - {{ cookiecutter.eks_cluster_alb_ingress_controller_version }}
