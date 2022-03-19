@@ -8,13 +8,11 @@
 #------------------------------------------------------------------------------
 
 data "aws_eks_cluster" "eks" {
-  name       = var.environment_namespace
-  depends_on = [aws_eks_cluster.eks]
+  name = var.environment_namespace
 }
 
 data "aws_eks_cluster_auth" "eks" {
-  name       = var.environment_namespace
-  depends_on = [aws_eks_cluster.eks]
+  name = var.environment_namespace
 }
 
 data "aws_caller_identity" "current" {}
