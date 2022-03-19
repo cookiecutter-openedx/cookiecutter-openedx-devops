@@ -73,7 +73,7 @@ Ingress traffic starts at the ALB and reaches the Kubernetes pods directly. CNIs
 Other documentation
 -------------------
 
-.. image:: doc/aws-eks_fargate.png
+.. image:: doc/aws_eks_fargate.png
   :width: 100%
   :alt: AWS EKS Fargate Diagram
 
