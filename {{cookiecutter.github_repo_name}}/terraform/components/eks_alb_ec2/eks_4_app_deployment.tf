@@ -12,7 +12,7 @@ data "aws_route53_zone" "environment_domain" {
 resource "kubernetes_deployment" "app" {
   metadata {
     name      = "owncloud-server"
-    namespace = "ec2-node"
+    namespace = var.environment_namespace
     labels = {
       app = "owncloud"
     }
@@ -53,7 +53,7 @@ resource "kubernetes_deployment" "app" {
 resource "kubernetes_service" "app" {
   metadata {
     name      = "owncloud-service"
-    namespace = "ec2-node"
+    namespace = var.environment_namespace
   }
   spec {
     selector = {

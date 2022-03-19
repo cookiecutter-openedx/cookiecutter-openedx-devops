@@ -21,7 +21,7 @@ provider "kubernetes" {
   token                  = data.aws_eks_cluster_auth.eks.token
 }
 
-resource "kubernetes_namespace" "namespace" {
+resource "kubernetes_namespace" "ec2" {
   metadata {
     name = var.environment_namespace
   }

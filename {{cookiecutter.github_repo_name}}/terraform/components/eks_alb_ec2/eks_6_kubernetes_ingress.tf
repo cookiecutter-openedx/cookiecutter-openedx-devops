@@ -2,7 +2,7 @@
 resource "kubernetes_ingress" "app" {
   metadata {
     name      = "owncloud-lb"
-    namespace = "ec2-node"
+    namespace = var.environment_namespace
     annotations = {
       "kubernetes.io/ingress.class"           = "alb"
       "alb.ingress.kubernetes.io/scheme"      = "internet-facing"

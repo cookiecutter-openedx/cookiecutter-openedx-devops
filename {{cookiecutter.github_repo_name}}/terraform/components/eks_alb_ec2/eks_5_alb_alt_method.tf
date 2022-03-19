@@ -1,26 +1,7 @@
 # see: https://raw.githubusercontent.com/iplabs/terraform-kubernetes-alb-ingress-controller/master/main.tf
-locals {
-  k8s_cluster_type = "eks"
-}
-
-data "aws_vpc" "selected" {
-  id = data.aws_eks_cluster.selected[0].vpc_config[0].vpc_id
-}
-
-data "aws_region" "current" {
-  name = var.aws_region
-}
-
 data "aws_caller_identity" "current" {}
 
-# The EKS cluster (if any) that represents the installation target.
-data "aws_eks_cluster" "selected" {
-  count = local.k8s_cluster_type == "eks" ? 1 : 0
-  name  = var.environment_namespace
-}
-
 data "aws_iam_policy_document" "ec2_assume_role" {
-  count = local.k8s_cluster_type == "vanilla" ? 1 : 0
   statement {
     actions = ["sts:AssumeRole"]
 
@@ -32,20 +13,19 @@ data "aws_iam_policy_document" "ec2_assume_role" {
 }
 
 data "aws_iam_policy_document" "eks_oidc_assume_role" {
-  count = local.k8s_cluster_type == "eks" ? 1 : 0
   statement {
     actions = ["sts:AssumeRoleWithWebIdentity"]
     effect  = "Allow"
     condition {
       test     = "StringEquals"
-      variable = "${replace(data.aws_eks_cluster.selected[0].identity[0].oidc[0].issuer, "https://", "")}:sub"
+      variable = "${replace(data.aws_eks_cluster.eks.identity[0].oidc[0].issuer, "https://", "")}:sub"
       values = [
         "system:serviceaccount:${var.environment_namespace}:aws-alb-ingress-controller"
       ]
     }
     principals {
       identifiers = [
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/${replace(data.aws_eks_cluster.selected[0].identity[0].oidc[0].issuer, "https://", "")}"
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/${replace(data.aws_eks_cluster.eks.identity[0].oidc[0].issuer, "https://", "")}"
       ]
       type = "Federated"
     }
@@ -61,7 +41,7 @@ resource "aws_iam_role" "this" {
 
   force_detach_policies = true
 
-  assume_role_policy = local.k8s_cluster_type == "vanilla" ? data.aws_iam_policy_document.ec2_assume_role[0].json : data.aws_iam_policy_document.eks_oidc_assume_role[0].json
+  assume_role_policy = data.aws_iam_policy_document.eks_oidc_assume_role.json
 }
 
 data "aws_iam_policy_document" "alb_management" {
