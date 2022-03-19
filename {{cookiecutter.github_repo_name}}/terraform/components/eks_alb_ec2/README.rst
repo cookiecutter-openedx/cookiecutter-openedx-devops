@@ -29,7 +29,7 @@ The following diagram details the AWS components this controller creates. It als
 Ingress Creation
 ~~~~~~~~~~~~~~~~
 
-**[1]**: The alb ingress controller watches for ingress events from the API server. Ingress events originate from this Terraform code, when you run `terragrunt apply` or `terragrunt destroy`. When it finds ingress resources that satisfy its requirements, it begins the creation of AWS resources.
+**[1]**: The alb ingress controller watches for ingress events from the API server. Ingress events originate from this Terraform code, when you run :bash:`terragrunt apply` or :bash:`terragrunt destroy`. When it finds ingress resources that satisfy its requirements, it begins the creation of AWS resources.
 
 **[2]**: An Application Load Balancer (ALB) is created in AWS for the new ingress resource. This ALB can be internet-facing or internal. You can also specify the subnets it's created in using annotations.
 
@@ -52,7 +52,7 @@ AWS Load Balancer controller supports two traffic modes:
 
 Instance mode
 IP mode
-By default, Instance mode is used, users can explicitly select the mode via `alb.ingress.kubernetes.io/target-type` annotation.
+By default, Instance mode is used, users can explicitly select the mode via :terraform:`alb.ingress.kubernetes.io/target-type` annotation.
 
 **Instance mode**
 
