@@ -64,39 +64,40 @@ These would result in environments like the following:
 - CDN at https://cdn.dev.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }} linked to an S3 bucket named dev-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-storage
 - daily data backups archived into an S3 bucket named dev-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-mongodb-backup
 
-**Cookiecutter Manifest**
+Cookiecutter Manifest
+~~~~~~~~~~~~~~~~~~~~~
 
-This repository was generated using Cookiecutter. Keep your repository up to date with the latest versions of applications, services and code library by occasionally re-running Cookiecutter.
+This repository was generated using `Cookiecutter <https://cookiecutter.readthedocs.io/>`_. Keep your repository up to date with the latest Terraform code and configuration versions of the Open edX application stack, AWS infrastructure services and api code libraries by occasionally re-generating the Cookiecutter template using this `make file <./make.sh>`_.
 
 .. list-table:: Cookiecutter Version Control
-  :widths: 60 20
+  :widths: 75 20
   :header-rows: 1
 
   * - Software
     - Version
-  * - ci_build_open_edx_version
+  * - Open edX release
     - {{ cookiecutter.ci_build_open_edx_version }}
-  * - ci_build_tutor_version
+  * - Tutor version
     - {{ cookiecutter.ci_build_tutor_version }}
-  * - eks_cluster_version
+  * - Kubernetes Cluster version
     - {{ cookiecutter.eks_cluster_version }}
-  * - eks_cluster_alb_ingress_controller_version
+  * - `aws-alb-ingress-controller Docker container version <https://hub.docker.com/r/amazon/aws-alb-ingress-controller/>`_ version
     - {{ cookiecutter.eks_cluster_alb_ingress_controller_version }}
-  * - mongodb_engine_version
+  * - MongoDB version
     - {{ cookiecutter.mongodb_engine_version }}
-  * - mysql_engine_version
+  * - MySQL versin
     - {{ cookiecutter.mysql_engine_version }}
-  * - redis_engine_version
+  * - Redis Cache version
     - {{ cookiecutter.redis_engine_version }}
-  * - terraform_required_version
+  * - Terraform version
     - {{ cookiecutter.terraform_required_version }}
-  * - terraform_provider_kubernetes_version
+  * - `Terraform Kubernetes Provider <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs>`_ version
     - {{ cookiecutter.terraform_provider_kubernetes_version }}
-  * - terraform_provider_hashicorp_aws_version
+  * - `Terraform AWS Provider <https://registry.terraform.io/providers/hashicorp/aws/latest/docs>`_ version
     - {{ cookiecutter.terraform_provider_hashicorp_aws_version }}
-  * - terraform_provider_hashicorp_local_version
+  * - `Terraform Local Provider <https://registry.terraform.io/providers/hashicorp/local/latest/docs>`_ version
     - {{ cookiecutter.terraform_provider_hashicorp_local_version }}
-  * - terraform_provider_hashicorp_random_version
+  * - `Terraform Random Provider <https://registry.terraform.io/providers/hashicorp/random/latest/docs>`_ version
     - {{ cookiecutter.terraform_provider_hashicorp_random_version }}
 
 
