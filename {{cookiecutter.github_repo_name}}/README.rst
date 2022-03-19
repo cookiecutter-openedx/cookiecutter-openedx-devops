@@ -81,15 +81,15 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
     - {{ cookiecutter.ci_build_tutor_version }}
   * - Kubernetes Cluster version
     - {{ cookiecutter.eks_cluster_version }}
-  * - `aws-alb-ingress-controller Docker container version <https://hub.docker.com/r/amazon/aws-alb-ingress-controller/>`_ version
+  * - `amazon/aws-alb-ingress-controller Docker container <https://hub.docker.com/r/amazon/aws-alb-ingress-controller/>`_ version
     - {{ cookiecutter.eks_cluster_alb_ingress_controller_version }}
-  * - MongoDB version
+  * - `MongoDB <https://www.mongodb.com/>`_ version
     - {{ cookiecutter.mongodb_engine_version }}
-  * - MySQL versin
+  * - `MySQL <https://www.mysql.com/>`_ versin
     - {{ cookiecutter.mysql_engine_version }}
-  * - Redis Cache version
+  * - `Redis <https://redis.io/>`_ version
     - {{ cookiecutter.redis_engine_version }}
-  * - Terraform version
+  * - `Terraform <https://www.terraform.io/>`_ version
     - {{ cookiecutter.terraform_required_version }}
   * - `Terraform Kubernetes Provider <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs>`_ version
     - {{ cookiecutter.terraform_provider_kubernetes_version }}
