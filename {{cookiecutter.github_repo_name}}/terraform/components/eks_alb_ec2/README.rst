@@ -26,6 +26,12 @@ The following diagram details the AWS components this controller creates. It als
   :width: 100%
   :alt: How AWS Load Balancer controller works
 
+.. role:: bash(code)
+   :language: bash
+
+.. role:: kubernetes(code)
+   :language: kubernetes
+
 Ingress Creation
 ~~~~~~~~~~~~~~~~
 
@@ -52,7 +58,7 @@ AWS Load Balancer controller supports two traffic modes:
 
 Instance mode
 IP mode
-By default, Instance mode is used, users can explicitly select the mode via :terraform:`alb.ingress.kubernetes.io/target-type` annotation.
+By default, Instance mode is used, users can explicitly select the mode via :kubernetes:`alb.ingress.kubernetes.io/target-type` annotation.
 
 **Instance mode**
 
