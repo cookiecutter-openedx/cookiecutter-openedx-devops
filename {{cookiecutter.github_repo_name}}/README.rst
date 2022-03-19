@@ -64,11 +64,11 @@ These would result in environments like the following:
 - CDN at https://cdn.dev.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }} linked to an S3 bucket named dev-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-storage
 - daily data backups archived into an S3 bucket named dev-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-mongodb-backup
 
-Version Control
----------------
-This repository is using the following versions.
+**Cookiecutter Manifest**
 
-.. list-table:: Version Control
+This repository was generated using Cookiecutter. Keep your repository up to date with the latest versions of applications, services and code library by occasionally re-running Cookiecutter.
+
+.. list-table:: Cookiecutter Version Control
   :widths: 60 20
   :header-rows: 1
 
