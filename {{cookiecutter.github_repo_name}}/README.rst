@@ -64,6 +64,38 @@ These would result in environments like the following:
 - CDN at https://cdn.dev.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }} linked to an S3 bucket named dev-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-storage
 - daily data backups archived into an S3 bucket named dev-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-mongodb-backup
 
+Version Control
+---------------
+
+.. list-table:: Version Control
+   :widths: 60 20
+   :header-rows: 1
+
+   * - Software
+     - Version
+    * - ci_build_tutor_version
+      - {{ cookiecutter.ci_build_tutor_version }}
+    * - eks_cluster_version
+      - {{ cookiecutter.eks_cluster_version }}
+    * - eks_cluster_alb_¡ngress_controller_version
+      - {{ cookiecutter.eks_cluster_alb_¡ngress_controller_version }}
+    * - mongodb_engine_version
+      - {{ cookiecutter.mongodb_engine_version }}
+    * - mysql_engine_version
+      - {{ cookiecutter.mysql_engine_version }}
+    * - redis_engine_version
+      - {{ cookiecutter.redis_engine_version }}
+    * - terraform_required_version
+      - {{ cookiecutter.terraform_required_version }}
+    * - terraform_provider_kubernetes_version
+      - {{ cookiecutter.terraform_provider_kubernetes_version }}
+    * - terraform_provider_hashicorp_aws_version
+      - {{ cookiecutter.terraform_provider_hashicorp_aws_version }}
+    * - terraform_provider_hashicorp_local_version
+      - {{ cookiecutter.terraform_provider_hashicorp_local_version }}
+    * - terraform_provider_hashicorp_random_version
+      - {{ cookiecutter.terraform_provider_hashicorp_random_version }}
+
 
 Important Considerations
 ------------------------
