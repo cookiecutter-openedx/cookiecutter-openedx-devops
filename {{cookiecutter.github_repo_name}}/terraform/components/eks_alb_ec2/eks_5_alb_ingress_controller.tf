@@ -175,7 +175,7 @@ resource "kubernetes_deployment" "ingress" {
 
         container {
           name              = "alb-ingress-controller"
-          image             = "docker.io/amazon/aws-alb-ingress-controller:{{ cookiecutter.eks_cluster_alb_¡ngress_controller_version }}"
+          image             = "docker.io/amazon/aws-alb-ingress-controller:{{ cookiecutter.eks_cluster_alb_ingress_controller_version }}"
           image_pull_policy = "Always"
 
           args = [

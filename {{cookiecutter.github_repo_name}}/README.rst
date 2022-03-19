@@ -77,8 +77,8 @@ Version Control
       - {{ cookiecutter.ci_build_tutor_version }}
     * - eks_cluster_version
       - {{ cookiecutter.eks_cluster_version }}
-    * - eks_cluster_alb_¡ngress_controller_version
-      - {{ cookiecutter.eks_cluster_alb_¡ngress_controller_version }}
+    * - eks_cluster_alb_ingress_controller_version
+      - {{ cookiecutter.eks_cluster_alb_ingress_controller_version }}
     * - mongodb_engine_version
       - {{ cookiecutter.mongodb_engine_version }}
     * - mysql_engine_version
