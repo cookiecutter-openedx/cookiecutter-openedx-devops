@@ -77,27 +77,27 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
     - Version
   * - `Open edX Named Release <https://edx.readthedocs.io/projects/edx-developer-docs/en/latest/named_releases.html>`_
     - {{ cookiecutter.ci_build_open_edx_version }}
-  * - `Tutor <https://docs.tutor.overhang.io/>`_ version
-    - {{ cookiecutter.ci_build_tutor_version }}
-  * - `Kubernetes Cluster <https://kubernetes.io/>`_ version
-    - {{ cookiecutter.eks_cluster_version }}
-  * - `amazon/aws-alb-ingress-controller Docker container <https://hub.docker.com/r/amazon/aws-alb-ingress-controller/>`_ version
-    - {{ cookiecutter.eks_cluster_alb_ingress_controller_version }}
-  * - `MongoDB <https://www.mongodb.com/>`_ version
-    - {{ cookiecutter.mongodb_engine_version }}
-  * - `MySQL <https://www.mysql.com/>`_ versin
+  * - `MySQL Server <https://www.mysql.com/>`_
     - {{ cookiecutter.mysql_engine_version }}
-  * - `Redis <https://redis.io/>`_ version
+  * - `MongoDB Server <https://www.mongodb.com/>`_
+    - {{ cookiecutter.mongodb_engine_version }}
+  * - `Redis Cache <https://redis.io/>`_
     - {{ cookiecutter.redis_engine_version }}
-  * - `Terraform <https://www.terraform.io/>`_ version
+  * - `Tutor Docker-based Open edX Installer <https://docs.tutor.overhang.io/>`_
+    - {{ cookiecutter.ci_build_tutor_version }}
+  * - `Kubernetes Cluster <https://kubernetes.io/>`_
+    - {{ cookiecutter.eks_cluster_version }}
+  * - Kubernetes `amazon/aws-alb-ingress-controller <https://hub.docker.com/r/amazon/aws-alb-ingress-controller/>`_
+    - {{ cookiecutter.eks_cluster_alb_ingress_controller_version }}
+  * - `Terraform <https://www.terraform.io/>`_
     - {{ cookiecutter.terraform_required_version }}
-  * - `Terraform Kubernetes Provider <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs>`_ version
+  * - `Terraform Kubernetes Provider <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs>`_
     - {{ cookiecutter.terraform_provider_kubernetes_version }}
-  * - `Terraform AWS Provider <https://registry.terraform.io/providers/hashicorp/aws/latest/docs>`_ version
+  * - `Terraform AWS Provider <https://registry.terraform.io/providers/hashicorp/aws/latest/docs>`_
     - {{ cookiecutter.terraform_provider_hashicorp_aws_version }}
-  * - `Terraform Local Provider <https://registry.terraform.io/providers/hashicorp/local/latest/docs>`_ version
+  * - `Terraform Local Provider <https://registry.terraform.io/providers/hashicorp/local/latest/docs>`_
     - {{ cookiecutter.terraform_provider_hashicorp_local_version }}
-  * - `Terraform Random Provider <https://registry.terraform.io/providers/hashicorp/random/latest/docs>`_ version
+  * - `Terraform Random Provider <https://registry.terraform.io/providers/hashicorp/random/latest/docs>`_
     - {{ cookiecutter.terraform_provider_hashicorp_random_version }}
 
 
