@@ -91,13 +91,13 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
     - {{ cookiecutter.eks_cluster_alb_ingress_controller_version }}
   * - `Terraform <https://www.terraform.io/>`_
     - {{ cookiecutter.terraform_required_version }}
-  * - `Terraform Kubernetes Provider <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs>`_
+  * - Terraform `Kubernetes Provider <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs>`_
     - {{ cookiecutter.terraform_provider_kubernetes_version }}
-  * - `Terraform AWS Provider <https://registry.terraform.io/providers/hashicorp/aws/latest/docs>`_
+  * - Terraform `AWS Provider <https://registry.terraform.io/providers/hashicorp/aws/latest/docs>`_
     - {{ cookiecutter.terraform_provider_hashicorp_aws_version }}
-  * - `Terraform Local Provider <https://registry.terraform.io/providers/hashicorp/local/latest/docs>`_
+  * - Terraform `Local Provider <https://registry.terraform.io/providers/hashicorp/local/latest/docs>`_
     - {{ cookiecutter.terraform_provider_hashicorp_local_version }}
-  * - `Terraform Random Provider <https://registry.terraform.io/providers/hashicorp/random/latest/docs>`_
+  * - Terraform `Random Provider <https://registry.terraform.io/providers/hashicorp/random/latest/docs>`_
     - {{ cookiecutter.terraform_provider_hashicorp_random_version }}
 
 
