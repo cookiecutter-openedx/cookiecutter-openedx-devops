@@ -1,0 +1,3 @@
+LMS_HOSTNAME={{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
+CMS_HOSTNAME=studio.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
+DOCKER_IMAGE_OPENEDX={{ cookiecutter.global_account_id }}.dkr.ecr.{{ cookiecutter.global_aws_region }}.amazonaws.com/openedx:latest
