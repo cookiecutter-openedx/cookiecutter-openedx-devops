@@ -1,17 +1,10 @@
-provider "aws" {
-  region = local.region
-}
 
 locals {
-  name            = "ex-${replace(basename(path.cwd), "_", "-")}"
-  cluster_version = "1.21"
-  region          = "eu-west-1"
+  name            = var.environment_namespace
+  cluster_version = var.eks_cluster_version
+  region          = var.aws_region
 
-  tags = {
-    Example    = local.name
-    GithubRepo = "terraform-aws-eks"
-    GithubOrg  = "terraform-aws-modules"
-  }
+  tags = var.tags
 }
 
 ################################################################################
@@ -19,7 +12,8 @@ locals {
 ################################################################################
 
 module "eks" {
-  source = "../.."
+  source  = "terraform-aws-modules/eks/aws"
+  version = "~> 18.11"
 
   cluster_name                    = local.name
   cluster_version                 = local.cluster_version
@@ -42,8 +36,8 @@ module "eks" {
     resources        = ["secrets"]
   }]
 
-  vpc_id     = module.vpc.vpc_id
-  subnet_ids = module.vpc.private_subnets
+  vpc_id     = var.vpc_id
+  subnet_ids = var.private_subnet_ids
 
   # You require a node group to schedule coredns which is critical for running correctly internal DNS.
   # If you want to use only fargate you must follow docs `(Optional) Update CoreDNS`
@@ -105,8 +99,7 @@ module "eks" {
         }
       ]
 
-      # Using specific subnets instead of the subnets supplied for the cluster itself
-      subnet_ids = [module.vpc.private_subnets[1]]
+      subnet_ids = var.private_subnet_ids
 
       tags = {
         Owner = "secondary"
@@ -120,38 +113,6 @@ module "eks" {
 ################################################################################
 # Supporting Resources
 ################################################################################
-
-module "vpc" {
-  source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 3.0"
-
-  name = local.name
-  cidr = "10.0.0.0/16"
-
-  azs             = ["${local.region}a", "${local.region}b", "${local.region}c"]
-  private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
-  public_subnets  = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
-
-  enable_nat_gateway   = true
-  single_nat_gateway   = true
-  enable_dns_hostnames = true
-
-  enable_flow_log                      = true
-  create_flow_log_cloudwatch_iam_role  = true
-  create_flow_log_cloudwatch_log_group = true
-
-  public_subnet_tags = {
-    "kubernetes.io/cluster/${local.name}" = "shared"
-    "kubernetes.io/role/elb"              = 1
-  }
-
-  private_subnet_tags = {
-    "kubernetes.io/cluster/${local.name}" = "shared"
-    "kubernetes.io/role/internal-elb"     = 1
-  }
-
-  tags = local.tags
-}
 
 resource "aws_kms_key" "eks" {
   description             = "EKS Secret Encryption Key"
