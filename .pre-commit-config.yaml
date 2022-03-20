@@ -20,7 +20,6 @@ repos:
       - id: detect-aws-credentials
       - id: detect-private-key
       - id: end-of-file-fixer
-      - id: forbid-new-submodules
       - id: trailing-whitespace
     #  - id: pretty-format-json
     #  - id: check-yaml
