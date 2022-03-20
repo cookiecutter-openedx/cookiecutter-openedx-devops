@@ -7,13 +7,17 @@ locals {
   tags = var.tags
 }
 
-################################################################################
-# EKS Module
-################################################################################
+resource "aws_kms_key" "eks" {
+  description             = "EKS Secret Encryption Key"
+  deletion_window_in_days = 7
+  enable_key_rotation     = true
+
+  tags = local.tags
+}
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "~> 18.11"
+  version = "{{ cookiecutter.terraform_aws_modules_eks }}"
 
   cluster_name                    = local.name
   cluster_version                 = local.cluster_version
@@ -106,18 +110,6 @@ module "eks" {
       }
     }
   }
-
-  tags = local.tags
-}
-
-################################################################################
-# Supporting Resources
-################################################################################
-
-resource "aws_kms_key" "eks" {
-  description             = "EKS Secret Encryption Key"
-  deletion_window_in_days = 7
-  enable_key_rotation     = true
 
   tags = local.tags
 }
