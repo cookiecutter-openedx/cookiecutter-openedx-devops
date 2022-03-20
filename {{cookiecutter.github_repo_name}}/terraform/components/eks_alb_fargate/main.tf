@@ -25,10 +25,11 @@ module "eks" {
   cluster_endpoint_public_access  = true
 
   cluster_addons = {
+    # mcdaniel mar-2022: moved this to Fargate profile, below.
     # Note: https://docs.aws.amazon.com/eks/latest/userguide/fargate-getting-started.html#fargate-gs-coredns
-    coredns = {
-      resolve_conflicts = "OVERWRITE"
-    }
+    #coredns = {
+    #  resolve_conflicts = "OVERWRITE"
+    #}
     kube-proxy = {}
     vpc-cni = {
       resolve_conflicts = "OVERWRITE"
@@ -43,37 +44,40 @@ module "eks" {
   vpc_id     = var.vpc_id
   subnet_ids = var.private_subnet_ids
 
+  # mcdaniel mar-2022: disabling this. it's no longer necessary because coredns is moved to
+  #                    to a Fargate profile, below.
+  #
   # You require a node group to schedule coredns which is critical for running correctly internal DNS.
   # If you want to use only fargate you must follow docs `(Optional) Update CoreDNS`
   # available under https://docs.aws.amazon.com/eks/latest/userguide/fargate-getting-started.html
-  eks_managed_node_groups = {
-    example = {
-      desired_size = 1
-
-      instance_types = ["t3.large"]
-      labels = {
-        Example    = "managed_node_groups"
-        GithubRepo = "terraform-aws-eks"
-        GithubOrg  = "terraform-aws-modules"
-      }
-      tags = {
-        ExtraTag = "example"
-      }
-    }
-  }
+  #eks_managed_node_groups = {
+  #  managed = {
+  #    desired_size = 1
+  #
+  #    instance_types = ["t3.large"]
+  #    labels = {
+  #      Managed    = "managed_node_groups"
+  #      GithubRepo = "terraform-aws-eks"
+  #      GithubOrg  = "terraform-aws-modules"
+  #    }
+  #    tags = {
+  #      ExtraTag = "managed"
+  #    }
+  #  }
+  #}
 
   fargate_profiles = {
-    default = {
-      name = "default"
+    openedx = {
+      name = "openedx"
       selectors = [
         {
           namespace = "backend"
           labels = {
-            Application = "backend"
+            Application = "openedx_backend"
           }
         },
         {
-          namespace = "default"
+          namespace = "openedx"
           labels = {
             WorkerType = "fargate"
           }
@@ -81,7 +85,7 @@ module "eks" {
       ]
 
       tags = {
-        Owner = "default"
+        Owner = "openedx"
       }
 
       timeouts = {
@@ -90,15 +94,13 @@ module "eks" {
       }
     }
 
-    secondary = {
-      name = "secondary"
+    coredns = {
+      name = "coredns"
       selectors = [
         {
-          namespace = "default"
+          namespace = "kube-system"
           labels = {
-            Environment = "test"
-            GithubRepo  = "terraform-aws-eks"
-            GithubOrg   = "terraform-aws-modules"
+            k8s-app = "kube-dns"
           }
         }
       ]
@@ -106,7 +108,7 @@ module "eks" {
       subnet_ids = var.private_subnet_ids
 
       tags = {
-        Owner = "secondary"
+        Owner = "coredns"
       }
     }
   }
