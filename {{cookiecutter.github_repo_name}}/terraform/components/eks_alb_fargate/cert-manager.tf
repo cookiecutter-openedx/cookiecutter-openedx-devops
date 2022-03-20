@@ -17,7 +17,7 @@ module "cert_manager_irsa" {
 }
 
 data "template_file" "cert-manager-values" {
-  template = file("${path.module}/cert-manager-values.yaml.tpl")
+  template = file("${path.module}/templates/cert-manager-values.yaml.tpl")
   vars = {
     role_arn = module.cert_manager_irsa.iam_role_arn
   }
@@ -30,7 +30,7 @@ resource "helm_release" "cert-manager" {
 
   chart      = "cert-manager"
   repository = "https://charts.jetstack.io"
-  version    = "v1.4.0"
+  version    = "{{ cookiecutter.terraform_helm_cert_manager }}"
   values = [data.template_file.cert-manager-values.rendered
   ]
 }
