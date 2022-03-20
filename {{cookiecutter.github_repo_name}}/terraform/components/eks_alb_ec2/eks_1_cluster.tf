@@ -12,7 +12,7 @@ data "aws_vpc" "selected" {
 }
 
 module "eks" {
-  source              = "Young-ook/eks/aws"
+  source              = "./terraform-aws-eks"
   name                = var.environment_namespace
   tags                = var.tags
   subnets             = var.private_subnet_ids

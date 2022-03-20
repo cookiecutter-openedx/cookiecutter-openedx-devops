@@ -1,0 +1,3 @@
+[submodule "{{cookiecutter.github_repo_name}}/terraform/components/eks_alb_ec2/{{cookiecutter.github_repo_name}}/terraform/components/eks_alb_ec2/terraform-aws-eks"]
+	path = {{cookiecutter.github_repo_name}}/terraform/components/eks_alb_ec2/{{cookiecutter.github_repo_name}}/terraform/components/eks_alb_ec2/terraform-aws-eks
+	url = https://github.com/Young-ook/terraform-aws-eks.git
