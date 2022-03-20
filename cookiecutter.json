@@ -25,7 +25,7 @@
     "ci_deploy_EMAIL_PORT": 587,
     "ci_deploy_EMAIL_USE_TLS": true,
     "eks_cluster_version": "1.21",
-    "eks_cluster_compute_type": ["ALB_FARGATE", "CLB_EC2", "ALB_EC2"],
+    "eks_cluster_compute_type": ["ALB_Fargate", "CLB_EC2", "ALB_EC2"],
     "eks_cluster_alb_ingress_controller_version": "v2.4.1",
     "mongodb_master_username": "root",
     "mongodb_db_port": 27017,
