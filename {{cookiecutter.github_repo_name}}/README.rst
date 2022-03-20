@@ -91,10 +91,22 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
     - {{ cookiecutter.eks_cluster_alb_ingress_controller_version }}
   * - `Terraform <https://www.terraform.io/>`_
     - {{ cookiecutter.terraform_required_version }}
+  * - Terraform `terraform-aws-modules/eks/aws <https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest>`_
+    - {{ cookiecutter.terraform_aws_modules_eks }}
+  * - Terraform `terraform-aws-modules/acm/aws <https://registry.terraform.io/modules/terraform-aws-modules/acm/aws/latest>`_
+    - {{ cookiecutter.terraform_aws_modules_acm }}
+  * - Terraform `terraform-aws-modules/iam/aws <https://registry.terraform.io/modules/terraform-aws-modules/iam/aws/latest>`_
+    - {{ cookiecutter.terraform_aws_modules_iam }}
+  * - Terraform `Helm kubernetes.github.io/ingress-nginx <https://kubernetes.github.io/ingress-nginx>`_
+    - {{ cookiecutter.terraform_helm_ingress_nginx }}
+  * - Terraform `Helm cert-manager <https://charts.jetstack.io>`_
+    - {{ cookiecutter.terraform_helm_cert_manager }}
   * - Terraform `Kubernetes Provider <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs>`_
     - {{ cookiecutter.terraform_provider_kubernetes_version }}
   * - Terraform `AWS Provider <https://registry.terraform.io/providers/hashicorp/aws/latest/docs>`_
     - {{ cookiecutter.terraform_provider_hashicorp_aws_version }}
+  * - Terraform `Helm Provider <https://registry.terraform.io/providers/hashicorp/helm/latest/docs>`_
+    - {{ cookiecutter.terraform_provider_hashicorp_helm_version }}
   * - Terraform `Local Provider <https://registry.terraform.io/providers/hashicorp/local/latest/docs>`_
     - {{ cookiecutter.terraform_provider_hashicorp_local_version }}
   * - Terraform `Random Provider <https://registry.terraform.io/providers/hashicorp/random/latest/docs>`_
