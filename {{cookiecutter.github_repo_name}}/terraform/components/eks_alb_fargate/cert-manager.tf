@@ -31,8 +31,11 @@ resource "helm_release" "cert-manager" {
   chart      = "cert-manager"
   repository = "https://charts.jetstack.io"
   version    = "{{ cookiecutter.terraform_helm_cert_manager }}"
-  values = [data.template_file.cert-manager-values.rendered
+  values = [
+    data.template_file.cert-manager-values.rendered
   ]
+
+  depends_on = [module.eks]
 }
 
 resource "aws_iam_policy" "cert_manager_policy" {

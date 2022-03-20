@@ -35,6 +35,8 @@ resource "helm_release" "ingress-nginx" {
     name  = "service.type"
     value = "ClusterIP"
   }
+
+  depends_on = [module.eks]
 }
 
 data "kubernetes_service" "ingress_nginx_controller" {
