@@ -39,11 +39,10 @@ module "eks" {
   cluster_endpoint_public_access  = true
 
   cluster_addons = {
-    # mcdaniel mar-2022: moved this to Fargate profile, below.
     # Note: https://docs.aws.amazon.com/eks/latest/userguide/fargate-getting-started.html#fargate-gs-coredns
-    #coredns = {
-    #  resolve_conflicts = "OVERWRITE"
-    #}
+    coredns = {
+      resolve_conflicts = "OVERWRITE"
+    }
     kube-proxy = {}
     vpc-cni = {
       resolve_conflicts = "OVERWRITE"
@@ -58,27 +57,24 @@ module "eks" {
   vpc_id     = var.vpc_id
   subnet_ids = var.private_subnet_ids
 
-  # mcdaniel mar-2022: disabling this. it's no longer necessary because coredns is moved to
-  #                    to a Fargate profile, below.
-  #
   # You require a node group to schedule coredns which is critical for running correctly internal DNS.
   # If you want to use only fargate you must follow docs `(Optional) Update CoreDNS`
   # available under https://docs.aws.amazon.com/eks/latest/userguide/fargate-getting-started.html
-  #eks_managed_node_groups = {
-  #  managed = {
-  #    desired_size = 1
-  #
-  #    instance_types = ["t3.large"]
-  #    labels = {
-  #      Managed    = "managed_node_groups"
-  #      GithubRepo = "terraform-aws-eks"
-  #      GithubOrg  = "terraform-aws-modules"
-  #    }
-  #    tags = {
-  #      ExtraTag = "managed"
-  #    }
-  #  }
-  #}
+  eks_managed_node_groups = {
+    managed = {
+      desired_size = 1
+
+      instance_types = ["t3.large"]
+      labels = {
+        Managed    = "managed_node_groups"
+        GithubRepo = "terraform-aws-eks"
+        GithubOrg  = "terraform-aws-modules"
+      }
+      tags = {
+        ExtraTag = "managed"
+      }
+    }
+  }
 
   fargate_profiles = {
     openedx = {
@@ -105,24 +101,6 @@ module "eks" {
       timeouts = {
         create = "20m"
         delete = "20m"
-      }
-    }
-
-    coredns = {
-      name = "coredns"
-      selectors = [
-        {
-          namespace = "kube-system"
-          labels = {
-            k8s-app = "kube-dns"
-          }
-        }
-      ]
-
-      subnet_ids = var.private_subnet_ids
-
-      tags = {
-        Owner = "coredns"
       }
     }
   }
