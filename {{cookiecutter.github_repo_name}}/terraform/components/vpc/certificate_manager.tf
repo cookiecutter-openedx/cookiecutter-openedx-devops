@@ -30,7 +30,7 @@ provider "aws" {
 
 module "acm_root_domain_environment_region" {
   source  = "terraform-aws-modules/acm/aws"
-  version = "~> 3.0"
+  version = "{{ cookiecutter.terraform_aws_modules_acm }}"
 
   providers = {
     aws = aws.environment_region
@@ -49,7 +49,7 @@ module "acm_root_domain_environment_region" {
 
 module "acm_environment_environment_region" {
   source  = "terraform-aws-modules/acm/aws"
-  version = "~> 3.0"
+  version = "{{ cookiecutter.terraform_aws_modules_acm }}"
 
   providers = {
     aws = aws.environment_region
@@ -68,7 +68,7 @@ module "acm_environment_environment_region" {
 
 module "acm_subdomains_environment_region" {
   source  = "terraform-aws-modules/acm/aws"
-  version = "~> 3.0"
+  version = "{{ cookiecutter.terraform_aws_modules_acm }}"
 
   providers = {
     aws = aws.environment_region
@@ -96,7 +96,7 @@ provider "aws" {
 
 module "acm_root_domain" {
   source  = "terraform-aws-modules/acm/aws"
-  version = "~> 3.0"
+  version = "{{ cookiecutter.terraform_aws_modules_acm }}"
 
   providers = {
     aws = aws.us-east-1
@@ -115,7 +115,7 @@ module "acm_root_domain" {
 
 module "acm_environment_domain" {
   source  = "terraform-aws-modules/acm/aws"
-  version = "~> 3.0"
+  version = "{{ cookiecutter.terraform_aws_modules_acm }}"
 
   providers = {
     aws = aws.us-east-1
@@ -134,7 +134,7 @@ module "acm_environment_domain" {
 
 module "acm_subdomains" {
   source  = "terraform-aws-modules/acm/aws"
-  version = "~> 3.0"
+  version = "{{ cookiecutter.terraform_aws_modules_acm }}"
 
   providers = {
     aws = aws.us-east-1
