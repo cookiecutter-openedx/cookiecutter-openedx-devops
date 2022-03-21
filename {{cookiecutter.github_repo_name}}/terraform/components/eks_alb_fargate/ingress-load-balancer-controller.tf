@@ -4,10 +4,14 @@
 #
 # date: Mar-2022
 #
-# usage: add a Kubernetes ingress ALB controller.
+# usage: use Helm to add a Kubernetes ingress ALB controller
+#        using the AWS-sponsored helm chart
 #
 # see:
-# - https://github.com/aws/eks-charts/tree/master/stable/aws-load-balancer-controller#configuration
+# - https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/
+# - https://github.com/aws/eks-charts/tree/master/stable/aws-load-balancer-controller
+# - https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+#
 #------------------------------------------------------------------------------
 
 #------------------------------------------------------------------------------
@@ -38,7 +42,7 @@ module "alb_controller" {
   k8s_cluster_type          = "eks"
   k8s_cluster_name          = var.environment_namespace
   k8s_namespace             = "kube-system"
-  k8s_replicas              = 1
+  k8s_replicas              = 2
   aws_iam_path_prefix       = ""
   aws_vpc_id                = var.vpc_id
   aws_region_name           = var.aws_region
@@ -46,10 +50,66 @@ module "alb_controller" {
   aws_tags                  = var.tags
   alb_controller_depends_on = [module.eks]
   enable_host_networking    = false
+  k8s_pod_labels            = {}
+  chart_env_overrides = {
+    defaultTags = var.tags
+  }
+  target_groups = []
+  # https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/guide/ingress/annotations/
+  k8s_pod_annotations = {
+    "alb.ingress.kubernetes.io/load-balancer-name" : var.alb_name,
+    "alb.ingress.kubernetes.io/tags" : var.tags,
+    "alb.ingress.kubernetes.io/ip-address-type" : "ipv4"
+    "alb.ingress.kubernetes.io/scheme" : "internet-facing",
+    "alb.ingress.kubernetes.io/security-groups" : [aws_security_group.sg_alb],
+    "alb.ingress.kubernetes.io/load-balancer-attributes" : {},
+    "alb.ingress.kubernetes.io/listen-ports" : jsonencode([{ "HTTP" : 80 }, { "HTTPS" : 443 }, { "HTTP" : 8080 }, { "HTTPS" : 8443 }]),
+    "alb.ingress.kubernetes.io/ssl-redirect" : "443",
+    "alb.ingress.kubernetes.io/certificate-arn" : module.acm_environment_environment_region.arn,
+    "alb.ingress.kubernetes.io/target-type" : "ip",
+    "alb.ingress.kubernetes.io/backend-protocol" : "HTTP",
+    "alb.ingress.kubernetes.io/target-group-attributes" : {},
+    "alb.ingress.kubernetes.io/healthcheck-port" : "80",
+    "alb.ingress.kubernetes.io/healthcheck-path" : "/",
+    "alb.ingress.kubernetes.io/healthcheck-interval-seconds" : "15",
+    "alb.ingress.kubernetes.io/healthcheck-timeout-seconds" : "5",
+    "alb.ingress.kubernetes.io/healthy-threshold-count" : "2",
+    "alb.ingress.kubernetes.io/unhealthy-threshold-count" : "2",
+    "alb.ingress.kubernetes.io/success-codes" : "200",
+    "alb.ingress.kubernetes.io/target-node-labels" : "label1=openedx"
+  }
 
-  # custom configuration data
-  k8s_pod_annotations = {}
-  k8s_pod_labels      = {}
-  chart_env_overrides = {}
-  target_groups       = []
+}
+
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group
+resource "aws_security_group" "sg_alb" {
+  name_prefix = "${var.environment_namespace}-bastion"
+  description = "Public-facing ALB"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    description = "public http from anywhere"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "public https from anywhere"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  tags = var.tags
 }

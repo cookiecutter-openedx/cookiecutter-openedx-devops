@@ -76,5 +76,7 @@ inputs = {
   eks_worker_group_max_size = local.eks_worker_group_max_size
   eks_worker_group_desired_size = local.eks_worker_group_desired_size
 
+  alb_name = var.env
+
   tags = local.tags
 }
