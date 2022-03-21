@@ -6,32 +6,11 @@
 #
 # usage: create an EC2 instance with ssh access and a DNS record.
 #------------------------------------------------------------------------------
-variable "subdomains" {
-  type = list(string)
-}
-
 variable "environment_domain" {
   type = string
 }
 
-variable "root_domain" {
-  description = "Root domain (route53 zone) for the default cluster ingress."
-  type        = string
-}
-
 variable "environment_namespace" {
-  type = string
-}
-
-variable "alb_name" {
-  type = string
-}
-
-variable "k8s_namespace" {
-  type = string
-}
-
-variable "eks_cluster_version" {
   type = string
 }
 
@@ -51,4 +30,24 @@ variable "tags" {
   description = "A map of tags to add to all resources. Tags added to launch configuration or templates override these values for ASG Tags only."
   type        = map(string)
   default     = {}
+}
+
+variable "enable_irsa" {
+  type    = bool
+  default = false
+}
+
+variable "map_roles" {
+  type    = map(string)
+  default = {}
+}
+
+variable "map_users" {
+  type    = map(string)
+  default = {}
+}
+
+variable "map_accounts" {
+  type    = map(string)
+  default = {}
 }
