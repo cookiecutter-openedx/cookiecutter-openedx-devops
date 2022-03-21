@@ -10,16 +10,12 @@ locals {
   external_dns_annotation = "*.${var.environment_domain}"
 }
 
-data "aws_eks_cluster" "eks" {
+data "aws_eks_cluster" "cluster" {
   name = var.environment_namespace
 }
 
-data "aws_eks_cluster" "cluster" {
-  name = module.eks.cluster_id
-}
-
 data "aws_eks_cluster_auth" "cluster" {
-  name = module.eks.cluster_id
+  name = var.environment_namespace
 }
 
 provider "kubernetes" {
@@ -36,13 +32,12 @@ provider "helm" {
   }
 }
 
-
 data "kubernetes_service" "ingress_nginx_controller" {
   metadata {
     name      = "ingress-nginx-controller"
     namespace = "ingress-nginx"
   }
-  depends_on = [data.aws_eks_cluster.eks]
+  depends_on = [data.aws_eks_cluster.cluster]
 }
 
 data "aws_elb_hosted_zone_id" "main" {}
@@ -58,6 +53,8 @@ resource "aws_route53_record" "ingress_domains_wildcard" {
     zone_id                = data.aws_elb_hosted_zone_id.main.id
     evaluate_target_health = true
   }
+
+  depends_on = [data.aws_eks_cluster.cluster]
 }
 
 resource "aws_route53_record" "ingress_domains_naked" {
@@ -71,4 +68,6 @@ resource "aws_route53_record" "ingress_domains_naked" {
     zone_id                = data.aws_elb_hosted_zone_id.main.id
     evaluate_target_health = true
   }
+
+  depends_on = [data.aws_eks_cluster.cluster]
 }
