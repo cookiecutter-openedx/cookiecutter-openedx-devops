@@ -45,7 +45,7 @@ dependency "vpc" {
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 
 terraform {
-  source = "../../../components//jwt"
+  source = "../../../modules//jwt"
 }
 
 # Include all settings from the root terragrunt.hcl file

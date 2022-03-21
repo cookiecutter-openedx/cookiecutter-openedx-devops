@@ -48,7 +48,7 @@ Taking the `dev` environment as an example, the file structure looks like this:
 
 #### config.yml
 This file contains a few entries that will be fed into early the Tutor configuration stage.
-These are the FQDNs of the LMS and CMS components of Open edX and the location of the custom image that we build [here](https://github.com/{{ cookiecutter.github_account_name }}/tutor-build).
+These are the FQDNs of the LMS and CMS applications of Open edX and the location of the custom image that we build [here](https://github.com/{{ cookiecutter.github_account_name }}/tutor-build).
 
 #### k8s
 

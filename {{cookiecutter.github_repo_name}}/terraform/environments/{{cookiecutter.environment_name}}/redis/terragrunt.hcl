@@ -22,7 +22,7 @@ locals {
 }
 
 terraform {
-  source = "../../../components//redis"
+  source = "../../../modules//redis"
 }
 
 dependencies {

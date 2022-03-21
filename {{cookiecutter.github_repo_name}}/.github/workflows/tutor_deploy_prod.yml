@@ -105,7 +105,7 @@ jobs:
                             --set EMAIL_PORT={{ cookiecutter.ci_deploy_EMAIL_PORT }} \
                             --set EMAIL_USE_TLS={{ cookiecutter.ci_deploy_EMAIL_USE_TLS }}
 
-      # see: https://github.com/{{ cookiecutter.github_account_name }}/terraform-openedx/blob/main/components/secrets/session.tf
+      # see: https://github.com/{{ cookiecutter.github_account_name }}/terraform-openedx/blob/main/modules/secrets/session.tf
       - name: EDX Secret Key
         run: |-
           kubectl get secret edx-secret-key -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"' >> $GITHUB_ENV
@@ -145,7 +145,7 @@ jobs:
       #          S3_REGION: {{ cookiecutter.global_aws_region }}
       #
       # this config depends on a public read-only AWS S3 bucket policy like this:
-      # https://github.com/{{ cookiecutter.github_account_name }}/terraform-openedx/blob/main/components/s3/main.tf#L19
+      # https://github.com/{{ cookiecutter.github_account_name }}/terraform-openedx/blob/main/modules/s3/main.tf#L19
       #
       #      {
       #          "Version": "2012-10-17",

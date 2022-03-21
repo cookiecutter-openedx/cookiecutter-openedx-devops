@@ -13,7 +13,7 @@ SUCCESS = "\x1b[1;32m [SUCCESS]: "
 
 
 def remove_clb_files():
-    component_dir_path = os.path.join("terraform", "components", "eks_ingress_clb_controller")
+    component_dir_path = os.path.join("terraform", "modules", "eks_ingress_clb_controller")
     if os.path.exists(component_dir_path):
         shutil.rmtree(component_dir_path)
 
@@ -26,7 +26,7 @@ def remove_clb_files():
         shutil.rmtree(ci_dir_path)
 
 def remove_alb_files():
-    component_dir_path = os.path.join("terraform", "components", "eks_ingress_alb_controller")
+    component_dir_path = os.path.join("terraform", "modules", "eks_ingress_alb_controller")
     if os.path.exists(component_dir_path):
         shutil.rmtree(component_dir_path)
 

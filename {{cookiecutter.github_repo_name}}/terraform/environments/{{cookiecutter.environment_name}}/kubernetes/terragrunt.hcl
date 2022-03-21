@@ -40,7 +40,7 @@ dependency "vpc" {
 }
 
 terraform {
-  source = "../../../components//kubernetes"
+  source = "../../../modules//kubernetes"
 }
 
 # Include all settings from the root terragrunt.hcl file

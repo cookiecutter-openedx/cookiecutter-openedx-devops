@@ -22,7 +22,7 @@ Design
 
 `AWS Load Balancer Controller Kubernetes Technical documentation <https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/how-it-works/>`_
 
-The following diagram details the AWS components this controller creates. It also demonstrates the route ingress traffic takes from the ALB to the Kubernetes cluster.
+The following diagram details the AWS resources this controller creates. It also demonstrates the route ingress traffic takes from the ALB to the Kubernetes cluster.
 
 .. image:: doc/aws-alb-ingress-controll.png
   :width: 100%
@@ -49,9 +49,9 @@ Ingress Creation
 
 Along with the above, the controller also...
 
-deletes AWS components when ingress resources are removed from k8s.
-modifies AWS components when ingress resources change in k8s.
-assembles a list of existing ingress-related AWS components on start-up, allowing you to recover if the controller were to be restarted.
+deletes AWS resources when ingress resources are removed from k8s.
+modifies AWS resources when ingress resources change in k8s.
+assembles a list of existing ingress-related AWS resources on start-up, allowing you to recover if the controller were to be restarted.
 
 Ingress Traffic
 ~~~~~~~~~~~~~~~
