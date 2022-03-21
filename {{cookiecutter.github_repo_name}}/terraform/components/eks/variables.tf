@@ -36,18 +36,3 @@ variable "enable_irsa" {
   type    = bool
   default = false
 }
-
-variable "map_roles" {
-  type    = map(string)
-  default = {}
-}
-
-variable "map_users" {
-  type    = map(string)
-  default = {}
-}
-
-variable "map_accounts" {
-  type    = map(string)
-  default = {}
-}

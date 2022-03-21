@@ -63,10 +63,6 @@ module "eks" {
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = true
   enable_irsa                     = var.enable_irsa
-  manage_aws_auth                 = true
-  map_roles                       = var.map_roles
-  map_users                       = var.map_users
-  map_accounts                    = var.map_accounts
 
 
   cluster_addons = {
