@@ -97,7 +97,9 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
     - {{ cookiecutter.terraform_aws_modules_acm }}
   * - Terraform `terraform-aws-modules/iam/aws <https://registry.terraform.io/modules/terraform-aws-modules/iam/aws/latest>`_
     - {{ cookiecutter.terraform_aws_modules_iam }}
-  * - Terraform `Helm kubernetes.github.io/ingress-nginx <https://kubernetes.github.io/ingress-nginx>`_
+  * - Terraform `Helm ingress-alb-controller <https://github.com/kubernetes-sigs/aws-load-balancer-controller/>`_
+    - {{ cookiecutter.terraform_helm_alb_conroller }}
+  * - Terraform `Helm ingress-nginx <https://kubernetes.github.io/ingress-nginx>`_
     - {{ cookiecutter.terraform_helm_ingress_nginx }}
   * - Terraform `Helm cert-manager <https://charts.jetstack.io>`_
     - {{ cookiecutter.terraform_helm_cert_manager }}
