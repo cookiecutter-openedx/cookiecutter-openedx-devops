@@ -7,9 +7,8 @@
 # usage: create an EC2 instance with ssh access and a DNS record.
 #------------------------------------------------------------------------------
 locals {
-  name            = var.environment_namespace
-  cluster_version = var.eks_cluster_version
-  region          = var.aws_region
+  name   = var.environment_namespace
+  region = var.aws_region
 
   tags = var.tags
 }
@@ -59,7 +58,7 @@ module "eks" {
   version = "{{ cookiecutter.terraform_aws_modules_eks }}"
 
   cluster_name                    = local.name
-  cluster_version                 = local.cluster_version
+  cluster_version                 = var.eks_cluster_version
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = true
   enable_irsa                     = var.enable_irsa
@@ -89,9 +88,11 @@ module "eks" {
   # available under https://docs.aws.amazon.com/eks/latest/userguide/fargate-getting-started.html
   eks_managed_node_groups = {
     managed = {
-      desired_size = 1
+      max_size     = var.eks_worker_group_max_size
+      min_size     = var.eks_worker_group_min_size
+      desired_size = var.eks_worker_group_desired_size
 
-      instance_types = ["t3.large"]
+      instance_types = [var.eks_worker_group_instance_type]
       labels = {
         Managed    = "managed_node_groups"
         GithubRepo = "terraform-aws-eks"
