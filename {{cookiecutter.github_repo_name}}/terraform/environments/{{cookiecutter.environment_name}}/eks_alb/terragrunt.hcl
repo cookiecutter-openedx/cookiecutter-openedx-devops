@@ -76,6 +76,7 @@ inputs = {
   eks_worker_group_max_size = local.eks_worker_group_max_size
   eks_worker_group_desired_size = local.eks_worker_group_desired_size
 
+  k8s_namespace = "ingress-alb"
   alb_name = local.env
 
   tags = local.tags

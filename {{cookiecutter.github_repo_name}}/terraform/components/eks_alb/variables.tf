@@ -27,6 +27,10 @@ variable "alb_name" {
   type = string
 }
 
+variable "k8s_namespace" {
+  type = string
+}
+
 variable "eks_cluster_version" {
   type = string
 }
