@@ -4,14 +4,17 @@
 #
 # date: Mar-2022
 #
-# usage: add a Kubernetes ingress ALB controller
+# usage: add a Kubernetes ingress ALB controller.
 #
 # see:
 # - https://github.com/aws/eks-charts/tree/master/stable/aws-load-balancer-controller#configuration
 #------------------------------------------------------------------------------
 
 #------------------------------------------------------------------------------
-# written by: U.S. General Services Administration
+# written by: Benjamin P. Jung
+#             headcr4sh@gmail.com
+#
+#             U.S. General Services Administration
 #             https://open.gsa.gov
 #             https://github.com/GSA/terraform-kubernetes-aws-load-balancer-controller
 #             forked from : https://registry.terraform.io/modules/iplabs/alb-ingress-controller/kubernetes/latest
@@ -19,8 +22,9 @@
 # mcdaniel mar-2022:
 # i've seen this same code in many other places, but this is the only set that
 # actually worked, and it looks like its being actively maintained by GSA.
-#
-# this is a good explanation of how it works: https://betterprogramming.pub/with-latest-updates-create-amazon-eks-fargate-cluster-and-managed-node-group-using-terraform-bc5cfefd5773
+# The latter half of this article, written by Harshet Jain, provides a
+# good explanation of how this works:
+# https://betterprogramming.pub/with-latest-updates-create-amazon-eks-fargate-cluster-and-managed-node-group-using-terraform-bc5cfefd5773
 #------------------------------------------------------------------------------
 module "alb_controller" {
   source                                     = "github.com/GSA/terraform-kubernetes-aws-load-balancer-controller"
