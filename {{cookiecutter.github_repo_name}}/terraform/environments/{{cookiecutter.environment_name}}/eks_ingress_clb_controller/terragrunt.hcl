@@ -14,7 +14,7 @@ locals {
   # Extract out common variables for reuse
   environment_domain              = local.environment_vars.locals.environment_domain
   environment_namespace           = local.environment_vars.locals.environment_namespace
-  aws_region                      = local.global_vars.locals.aws_region
+  subdomains                      = local.environment_vars.locals.subdomains
 
   tags = merge(
     local.environment_vars.locals.tags,
@@ -40,7 +40,7 @@ dependency "vpc" {
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
-  source = "../../../components//eks_ingress_alb_controller"
+  source = "../../../components//eks_ingress_clb_controller"
 }
 
 # Include all settings from the root terragrunt.hcl file
@@ -50,10 +50,8 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  environment_namespace = local.environment_namespace
   environment_domain = local.environment_domain
-  aws_region = local.aws_region
-  vpc_id  = dependency.vpc.outputs.vpc_id
-  k8s_namespace = "ingress-alb"
+  environment_namespace = local.environment_namespace
+  subdomains = local.subdomains
   tags = local.tags
 }
