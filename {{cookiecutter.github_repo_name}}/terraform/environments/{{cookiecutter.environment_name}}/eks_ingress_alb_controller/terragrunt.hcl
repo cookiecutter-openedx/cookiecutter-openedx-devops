@@ -19,7 +19,7 @@ locals {
   tags = merge(
     local.environment_vars.locals.tags,
     local.global_vars.locals.tags,
-    { Name = "${local.environment_namespace}-eks-alb" }
+    { Name = "${local.environment_namespace}-alb" }
   )
 }
 
