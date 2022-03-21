@@ -37,7 +37,7 @@ data "aws_acm_certificate" "issued" {
 
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group
 resource "aws_security_group" "sg_alb" {
-  name_prefix = "${var.environment_namespace}-bastion"
+  name_prefix = "${var.environment_namespace}-alb"
   description = "Public-facing ALB"
   vpc_id      = var.vpc_id
 
@@ -70,7 +70,7 @@ resource "aws_security_group" "sg_alb" {
 
 module "alb_controller" {
   source                                     = "github.com/GSA/terraform-kubernetes-aws-load-balancer-controller"
-  aws_load_balancer_controller_chart_version = "{{ cookiecutter.terraform_helm_alb_conroller }}"
+  aws_load_balancer_controller_chart_version = "{{ cookiecutter.terraform_helm_alb_controller }}"
 
   #providers = {
   #  kubernetes = kubernetes.eks,
@@ -89,9 +89,8 @@ module "alb_controller" {
   alb_controller_depends_on = [module.eks]
   enable_host_networking    = false
   k8s_pod_labels            = {}
-  chart_env_overrides = {
-  }
-  target_groups = []
+  chart_env_overrides       = {}
+  target_groups             = []
   # https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/guide/ingress/annotations/
   k8s_pod_annotations = {
     "alb.ingress.kubernetes.io/load-balancer-name" : var.alb_name,
