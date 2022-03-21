@@ -45,13 +45,13 @@ variable "eks_worker_group_instance_type" {
 }
 
 variable "eks_worker_group_min_size" {
-  type = integer
+  type = number
 }
 
 variable "eks_worker_group_max_size" {
-  type = integer
+  type = number
 }
 
 variable "eks_worker_group_desired_size" {
-  type = integer
+  type = number
 }
