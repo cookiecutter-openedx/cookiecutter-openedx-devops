@@ -96,9 +96,9 @@ module "eks" {
       name = "openedx"
       selectors = [
         {
-          namespace = "backend"
+          namespace = "workers"
           labels = {
-            Application = "openedx_backend"
+            Application = "openedx_workers"
           }
         },
         {

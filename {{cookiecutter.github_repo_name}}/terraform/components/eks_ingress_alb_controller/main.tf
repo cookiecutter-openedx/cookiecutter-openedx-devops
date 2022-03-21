@@ -31,38 +31,10 @@
 # https://betterprogramming.pub/with-latest-updates-create-amazon-eks-fargate-cluster-and-managed-node-group-using-terraform-bc5cfefd5773
 #------------------------------------------------------------------------------
 
-# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group
-resource "aws_security_group" "sg_alb" {
-  name_prefix = "${var.environment_namespace}-alb"
-  description = "Public-facing ALB"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    description = "public http from anywhere"
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    description = "public https from anywhere"
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-
-  tags = var.tags
+data "aws_eks_cluster" "cluster" {
+  name = var.environment_namespace
 }
+
 
 module "alb_controller" {
   source                                     = "github.com/GSA/terraform-kubernetes-aws-load-balancer-controller"
@@ -77,7 +49,7 @@ module "alb_controller" {
   aws_region_name           = var.aws_region
   aws_resource_name_prefix  = ""
   aws_tags                  = var.tags
-  alb_controller_depends_on = [module.eks]
+  alb_controller_depends_on = [data.aws_eks_cluster.cluster]
   enable_host_networking    = false
   k8s_pod_labels            = {}
   chart_env_overrides       = {}

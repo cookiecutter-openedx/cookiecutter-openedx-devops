@@ -30,7 +30,7 @@ locals {
   tags = merge(
     local.environment_vars.locals.tags,
     local.global_vars.locals.tags,
-    { Name = "${local.environment_namespace}-eks-alb" }
+    { Name = "${local.environment_namespace}-eks" }
   )
 }
 
@@ -51,7 +51,7 @@ dependency "vpc" {
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
-  source = "../../../components//eks_alb"
+  source = "../../../components//eks"
 }
 
 # Include all settings from the root terragrunt.hcl file
@@ -75,9 +75,6 @@ inputs = {
   eks_worker_group_min_size = local.eks_worker_group_min_size
   eks_worker_group_max_size = local.eks_worker_group_max_size
   eks_worker_group_desired_size = local.eks_worker_group_desired_size
-
-  k8s_namespace = "ingress-alb"
-  alb_name = local.env
 
   tags = local.tags
 }
