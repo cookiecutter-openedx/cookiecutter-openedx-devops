@@ -30,10 +30,6 @@
 # good explanation of how this works:
 # https://betterprogramming.pub/with-latest-updates-create-amazon-eks-fargate-cluster-and-managed-node-group-using-terraform-bc5cfefd5773
 #------------------------------------------------------------------------------
-data "aws_acm_certificate" "issued" {
-  domain   = var.environment_domain
-  statuses = ["ISSUED"]
-}
 
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group
 resource "aws_security_group" "sg_alb" {
@@ -72,14 +68,9 @@ module "alb_controller" {
   source                                     = "github.com/GSA/terraform-kubernetes-aws-load-balancer-controller"
   aws_load_balancer_controller_chart_version = "{{ cookiecutter.terraform_helm_alb_controller }}"
 
-  #providers = {
-  #  kubernetes = kubernetes.eks,
-  #  helm       = helm.eks
-  #}
-
   k8s_cluster_type          = "eks"
   k8s_cluster_name          = var.environment_namespace
-  k8s_namespace             = "kube-system"
+  k8s_namespace             = var.k8s_namespace
   k8s_replicas              = 2
   aws_iam_path_prefix       = ""
   aws_vpc_id                = var.vpc_id
@@ -91,16 +82,20 @@ module "alb_controller" {
   k8s_pod_labels            = {}
   chart_env_overrides       = {}
   target_groups             = []
+
   # https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/guide/ingress/annotations/
+  # https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.1/guide/ingress/cert_discovery/
+  # https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.1/guide/integrations/external_dns/
+  #
+  # mcdaniel: automatic cert discovery is enabled by **NOT** including alb.ingress.kubernetes.io/certificate-arn
   k8s_pod_annotations = {
-    "alb.ingress.kubernetes.io/load-balancer-name" : var.alb_name,
+    "alb.ingress.kubernetes.io/load-balancer-name" : "${var.alb_name}",
     "alb.ingress.kubernetes.io/ip-address-type" : "ipv4"
     "alb.ingress.kubernetes.io/scheme" : "internet-facing",
     "alb.ingress.kubernetes.io/security-groups" : aws_security_group.sg_alb.name,
     "alb.ingress.kubernetes.io/load-balancer-attributes" : "",
     "alb.ingress.kubernetes.io/listen-ports" : jsonencode([{ "HTTP" : 80 }, { "HTTPS" : 443 }, { "HTTP" : 8080 }, { "HTTPS" : 8443 }]),
     "alb.ingress.kubernetes.io/ssl-redirect" : "443",
-    "alb.ingress.kubernetes.io/certificate-arn" : data.aws_acm_certificate.issued.arn,
     "alb.ingress.kubernetes.io/target-type" : "ip",
     "alb.ingress.kubernetes.io/backend-protocol" : "HTTP",
     "alb.ingress.kubernetes.io/target-group-attributes" : "",
@@ -112,6 +107,8 @@ module "alb_controller" {
     "alb.ingress.kubernetes.io/unhealthy-threshold-count" : "2",
     "alb.ingress.kubernetes.io/success-codes" : "200",
     "alb.ingress.kubernetes.io/target-node-labels" : "label1=openedx"
+    "external-dns.alpha.kubernetes.io/hostname" : "${var.environment_domain}"
+    "external-dns.alpha.kubernetes.io/hostname" : "*.${var.environment_domain}"
   }
 
 }
