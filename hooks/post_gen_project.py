@@ -12,12 +12,12 @@ HINT = "\x1b[3;33m"
 SUCCESS = "\x1b[1;32m [SUCCESS]: "
 
 
-def remove_eks_clb_files():
-    component_dir_path = os.path.join("terraform", "components", "eks_clb")
+def remove_clb_files():
+    component_dir_path = os.path.join("terraform", "components", "eks_ingress_clb_controller")
     if os.path.exists(component_dir_path):
         shutil.rmtree(component_dir_path)
 
-    terragrunt_dir_path = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "eks_clb")
+    terragrunt_dir_path = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "eks_ingress_clb_controller")
     if os.path.exists(terragrunt_dir_path):
         shutil.rmtree(terragrunt_dir_path)
 
@@ -25,12 +25,12 @@ def remove_eks_clb_files():
     if os.path.exists(ci_dir_path):
         shutil.rmtree(ci_dir_path)
 
-def remove_eks_alb_files():
-    component_dir_path = os.path.join("terraform", "components", "eks_alb")
+def remove_alb_files():
+    component_dir_path = os.path.join("terraform", "components", "eks_ingress_alb_controller")
     if os.path.exists(component_dir_path):
         shutil.rmtree(component_dir_path)
 
-    terragrunt_dir_path = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "eks_alb")
+    terragrunt_dir_path = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "eks_ingress_alb_controller")
     if os.path.exists(terragrunt_dir_path):
         shutil.rmtree(terragrunt_dir_path)
 
@@ -52,11 +52,11 @@ def move_manifests(folder = ""):
 def main():
 
     if "{{ cookiecutter.eks_cluster_compute_type }}" == "CLB":
-        remove_eks_alb_files()
+        remove_alb_files()
         move_manifests("eks_clb")
 
     if "{{ cookiecutter.eks_cluster_compute_type }}" == "ALB":
-        remove_eks_clb_files()
+        remove_clb_files()
         move_manifests("eks_alb")
 
     print(SUCCESS + "Your Open edX devops repo has been initialized." + TERMINATOR)
