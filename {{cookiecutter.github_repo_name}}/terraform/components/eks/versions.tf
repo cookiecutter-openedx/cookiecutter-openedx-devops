@@ -4,7 +4,7 @@
 #
 # date: Mar-2022
 #
-# usage: create an EC2 instance with ssh access and a DNS record.
+# usage: create an EKS cluster
 #------------------------------------------------------------------------------
 terraform {
   required_version = "{{ cookiecutter.terraform_required_version }}"
