@@ -50,7 +50,7 @@ locals {
   # see: https://aws.amazon.com/ec2/instance-types/
   #----------------------------------------------------------------------------
   kubernetes_version = {{ cookiecutter.eks_cluster_version }}
-  eks_worker_group_instance_type = "a1.medium"
+  eks_worker_group_instance_type = "t3.large"
   eks_worker_group_min_size = 1
   eks_worker_group_max_size = 2
   eks_worker_group_desired_size = 1
