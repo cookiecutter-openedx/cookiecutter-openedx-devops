@@ -14,6 +14,10 @@ locals {
   tags = var.tags
 }
 
+data "tls_certificate" "cluster" {
+  url = module.eks.cluster_oidc_issuer_url
+}
+
 data "aws_eks_cluster" "cluster" {
   name = module.eks.cluster_id
 }
@@ -44,6 +48,12 @@ resource "aws_kms_key" "eks" {
   tags = local.tags
 }
 
+resource "kubernetes_namespace" "namespace" {
+  metadata {
+    name = "openedx"
+  }
+}
+
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "{{ cookiecutter.terraform_aws_modules_eks }}"
@@ -52,6 +62,12 @@ module "eks" {
   cluster_version                 = local.cluster_version
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = true
+  enable_irsa                     = var.enable_irsa
+  manage_aws_auth                 = true
+  map_roles                       = var.map_roles
+  map_users                       = var.map_users
+  map_accounts                    = var.map_accounts
+
 
   cluster_addons = {
     # Note: https://docs.aws.amazon.com/eks/latest/userguide/fargate-getting-started.html#fargate-gs-coredns

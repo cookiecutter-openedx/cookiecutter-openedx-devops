@@ -10,6 +10,24 @@ locals {
   external_dns_annotation = "*.${var.environment_domain}"
 }
 
+data "aws_eks_cluster" "eks" {
+  name = var.environment_namespace
+}
+
+data "aws_eks_cluster" "cluster" {
+  name = module.eks.cluster_id
+}
+
+data "aws_eks_cluster_auth" "cluster" {
+  name = module.eks.cluster_id
+}
+
+provider "kubernetes" {
+  host                   = data.aws_eks_cluster.cluster.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
+  token                  = data.aws_eks_cluster_auth.cluster.token
+}
+
 provider "helm" {
   kubernetes {
     host                   = data.aws_eks_cluster.cluster.endpoint
@@ -18,27 +36,13 @@ provider "helm" {
   }
 }
 
-resource "helm_release" "nginx" {
-  name             = "ingress-nginx"
-  namespace        = "ingress-nginx"
-  create_namespace = true
-
-  chart      = "ingress-nginx"
-  repository = "https://kubernetes.github.io/ingress-nginx"
-  version    = "~> 3"
-
-  set {
-    name  = "service.type"
-    value = "ClusterIP"
-  }
-}
 
 data "kubernetes_service" "ingress_nginx_controller" {
   metadata {
     name      = "ingress-nginx-controller"
     namespace = "ingress-nginx"
   }
-  depends_on = [helm_release.nginx]
+  depends_on = [data.aws_eks_cluster.eks]
 }
 
 data "aws_elb_hosted_zone_id" "main" {}
