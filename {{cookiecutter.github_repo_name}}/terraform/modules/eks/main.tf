@@ -4,7 +4,8 @@
 #
 # date: Mar-2022
 #
-# usage: create an EKS cluster
+# usage: create an EKS cluster with one managed node group for EC2
+#        plus a Fargate profile for serverless computing.
 #------------------------------------------------------------------------------
 locals {
   name = var.environment_namespace
@@ -91,15 +92,25 @@ module "eks" {
       name = "openedx"
       selectors = [
         {
-          namespace = "kube-system"
-          labels = {
-            k8s-app = "kube-dns"
-          }
-        },
-        {
           namespace = "openedx"
           labels = {
             WorkerType = "fargate"
+          }
+        }
+      ]
+      tags = var.tags
+      timeouts = {
+        create = "10m"
+        delete = "10m"
+      }
+    },
+    kube-system = {
+      name = "kube-system"
+      selectors = [
+        {
+          namespace = "kube-system"
+          labels = {
+            k8s-app = "kube-dns"
           }
         }
       ]
