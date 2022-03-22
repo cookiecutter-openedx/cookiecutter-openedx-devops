@@ -85,6 +85,8 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
     - {{ cookiecutter.redis_engine_version }}
   * - `Tutor Docker-based Open edX Installer <https://docs.tutor.overhang.io/>`_
     - {{ cookiecutter.ci_build_tutor_version }}
+  * - `Tutor Plugin: Object storage for Open edX with S3 <https://github.com/hastexo/tutor-contrib-s3>`_
+    - {{ cookiecutter.ci_deploy_hastexo_tutor_contrib_s3_version }}
   * - `Kubernetes Cluster <https://kubernetes.io/>`_
     - {{ cookiecutter.eks_cluster_version }}
   * - Kubernetes `amazon/aws-alb-ingress-controller <https://hub.docker.com/r/amazon/aws-alb-ingress-controller/>`_
