@@ -67,13 +67,13 @@ jobs:
         run: |-
           echo "OPENEDX_COMMON_VERSION=$OPENEDX_COMMON_VERSION" >> $GITHUB_ENV
 
-      # see: https://github.com/{{ cookiecutter.github_account_name }}/terraform-openedx/tree/main/ci/tutor-deploy/environments/prod/jwt
+      # see: https://github.com/{{ cookiecutter.github_account_name }}/terraform-openedx/tree/main/ci/tutor-deploy/environments/{{ cookiecutter.environment_name }}/jwt
       - name: Fetch JWT token
         run: |-
           ### Fetch secrets from Kubernetes into Environment
           kubectl get secret jwt -n $NAMESPACE -o json |  jq  '.data| map_values(@base64d)'  | jq -r 'keys[] as $k | "\(.[$k])"' > jwt_private_key
 
-      # see: https://github.com/{{ cookiecutter.github_account_name }}/terraform-openedx/tree/main/ci/tutor-deploy/environments/prod/rds
+      # see: https://github.com/{{ cookiecutter.github_account_name }}/terraform-openedx/tree/main/ci/tutor-deploy/environments/{{ cookiecutter.environment_name }}/rds
       - name: MySQL
         run: |-
           echo "TUTOR_RUN_MYSQL=false" >> $GITHUB_ENV
@@ -85,7 +85,7 @@ jobs:
           echo "TUTOR_RUN_MONGODB=false" >> $GITHUB_ENV
           kubectl get secret mongodb-admin -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"' >> $GITHUB_ENV
 
-      # see: https://github.com/{{ cookiecutter.github_account_name }}/terraform-openedx/tree/main/ci/tutor-deploy/environments/prod/redis
+      # see: https://github.com/{{ cookiecutter.github_account_name }}/terraform-openedx/tree/main/ci/tutor-deploy/environments/{{ cookiecutter.environment_name }}/redis
       - name: Redis
         run: |-
           echo "TUTOR_RUN_REDIS=false" >> $GITHUB_ENV
@@ -116,7 +116,7 @@ jobs:
           cat ci/tutor-deploy/environments/$ENVIRONMENT_ID/config.yml >> $GITHUB_ENV
 
       # note that values like $LMS_HOSTNAME come from this repo
-      # in /ci/tutor-deploy/environments/prod/config.yml
+      # in /ci/tutor-deploy/environments/{{ cookiecutter.environment_name }}/config.yml
       - name: Load additional environment specific settings  (computed)
         run: |-
           # We don't want to run these services as we are using the Kubernetes ingress instead.
@@ -129,7 +129,7 @@ jobs:
           echo "TUTOR_RUN_NGINX=false" >> $GITHUB_ENV
 
       # note that the Kubernetes additional config data is locally
-      # stored in ci/tutor-deploy/environments/prod/k8s/
+      # stored in ci/tutor-deploy/environments/{{ cookiecutter.environment_name }}/k8s/
       - name: Create Kubernetes add-on resources
         run:  |-
           # Create kubernetes ingress and other environment resources
@@ -192,7 +192,7 @@ jobs:
           cat $TUTOR_ROOT/config.yml
 
       # in this step we're combining our custom configuration data
-      # from ci/tutor-deploy/environments/prod/settings_merge.json with the default
+      # from ci/tutor-deploy/environments/{{ cookiecutter.environment_name }}/settings_merge.json with the default
       # config that was created when we built the openedx docker image with tutor
       - name: Patch Generated Configuration (Static)
         run:  |-
