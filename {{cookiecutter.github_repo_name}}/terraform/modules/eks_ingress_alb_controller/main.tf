@@ -35,6 +35,15 @@ data "aws_eks_cluster" "cluster" {
   name = var.environment_namespace
 }
 
+data "aws_eks_cluster_auth" "cluster" {
+  name = var.environment_namespace
+}
+
+provider "kubernetes" {
+  host                   = data.aws_eks_cluster.cluster.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
+  token                  = data.aws_eks_cluster_auth.cluster.token
+}
 
 module "alb_controller" {
   source                                     = "github.com/GSA/terraform-kubernetes-aws-load-balancer-controller"
@@ -61,7 +70,7 @@ module "alb_controller" {
   #
   # mcdaniel: automatic cert discovery is enabled by **NOT** including alb.ingress.kubernetes.io/certificate-arn
   k8s_pod_annotations = {
-    "alb.ingress.kubernetes.io/load-balancer-name" : "${var.alb_name}",
+    "alb.ingress.kubernetes.io/load-balancer-name" : "${var.environment_namespace}",
     "alb.ingress.kubernetes.io/ip-address-type" : "ipv4"
     "alb.ingress.kubernetes.io/scheme" : "internet-facing",
     "alb.ingress.kubernetes.io/security-groups" : aws_security_group.sg_alb.name,
