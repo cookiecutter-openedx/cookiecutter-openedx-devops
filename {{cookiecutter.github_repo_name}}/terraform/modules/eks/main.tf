@@ -51,6 +51,8 @@ resource "kubernetes_namespace" "namespace" {
   metadata {
     name = "openedx"
   }
+
+  depends_on = [module.eks]
 }
 
 module "eks" {
