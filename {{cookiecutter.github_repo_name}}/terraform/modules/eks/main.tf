@@ -7,10 +7,7 @@
 # usage: create an EKS cluster
 #------------------------------------------------------------------------------
 locals {
-  name   = var.environment_namespace
-  region = var.aws_region
-
-  tags = var.tags
+  name = var.environment_namespace
 }
 
 data "tls_certificate" "cluster" {
@@ -44,7 +41,7 @@ resource "aws_kms_key" "eks" {
   deletion_window_in_days = 7
   enable_key_rotation     = true
 
-  tags = local.tags
+  tags = var.tags
 }
 
 resource "kubernetes_namespace" "namespace" {
@@ -89,6 +86,11 @@ module "eks" {
   # If you want to use only fargate you must follow docs `(Optional) Update CoreDNS`
   # available under https://docs.aws.amazon.com/eks/latest/userguide/fargate-getting-started.html
   eks_managed_node_groups = {
+    default = {
+      create_launch_template = false
+      launch_template_name   = ""
+    }
+
     managed = {
       max_size     = var.eks_worker_group_max_size
       min_size     = var.eks_worker_group_min_size
@@ -107,6 +109,33 @@ module "eks" {
   }
 
   fargate_profiles = {
+    default = {
+      name = "default"
+      selectors = [
+        {
+          namespace = "backend"
+          labels = {
+            Application = "backend"
+          }
+        },
+        {
+          namespace = "default"
+          labels = {
+            WorkerType = "fargate"
+          }
+        }
+      ]
+
+      tags = {
+        Owner = "default"
+      }
+
+      timeouts = {
+        create = "20m"
+        delete = "20m"
+      }
+    }
+
     openedx = {
       name = "openedx"
       selectors = [
@@ -135,5 +164,5 @@ module "eks" {
     }
   }
 
-  tags = local.tags
+  tags = var.tags
 }
