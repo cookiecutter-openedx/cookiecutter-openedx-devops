@@ -10,9 +10,9 @@ locals {
   name = var.environment_namespace
 }
 
-data "tls_certificate" "cluster" {
-  url = module.eks.cluster_oidc_issuer_url
-}
+#data "tls_certificate" "cluster" {
+#  url = module.eks.cluster_oidc_issuer_url
+#}
 
 data "aws_eks_cluster" "cluster" {
   name = module.eks.cluster_id
@@ -36,13 +36,13 @@ provider "helm" {
   }
 }
 
-resource "aws_kms_key" "eks" {
-  description             = "EKS Secret Encryption Key"
-  deletion_window_in_days = 7
-  enable_key_rotation     = true
-
-  tags = var.tags
-}
+#resource "aws_kms_key" "eks" {
+#  description             = "EKS Secret Encryption Key"
+#  deletion_window_in_days = 7
+#  enable_key_rotation     = true
+#
+#  tags = var.tags
+#}
 
 resource "kubernetes_namespace" "namespace" {
   metadata {
@@ -50,8 +50,7 @@ resource "kubernetes_namespace" "namespace" {
   }
 
   depends_on = [
-    module.eks,
-    aws_kms_key.eks
+    module.eks
   ]
 }
 
@@ -72,6 +71,12 @@ module "vpc_cni_irsa" {
   tags = var.tags
 }
 
+#------------------------------------------------------------------------------
+# Technical documentation:
+# - https://docs.aws.amazon.com/eks
+# - https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/
+#
+#------------------------------------------------------------------------------
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "{{ cookiecutter.terraform_aws_modules_eks }}"
@@ -86,16 +91,16 @@ module "eks" {
 
 
   # Note: https://docs.aws.amazon.com/eks/latest/userguide/fargate-getting-started.html#fargate-gs-coredns
-  cluster_addons = {
-    coredns = {
-      resolve_conflicts = "OVERWRITE"
-    }
-    kube-proxy = {}
-    vpc-cni = {
-      resolve_conflicts        = "OVERWRITE"
-      service_account_role_arn = module.vpc_cni_irsa.iam_role_arn
-    }
-  }
+  #cluster_addons = {
+  #  coredns = {
+  #    resolve_conflicts = "OVERWRITE"
+  #  }
+  #  kube-proxy = {}
+  #  vpc-cni = {
+  #    resolve_conflicts        = "OVERWRITE"
+  #    service_account_role_arn = module.vpc_cni_irsa.iam_role_arn
+  #  }
+  #}
 
   # You require a node group to schedule coredns which is critical for running correctly internal DNS.
   # If you want to use only fargate you must follow docs `(Optional) Update CoreDNS`
@@ -129,12 +134,6 @@ module "eks" {
       name = "default"
       selectors = [
         {
-          namespace = "backend"
-          labels = {
-            Application = "backend"
-          }
-        },
-        {
           namespace = "default"
           labels = {
             WorkerType = "fargate"
@@ -146,37 +145,18 @@ module "eks" {
         Owner = "default"
       }
 
-      timeouts = {
-        create = "20m"
-        delete = "20m"
-      }
     }
 
-    openedx = {
-      name = "openedx"
+    coredns = {
+      name = "coredns"
       selectors = [
         {
-          namespace = "workers"
+          namespace = "kube-system"
           labels = {
-            Application = "openedx_workers"
-          }
-        },
-        {
-          namespace = "openedx"
-          labels = {
-            WorkerType = "fargate"
+            k8s-app = kube-dns
           }
         }
       ]
-
-      tags = {
-        Owner = "openedx"
-      }
-
-      timeouts = {
-        create = "20m"
-        delete = "20m"
-      }
     }
   }
 
