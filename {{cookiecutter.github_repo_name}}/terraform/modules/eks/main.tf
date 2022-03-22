@@ -63,8 +63,8 @@ module "eks" {
   enable_irsa                     = var.enable_irsa
 
 
+  # Note: https://docs.aws.amazon.com/eks/latest/userguide/fargate-getting-started.html#fargate-gs-coredns
   cluster_addons = {
-    # Note: https://docs.aws.amazon.com/eks/latest/userguide/fargate-getting-started.html#fargate-gs-coredns
     coredns = {
       resolve_conflicts = "OVERWRITE"
     }
@@ -108,6 +108,7 @@ module "eks" {
     }
   }
 
+  # see: https://github.com/terraform-aws-modules/terraform-aws-eks/blob/master/examples/fargate_profile/main.tf
   fargate_profiles = {
     default = {
       name = "default"
