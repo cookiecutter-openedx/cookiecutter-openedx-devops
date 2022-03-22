@@ -4,4 +4,4 @@ These are logical representations of actual AWS resources (ie services) that you
 
 Since each of these represent AWS' premium service offering for each respective service (MySQL, MongoDB, Redis, etc), there are more options available to you. For example, each of these services can be independently sized. You can specifiy maintenance windows for automated upgrades, backup time windows and so forth.
 
-Note that **you do not execute any of these Terraform scripts directly**. Quite the contrary, each of these modules is wired to its Terragrunt counterpart located in [terraform/environments/prod](terraform/environments/prod) and is called by Terragrunt.
+Note that **you do not execute any of these Terraform scripts directly**. Quite the contrary, each of these modules is wired to its Terragrunt counterpart located in [terraform/environments{{ cookiecutter.environment_name }}](terraform/environments{{ cookiecutter.environment_name }}) and is called by Terragrunt.

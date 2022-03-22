@@ -16,7 +16,7 @@
 #        7. use Tutor to startup the edxapp platform
 #        8. initialize Kubernetes, and then let it take over
 #------------------------------------------------------------------------------
-name: Tutor Deploy Prod
+name: Tutor Deploy {{ cookiecutter.environment_name }}
 
 on: [workflow_dispatch]
 
@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       KUBECONFIG: /home/runner/.kube/config
-      ENVIRONMENT_ID: prod
+      ENVIRONMENT_ID: {{ cookiecutter.environment_name }}
       NAMESPACE: {{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}
       TUTOR_VERSION: {{ cookiecutter.ci_build_tutor_version }}
       OPENEDX_COMMON_VERSION: {{ cookiecutter.ci_deploy_OPENEDX_COMMON_VERSION }}
@@ -44,7 +44,7 @@ jobs:
           aws-region: {{ cookiecutter.global_aws_region }}
 
       - name: Get Kube config
-        run: aws eks --region {{ cookiecutter.global_aws_region }} update-kubeconfig --name {{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }} --alias eks-prod
+        run: aws eks --region {{ cookiecutter.global_aws_region }} update-kubeconfig --name {{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }} --alias eks-{{ cookiecutter.environment_name }}
 
       - name: Install kubectl
         uses: azure/setup-kubectl@v1

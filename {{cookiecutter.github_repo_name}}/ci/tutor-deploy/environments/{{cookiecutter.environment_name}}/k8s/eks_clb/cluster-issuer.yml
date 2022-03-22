@@ -29,7 +29,7 @@ kind: Certificate
 metadata:
   name: le-crt
 spec:
-  secretName: wild-openedx-prod-tls
+  secretName: wild-openedx-{{ cookiecutter.environment_name }}-tls
   issuerRef:
     kind: ClusterIssuer
     name: letsencrypt

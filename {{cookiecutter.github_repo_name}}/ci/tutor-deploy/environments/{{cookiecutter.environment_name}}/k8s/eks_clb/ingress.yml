@@ -28,7 +28,7 @@ spec:
   - hosts:
     - "{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}"
     - "*.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}"
-    secretName: wild-openedx-prod-tls
+    secretName: wild-openedx-{{ cookiecutter.environment_name }}-tls
   rules:
   - host: {{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
     http:
