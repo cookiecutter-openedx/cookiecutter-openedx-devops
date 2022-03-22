@@ -60,6 +60,7 @@
     "terraform_aws_modules_eks": "~> 18.11",
     "terraform_aws_modules_acm": "~> 3.4",
     "terraform_aws_modules_iam": "~> 4.14",
+    "terraform_aws_modules_s3": "~> 2.15",
     "terraform_helm_ingress_nginx": "~> 4",
     "terraform_helm_cert_manager": "v1.7.1",
     "terraform_helm_alb_controller": "1.4.1",

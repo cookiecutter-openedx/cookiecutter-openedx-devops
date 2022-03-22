@@ -101,6 +101,8 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
     - {{ cookiecutter.terraform_aws_modules_acm }}
   * - Terraform `terraform-aws-modules/iam/aws <https://registry.terraform.io/modules/terraform-aws-modules/iam/aws/latest>`_
     - {{ cookiecutter.terraform_aws_modules_iam }}
+  * - Terraform `terraform-aws-modules/s3-bucket/aws <https://registry.terraform.io/modules/terraform-aws-modules/s3-bucket/aws/latest>`_
+    - {{ cookiecutter.terraform_aws_modules_s3 }}
   * - Terraform `Helm ingress-alb-controller <https://github.com/kubernetes-sigs/aws-load-balancer-controller/>`_
     - {{ cookiecutter.terraform_helm_alb_controller }}
   * - Terraform `Helm ingress-nginx <https://kubernetes.github.io/ingress-nginx>`_

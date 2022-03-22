@@ -9,7 +9,7 @@
 #------------------------------------------------------------------------------
 module "data_backup_s3_bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "~> 2"
+  version = "{{ cookiecutter.terraform_aws_modules_s3 }}"
 
   bucket = var.resource_name
   acl    = "private"
