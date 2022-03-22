@@ -10,10 +10,6 @@
 # - https://kubernetes.github.io/ingress-nginx/
 # - https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/
 #------------------------------------------------------------------------------
-locals {
-  external_dns_annotation = "*.${var.environment_domain}"
-}
-
 resource "helm_release" "ingress-nginx" {
   name             = "ingress-nginx"
   namespace        = "ingress-nginx"
@@ -28,5 +24,8 @@ resource "helm_release" "ingress-nginx" {
     value = "ClusterIP"
   }
 
-  depends_on = [module.eks]
+  depends_on = [
+    module.eks,
+    aws_kms_key.eks
+  ]
 }

@@ -6,9 +6,6 @@
 #
 # usage: Add nginx proxy for EKS cluster load balancer
 #------------------------------------------------------------------------------
-locals {
-  external_dns_annotation = "*.${var.environment_domain}"
-}
 
 data "aws_eks_cluster" "cluster" {
   name = var.environment_namespace

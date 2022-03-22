@@ -49,7 +49,27 @@ resource "kubernetes_namespace" "namespace" {
     name = "openedx"
   }
 
-  depends_on = [module.eks]
+  depends_on = [
+    module.eks,
+    aws_kms_key.eks
+  ]
+}
+
+module "vpc_cni_irsa" {
+  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+
+  role_name             = "vpc_cni"
+  attach_vpc_cni_policy = true
+  vpc_cni_enable_ipv4   = true
+
+  oidc_providers = {
+    main = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["kube-system:aws-node"]
+    }
+  }
+
+  tags = var.tags
 }
 
 module "eks" {
@@ -60,7 +80,9 @@ module "eks" {
   cluster_version                 = var.eks_cluster_version
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = false
-  enable_irsa                     = var.enable_irsa
+  vpc_id                          = var.vpc_id
+  subnet_ids                      = var.private_subnet_ids
+  tags                            = var.tags
 
 
   # Note: https://docs.aws.amazon.com/eks/latest/userguide/fargate-getting-started.html#fargate-gs-coredns
@@ -70,17 +92,10 @@ module "eks" {
     }
     kube-proxy = {}
     vpc-cni = {
-      resolve_conflicts = "OVERWRITE"
+      resolve_conflicts        = "OVERWRITE"
+      service_account_role_arn = module.vpc_cni_irsa.iam_role_arn
     }
   }
-
-  cluster_encryption_config = [{
-    provider_key_arn = aws_kms_key.eks.arn
-    resources        = ["secrets"]
-  }]
-
-  vpc_id     = var.vpc_id
-  subnet_ids = var.private_subnet_ids
 
   # You require a node group to schedule coredns which is critical for running correctly internal DNS.
   # If you want to use only fargate you must follow docs `(Optional) Update CoreDNS`
@@ -165,5 +180,4 @@ module "eks" {
     }
   }
 
-  tags = var.tags
 }

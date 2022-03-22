@@ -35,7 +35,11 @@ resource "helm_release" "cert-manager" {
     data.template_file.cert-manager-values.rendered
   ]
 
-  depends_on = [module.eks]
+  depends_on = [
+    module.eks,
+    aws_kms_key.eks,
+    kubernetes_namespace.namespace
+    ]
 }
 
 resource "aws_iam_policy" "cert_manager_policy" {
