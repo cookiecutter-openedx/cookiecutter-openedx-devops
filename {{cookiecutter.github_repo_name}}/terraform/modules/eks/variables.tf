@@ -34,7 +34,7 @@ variable "tags" {
 
 variable "enable_irsa" {
   type    = bool
-  default = false
+  default = true
 }
 
 variable "eks_cluster_version" {
