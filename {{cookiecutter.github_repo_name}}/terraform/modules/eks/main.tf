@@ -49,6 +49,8 @@ resource "kubernetes_namespace" "openedx" {
 
     name = "openedx"
   }
+
+  depends_on = [module.eks]
 }
 
 
