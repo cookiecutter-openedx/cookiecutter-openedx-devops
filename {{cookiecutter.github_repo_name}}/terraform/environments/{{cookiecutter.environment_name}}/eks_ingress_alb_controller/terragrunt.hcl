@@ -58,6 +58,5 @@ inputs = {
   environment_domain = local.environment_domain
   aws_region = local.aws_region
   vpc_id  = dependency.vpc.outputs.vpc_id
-  k8s_namespace = "ingress-alb"
   tags = local.tags
 }

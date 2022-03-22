@@ -14,11 +14,6 @@ variable "environment_namespace" {
   type = string
 }
 
-
-variable "k8s_namespace" {
-  type = string
-}
-
 variable "aws_region" {
   type = string
 }

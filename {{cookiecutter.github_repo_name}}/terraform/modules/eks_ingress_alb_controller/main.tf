@@ -45,13 +45,21 @@ provider "kubernetes" {
   token                  = data.aws_eks_cluster_auth.cluster.token
 }
 
+provider "helm" {
+  kubernetes {
+    host                   = data.aws_eks_cluster.cluster.endpoint
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
+    token                  = data.aws_eks_cluster_auth.cluster.token
+  }
+}
+
 module "alb_controller" {
   source                                     = "github.com/GSA/terraform-kubernetes-aws-load-balancer-controller"
   aws_load_balancer_controller_chart_version = "{{ cookiecutter.terraform_helm_alb_controller }}"
 
   k8s_cluster_type          = "eks"
   k8s_cluster_name          = var.environment_namespace
-  k8s_namespace             = var.k8s_namespace
+  k8s_namespace             = "kube-system"
   k8s_replicas              = 2
   aws_iam_path_prefix       = ""
   aws_vpc_id                = var.vpc_id
