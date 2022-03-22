@@ -25,7 +25,6 @@ resource "helm_release" "ingress-nginx" {
   }
 
   depends_on = [
-    module.eks,
-    aws_kms_key.eks
+    module.eks
   ]
 }
