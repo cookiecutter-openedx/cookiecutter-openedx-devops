@@ -36,23 +36,20 @@ provider "helm" {
   }
 }
 
-#resource "aws_kms_key" "eks" {
-#  description             = "EKS Secret Encryption Key"
-#  deletion_window_in_days = 7
-#  enable_key_rotation     = true
-#
-#  tags = var.tags
-#}
-
-resource "kubernetes_namespace" "namespace" {
+resource "kubernetes_namespace" "openedx" {
   metadata {
+    annotations = {
+      name = "openedx"
+    }
+
+    labels = {
+      mylabel = "openedx"
+    }
+
     name = "openedx"
   }
-
-  depends_on = [
-    module.eks
-  ]
 }
+
 
 #------------------------------------------------------------------------------
 # FIX NOTE. make a decision on whether to use this or not.
@@ -95,7 +92,7 @@ module "eks" {
   cluster_name                    = local.name
   cluster_version                 = var.eks_cluster_version
   cluster_endpoint_private_access = true
-  cluster_endpoint_public_access  = false
+  cluster_endpoint_public_access  = true
   vpc_id                          = var.vpc_id
   subnet_ids                      = var.private_subnet_ids
   tags                            = var.tags
@@ -109,31 +106,6 @@ module "eks" {
     }
   }
 
-  # You require a node group to schedule coredns which is critical for running correctly internal DNS.
-  # If you want to use only fargate you must follow docs `(Optional) Update CoreDNS`
-  # available under https://docs.aws.amazon.com/eks/latest/userguide/fargate-getting-started.html
-  eks_managed_node_groups = {
-    default = {
-      create_launch_template = false
-      launch_template_name   = ""
-    }
-
-    managed = {
-      max_size     = var.eks_worker_group_max_size
-      min_size     = var.eks_worker_group_min_size
-      desired_size = var.eks_worker_group_desired_size
-
-      instance_types = [var.eks_worker_group_instance_type]
-      labels = {
-        Managed    = "managed_node_groups"
-        GithubRepo = "terraform-aws-eks"
-        GithubOrg  = "terraform-aws-modules"
-      }
-      tags = {
-        ExtraTag = "managed"
-      }
-    }
-  }
 
   # see: https://github.com/terraform-aws-modules/terraform-aws-eks/blob/master/examples/fargate_profile/main.tf
   fargate_profiles = {
@@ -157,7 +129,7 @@ module "eks" {
         {
           namespace = "kube-system"
           labels = {
-            k8s-app = kube-dns
+            k8s-app = "kube-dns"
           }
         }
       ]

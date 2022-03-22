@@ -4,6 +4,8 @@ Amazon Elastic Kubernetes Service (EKS)
 This module uses the latest version of the community-supported `AWS EKS Terraform module <https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest>`_ to create a fully configured Kubernetes Cluster within the custom VPC.
 AWS EKS Terraform module is widely supported and adopted, with more than 250 open source code contributers, and more than 10 million downloads from the Terraform registry as of March, 2022.
 
+Our goal is to, as much as possible, implement a plain vanilla Kubernetes Cluster that generally uses all default configuration values and that includes EC2 as well as Fargate compute nodes
+
 Features include:
 
 - EC2 managed node group
