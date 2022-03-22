@@ -1,6 +1,14 @@
 AWS Elastic Kubernetes Service (EKS)
 ====================================================================================================
 
+This module uses the latest version of the community-supported `AWS EKS Terraform module <https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest>`_ to create a fully configured Kubernetes Cluster within the custom VPC. Features include:
+
+- EC2 managed node group
+- Fargate serverless compute cluster
+- IRSA
+- Private access to all resources contained in the VPN
+- Kubernetes secrets encryption
+
 see:
 
     https://www.youtube.com/watch?v=oYHZ3EPR094&t=1093s
