@@ -96,7 +96,7 @@ module "eks" {
   vpc_id                          = var.vpc_id
   subnet_ids                      = var.private_subnet_ids
   tags                            = var.tags
-
+  manage_aws_auth                 = false
 
   # Note: https://docs.aws.amazon.com/eks/latest/userguide/fargate-getting-started.html#fargate-gs-coredns
   cluster_addons = {
@@ -106,12 +106,35 @@ module "eks" {
     }
   }
 
+  node_groups = {
+    example = {
+      desired_capacity = 1
 
-  # see: https://github.com/terraform-aws-modules/terraform-aws-eks/blob/master/examples/fargate_profile/main.tf
+      instance_types = ["t3.medium"]
+      k8s_labels = {
+        Example    = "managed_node_groups"
+        GithubRepo = "terraform-aws-eks"
+        GithubOrg  = "terraform-aws-modules"
+      }
+      additional_tags = {
+        ExtraTag = "example"
+      }
+      update_config = {
+        max_unavailable_percentage = 50 # or set `max_unavailable`
+      }
+    }
+  }
+
   fargate_profiles = {
     default = {
       name = "default"
       selectors = [
+        {
+          namespace = "kube-system"
+          labels = {
+            k8s-app = "kube-dns"
+          }
+        },
         {
           namespace = "default"
           labels = {
@@ -119,20 +142,36 @@ module "eks" {
           }
         }
       ]
+
       tags = {
         Owner = "default"
       }
+
+      timeouts = {
+        create = "20m"
+        delete = "20m"
+      }
     }
-    coredns = {
-      name = "coredns"
+
+    secondary = {
+      name = "secondary"
       selectors = [
         {
-          namespace = "kube-system"
+          namespace = "default"
           labels = {
-            k8s-app = "kube-dns"
+            Environment = "test"
+            GithubRepo  = "terraform-aws-eks"
+            GithubOrg   = "terraform-aws-modules"
           }
         }
       ]
+
+      # Using specific subnets instead of the ones configured in EKS (`subnets` and `fargate_subnets`)
+      subnets = [module.vpc.private_subnets[1]]
+
+      tags = {
+        Owner = "secondary"
+      }
     }
   }
 
