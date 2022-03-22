@@ -93,6 +93,8 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
     - {{ cookiecutter.eks_cluster_alb_ingress_controller_version }}
   * - `Terraform <https://www.terraform.io/>`_
     - {{ cookiecutter.terraform_required_version }}
+  * - Terraform `terraform-aws-modules/vpc/aws <https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest>`_
+    - {{ cookiecutter.terraform_aws_modules_vpc }}
   * - Terraform `terraform-aws-modules/eks/aws <https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest>`_
     - {{ cookiecutter.terraform_aws_modules_eks }}
   * - Terraform `terraform-aws-modules/acm/aws <https://registry.terraform.io/modules/terraform-aws-modules/acm/aws/latest>`_
