@@ -54,6 +54,17 @@ resource "kubernetes_namespace" "namespace" {
   ]
 }
 
+#------------------------------------------------------------------------------
+# FIX NOTE. make a decision on whether to use this or not.
+#
+# cluster_addons = {
+#   vpc-cni = {
+#     resolve_conflicts        = "OVERWRITE"
+#     service_account_role_arn = module.vpc_cni_irsa.iam_role_arn
+#   }
+# }
+#
+#------------------------------------------------------------------------------
 module "vpc_cni_irsa" {
   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
@@ -91,16 +102,12 @@ module "eks" {
 
 
   # Note: https://docs.aws.amazon.com/eks/latest/userguide/fargate-getting-started.html#fargate-gs-coredns
-  #cluster_addons = {
-  #  coredns = {
-  #    resolve_conflicts = "OVERWRITE"
-  #  }
-  #  kube-proxy = {}
-  #  vpc-cni = {
-  #    resolve_conflicts        = "OVERWRITE"
-  #    service_account_role_arn = module.vpc_cni_irsa.iam_role_arn
-  #  }
-  #}
+  cluster_addons = {
+    coredns = {
+      resolve_conflicts = "OVERWRITE"
+      namespace         = "kube-system"
+    }
+  }
 
   # You require a node group to schedule coredns which is critical for running correctly internal DNS.
   # If you want to use only fargate you must follow docs `(Optional) Update CoreDNS`
@@ -140,13 +147,10 @@ module "eks" {
           }
         }
       ]
-
       tags = {
         Owner = "default"
       }
-
     }
-
     coredns = {
       name = "coredns"
       selectors = [
