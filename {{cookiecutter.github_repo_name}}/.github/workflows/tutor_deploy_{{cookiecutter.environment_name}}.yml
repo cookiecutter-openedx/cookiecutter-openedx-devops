@@ -165,7 +165,7 @@ jobs:
       #
       - name: Install S3 plugin
         run: |-
-          pip install git+https://github.com/hastexo/tutor-contrib-s3@v0.2.0
+          pip install git+https://github.com/hastexo/tutor-contrib-s3@{{ cookiecutter.ci_deploy_hastexo_tutor_contrib_s3_version }}
           tutor plugins enable s3
           tutor config save
 

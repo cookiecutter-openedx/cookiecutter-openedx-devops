@@ -21,6 +21,7 @@
     "ci_build_xblock_repository": "edx-ora2",
     "ci_build_xblock_ref": "master",
     "ci_deploy_OPENEDX_COMMON_VERSION": "open-release/{{ cookiecutter.ci_build_open_edx_version }}",
+    "ci_deploy_hastexo_tutor_contrib_s3_version": "v0.2.0",
     "ci_deploy_EMAIL_HOST": "email-smtp.{{ cookiecutter.global_aws_region|lower|replace(' ', '-') }}.amazonaws.com",
     "ci_deploy_EMAIL_PORT": 587,
     "ci_deploy_EMAIL_USE_TLS": true,
