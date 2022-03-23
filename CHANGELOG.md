@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - restructured terraform folders
 - parameterized deployment yaml manifests with cookiecutter
 - refactored VPC and EKS modules based on the current latest version of terraform-aws-modules modules
+- separated EKS ingresses into their modules: nginx, CLB, and ALB
 - added a Fargate profile to EKS
 - added an ingress AWS Application Load Balancer controller to EKS
 - added AWS certficates in us-east-1 and the aws region specified in environments/global.hcl
