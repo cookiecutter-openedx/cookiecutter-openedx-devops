@@ -42,7 +42,7 @@ module "eks" {
   }
 
   fargate_profiles = {
-    app = {
+    fargate-node = {
       name = "fargate-node"
       selectors = [
         {

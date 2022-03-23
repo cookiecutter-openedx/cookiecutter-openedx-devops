@@ -15,7 +15,7 @@ resource "kubernetes_namespace" "app" {
 resource "kubernetes_deployment" "app" {
   metadata {
     name      = "owncloud-server"
-    namespace = kubernetes_namespace.test.metadata.0.name
+    namespace = kubernetes_namespace.app.metadata.0.name
     labels = {
       app = "owncloud"
     }
@@ -49,7 +49,7 @@ resource "kubernetes_deployment" "app" {
       }
     }
   }
-  depends_on = [kubernetes_namespace.fargate]
+  depends_on = [kubernetes_namespace.app]
 
 }
 
@@ -78,7 +78,7 @@ resource "kubernetes_service" "app" {
 resource "kubernetes_ingress" "app" {
   metadata {
     name      = "owncloud-lb"
-    namespace = kubernetes_namespace.test.metadata.0.name
+    namespace = kubernetes_namespace.app.metadata.0.name
     annotations = {
       "kubernetes.io/ingress.class"           = "alb"
       "alb.ingress.kubernetes.io/scheme"      = "internet-facing"
