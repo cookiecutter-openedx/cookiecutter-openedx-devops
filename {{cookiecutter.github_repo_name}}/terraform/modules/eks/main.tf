@@ -6,55 +6,7 @@
 #
 # usage: create an EKS cluster with one managed node group for EC2
 #        plus a Fargate profile for serverless computing.
-#------------------------------------------------------------------------------
-locals {
-  name = var.environment_namespace
-}
-
-#data "tls_certificate" "cluster" {
-#  url = module.eks.cluster_oidc_issuer_url
-#}
-
-data "aws_eks_cluster" "cluster" {
-  name = module.eks.cluster_id
-}
-
-data "aws_eks_cluster_auth" "cluster" {
-  name = module.eks.cluster_id
-}
-
-provider "kubernetes" {
-  host                   = data.aws_eks_cluster.cluster.endpoint
-  cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
-  token                  = data.aws_eks_cluster_auth.cluster.token
-}
-
-provider "helm" {
-  kubernetes {
-    host                   = data.aws_eks_cluster.cluster.endpoint
-    cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
-    token                  = data.aws_eks_cluster_auth.cluster.token
-  }
-}
-
-resource "kubernetes_namespace" "openedx" {
-  metadata {
-    annotations = {
-      name = "openedx"
-    }
-
-    labels = {
-      mylabel = "openedx"
-    }
-
-    name = "openedx"
-  }
-
-  depends_on = [module.eks]
-}
-
-
-#------------------------------------------------------------------------------
+#
 # Technical documentation:
 # - https://docs.aws.amazon.com/eks
 # - https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/
@@ -63,7 +15,7 @@ resource "kubernetes_namespace" "openedx" {
 module "eks" {
   source                          = "terraform-aws-modules/eks/aws"
   version                         = "{{ cookiecutter.terraform_aws_modules_eks }}"
-  cluster_name                    = local.name
+  cluster_name                    = var.environment_namespace
   cluster_version                 = var.eks_cluster_version
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = true
@@ -90,14 +42,11 @@ module "eks" {
   }
 
   fargate_profiles = {
-    openedx = {
-      name = "openedx"
+    app = {
+      name = "fargate-node"
       selectors = [
         {
-          namespace = "openedx"
-          labels = {
-            WorkerType = "fargate"
-          }
+          namespace = "fargate-node"
         }
       ]
       tags = var.tags
