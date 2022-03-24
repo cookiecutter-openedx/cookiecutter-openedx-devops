@@ -31,7 +31,6 @@ data "kubernetes_service" "ingress_nginx_controller" {
 data "aws_elb_hosted_zone_id" "main" {}
 
 
-
 resource "helm_release" "ingress-nginx" {
   name             = "ingress-nginx"
   namespace        = "ingress-nginx"
