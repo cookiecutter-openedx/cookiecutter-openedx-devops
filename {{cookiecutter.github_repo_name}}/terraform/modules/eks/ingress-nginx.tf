@@ -33,7 +33,7 @@ data "aws_elb_hosted_zone_id" "main" {}
 
 resource "helm_release" "ingress-nginx" {
   name             = "ingress-nginx"
-  namespace        = "ingress-nginx"
+  namespace        = "alb"
   create_namespace = true
   disable_webhooks = false
   chart            = "ingress-nginx"
