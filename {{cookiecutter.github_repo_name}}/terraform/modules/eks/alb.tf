@@ -8,6 +8,7 @@
 #        using the AWS-sponsored helm chart
 #
 # see:
+# - https://artifacthub.io/packages/helm/aws/aws-load-balancer-controller
 # - https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/
 # - https://github.com/aws/eks-charts/tree/master/stable/aws-load-balancer-controller
 # - https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -31,6 +32,19 @@
 # https://betterprogramming.pub/with-latest-updates-create-amazon-eks-fargate-cluster-and-managed-node-group-using-terraform-bc5cfefd5773
 #------------------------------------------------------------------------------
 
+resource "kubernetes_namespace" "ingress-alb-controller" {
+  metadata {
+    annotations = {
+      name = "ingress-alb-controller-annotation"
+    }
+
+    labels = {
+      mylabel = "label-value"
+    }
+
+    name = "ingress-alb-controller"
+  }
+}
 
 module "alb_controller" {
   source                                     = "github.com/GSA/terraform-kubernetes-aws-load-balancer-controller"
@@ -79,5 +93,8 @@ module "alb_controller" {
     "external-dns.alpha.kubernetes.io/hostname" : "*.${var.environment_domain}"
   }
 
-  depends_on = [module.eks]
+  depends_on = [
+    module.eks,
+    kubernetes_namespace.ingress-alb-controller
+  ]
 }
