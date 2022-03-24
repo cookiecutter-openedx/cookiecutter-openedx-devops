@@ -6,7 +6,8 @@
 
 # Create a local variable for the load balancer name.
 locals {
-  lb_name = split("-", split(".", kubernetes_service.nginx.status.0.load_balancer.0.ingress.0.hostname).0).0
+  lb_name   = split("-", split(".", kubernetes_service.nginx.status.0.load_balancer.0.ingress.0.hostname).0).0
+  namespace = "ingress-alb-controller"
 }
 
 # Read information about the load balancer using the AWS provider.
@@ -17,7 +18,7 @@ data "aws_elb" "app" {
 
 resource "kubernetes_deployment" "nginx" {
   metadata {
-    namespace = "ingress-alb-controller"
+    namespace = local.namespace
     name      = "scalable-nginx-example"
     labels = {
       App = "nginx"
@@ -65,19 +66,54 @@ resource "kubernetes_deployment" "nginx" {
 
 resource "kubernetes_service" "nginx" {
   metadata {
-    name = "nginx-example"
+    name = "nginx-service"
   }
   spec {
     type = "NodePort"
     selector = {
       App = kubernetes_deployment.nginx.spec.0.template.0.metadata[0].labels.App
     }
-    ports = {
-      port = {
-        port        = 80
-        target_port = 80
-      }
-      nodePort = 30007
+    port {
+      port        = 80
+      target_port = 80
+      protocol    = "TCP"
     }
   }
+  annotations {}
+  depends_on = [kubernetes_deployment.nginx]
+}
+
+resource "kubernetes_ingress" "nginx" {
+  metadata {
+    name      = "nginx-lb"
+    namespace = local.namespace
+    annotations = {
+      "kubernetes.io/ingress.class"           = "alb"
+      "alb.ingress.kubernetes.io/scheme"      = "internet-facing"
+      "alb.ingress.kubernetes.io/target-type" = "ip"
+    }
+    labels = {
+      "app" = "nginx"
+    }
+  }
+
+  spec {
+    backend {
+      service_name = "nginx-service"
+      service_port = 80
+    }
+    rule {
+      http {
+        path {
+          path = "/"
+          backend {
+            service_name = "nginx-service"
+            service_port = 80
+          }
+        }
+      }
+    }
+  }
+
+  depends_on = [kubernetes_service.app]
 }
