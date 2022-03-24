@@ -30,6 +30,9 @@
 # The latter half of this article, written by Harshet Jain, provides a
 # good explanation of how this works:
 # https://betterprogramming.pub/with-latest-updates-create-amazon-eks-fargate-cluster-and-managed-node-group-using-terraform-bc5cfefd5773
+#
+#     "external-dns.alpha.kubernetes.io/hostname" : "${var.environment_domain}"
+#     "external-dns.alpha.kubernetes.io/hostname" : "*.${var.environment_domain}"
 #------------------------------------------------------------------------------
 
 resource "kubernetes_namespace" "ingress-alb-controller" {
@@ -60,6 +63,7 @@ module "alb_controller" {
   aws_resource_name_prefix  = ""
   aws_tags                  = var.tags
   alb_controller_depends_on = [data.aws_eks_cluster.cluster]
+  depends_on                = [kubernetes_namespace.ingress-alb-controller]
   enable_host_networking    = false
   k8s_pod_labels            = {}
   chart_env_overrides       = {}
@@ -88,13 +92,7 @@ module "alb_controller" {
     "alb.ingress.kubernetes.io/healthy-threshold-count" : "2",
     "alb.ingress.kubernetes.io/unhealthy-threshold-count" : "2",
     "alb.ingress.kubernetes.io/success-codes" : "200",
-    "alb.ingress.kubernetes.io/target-node-labels" : "label1=openedx"
-    "external-dns.alpha.kubernetes.io/hostname" : "${var.environment_domain}"
-    "external-dns.alpha.kubernetes.io/hostname" : "*.${var.environment_domain}"
+    "alb.ingress.kubernetes.io/target-node-labels" : "label1=nginx"
   }
 
-  depends_on = [
-    module.eks,
-    kubernetes_namespace.ingress-alb-controller
-  ]
 }

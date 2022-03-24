@@ -20,7 +20,7 @@ resource "kubernetes_deployment" "nginx" {
     namespace = "ingress-alb-controller"
     name      = "scalable-nginx-example"
     labels = {
-      App = "ScalableNginxExample"
+      App = "nginx"
     }
   }
 
@@ -28,13 +28,13 @@ resource "kubernetes_deployment" "nginx" {
     replicas = 2
     selector {
       match_labels = {
-        App = "ScalableNginxExample"
+        App = "nginx"
       }
     }
     template {
       metadata {
         labels = {
-          App = "ScalableNginxExample"
+          App = "nginx"
         }
       }
       spec {
@@ -68,14 +68,16 @@ resource "kubernetes_service" "nginx" {
     name = "nginx-example"
   }
   spec {
+    type = "NodePort"
     selector = {
       App = kubernetes_deployment.nginx.spec.0.template.0.metadata[0].labels.App
     }
-    port {
-      port        = 8080
-      target_port = 80
+    ports = {
+      port = {
+        port        = 80
+        target_port = 80
+      }
+      nodePort = 30007
     }
-
-    type = "LoadBalancer"
   }
 }
