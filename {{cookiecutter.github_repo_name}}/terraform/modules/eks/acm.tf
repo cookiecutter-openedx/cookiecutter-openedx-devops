@@ -1,3 +1,13 @@
+provider "aws" {
+  alias  = "us-east-1"
+  region = "us-east-1"
+}
+provider "aws" {
+  alias  = "environment_region"
+  region = var.aws_region
+}
+
+
 module "acm_subdomains" {
   source  = "terraform-aws-modules/acm/aws"
   version = "{{ cookiecutter.terraform_aws_modules_acm }}"

@@ -16,6 +16,7 @@ locals {
   environment_domain              = local.environment_vars.locals.environment_domain
   environment_namespace           = local.environment_vars.locals.environment_namespace
   subdomains                      = local.environment_vars.locals.subdomains
+  root_domain                     = local.global_vars.locals.root_domain
   platform_name                   = local.global_vars.locals.platform_name
   platform_region                 = local.global_vars.locals.platform_region
   account_id                      = local.global_vars.locals.account_id
@@ -63,6 +64,7 @@ include {
 inputs = {
   aws_region = local.aws_region
   environment_domain = local.environment_domain
+  root_domain = local.root_domain
   environment_namespace = local.environment_namespace
   subdomains = local.subdomains
 

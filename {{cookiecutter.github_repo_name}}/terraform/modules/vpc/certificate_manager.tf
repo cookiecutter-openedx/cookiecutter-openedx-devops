@@ -20,6 +20,14 @@
 # than as data
 #------------------------------------------------------------------------------
 
+data "aws_route53_zone" "root_domain" {
+  name = var.root_domain
+}
+
+data "aws_route53_zone" "environment_domain" {
+  name = var.environment_domain
+}
+
 #------------------------------------------------------------------------------
 # SSL/TLS certs issued in the AWS region for ALB
 #------------------------------------------------------------------------------
