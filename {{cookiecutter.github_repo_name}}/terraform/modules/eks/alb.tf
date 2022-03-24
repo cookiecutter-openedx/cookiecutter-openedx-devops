@@ -30,6 +30,8 @@
 # good explanation of how this works:
 # https://betterprogramming.pub/with-latest-updates-create-amazon-eks-fargate-cluster-and-managed-node-group-using-terraform-bc5cfefd5773
 #------------------------------------------------------------------------------
+
+
 module "alb_controller" {
   source                                     = "github.com/GSA/terraform-kubernetes-aws-load-balancer-controller"
   aws_load_balancer_controller_chart_version = "{{ cookiecutter.terraform_helm_alb_controller }}"
@@ -77,4 +79,5 @@ module "alb_controller" {
     "external-dns.alpha.kubernetes.io/hostname" : "*.${var.environment_domain}"
   }
 
+  depends_on = [module.eks]
 }
