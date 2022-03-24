@@ -36,7 +36,7 @@ module "alb_controller" {
 
   k8s_cluster_type          = "eks"
   k8s_cluster_name          = var.environment_namespace
-  k8s_namespace             = "alb"
+  k8s_namespace             = "ingress-alb-controller"
   k8s_replicas              = 2
   aws_iam_path_prefix       = ""
   aws_vpc_id                = var.vpc_id
