@@ -6,15 +6,9 @@
 
 # Create a local variable for the load balancer name.
 locals {
-  lb_name   = split("-", split(".", kubernetes_service.nginx.status.0.load_balancer.0.ingress.0.hostname).0).0
+  lb_name   = split("-", split(".", kubernetes_ingress.nginx.status.0.load_balancer.0.ingress.0.hostname).0).0
   namespace = "ingress-alb-controller"
 }
-
-# Read information about the load balancer using the AWS provider.
-data "aws_elb" "app" {
-  name = local.lb_name
-}
-
 
 resource "kubernetes_deployment" "nginx" {
   metadata {
@@ -79,7 +73,6 @@ resource "kubernetes_service" "nginx" {
       protocol    = "TCP"
     }
   }
-  annotations {}
   depends_on = [kubernetes_deployment.nginx]
 }
 
@@ -115,5 +108,5 @@ resource "kubernetes_ingress" "nginx" {
     }
   }
 
-  depends_on = [kubernetes_service.app]
+  depends_on = [kubernetes_service.nginx]
 }

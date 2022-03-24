@@ -183,19 +183,3 @@ output "aws_auth_configmap_yaml" {
 ################################################################################
 # ELB
 ################################################################################
-
-output "load_balancer_name" {
-  value = local.lb_name
-}
-
-output "load_balancer_hostname" {
-  value = kubernetes_service.nginx.status.0.load_balancer.0.ingress.0.hostname
-}
-
-output "load_balancer_info" {
-  value = data.aws_elb.app
-}
-
-output "lb_ip" {
-  value = kubernetes_service.nginx.status.0.load_balancer.0.ingress.0.hostname
-}
