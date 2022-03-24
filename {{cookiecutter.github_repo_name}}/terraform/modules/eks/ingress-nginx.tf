@@ -17,6 +17,21 @@
 # 12,000 stars
 # last commit was 16 hours ago
 #------------------------------------------------------------------------------
+
+
+data "kubernetes_service" "ingress_nginx_controller" {
+  metadata {
+    name      = "ingress-nginx-controller"
+    namespace = "ingress-nginx"
+  }
+  depends_on = [helm_release.ingress-nginx]
+}
+
+
+data "aws_elb_hosted_zone_id" "main" {}
+
+
+
 resource "helm_release" "ingress-nginx" {
   name             = "ingress-nginx"
   namespace        = "ingress-nginx"

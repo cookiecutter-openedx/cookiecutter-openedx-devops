@@ -10,6 +10,10 @@ variable "environment_domain" {
   type = string
 }
 
+variable "subdomains" {
+  type = list(string)
+}
+
 variable "environment_namespace" {
   type = string
 }

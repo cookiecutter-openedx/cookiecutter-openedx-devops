@@ -1,7 +1,20 @@
+# nginx deployment example: https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/guides/getting-started
+
+resource "kubernetes_namespace" "app" {
+  metadata {
+    labels = {
+      app = "owncloud"
+    }
+    name = "fargate-node"
+  }
+
+  depends_on = [module.eks]
+}
 
 resource "kubernetes_deployment" "app" {
   metadata {
-    name = "owncloud-server"
+    name      = "owncloud-server"
+    namespace = kubernetes_namespace.app.metadata.0.name
     labels = {
       app = "owncloud"
     }
@@ -35,12 +48,14 @@ resource "kubernetes_deployment" "app" {
       }
     }
   }
+  depends_on = [kubernetes_namespace.app]
 
 }
 
 resource "kubernetes_service" "app" {
   metadata {
-    name = "owncloud-service"
+    name      = "owncloud-service"
+    namespace = kubernetes_namespace.app.metadata.0.name
   }
   spec {
     selector = {
@@ -61,7 +76,8 @@ resource "kubernetes_service" "app" {
 
 resource "kubernetes_ingress" "app" {
   metadata {
-    name = "owncloud-lb"
+    name      = "owncloud-lb"
+    namespace = kubernetes_namespace.app.metadata.0.name
     #annotations = {
     #  "kubernetes.io/ingress.class"           = "alb"
     #  "alb.ingress.kubernetes.io/scheme"      = "internet-facing"

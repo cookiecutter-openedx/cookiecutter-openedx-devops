@@ -1,3 +1,5 @@
+# https://www.itwonderlab.com/en/kubernetes-with-terraform/
+
 #-----------------------------------------
 # KUBERNETES DEPLOYMENT COLOR APP
 #-----------------------------------------
@@ -15,7 +17,7 @@ resource "kubernetes_deployment" "color" {
       match_labels = {
         app   = "color"
         color = "blue"
-      } //match_labels
+      }
     }
     replicas = 3
 
@@ -65,16 +67,16 @@ resource "kubernetes_deployment" "color" {
 resource "kubernetes_service" "color-service-np" {
   metadata {
     name = "color-service-np"
-  } //metadata
+  }
   spec {
     selector = {
       app = "color"
-    } //selector
+    }
     session_affinity = "ClientIP"
     port {
       port      = 8080
       node_port = 30085
-    } //port
+    }
     type = "NodePort"
-  } //spec
-}   //resource
+  }
+}
