@@ -23,6 +23,27 @@ module "eks" {
   vpc_id                          = var.vpc_id
   subnet_ids                      = var.private_subnet_ids
   tags                            = var.tags
+
+  # FIX NOTE:
+  # regarding https://github.com/kubernetes-sigs/aws-load-balancer-controller/issues/2462
+  # this is allowing all traffic -- the group is wide open.
+
+  # Resolution for
+  # Error: Failed to create Ingress 'ingress-alb-controller/nginx-lb' because: Internal error occurred:
+  #        failed calling webhook "vingress.elbv2.k8s.aws":
+  #        Post "https://aws-load-balancer-webhook-service.ingress-alb-controller.svc:443/validate-networking-v1-ingress?timeout=10s": context deadline exceeded
+  node_security_group_additional_rules = {
+    inter_node = {
+      description = "Allow traffic between nodes and control plane"
+      protocol    = "-1"
+      from_port   = 9443 // doesn't appear to do anything
+      to_port     = 9443
+      type        = "ingress" // needs to be tightened
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  }
+
+
   eks_managed_node_groups = {
     default = {
       min_size       = var.eks_worker_group_min_size
