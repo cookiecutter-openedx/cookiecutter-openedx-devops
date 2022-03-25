@@ -54,23 +54,40 @@ module "eks" {
         create = "10m"
         delete = "10m"
       }
-    },
-    kube-system = {
-      name = "kube-system"
-      selectors = [
-        {
-          namespace = "kube-system"
-          labels = {
-            k8s-app = "kube-dns"
-          }
-        }
-      ]
-      tags = var.tags
-      timeouts = {
-        create = "10m"
-        delete = "10m"
-      }
     }
   }
 
+}
+
+#------------------------------------------------------------------------------
+# Create the Amazon EKS pod execution role
+#
+# see:
+# - https://docs.aws.amazon.com/eks/latest/userguide/pod-execution-role.html#create-pod-execution-role
+#------------------------------------------------------------------------------
+
+resource "aws_iam_role" "this" {
+  name        = "${var.environment_namespace}-EKSFargatePodExecutionRole"
+  description = "AWS Fargate pod execution role"
+
+  tags                  = var.tags
+  force_detach_policies = true
+  managed_policy_arns   = ["arn:aws:iam::aws:policy/AmazonEKSFargatePodExecutionRolePolicy"]
+  assume_role_policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Condition" : {
+          "ArnLike" : {
+            "aws:SourceArn" : "arn:aws:eks:{{ cookiecutter.global_aws_region }}:{{ cookiecutter.global_account_id }}:fargateprofile/${var.environment_namespace}/*"
+          }
+        },
+        "Principal" : {
+          "Service" : "eks-fargate-pods.amazonaws.com"
+        },
+        "Action" : "sts:AssumeRole"
+      }
+    ]
+  })
 }
