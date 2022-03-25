@@ -217,11 +217,6 @@ resource "kubernetes_cluster_role" "this" {
   depends_on = [local.alb_controller_depends_on]
 }
 
-# mcdaniel: i made this. probably redundant.
-resource "aws_iam_role_policy_attachment" "cluster_role" {
-  policy_arn = aws_iam_policy.this.arn
-  role       = kubernetes_cluster_role.this.metadata[0].name
-}
 
 #------------------------------------------------------------------------------
 # https://aws.amazon.com/premiumsupport/knowledge-center/eks-alb-ingress-controller-fargate/
@@ -254,10 +249,29 @@ resource "helm_release" "alb_controller" {
   repository = "https://aws.github.io/eks-charts"
   chart      = "aws-load-balancer-controller"
   version    = "{{ cookiecutter.terraform_helm_alb_controller_chart_version }}"
-
-  namespace = local.k8s_namespace
-  atomic    = true
-  timeout   = 900
-
+  namespace  = local.k8s_namespace
+  atomic     = true
+  timeout    = 900
   depends_on = [local.alb_controller_depends_on]
+
+  set {
+    name  = "clusterName"
+    value = var.environment_namespace
+  }
+  set {
+    name  = "serviceAccount.create"
+    value = false
+  }
+  set {
+    name  = "serviceAccount.name"
+    value = kubernetes_service_account.this.metadata[0].name
+  }
+  set {
+    name  = "region"
+    value = var.aws_region
+  }
+  set {
+    name  = "vpcId"
+    value = var.vpc_id
+  }
 }
