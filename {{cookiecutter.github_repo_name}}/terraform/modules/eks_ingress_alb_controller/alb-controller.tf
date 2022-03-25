@@ -9,9 +9,9 @@
 #
 # Setup instructions:
 # -------------------
-# https://aws.github.io/eks-charts/aws-load-balancer-controller
-# https://github.com/aws/eks-charts/tree/v0.0.82/stable/aws-load-balancer-controller
-# https://aws.amazon.com/premiumsupport/knowledge-center/eks-alb-ingress-controller-fargate/
+# - https://aws.github.io/eks-charts/aws-load-balancer-controller
+# - https://github.com/aws/eks-charts/tree/v0.0.82/stable/aws-load-balancer-controller
+# - https://aws.amazon.com/premiumsupport/knowledge-center/eks-alb-ingress-controller-fargate/
 #
 # technical documentation:
 # - https://artifacthub.io/packages/helm/aws/aws-load-balancer-controller
@@ -26,8 +26,8 @@
 #        failed calling webhook "vingress.elbv2.k8s.aws":
 #        Post "https://aws-load-balancer-webhook-service.ingress-alb-controller.svc:443/validate-networking-v1-ingress?timeout=10s": context deadline exceeded
 #
+# Resolution: during EKS creation, have open to port ??? (9443 ???) in EKS node shared security group
 # - https://github.com/kubernetes-sigs/aws-load-balancer-controller/issues/2462
-# Resolution: during EKS creation, have open port ??? in EKS node shared security group
 #------------------------------------------------------------------------------
 
 locals {

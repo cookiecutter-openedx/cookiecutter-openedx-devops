@@ -1,10 +1,18 @@
-
+#------------------------------------------------------------------------------
+# written by: Lawrence McDaniel
+#             https://lawrencemcdaniel.com/
+#
+# date: Mar-2022
+#
+# usage: create an EKS cluster with one managed node group for EC2
+#        plus a Fargate profile for serverless computing.
+#------------------------------------------------------------------------------
 data "aws_eks_cluster" "cluster" {
-  name = var.environment_namespace
+  name = module.eks.cluster_id
 }
 
 data "aws_eks_cluster_auth" "cluster" {
-  name = var.environment_namespace
+  name = module.eks.cluster_id
 }
 
 provider "kubernetes" {
