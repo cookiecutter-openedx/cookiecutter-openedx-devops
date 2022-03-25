@@ -60,7 +60,7 @@ data "aws_iam_policy_document" "eks_oidc_assume_role" {
       test     = "StringEquals"
       variable = "${replace(data.aws_eks_cluster.cluster.identity[0].oidc[0].issuer, "https://", "")}:sub"
       values = [
-        "system:serviceaccount:${var.k8s_namespace}:aws-load-balancer-controller"
+        "system:serviceaccount:${local.k8s_namespace}:aws-load-balancer-controller"
       ]
     }
     principals {
@@ -122,26 +122,26 @@ resource "aws_iam_role_policy_attachment" "this" {
 resource "kubernetes_service_account" "this" {
   automount_service_account_token = true
   metadata {
-    name      = var.resource_name
-    namespace = var.k8s_namespace // note that example uses `kube-system`
+    name      = local.resource_name
+    namespace = local.k8s_namespace // note that example uses `kube-system`
     annotations = {
       "eks.amazonaws.com/role-arn" = aws_iam_role.this.arn
     }
     labels = {
-      "app.kubernetes.io/name"       = var.resource_name
+      "app.kubernetes.io/name"       = local.resource_name
       "app.kubernetes.io/component"  = "controller"
       "app.kubernetes.io/managed-by" = "terraform"
     }
   }
-  depends_on = [var.alb_controller_depends_on]
+  depends_on = [local.alb_controller_depends_on]
 }
 
 resource "kubernetes_cluster_role_binding" "this" {
   metadata {
-    name = var.resource_name
+    name = local.resource_name
 
     labels = {
-      "app.kubernetes.io/name"       = var.resource_name
+      "app.kubernetes.io/name"       = local.resource_name
       "app.kubernetes.io/managed-by" = "terraform"
     }
   }
@@ -161,10 +161,10 @@ resource "kubernetes_cluster_role_binding" "this" {
 }
 resource "kubernetes_cluster_role" "this" {
   metadata {
-    name = var.resource_name
+    name = local.resource_name
 
     labels = {
-      "app.kubernetes.io/name"       = var.resource_name
+      "app.kubernetes.io/name"       = local.resource_name
       "app.kubernetes.io/managed-by" = "terraform"
     }
   }
@@ -214,7 +214,7 @@ resource "kubernetes_cluster_role" "this" {
       "watch",
     ]
   }
-  depends_on = [var.alb_controller_depends_on]
+  depends_on = [local.alb_controller_depends_on]
 }
 
 # mcdaniel: i made this. probably redundant.
@@ -250,14 +250,14 @@ resource "aws_iam_role_policy_attachment" "cluster_role" {
 #
 #------------------------------------------------------------------------------
 resource "helm_release" "alb_controller" {
-  name       = var.resource_name
+  name       = local.resource_name
   repository = "https://aws.github.io/eks-charts"
   chart      = "aws-load-balancer-controller"
   version    = "{{ cookiecutter.terraform_helm_alb_controller_chart_version }}"
 
-  namespace = var.k8s_namespace
+  namespace = local.k8s_namespace
   atomic    = true
   timeout   = 900
 
-  depends_on = [var.alb_controller_depends_on]
+  depends_on = [local.alb_controller_depends_on]
 }
