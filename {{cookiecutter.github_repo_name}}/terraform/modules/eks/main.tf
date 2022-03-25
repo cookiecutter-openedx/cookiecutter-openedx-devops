@@ -57,7 +57,7 @@ module "eks" {
       }
       # this is redundant, since aws_iam_role.this sets its assume_role_policy
       # to point to this exact fargate profile.
-      pod_execution_role = aws_iam_role.this
+      pod_execution_role = aws_iam_role.pod_execution_role
     }
   }
 
@@ -75,7 +75,7 @@ module "eks" {
 # - https://docs.aws.amazon.com/eks/latest/userguide/pod-execution-role.html#create-pod-execution-role
 #------------------------------------------------------------------------------
 
-resource "aws_iam_role" "this" {
+resource "aws_iam_role" "pod_execution_role" {
   name        = "${var.environment_namespace}-EKSFargatePodExecutionRole"
   description = "AWS Fargate pod execution role"
 
