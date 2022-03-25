@@ -33,6 +33,16 @@
 #
 #     "external-dns.alpha.kubernetes.io/hostname" : "${var.environment_domain}"
 #     "external-dns.alpha.kubernetes.io/hostname" : "*.${var.environment_domain}"
+#
+#
+# https://github.com/kubernetes-sigs/aws-load-balancer-controller/issues/2039
+#
+# Setup instructions:
+# -------------------
+# https://aws.github.io/eks-charts/aws-load-balancer-controller
+# https://github.com/aws/eks-charts/tree/v0.0.82/stable/aws-load-balancer-controller
+# https://aws.amazon.com/premiumsupport/knowledge-center/eks-alb-ingress-controller-fargate/
+#
 #------------------------------------------------------------------------------
 
 resource "kubernetes_namespace" "ingress-alb-controller" {
