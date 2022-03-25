@@ -19,6 +19,15 @@
 # - https://github.com/aws/eks-charts/tree/master/stable/aws-load-balancer-controller
 # - https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 #
+#
+# trouble shooting:
+# ------------------
+# Error: Failed to create Ingress 'ingress-alb-controller/nginx-lb' because: Internal error occurred:
+#        failed calling webhook "vingress.elbv2.k8s.aws":
+#        Post "https://aws-load-balancer-webhook-service.ingress-alb-controller.svc:443/validate-networking-v1-ingress?timeout=10s": context deadline exceeded
+#
+# - https://github.com/kubernetes-sigs/aws-load-balancer-controller/issues/2462
+# Resolution: during EKS creation, have open port ??? in EKS node shared security group
 #------------------------------------------------------------------------------
 
 locals {
