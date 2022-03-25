@@ -55,7 +55,7 @@ resource "kubernetes_deployment" "nginx" {
       }
     }
   }
-  depends_on = [module.alb_controller]
+  depends_on = [helm_release.alb_controller]
 }
 
 resource "kubernetes_service" "nginx" {
