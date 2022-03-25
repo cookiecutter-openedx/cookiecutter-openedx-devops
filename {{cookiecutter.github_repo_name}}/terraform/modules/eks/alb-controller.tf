@@ -220,7 +220,7 @@ resource "kubernetes_cluster_role" "this" {
 # mcdaniel: i made this. probably redundant.
 resource "aws_iam_role_policy_attachment" "cluster_role" {
   policy_arn = aws_iam_policy.this.arn
-  role       = kubernetes_cluster_role.this.metadata[0].arn
+  role       = kubernetes_cluster_role.this.metadata[0].name
 }
 
 #------------------------------------------------------------------------------
