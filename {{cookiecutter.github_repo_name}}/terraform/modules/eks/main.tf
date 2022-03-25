@@ -10,6 +10,7 @@
 # Technical documentation:
 # - https://docs.aws.amazon.com/eks
 # - https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/
+# - https://docs.aws.amazon.com/eks/latest/userguide/fargate-profile.html
 #
 #------------------------------------------------------------------------------
 module "eks" {
@@ -54,13 +55,21 @@ module "eks" {
         create = "10m"
         delete = "10m"
       }
+      # this is redundant, since aws_iam_role.this sets its assume_role_policy
+      # to point to this exact fargate profile.
+      pod_execution_role = aws_iam_role.this
     }
   }
 
 }
 
 #------------------------------------------------------------------------------
-# Create the Amazon EKS pod execution role
+#
+# Before you create a Fargate profile, you must create an IAM role with the
+# AmazonEKSFargatePodExecutionRolePolicy.
+# This policy exactly: https://us-east-1.console.aws.amazon.com/iam/home?region=us-east-1#/policies/arn:aws:iam::aws:policy/AmazonEKSFargatePodExecutionRolePolicy$jsonEditor
+#
+# Create the Amazon EKS Fargate pod execution role.
 #
 # see:
 # - https://docs.aws.amazon.com/eks/latest/userguide/pod-execution-role.html#create-pod-execution-role
