@@ -77,6 +77,7 @@ resource "kubernetes_service" "nginx" {
 }
 
 resource "kubernetes_ingress" "nginx" {
+  wait_for_load_balancer = true
   metadata {
     name      = "nginx-lb"
     namespace = local.namespace
