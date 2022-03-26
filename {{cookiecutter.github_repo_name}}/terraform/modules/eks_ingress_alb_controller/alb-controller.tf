@@ -39,21 +39,6 @@ locals {
   ]
 }
 
-# mcdaniel: made by me
-resource "kubernetes_namespace" "ingress-alb-controller" {
-  metadata {
-    annotations = {
-      name = "ingress-alb-controller-annotation"
-    }
-
-    labels = {
-      mylabel = "label-value"
-    }
-
-    name = "ingress-alb-controller"
-  }
-}
-
 #------------------------------------------------------------------------------
 # https://aws.amazon.com/premiumsupport/knowledge-center/eks-alb-ingress-controller-fargate/
 #
