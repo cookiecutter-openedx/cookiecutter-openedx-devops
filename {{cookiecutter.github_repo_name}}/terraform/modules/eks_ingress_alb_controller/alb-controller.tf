@@ -22,8 +22,8 @@
 #
 # trouble shooting:
 # ------------------
-# Error: Failed to create Ingress 'ingress-alb-controller/nginx-lb' because: Internal error occurred:
-#        failed calling webhook "vingress.elbv2.k8s.aws":
+# Error: Failed to create Ingress 'ingress-alb-controller/nginx-lb' because:
+#        Internal error occurred: failed calling webhook "vingress.elbv2.k8s.aws":
 #        Post "https://aws-load-balancer-webhook-service.ingress-alb-controller.svc:443/validate-networking-v1-ingress?timeout=10s": context deadline exceeded
 #
 # Resolution: during EKS creation, have open to port ??? (9443 ???) in EKS node shared security group
@@ -31,7 +31,7 @@
 #------------------------------------------------------------------------------
 
 locals {
-  k8s_namespace = "ingress-alb-controller"
+  k8s_namespace = "kube-system"
   resource_name = "aws-load-balancer-controller"
   alb_controller_depends_on = [
     data.aws_eks_cluster.cluster,
@@ -57,7 +57,8 @@ resource "kubernetes_namespace" "ingress-alb-controller" {
 #------------------------------------------------------------------------------
 # https://aws.amazon.com/premiumsupport/knowledge-center/eks-alb-ingress-controller-fargate/
 #
-# 2. To allow the cluster to use AWS Identity and Access Management (IAM) for service accounts, run the following command:
+# 2. To allow the cluster to use AWS Identity and Access Management (IAM) for
+#    service accounts, run the following command:
 #    eksctl utils associate-iam-oidc-provider --cluster var.environment_namespace --approve
 #------------------------------------------------------------------------------
 data "aws_caller_identity" "current" {}
@@ -92,10 +93,12 @@ resource "aws_iam_role" "this" {
 #------------------------------------------------------------------------------
 # https://aws.amazon.com/premiumsupport/knowledge-center/eks-alb-ingress-controller-fargate/
 #
-# 3. To download an IAM policy that allows the AWS Load Balancer Controller to make calls to AWS APIs on your behalf, run the following command:
+# 3. To download an IAM policy that allows the AWS Load Balancer Controller to
+#    make calls to AWS APIs on your behalf, run the following command:
 #    curl -o ./json/iam-policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.2.0/docs/install/iam_policy.json
 #
-# 4. To create an IAM policy using the policy that you downloaded in step 3, run the following command:
+# 4. To create an IAM policy using the policy that you downloaded in step 3,
+#    run the following command:
 #    aws iam create-policy \
 #       --policy-name AWSLoadBalancerControllerIAMPolicy \
 #       --policy-document file://iam_policy.json
