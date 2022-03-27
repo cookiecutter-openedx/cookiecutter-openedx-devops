@@ -27,12 +27,14 @@ module "eks" {
   # Note: https://docs.aws.amazon.com/eks/latest/userguide/fargate-getting-started.html#fargate-gs-coredns
   cluster_addons = {
     coredns = {
+      resolve_conflicts        = "OVERWRITE"
+      tags                     = var.tags
+      service_account_role_arn = aws_iam_role.fargate_pod_execution_role.arn
+    }
+    kube-proxy = {}
+    vpc-cni = {
       resolve_conflicts = "OVERWRITE"
     }
-    #kube-proxy = {}
-    #vpc-cni = {
-    #  resolve_conflicts = "OVERWRITE"
-    #}
   }
 
   # FIX NOTE:
@@ -76,7 +78,7 @@ module "eks" {
   #  }
   #}
 
-  coredns = {
+  fargate_profiles = {
     coredns = {
       name       = "coredns"
       subnet_ids = var.private_subnet_ids
@@ -92,7 +94,7 @@ module "eks" {
       tags = var.tags
       # this is redundant, since aws_iam_role.this sets its assume_role_policy
       # to point to this exact fargate profile.
-      pod_execution_role = aws_iam_role.pod_execution_role
+      pod_execution_role = aws_iam_role.fargate_pod_execution_role
     }
 
     fargate-node = {
@@ -100,6 +102,9 @@ module "eks" {
       selectors = [
         {
           namespace = "fargate-node"
+        },
+        {
+          namespace = "default"
         }
       ]
       tags = var.tags
@@ -109,7 +114,7 @@ module "eks" {
       }
       # this is redundant, since aws_iam_role.this sets its assume_role_policy
       # to point to this exact fargate profile.
-      pod_execution_role = aws_iam_role.pod_execution_role
+      pod_execution_role = aws_iam_role.fargate_pod_execution_role
     }
   }
 
@@ -127,7 +132,7 @@ module "eks" {
 # - https://docs.aws.amazon.com/eks/latest/userguide/pod-execution-role.html#create-pod-execution-role
 #------------------------------------------------------------------------------
 
-resource "aws_iam_role" "pod_execution_role" {
+resource "aws_iam_role" "fargate_pod_execution_role" {
   name        = "${var.environment_namespace}-EKSFargatePodExecutionRole"
   description = "AWS Fargate pod execution role"
 
@@ -141,7 +146,8 @@ resource "aws_iam_role" "pod_execution_role" {
         "Effect" : "Allow",
         "Condition" : {
           "ArnLike" : {
-            "aws:SourceArn" : "arn:aws:eks:{{ cookiecutter.global_aws_region }}:{{ cookiecutter.global_account_id }}:fargateprofile/${var.environment_namespace}/*"
+            "aws:SourceArn" : "arn:aws:eks:{{ cookiecutter.global_aws_region }}:{{ cookiecutter.global_account_id }}:fargateprofile/${var.environment_namespace}/*",
+            "aws:SourceArn" : "arn:aws:eks:{{ cookiecutter.global_aws_region }}:{{ cookiecutter.global_account_id }}:addon/${var.environment_namespace}/*"
           }
         },
         "Principal" : {
