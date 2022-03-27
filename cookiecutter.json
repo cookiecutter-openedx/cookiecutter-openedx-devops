@@ -57,7 +57,7 @@
     "redis_family": "redis6.x",
     "terraform_required_version": "~> 1.1",
     "terraform_aws_modules_vpc": "~> 3.13",
-    "terraform_aws_modules_eks": "~> 18.11",
+    "terraform_aws_modules_eks": "~> 18.15",
     "terraform_aws_modules_acm": "~> 3.4",
     "terraform_aws_modules_iam": "~> 4.14",
     "terraform_aws_modules_s3": "~> 2.15",
