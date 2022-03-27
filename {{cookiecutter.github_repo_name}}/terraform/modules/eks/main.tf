@@ -94,7 +94,11 @@ module "eks" {
           labels = {
             k8s-app = "kube-dns"
           }
+        },
+        {
+          namespace = "kube-system"
         }
+
       ]
       tags = var.tags
       # this is redundant, since aws_iam_role.this sets its assume_role_policy
