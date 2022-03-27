@@ -31,9 +31,14 @@ module "eks" {
       tags                     = var.tags
       service_account_role_arn = aws_iam_role.fargate_pod_execution_role.arn
     }
-    kube-proxy = {}
+    kube-proxy = {
+      tags                     = var.tags
+      service_account_role_arn = aws_iam_role.fargate_pod_execution_role.arn
+    }
     vpc-cni = {
-      resolve_conflicts = "OVERWRITE"
+      resolve_conflicts        = "OVERWRITE"
+      tags                     = var.tags
+      service_account_role_arn = aws_iam_role.fargate_pod_execution_role.arn
     }
   }
 
