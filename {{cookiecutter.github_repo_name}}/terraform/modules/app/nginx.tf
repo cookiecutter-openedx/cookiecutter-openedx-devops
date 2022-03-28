@@ -12,7 +12,7 @@ locals {
 resource "kubernetes_deployment" "nginx" {
   metadata {
     namespace = local.namespace
-    name      = "scalable-nginx-example"
+    name      = "nginx"
     labels = {
       App = "nginx"
     }
@@ -91,6 +91,11 @@ resource "kubernetes_ingress" "nginx" {
   }
 
   spec {
+    tls {
+      hosts = [
+        "fargate.stepwise.ai"
+      ]
+    }
     backend {
       service_name = "nginx-service"
       service_port = 80

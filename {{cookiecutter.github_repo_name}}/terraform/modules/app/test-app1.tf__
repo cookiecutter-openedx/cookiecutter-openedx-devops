@@ -1,11 +1,15 @@
 # https://www.itwonderlab.com/en/kubernetes-with-terraform/
+locals {
+  namespace = "application"
+}
 
 #-----------------------------------------
 # KUBERNETES DEPLOYMENT COLOR APP
 #-----------------------------------------
 resource "kubernetes_deployment" "color" {
   metadata {
-    name = "color-blue-dep"
+    namespace = local.namespace
+    name = "test-app"
     labels = {
       app   = "color"
       color = "blue"
