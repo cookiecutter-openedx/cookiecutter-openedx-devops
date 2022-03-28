@@ -51,15 +51,24 @@ module "eks" {
   #        failed calling webhook "vingress.elbv2.k8s.aws":
   #        Post "https://aws-load-balancer-webhook-service.ingress-alb-controller.svc:443/validate-networking-v1-ingress?timeout=10s": context deadline exceeded
   #
-  # private subnet cidr is 192.168.0.0/16 ?
+  # Extend node-to-node security group rules
   node_security_group_additional_rules = {
-    inter_node = {
-      description = "Allow traffic between nodes and control plane"
+    ingress_self_all = {
+      description = "Node to node all ports/protocols"
       protocol    = "-1"
-      from_port   = 9443 // doesn't appear to do anything
-      to_port     = 9443
-      type        = "ingress" // needs to be tightened
-      cidr_blocks = ["0.0.0.0/0"]
+      from_port   = 0
+      to_port     = 0
+      type        = "ingress"
+      self        = true
+    }
+    egress_all = {
+      description      = "Node all egress"
+      protocol         = "-1"
+      from_port        = 0
+      to_port          = 0
+      type             = "egress"
+      cidr_blocks      = ["0.0.0.0/0"]
+      ipv6_cidr_blocks = ["::/0"]
     }
   }
 
