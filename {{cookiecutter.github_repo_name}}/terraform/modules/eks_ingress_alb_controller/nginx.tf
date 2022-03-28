@@ -86,17 +86,19 @@ resource "kubernetes_ingress" "nginx" {
   metadata {
     name      = "ingress-nginx"
     namespace = local.namespace
+    labels = {
+      "app" = "nginx"
+    }
     # https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.2/guide/ingress/annotations/
+    # https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/
     annotations = {
-      "alb.ingress.kubernetes.io/load-balancer-name"           = var.environment_namespace
-      "alb.ingress.kubernetes.io/tags"                         = "Environment=${var.environment_namespace}"
       "kubernetes.io/ingress.class"                            = "alb"
+      "alb.ingress.kubernetes.io/load-balancer-name"           = var.environment_namespace
       "alb.ingress.kubernetes.io/scheme"                       = "internet-facing"
       "alb.ingress.kubernetes.io/target-type"                  = "ip"
       "alb.ingress.kubernetes.io/certificate-arn"              = data.aws_acm_certificate.issued.arn
       "alb.ingress.kubernetes.io/ip-address-type"              = "ipv4"
       "alb.ingress.kubernetes.io/security-groups"              = aws_security_group.sg_alb.name,
-      "alb.ingress.kubernetes.io/listen-ports"                 = jsonencode([{ "HTTP" : 80 }, { "HTTPS" : 443 }, { "HTTP" : 8080 }, { "HTTPS" : 8443 }])
       "alb.ingress.kubernetes.io/ssl-redirect"                 = "443"
       "alb.ingress.kubernetes.io/target-type"                  = "ip"
       "alb.ingress.kubernetes.io/backend-protocol"             = "HTTP"
@@ -109,10 +111,8 @@ resource "kubernetes_ingress" "nginx" {
       "alb.ingress.kubernetes.io/unhealthy-threshold-count"    = "2"
       "alb.ingress.kubernetes.io/success-codes"                = "200"
       "alb.ingress.kubernetes.io/target-node-labels"           = "label1=nginx"
-
-    }
-    labels = {
-      "app" = "nginx"
+      "alb.ingress.kubernetes.io/listen-ports"                 = jsonencode([{ "HTTP" : 80 }, { "HTTPS" : 443 }, { "HTTP" : 8080 }, { "HTTPS" : 8443 }])
+      "alb.ingress.kubernetes.io/tags"                         = "Environment=${var.environment_namespace}"
     }
   }
 
@@ -139,5 +139,10 @@ resource "kubernetes_ingress" "nginx" {
     }
   }
 
-  depends_on = [kubernetes_service.nginx]
+  depends_on = [
+    helm_release.alb_controller,
+    aws_security_group.sg_alb,
+    kubernetes_deployment.nginx,
+    kubernetes_service.nginx
+  ]
 }
