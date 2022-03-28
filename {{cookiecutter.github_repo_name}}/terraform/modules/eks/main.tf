@@ -104,20 +104,19 @@ module "eks" {
     }
 
     fargate-node = {
-      name = "fargate-node"
+      name = "application"
       selectors = [
         {
-          namespace = "fargate-node"
+          namespace = "application"
+        },
+        {
+          namespace = "openedx"
         },
         {
           namespace = "default"
         }
       ]
       tags = var.tags
-      timeouts = {
-        create = "10m"
-        delete = "10m"
-      }
       # this is redundant, since aws_iam_role.this sets its assume_role_policy
       # to point to this exact fargate profile.
       pod_execution_role = aws_iam_role.fargate_pod_execution_role

@@ -34,8 +34,7 @@ locals {
   k8s_namespace = "kube-system"
   resource_name = "aws-load-balancer-controller"
   alb_controller_depends_on = [
-    data.aws_eks_cluster.cluster,
-    kubernetes_namespace.ingress-alb-controller
+    data.aws_eks_cluster.cluster
   ]
 }
 

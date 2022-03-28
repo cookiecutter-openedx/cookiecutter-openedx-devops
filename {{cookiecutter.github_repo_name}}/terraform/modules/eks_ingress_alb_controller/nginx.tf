@@ -6,7 +6,7 @@
 
 # Create a local variable for the load balancer name.
 locals {
-  namespace = "ingress-alb-controller"
+  namespace = "application"
 }
 
 resource "kubernetes_deployment" "nginx" {
