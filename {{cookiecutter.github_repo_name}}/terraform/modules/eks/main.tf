@@ -125,6 +125,20 @@ module "eks" {
 
 }
 
+resource "kubernetes_namespace" "application" {
+  metadata {
+    name = "application"
+  }
+  depends_on = [module.eks]
+}
+
+resource "kubernetes_namespace" "openedx" {
+  metadata {
+    name = "openedx"
+  }
+  depends_on = [module.eks]
+}
+
 #------------------------------------------------------------------------------
 #
 # Before you create a Fargate profile, you must create an IAM role with the
