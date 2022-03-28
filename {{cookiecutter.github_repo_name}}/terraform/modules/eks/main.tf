@@ -20,6 +20,7 @@ module "eks" {
   cluster_version                 = var.eks_cluster_version
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = true
+  enable_irsa                     = true
   vpc_id                          = var.vpc_id
   subnet_ids                      = var.private_subnet_ids
   tags                            = var.tags
@@ -53,6 +54,14 @@ module "eks" {
   #
   # Extend node-to-node security group rules
   node_security_group_additional_rules = {
+    nginx_all = {
+      description = "Port 80 from anywhere"
+      protocol    = "tcp"
+      from_port   = 80
+      to_port     = 80
+      type        = "ingress"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
     ingress_self_all = {
       description = "Node to node all ports/protocols"
       protocol    = "-1"

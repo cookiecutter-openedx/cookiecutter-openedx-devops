@@ -36,7 +36,7 @@ resource "kubernetes_deployment" "nginx" {
       }
       spec {
         container {
-          image = "nginx:1.7.8"
+          image = "nginx:latest"
           name  = "nginx"
 
           port {
@@ -64,6 +64,9 @@ resource "kubernetes_service" "nginx" {
   metadata {
     name      = "ingress-service"
     namespace = local.namespace
+    annotations = {
+      "alb.ingress.kubernetes.io/target-type" = "ip"
+    }
   }
   spec {
     type = "NodePort"
@@ -91,16 +94,13 @@ resource "kubernetes_ingress" "nginx" {
     # https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/
     annotations = {
       "kubernetes.io/ingress.class"                            = "alb"
-      "alb.ingress.kubernetes.io/load-balancer-name"           = var.environment_namespace
       "alb.ingress.kubernetes.io/scheme"                       = "internet-facing"
-      "alb.ingress.kubernetes.io/target-type"                  = "ip"
+      "alb.ingress.kubernetes.io/load-balancer-name"           = var.environment_namespace
       "alb.ingress.kubernetes.io/certificate-arn"              = data.aws_acm_certificate.issued.arn
       "alb.ingress.kubernetes.io/ip-address-type"              = "ipv4"
       "alb.ingress.kubernetes.io/security-groups"              = aws_security_group.sg_alb.id,
       "alb.ingress.kubernetes.io/ssl-redirect"                 = "443"
-      "alb.ingress.kubernetes.io/target-type"                  = "ip"
       "alb.ingress.kubernetes.io/backend-protocol"             = "HTTP"
-      "alb.ingress.kubernetes.io/target-group-attributes"      = ""
       "alb.ingress.kubernetes.io/healthcheck-port"             = "80"
       "alb.ingress.kubernetes.io/healthcheck-path"             = "/"
       "alb.ingress.kubernetes.io/healthcheck-interval-seconds" = "15"
@@ -127,7 +127,7 @@ resource "kubernetes_ingress" "nginx" {
     rule {
       http {
         path {
-          path = "/"
+          path = "/*"
           backend {
             service_name = kubernetes_service.nginx.metadata.0.name
             service_port = 80
