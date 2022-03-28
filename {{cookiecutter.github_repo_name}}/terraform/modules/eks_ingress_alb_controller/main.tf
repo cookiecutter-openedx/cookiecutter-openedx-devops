@@ -33,9 +33,6 @@
 locals {
   k8s_namespace = "kube-system"
   resource_name = "aws-load-balancer-controller"
-  alb_controller_depends_on = [
-    data.aws_eks_cluster.cluster
-  ]
 }
 
 #------------------------------------------------------------------------------
@@ -129,7 +126,7 @@ resource "kubernetes_service_account" "this" {
       "app.kubernetes.io/managed-by" = "terraform"
     }
   }
-  depends_on = [local.alb_controller_depends_on]
+  depends_on = [data.aws_eks_cluster.cluster]
 }
 
 resource "kubernetes_cluster_role_binding" "this" {
@@ -154,6 +151,8 @@ resource "kubernetes_cluster_role_binding" "this" {
     name      = kubernetes_service_account.this.metadata[0].name
     namespace = kubernetes_service_account.this.metadata[0].namespace
   }
+
+  depends_on = [kubernetes_service_account.this]
 }
 resource "kubernetes_cluster_role" "this" {
   metadata {
@@ -210,7 +209,7 @@ resource "kubernetes_cluster_role" "this" {
       "watch",
     ]
   }
-  depends_on = [local.alb_controller_depends_on]
+  depends_on = [data.aws_eks_cluster.cluster]
 }
 
 
@@ -248,7 +247,10 @@ resource "helm_release" "alb_controller" {
   namespace  = local.k8s_namespace
   atomic     = true
   timeout    = 900
-  depends_on = [local.alb_controller_depends_on]
+  depends_on = [
+    data.aws_eks_cluster.cluster,
+    kubernetes_service_account.this
+  ]
 
   set {
     name  = "clusterName"
@@ -270,4 +272,5 @@ resource "helm_release" "alb_controller" {
     name  = "vpcId"
     value = var.vpc_id
   }
+
 }
