@@ -6,7 +6,15 @@
 #
 # usage: create an Application Load Balancer
 #------------------------------------------------------------------------------
+variable "root_domain" {
+  type = string
+}
+
 variable "environment_domain" {
+  type = string
+}
+
+variable "subdomains" {
   type = string
 }
 

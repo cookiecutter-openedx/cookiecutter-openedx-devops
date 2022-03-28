@@ -76,13 +76,10 @@ module "eks" {
   #      GithubOrg   = "terraform-aws-modules"
   #    }
   #    tags = var.tags
-  #    timeouts = {
-  #      create = "10m"
-  #      delete = "10m"
-  #    }
   #  }
   #}
 
+  # see: https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/
   fargate_profiles = {
     coredns = {
       name       = "coredns"

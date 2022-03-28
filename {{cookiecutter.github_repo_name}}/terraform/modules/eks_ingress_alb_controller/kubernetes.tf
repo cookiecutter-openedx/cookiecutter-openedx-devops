@@ -8,11 +8,11 @@
 #        plus a Fargate profile for serverless computing.
 #------------------------------------------------------------------------------
 data "aws_eks_cluster" "cluster" {
-  name = module.eks.cluster_id
+  name = var.environment_namespace
 }
 
 data "aws_eks_cluster_auth" "cluster" {
-  name = module.eks.cluster_id
+  name = var.environment_namespace
 }
 
 provider "kubernetes" {
