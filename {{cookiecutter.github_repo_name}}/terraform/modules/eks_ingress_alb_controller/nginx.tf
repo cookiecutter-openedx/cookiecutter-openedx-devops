@@ -9,6 +9,11 @@ locals {
   namespace = "application"
 }
 
+data "aws_acm_certificate" "issued" {
+  domain   = var.environment_domain
+  statuses = ["ISSUED"]
+}
+
 resource "kubernetes_deployment" "nginx" {
   metadata {
     namespace = local.namespace
@@ -34,7 +39,7 @@ resource "kubernetes_deployment" "nginx" {
       spec {
         container {
           image = "nginx:1.7.8"
-          name  = "example"
+          name  = "nginx"
 
           port {
             container_port = 80
@@ -59,7 +64,8 @@ resource "kubernetes_deployment" "nginx" {
 
 resource "kubernetes_service" "nginx" {
   metadata {
-    name = "nginx-service"
+    name      = "ingress-service"
+    namespace = local.namespace
   }
   spec {
     type = "NodePort"
@@ -78,12 +84,32 @@ resource "kubernetes_service" "nginx" {
 resource "kubernetes_ingress" "nginx" {
   wait_for_load_balancer = true
   metadata {
-    name      = "nginx-lb"
+    name      = "ingress-nginx"
     namespace = local.namespace
+    # https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.2/guide/ingress/annotations/
     annotations = {
-      "kubernetes.io/ingress.class"           = "alb"
-      "alb.ingress.kubernetes.io/scheme"      = "internet-facing"
-      "alb.ingress.kubernetes.io/target-type" = "ip"
+      "alb.ingress.kubernetes.io/load-balancer-name"           = var.environment_namespace
+      "alb.ingress.kubernetes.io/tags"                         = "Environment=${var.environment_namespace}"
+      "kubernetes.io/ingress.class"                            = "alb"
+      "alb.ingress.kubernetes.io/scheme"                       = "internet-facing"
+      "alb.ingress.kubernetes.io/target-type"                  = "ip"
+      "alb.ingress.kubernetes.io/certificate-arn"              = data.aws_acm_certificate.issued.arn
+      "alb.ingress.kubernetes.io/ip-address-type"              = "ipv4"
+      "alb.ingress.kubernetes.io/security-groups"              = aws_security_group.sg_alb.name,
+      "alb.ingress.kubernetes.io/listen-ports"                 = jsonencode([{ "HTTP" : 80 }, { "HTTPS" : 443 }, { "HTTP" : 8080 }, { "HTTPS" : 8443 }])
+      "alb.ingress.kubernetes.io/ssl-redirect"                 = "443"
+      "alb.ingress.kubernetes.io/target-type"                  = "ip"
+      "alb.ingress.kubernetes.io/backend-protocol"             = "HTTP"
+      "alb.ingress.kubernetes.io/target-group-attributes"      = ""
+      "alb.ingress.kubernetes.io/healthcheck-port"             = "80"
+      "alb.ingress.kubernetes.io/healthcheck-path"             = "/"
+      "alb.ingress.kubernetes.io/healthcheck-interval-seconds" = "15"
+      "alb.ingress.kubernetes.io/healthcheck-timeout-seconds"  = "5"
+      "alb.ingress.kubernetes.io/healthy-threshold-count"      = "2"
+      "alb.ingress.kubernetes.io/unhealthy-threshold-count"    = "2"
+      "alb.ingress.kubernetes.io/success-codes"                = "200"
+      "alb.ingress.kubernetes.io/target-node-labels"           = "label1=nginx"
+
     }
     labels = {
       "app" = "nginx"
@@ -97,7 +123,7 @@ resource "kubernetes_ingress" "nginx" {
       ]
     }
     backend {
-      service_name = "nginx-service"
+      service_name = kubernetes_service.nginx.metadata.0.name
       service_port = 80
     }
     rule {
@@ -105,7 +131,7 @@ resource "kubernetes_ingress" "nginx" {
         path {
           path = "/"
           backend {
-            service_name = "nginx-service"
+            service_name = kubernetes_service.nginx.metadata.0.name
             service_port = 80
           }
         }
