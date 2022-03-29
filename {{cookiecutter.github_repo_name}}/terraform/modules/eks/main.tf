@@ -142,7 +142,7 @@ module "eks" {
           namespace = "application"
         },
         {
-          namespace = "openedx"
+          namespace = "${var.environment_namespace}"
         },
         {
           namespace = "default"
