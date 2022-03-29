@@ -1,3 +1,13 @@
+#------------------------------------------------------------------------------
+# written by: Lawrence McDaniel
+#             https://lawrencemcdaniel.com/
+#
+# date: Mar-2022
+#
+# usage: create ssl/tls certificates in aws_region and us-east-1
+#
+#------------------------------------------------------------------------------
+
 provider "aws" {
   alias  = "us-east-1"
   region = "us-east-1"

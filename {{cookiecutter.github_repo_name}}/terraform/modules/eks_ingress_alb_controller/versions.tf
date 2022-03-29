@@ -3,8 +3,6 @@
 #             https://lawrencemcdaniel.com/
 #
 # date: Mar-2022
-#
-# usage: create an Application Load Balancer
 #------------------------------------------------------------------------------
 terraform {
   required_version = "{{ cookiecutter.terraform_required_version }}"

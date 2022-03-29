@@ -239,9 +239,8 @@ resource "kubernetes_namespace" "openedx" {
 #------------------------------------------------------------------------------
 
 resource "aws_iam_role" "fargate_pod_execution_role" {
-  name        = "${var.environment_namespace}-EKSFargatePodExecutionRole"
-  description = "AWS Fargate pod execution role"
-
+  name                  = "${var.environment_namespace}-EKSFargatePodExecutionRole"
+  description           = "AWS Fargate pod execution role"
   tags                  = var.tags
   force_detach_policies = true
   managed_policy_arns   = ["arn:aws:iam::aws:policy/AmazonEKSFargatePodExecutionRolePolicy"]

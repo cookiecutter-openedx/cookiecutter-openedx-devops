@@ -1,8 +1,13 @@
-# -----------------------------------------------------------------------------
+#------------------------------------------------------------------------------
+# written by: Lawrence McDaniel
+#             https://lawrencemcdaniel.com/
 #
-# https://learn.hashicorp.com/tutorials/terraform/kubernetes-provider
+# date: Mar-2022
 #
-# -----------------------------------------------------------------------------
+# usage: create a kubernetes ingress in the form of an AWS Application Load
+#        Balancer (ALB).
+#
+#------------------------------------------------------------------------------
 locals {
   namespace = "application"
 }

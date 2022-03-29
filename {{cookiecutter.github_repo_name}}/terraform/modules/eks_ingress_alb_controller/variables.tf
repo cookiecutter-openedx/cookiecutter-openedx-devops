@@ -4,7 +4,6 @@
 #
 # date: Mar-2022
 #
-# usage: create an Application Load Balancer
 #------------------------------------------------------------------------------
 variable "root_domain" {
   type = string

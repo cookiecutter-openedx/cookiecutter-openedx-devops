@@ -2,13 +2,11 @@
 # written by: Lawrence McDaniel
 #             https://lawrencemcdaniel.com/
 #
-# date: Aug-2021
+# date: Mar-2022
 #
-# usage: create a VPC to contain all Open edX backend resources.
+# usage: create subdomain records pointing to the ALB endpoint.
 #------------------------------------------------------------------------------
 
-#   un-comment this if the root_domain is managed in route53
-# -----------------------------------------------------------------------------
 data "aws_route53_zone" "root_domain" {
   name = var.root_domain
 }

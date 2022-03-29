@@ -4,7 +4,7 @@
 #
 # date: Mar-2022
 #
-# usage: create an Application Load Balancer
+# usage: create a security group for the Application Load Balancer
 #------------------------------------------------------------------------------
 
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group
