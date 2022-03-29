@@ -92,14 +92,6 @@ module "eks" {
   #
   #----------------------------------------------------------------------------
   node_security_group_additional_rules = {
-    nginx_all = {
-      description = "Port 80 from anywhere"
-      protocol    = "tcp"
-      from_port   = 80
-      to_port     = 80
-      type        = "ingress"
-      cidr_blocks = ["0.0.0.0/0"]
-    }
     ingress_self_all = {
       description = "Node to node all ports/protocols"
       protocol    = "-1"
