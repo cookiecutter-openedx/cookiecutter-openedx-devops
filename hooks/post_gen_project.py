@@ -51,11 +51,11 @@ def move_manifests(folder = ""):
 
 def main():
 
-    if "{{ cookiecutter.eks_cluster_compute_type }}" == "CLB":
+    if "{{ cookiecutter.eks_cluster_load_balancer_type }}" == "CLB":
         remove_alb_files()
         move_manifests("eks_clb")
 
-    if "{{ cookiecutter.eks_cluster_compute_type }}" == "ALB":
+    if "{{ cookiecutter.eks_cluster_load_balancer_type }}" == "ALB":
         remove_clb_files()
         move_manifests("eks_alb")
 
