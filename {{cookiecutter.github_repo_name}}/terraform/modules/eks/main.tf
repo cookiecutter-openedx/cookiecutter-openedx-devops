@@ -157,6 +157,40 @@ module "eks" {
 
 }
 
+#------------------------------------------------------------------------------
+# to locate the automatically-created EKS security group, with description:
+#     EKS created security group applied to ENI that is attached to EKS
+#     Control Plane master nodes, as well as any managed workloads.
+#------------------------------------------------------------------------------
+data "aws_security_group" "eks" {
+  tags = merge(
+    {
+      "kubernetes.io/cluster/${var.environment_namespace}" = "owned"
+    },
+    {
+      "aws:eks:cluster-name" = "${var.environment_namespace}"
+    },
+    {
+      Terraform = "true"
+    },
+  )
+}
+
+#------------------------------------------------------------------------------
+# mcdaniel mar-2022
+# this is needed so that Fargate nodes can receive traffic from the ALB.
+# FIX NOTE: tighten up the cidr block so that we only accept traffic from the ALB.
+#------------------------------------------------------------------------------
+resource "aws_security_group_rule" "nginx" {
+  description       = "http port 80 from anywhere"
+  type              = "ingress"
+  from_port         = 80
+  to_port           = 80
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = data.aws_security_group.eks.id
+}
+
 module "vpc_cni_irsa" {
   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
