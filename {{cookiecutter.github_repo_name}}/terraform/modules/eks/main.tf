@@ -208,8 +208,7 @@ module "vpc_cni_irsa" {
     }
   }
 
-  tags       = var.tags
-  depends_on = [module.eks]
+  tags = var.tags
 }
 
 resource "kubernetes_namespace" "application" {
