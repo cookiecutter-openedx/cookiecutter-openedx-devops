@@ -63,6 +63,10 @@ resource "kubernetes_deployment" "nginx" {
 
 #------------------------------------------------------------------------------
 # see: https://stackoverflow.com/questions/43789155/nodeport-service-is-not-externally-accessible-via-port-number
+#      https://stackoverflow.com/questions/70924215/aws-fargate-backed-eks-application-not-reachable-over-loadbalancer-service
+#
+#      https://github.com/weaveworks/eksctl/issues/1640
+#      For exposing an HTTP service, it so far only supports ALB with IP mode and you should specify your service as ClusterIP.
 #
 # suppose your applied Kubernetes Services looks like this
 #     Name:                     ingress-service
@@ -106,12 +110,13 @@ resource "kubernetes_service" "nginx" {
     }
   }
   spec {
-    type = "NodePort"
+    #type = "NodePort"
+    type = "ClusterIP"
     selector = {
       App = kubernetes_deployment.nginx.spec.0.template.0.metadata[0].labels.App
     }
     port {
-      port        = 8090
+      port        = 80
       target_port = 80
       node_port   = 31000
       protocol    = "TCP"
