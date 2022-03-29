@@ -33,14 +33,41 @@ module "eks" {
     delete = "20m"
   }
 
-  # Note: https://docs.aws.amazon.com/eks/latest/userguide/fargate-getting-started.html#fargate-gs-coredns
+  #----------------------------------------------------------------------------
+  # cluster_addons
+  #
+  # AWS Load Balancer Controller add-on
+  #   Moved to its own module in this repo: ../eks_ingress_alb_controller
+  #   https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html
+  #
+  # coredns:
+  #   CoreDNS is a flexible, extensible DNS server that can serve as the
+  #   Kubernetes cluster DNS. When you launch an Amazon EKS cluster with
+  #   at least one node, two replicas of the CoreDNS image are deployed by
+  #   default, regardless of the number of nodes deployed in your cluster.
+  #   The CoreDNS pods provide name resolution for all pods in the cluster.
+  #   The CoreDNS pods can be deployed to Fargate nodes if your cluster
+  #   includes an AWS Fargate profile with a namespace that matches the
+  #   namespace for the CoreDNS Deployment.
+  #
+  #   https://docs.aws.amazon.com/eks/latest/userguide/fargate-getting-started.html#fargate-gs-coredns
+  #
+  # vpc-cni:
+  #   Amazon EKS supports native VPC networking with the Amazon VPC Container
+  #   Network Interface (CNI) plugin for Kubernetes. Using this plugin allows
+  #   Kubernetes pods to have the same IP address inside the pod as they do on
+  #   the VPC network. For more information, see Pod networking (CNI).
+  #   https://docs.aws.amazon.com/eks/latest/userguide/pod-networking.html
+  #
+  # kube-proxy:
+  #   Kube-proxy maintains network rules on each Amazon EC2 node. It enables network
+  #   communication to your pods. Kube-proxy is not deployed to Fargate nodes."
+  #   https://docs.aws.amazon.com/eks/latest/userguide/managing-kube-proxy.html
+  #
+  #----------------------------------------------------------------------------
   cluster_addons = {
     coredns = {
       resolve_conflicts        = "OVERWRITE"
-      tags                     = var.tags
-      service_account_role_arn = aws_iam_role.fargate_pod_execution_role.arn
-    }
-    kube-proxy = {
       tags                     = var.tags
       service_account_role_arn = aws_iam_role.fargate_pod_execution_role.arn
     }
@@ -51,16 +78,19 @@ module "eks" {
     }
   }
 
-  # FIX NOTE:
-  # regarding https://github.com/kubernetes-sigs/aws-load-balancer-controller/issues/2462
-  # this is allowing all traffic -- the group is wide open.
-
-  # Resolution for
+  #----------------------------------------------------------------------------
+  # node_security_group_additional_rules
+  #
+  # mcdaniel mar-2022: had to add these in order to overcome network related
+  # deployment problems with fargate nodes whereby low-level services like the
+  # webhooks for the ALB ingress controller could not communicate with the
+  # Fargate nodes.
+  #
   # Error: Failed to create Ingress 'ingress-alb-controller/nginx-lb' because: Internal error occurred:
   #        failed calling webhook "vingress.elbv2.k8s.aws":
   #        Post "https://aws-load-balancer-webhook-service.ingress-alb-controller.svc:443/validate-networking-v1-ingress?timeout=10s": context deadline exceeded
   #
-  # Extend node-to-node security group rules
+  #----------------------------------------------------------------------------
   node_security_group_additional_rules = {
     nginx_all = {
       description = "Port 80 from anywhere"
@@ -88,22 +118,6 @@ module "eks" {
       ipv6_cidr_blocks = ["::/0"]
     }
   }
-
-
-  #eks_managed_node_groups = {
-  #  default = {
-  #    min_size       = var.eks_worker_group_min_size
-  #    max_size       = var.eks_worker_group_max_size
-  #    desired_size   = var.eks_worker_group_desired_size
-  #    instance_types = [var.eks_worker_group_instance_type]
-  #    labels = {
-  #      Environment = var.environment_namespace
-  #      GithubRepo  = "terraform-aws-eks"
-  #      GithubOrg   = "terraform-aws-modules"
-  #    }
-  #    tags = var.tags
-  #  }
-  #}
 
   # see: https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/
   fargate_profiles = {
