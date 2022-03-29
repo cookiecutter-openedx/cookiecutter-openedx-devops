@@ -40,6 +40,7 @@ resource "kubernetes_deployment" "nginx" {
           name  = "nginx"
 
           port {
+            name           = "web"
             container_port = 80
           }
 
@@ -60,6 +61,42 @@ resource "kubernetes_deployment" "nginx" {
   depends_on = [helm_release.alb_controller]
 }
 
+#------------------------------------------------------------------------------
+# see: https://stackoverflow.com/questions/43789155/nodeport-service-is-not-externally-accessible-via-port-number
+#
+# suppose your applied Kubernetes Services looks like this
+#     Name:                     ingress-service
+#     Namespace:                application
+#     Labels:                   <none>
+#     Annotations:              alb.ingress.kubernetes.io/target-type: ip
+#     Selector:                 App=nginx
+#     Type:                     NodePort
+#     IP Family Policy:         SingleStack
+#     IP Families:              IPv4
+#     IP:                       10.100.114.227
+#     IPs:                      10.100.114.227
+#     Port:                     <unset>  8090/TCP
+#     TargetPort:               80/TCP
+#     NodePort:                 <unset>  31000/TCP
+#     Endpoints:                192.168.4.227:80,192.168.5.101:80
+#     Session Affinity:         None
+#     External Traffic Policy:  Cluster
+#     Events:                   <none>
+#
+#   curl <node-ip>:<node-port>        # curl <node-ip>:31000
+#   curl <service-ip>:<service-port>  # curl <svc-ip>:8090
+#   curl <pod-ip>:<target-port>       # curl <pod-ip>:80
+#
+# 1. You are inside the kubernetes cluster (you are a pod)
+#     <service-ip> and <pod-ip> and <node-ip> will work.
+#
+# 2. You are on the node
+#     <service-ip> and <pod-ip> and <node-ip> will work.
+#
+# 3. You are outside the node
+#     Only <node-ip> will work assuming that <node-ip> is reachable.
+#
+#------------------------------------------------------------------------------
 resource "kubernetes_service" "nginx" {
   metadata {
     name      = "ingress-service"
@@ -74,10 +111,12 @@ resource "kubernetes_service" "nginx" {
       App = kubernetes_deployment.nginx.spec.0.template.0.metadata[0].labels.App
     }
     port {
-      port        = 80
+      port        = 8090
       target_port = 80
+      node_port   = 31000
       protocol    = "TCP"
     }
+
   }
   depends_on = [kubernetes_deployment.nginx]
 }
