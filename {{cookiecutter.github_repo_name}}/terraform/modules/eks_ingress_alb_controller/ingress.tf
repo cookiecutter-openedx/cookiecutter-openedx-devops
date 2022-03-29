@@ -66,6 +66,39 @@ resource "kubernetes_deployment" "nginx" {
   depends_on = [helm_release.alb_controller]
 }
 
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group
+resource "aws_security_group" "sg_alb" {
+  name_prefix = "${var.environment_namespace}-alb"
+  description = "Public-facing ALB"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    description = "public http from anywhere"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "public https from anywhere"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  tags = var.tags
+}
+
 #------------------------------------------------------------------------------
 # Amazon EKS pods running on AWS Fargate now support custom security groups
 # https://aws.amazon.com/about-aws/whats-new/2021/06/amazon-eks-pods-running-aws-fargate-support-custom-security-groups/

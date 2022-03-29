@@ -17,7 +17,6 @@ About the modules:
  - ingress.tf: deploys the kubernetes ingress and related configuration for the ALB configuration, including setting up the ALB target group.
  - main.tf: deploys the AWS Load Balancer controller and related AWS security resources and configuration.
  - route53.tf: provisions subdomain records pointing to the ALB endpoint.
- - security_group.tf: provisions a security group for the ALB that opens ports 80 and 443 from anywhere.
 
 Implementation strategy
 -----------------------
