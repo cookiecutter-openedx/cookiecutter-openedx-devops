@@ -218,9 +218,9 @@ resource "kubernetes_namespace" "application" {
   depends_on = [module.eks]
 }
 
-resource "kubernetes_namespace" "openedx" {
+resource "kubernetes_namespace" "environment" {
   metadata {
-    name = "openedx"
+    name = var.environment_namespace
   }
   depends_on = [module.eks]
 }
