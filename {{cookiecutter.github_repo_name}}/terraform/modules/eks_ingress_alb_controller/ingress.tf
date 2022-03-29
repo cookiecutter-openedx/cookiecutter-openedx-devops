@@ -62,50 +62,11 @@ resource "kubernetes_deployment" "nginx" {
 }
 
 #------------------------------------------------------------------------------
-#      Amazon EKS pods running on AWS Fargate now support custom security groups
-#      https://aws.amazon.com/about-aws/whats-new/2021/06/amazon-eks-pods-running-aws-fargate-support-custom-security-groups/
+# Amazon EKS pods running on AWS Fargate now support custom security groups
+# https://aws.amazon.com/about-aws/whats-new/2021/06/amazon-eks-pods-running-aws-fargate-support-custom-security-groups/
 #
-# see: https://stackoverflow.com/questions/43789155/nodeport-service-is-not-externally-accessible-via-port-number
-#      https://stackoverflow.com/questions/70924215/aws-fargate-backed-eks-application-not-reachable-over-loadbalancer-service
-#
-#      https://github.com/weaveworks/eksctl/issues/1640
-#      For exposing an HTTP service, it so far only supports ALB with IP mode and you should specify your service as ClusterIP.
-#
-#      Using ALB Ingress Controller with Amazon EKS on Fargate
-#      https://aws.amazon.com/blogs/containers/using-alb-ingress-controller-with-amazon-eks-on-fargate/
-#
-# suppose your applied Kubernetes Services looks like this
-#     Name:                     ingress-service
-#     Namespace:                application
-#     Labels:                   <none>
-#     Annotations:              alb.ingress.kubernetes.io/target-type: ip
-#     Selector:                 App=nginx
-#     Type:                     NodePort
-#     IP Family Policy:         SingleStack
-#     IP Families:              IPv4
-#     IP:                       10.100.114.227
-#     IPs:                      10.100.114.227
-#     Port:                     <unset>  8090/TCP
-#     TargetPort:               80/TCP
-#     NodePort:                 <unset>  31000/TCP
-#     Endpoints:                192.168.4.227:80,192.168.5.101:80
-#     Session Affinity:         None
-#     External Traffic Policy:  Cluster
-#     Events:                   <none>
-#
-#   curl <node-ip>:<node-port>        # curl <node-ip>:31000
-#   curl <service-ip>:<service-port>  # curl <svc-ip>:8090
-#   curl <pod-ip>:<target-port>       # curl <pod-ip>:80
-#
-# 1. You are inside the kubernetes cluster (you are a pod)
-#     <service-ip> and <pod-ip> and <node-ip> will work.
-#
-# 2. You are on the node
-#     <service-ip> and <pod-ip> and <node-ip> will work.
-#
-# 3. You are outside the node
-#     Only <node-ip> will work assuming that <node-ip> is reachable.
-#
+# https://github.com/weaveworks/eksctl/issues/1640
+# For exposing an HTTP service, it so far only supports ALB with IP mode and you should specify your service as ClusterIP.
 #------------------------------------------------------------------------------
 resource "kubernetes_service" "nginx" {
   metadata {
@@ -116,7 +77,6 @@ resource "kubernetes_service" "nginx" {
     }
   }
   spec {
-    #type = "NodePort"
     type = "ClusterIP"
     selector = {
       App = kubernetes_deployment.nginx.spec.0.template.0.metadata[0].labels.App

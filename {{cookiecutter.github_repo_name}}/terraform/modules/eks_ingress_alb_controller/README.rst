@@ -1,36 +1,38 @@
 Terraform module: AWS Load Balancer Controller installation
 ============================================================================
 
-This module installs the optional AWS Load Balancer (ALB) Controller into our Kubernetes cluster.
-The `AWS Load Balancer Controller <https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/>`_ that we're installing is an open-source project with broad community support.
+This module installs the optional AWS Load Balancer Controller into our Kubernetes cluster. This
+controller in turn will provision an AWS Application Load Balancer ingress for our cluster. The `AWS Load Balancer Controller <https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/>`_ that we're installing is an open-source project with broad community support.
 As of March, 2022 there have been 43 million downloads of this controller from the Kubernetes Registry, and the project itself is supported by more than 100 individual contributors.
 
+This implementation is largely based on the following AWS blog article: https://aws.amazon.com/blogs/containers/using-alb-ingress-controller-with-amazon-eks-on-fargate/
+
 .. image:: doc/alb-ingress-controller-fargate-architecture_pod.png
-  :width: 700
+  :width: 900
   :alt: ALB Ingress Controller with Amazon EKS on Fargate
 
-see: https://aws.amazon.com/blogs/containers/using-alb-ingress-controller-with-amazon-eks-on-fargate/
 
+About the modules:
+ - acm.tf: provisions AWS ssl/tls certificates for the environment domain and any subdomains. These certificates are associated with the ALB's listener on port 443.
+ - ingress.tf: deploys the kubernetes ingress and related configuration for the ALB configuration, including setting up the ALB target group.
+ - main.tf: deploys the AWS Load Balancer controller and related AWS security resources and configuration.
+ - route53.tf: provisions subdomain records pointing to the ALB endpoint.
+ - security_group.tf: provisions a security group for the ALB that opens ports 80 and 443 from anywhere.
 
 Implementation strategy
 -----------------------
 
 The AWS Load Balancer Controller `installation process <https://aws.amazon.com/blogs/opensource/kubernetes-ingress-aws-alb-ingress-controller/>`_ is complex.
-Fortunately however, the `U.S. General Services Administration (GSA) <https://open.gsa.gov>`_ modularized and `open-sourced their implementation <https://github.com/GSA/terraform-kubernetes-aws-load-balancer-controller>`_ which is quite robust and well maintained. You can view the implemntation in its entirety, `here <https://github.com/GSA/terraform-kubernetes-aws-load-balancer-controller/blob/main/main.tf>`_.
-Conveniently, this higher-order Terraform module exposes all of the parameters that we need for our purposes.
 
-GSA's implementation leverages the Terraform package manager `Helm <https://artifacthub.io/packages/helm/aws/aws-load-balancer-controller>`_ to install the AWS Load Balancer (ALB) Controller which itself simplifies the installation somewhat.
-Nonetheless, on further inspection of GSA's module you'll see that they create multiple security and access related IAM resources, and then associate these
-to the ALB controller, all of which requires vendor-specific syntax that would otherwise have been tedious to figure out. Resources created by GSA's installation module include:
+We implement the controller itself the Helm package manager, `Helm <https://artifacthub.io/packages/helm/aws/aws-load-balancer-controller>`_.
+Additionally, there's quite a bit of AWS security configuration that we have to do in order to grant the controller the extensive permissions that it needs in order to provision AWS resources on our behalf.
+
+We create multiple security and access related IAM resources, and then associate these to the ALB controller. These include:
 
 - **aws_iam_role** for the AWS ALB to be able to create resources like EC2 instances, among other things
 - **aws_iam_policy** to associate with the AWS ALB IAM role. The policy itself is quite granular and goes to great lengths to avoid granting permissions that are not necessary.
 - **kubernetes_service_account** and kubernetes_cluster_role that enable the ALB to interact with EKS
 
-Configuring the ALB
-~~~~~~~~~~~~~~~~~~~
-
-The specifics of our ALB configuration are implemented with a single dictionary in `main.tf <./main.tf>`_ named k8s_pod_annotations.
 
 How it works
 ------------
