@@ -25,6 +25,14 @@ module "eks" {
   subnet_ids                      = var.private_subnet_ids
   tags                            = var.tags
 
+  # mcdaniel mar-2022: pushing create to 30 minutes because of the coredns add-on,
+  # which takes around 25 minutes.
+  cluster_timeouts = {
+    create = "30m"
+    update = "20m"
+    delete = "20m"
+  }
+
   # Note: https://docs.aws.amazon.com/eks/latest/userguide/fargate-getting-started.html#fargate-gs-coredns
   cluster_addons = {
     coredns = {
