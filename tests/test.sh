@@ -24,5 +24,6 @@ cookiecutter --checkout $GITHUB_BRANCH \
              global_account_id=320713933456 \
              global_root_domain=stepwisemath.ai \
              global_aws_route53_hosted_zone_id=Z049210026A5G6XHV84CF \
+             global_ec2_ssh_key_name=stepwisemath-ohio \
              environment_name=fargate \
              environment_subdomain=fargate
