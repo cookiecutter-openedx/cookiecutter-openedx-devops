@@ -5,6 +5,13 @@ This module installs the optional AWS Load Balancer (ALB) Controller into our Ku
 The `AWS Load Balancer Controller <https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/>`_ that we're installing is an open-source project with broad community support.
 As of March, 2022 there have been 43 million downloads of this controller from the Kubernetes Registry, and the project itself is supported by more than 100 individual contributors.
 
+.. image:: doc/alb-ingress-controller-fargate-architecture_pod.png
+  :width: 700
+  :alt: ALB Ingress Controller with Amazon EKS on Fargate
+
+see: https://aws.amazon.com/blogs/containers/using-alb-ingress-controller-with-amazon-eks-on-fargate/
+
+
 Implementation strategy
 -----------------------
 
