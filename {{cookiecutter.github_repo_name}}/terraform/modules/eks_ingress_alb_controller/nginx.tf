@@ -109,7 +109,7 @@ resource "kubernetes_ingress" "nginx" {
       "alb.ingress.kubernetes.io/unhealthy-threshold-count"    = "2"
       "alb.ingress.kubernetes.io/success-codes"                = "200-399"
       "alb.ingress.kubernetes.io/target-node-labels"           = "label1=nginx"
-      "alb.ingress.kubernetes.io/listen-ports"                 = jsonencode([{ "HTTP" : 80 }, { "HTTPS" : 443 }, { "HTTP" : 8080 }, { "HTTPS" : 8443 }])
+      "alb.ingress.kubernetes.io/listen-ports"                 = jsonencode([{ "HTTP" : 80 }, { "HTTPS" : 443 }])
       "alb.ingress.kubernetes.io/tags"                         = "Environment=${var.environment_namespace}"
     }
   }
