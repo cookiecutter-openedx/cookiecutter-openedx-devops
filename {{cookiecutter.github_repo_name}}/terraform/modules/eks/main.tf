@@ -174,6 +174,8 @@ data "aws_security_group" "eks" {
       Terraform = "true"
     },
   )
+
+  depends_on = [module.eks]
 }
 
 #------------------------------------------------------------------------------
@@ -189,6 +191,7 @@ resource "aws_security_group_rule" "nginx" {
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = data.aws_security_group.eks.id
+  depends_on        = [module.eks]
 }
 
 module "vpc_cni_irsa" {
@@ -205,7 +208,8 @@ module "vpc_cni_irsa" {
     }
   }
 
-  tags = var.tags
+  tags       = var.tags
+  depends_on = [module.eks]
 }
 
 resource "kubernetes_namespace" "application" {
