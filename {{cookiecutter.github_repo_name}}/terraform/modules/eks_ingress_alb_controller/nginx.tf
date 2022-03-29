@@ -62,11 +62,17 @@ resource "kubernetes_deployment" "nginx" {
 }
 
 #------------------------------------------------------------------------------
+#      Amazon EKS pods running on AWS Fargate now support custom security groups
+#      https://aws.amazon.com/about-aws/whats-new/2021/06/amazon-eks-pods-running-aws-fargate-support-custom-security-groups/
+#
 # see: https://stackoverflow.com/questions/43789155/nodeport-service-is-not-externally-accessible-via-port-number
 #      https://stackoverflow.com/questions/70924215/aws-fargate-backed-eks-application-not-reachable-over-loadbalancer-service
 #
 #      https://github.com/weaveworks/eksctl/issues/1640
 #      For exposing an HTTP service, it so far only supports ALB with IP mode and you should specify your service as ClusterIP.
+#
+#      Using ALB Ingress Controller with Amazon EKS on Fargate
+#      https://aws.amazon.com/blogs/containers/using-alb-ingress-controller-with-amazon-eks-on-fargate/
 #
 # suppose your applied Kubernetes Services looks like this
 #     Name:                     ingress-service
@@ -118,7 +124,6 @@ resource "kubernetes_service" "nginx" {
     port {
       port        = 80
       target_port = 80
-      node_port   = 31000
       protocol    = "TCP"
     }
 
