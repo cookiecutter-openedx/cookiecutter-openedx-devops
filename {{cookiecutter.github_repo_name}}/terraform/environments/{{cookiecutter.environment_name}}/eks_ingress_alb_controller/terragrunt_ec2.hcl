@@ -40,7 +40,7 @@ dependency "vpc" {
 }
 
 dependency "eks" {
-  config_path = "../eks"
+  config_path = "../eks_ec2"
 }
 
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the

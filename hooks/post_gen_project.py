@@ -47,6 +47,16 @@ def remove_ec2_files():
     if os.path.exists(terragrunt_dir_path):
         shutil.rmtree(terragrunt_dir_path)
 
+    terragrunt_alb_dir_path = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "eks_ingress_alb_controller", "terragrunt_ec2.hcl")
+    if os.path.exists(terragrunt_alb_dir_path):
+        os.remove(terragrunt_alb_dir_path)
+
+    # rename the fargate version to terragrunt.hcl
+    terragrunt_alb_dir_old_name = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "eks_ingress_alb_controller", "terragrunt_fargate.hcl")
+    terragrunt_alb_dir_new_name = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "eks_ingress_alb_controller", "terragrunt.hcl")
+    if os.path.exists(terragrunt_alb_dir_old_name):
+        os.rename(terragrunt_alb_dir_old_name, terragrunt_alb_dir_new_name)
+
 def remove_fargate_files():
     component_dir_path = os.path.join("terraform", "modules", "eks_fargate")
     if os.path.exists(component_dir_path):
@@ -55,6 +65,16 @@ def remove_fargate_files():
     terragrunt_dir_path = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "eks_fargate")
     if os.path.exists(terragrunt_dir_path):
         shutil.rmtree(terragrunt_dir_path)
+
+    terragrunt_alb_dir_path = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "eks_ingress_alb_controller", "terragrunt_fargate.hcl")
+    if os.path.exists(terragrunt_alb_dir_path):
+        os.remove(terragrunt_alb_dir_path)
+
+    # rename the ec2 version to terragrunt.hcl
+    terragrunt_alb_dir_old_name = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "eks_ingress_alb_controller", "terragrunt_ec2.hcl")
+    terragrunt_alb_dir_new_name = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "eks_ingress_alb_controller", "terragrunt.hcl")
+    if os.path.exists(terragrunt_alb_dir_old_name):
+        os.rename(terragrunt_alb_dir_old_name, terragrunt_alb_dir_new_name)
 
 # move kubernetes manifests into the k8s folder and remove the original source folder.
 def move_manifests(folder = ""):
