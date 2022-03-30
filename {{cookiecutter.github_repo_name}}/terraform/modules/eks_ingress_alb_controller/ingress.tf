@@ -164,7 +164,7 @@ resource "kubernetes_ingress" "nginx" {
   spec {
     tls {
       hosts = [
-        "fargate.stepwise.ai"
+        "${var.environment_domain}"
       ]
     }
     backend {
