@@ -181,9 +181,6 @@ data "aws_security_group" "eks" {
     {
       "aws:eks:cluster-name" = "${var.environment_namespace}"
     },
-    {
-      Terraform = "true"
-    },
   )
 
   depends_on = [module.eks]
@@ -194,8 +191,12 @@ data "aws_security_group" "eks" {
 data "aws_vpc" "environment" {
 
   filter {
-    name   = "name"
+    name   = "tag-value"
     values = ["${var.environment_namespace}"]
+  }
+  filter {
+    name   = "tag-key"
+    values = ["Name"]
   }
 
 }
@@ -211,7 +212,7 @@ resource "aws_security_group_rule" "nginx" {
   from_port         = 80
   to_port           = 80
   protocol          = "tcp"
-  cidr_blocks       = data.aws_vpc.environment.vpc_cidr_block
+  cidr_blocks       = [data.aws_vpc.environment.cidr_block]
   security_group_id = data.aws_security_group.eks.id
   depends_on        = [module.eks]
 }

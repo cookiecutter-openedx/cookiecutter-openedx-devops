@@ -129,10 +129,25 @@ resource "kubernetes_service" "nginx" {
   depends_on = [kubernetes_deployment.nginx]
 }
 
-resource "kubernetes_ingress" "nginx" {
+#------------------------------------------------------------------------------
+# This works with the EKS ALB controller (see main.tf) to create and configure
+# an Application Load Balancer (ALB).
+#
+# metadata:
+#  - the ALB resource identifiers in both EKS as well as the AWS console.
+#  - the label "app" = "nginx" might not be necessary
+#
+# annotations: the configuration options for the ALB.
+#
+# spec:
+#  - tls might not need to be there since we're annotating alb.ingress.kubernetes.io/certificate-arn
+#  - backend defines the target group nodes
+#  - rule defines the ALB routing configuration
+#------------------------------------------------------------------------------
+resource "kubernetes_ingress" "alb" {
   wait_for_load_balancer = true
   metadata {
-    name      = "ingress-nginx"
+    name      = "ingress-alb"
     namespace = local.namespace
     labels = {
       "app" = "nginx"

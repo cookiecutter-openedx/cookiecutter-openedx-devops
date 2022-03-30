@@ -129,9 +129,17 @@ module "eks" {
 }
 
 #------------------------------------------------------------------------------
-# to locate the automatically-created EKS security group, with description:
-#     EKS created security group applied to ENI that is attached to EKS
-#     Control Plane master nodes, as well as any managed workloads.
+# This security group is created automatically by the EKS and is one of three
+# security groups associated with the cluster. The terraform module
+# terraform-aws-modules/eks/aws, above, provides hooks for the other two, but
+# does not provide us with a way to modify this one.
+#
+# We have to rely on the kubernetes-managed resource tags to identify it.
+#
+# Also, note that this security group is identifiable in the AWS Console
+# with the following description: "EKS created security group applied to ENI that
+#     is attached to EKS Control Plane master nodes, as well as any managed
+#     workloads."
 #------------------------------------------------------------------------------
 data "aws_security_group" "eks" {
   tags = merge(
@@ -141,30 +149,48 @@ data "aws_security_group" "eks" {
     {
       "aws:eks:cluster-name" = "${var.environment_namespace}"
     },
-    {
-      Terraform = "true"
-    },
   )
 
   depends_on = [module.eks]
 }
 
+# we need this so that we can pass the cidr of the vpc
+# to the security group rule below.
+data "aws_vpc" "environment" {
+
+  filter {
+    name   = "tag-value"
+    values = ["${var.environment_namespace}"]
+  }
+  filter {
+    name   = "tag-key"
+    values = ["Name"]
+  }
+
+}
+
 #------------------------------------------------------------------------------
 # mcdaniel mar-2022
-# this is needed so that Fargate nodes can receive traffic from the ALB.
-# FIX NOTE: tighten up the cidr block so that we only accept traffic from the ALB.
+# this is needed so that Fargate nodes can receive traffic from resources
+# inside the VPC; namely, the ALB.
 #------------------------------------------------------------------------------
 resource "aws_security_group_rule" "nginx" {
-  description       = "http port 80 from anywhere"
+  description       = "http port 80 from inside the VPC"
   type              = "ingress"
   from_port         = 80
   to_port           = 80
   protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
+  cidr_blocks       = [data.aws_vpc.environment.cidr_block]
   security_group_id = data.aws_security_group.eks.id
   depends_on        = [module.eks]
 }
 
+#------------------------------------------------------------------------------
+# mcdaniel mar-2022
+# i copied this from an example in the terraform documentation. it's referenced
+# by the vpc-cni add_on service_account_role_arn, but i'm not 100%
+# certain that it's really necessary to provide our own custom-made iam role.
+#------------------------------------------------------------------------------
 module "vpc_cni_irsa" {
   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
@@ -182,6 +208,15 @@ module "vpc_cni_irsa" {
   tags = var.tags
 }
 
+#------------------------------------------------------------------------------
+# These are two of the three namespaces included in the Fargate node selector.
+# The third, "default", doesn't need to be created.
+#
+# The Github Actions deployment workflow deploys all of the Tutor docker
+# containers into the "environment" namespace.
+#
+# The namespace "application" is an extra that i'm adding for future use.
+#------------------------------------------------------------------------------
 resource "kubernetes_namespace" "application" {
   metadata {
     name = "application"
@@ -197,17 +232,14 @@ resource "kubernetes_namespace" "environment" {
 }
 
 #------------------------------------------------------------------------------
+# mcdaniel mar-2022: before you create a Fargate profile, you must create an IAM
+# role with the AmazonEKSFargatePodExecutionRolePolicy.
 #
-# Before you create a Fargate profile, you must create an IAM role with the
-# AmazonEKSFargatePodExecutionRolePolicy.
-# This policy exactly: https://us-east-1.console.aws.amazon.com/iam/home?region=us-east-1#/policies/arn:aws:iam::aws:policy/AmazonEKSFargatePodExecutionRolePolicy$jsonEditor
-#
-# Create the Amazon EKS Fargate pod execution role.
+# This is the policy: https://us-east-1.console.aws.amazon.com/iam/home?region=us-east-1#/policies/arn:aws:iam::aws:policy/AmazonEKSFargatePodExecutionRolePolicy$jsonEditor
 #
 # see:
 # - https://docs.aws.amazon.com/eks/latest/userguide/pod-execution-role.html#create-pod-execution-role
 #------------------------------------------------------------------------------
-
 resource "aws_iam_role" "fargate_pod_execution_role" {
   name                  = "${var.environment_namespace}-EKSFargatePodExecutionRole"
   description           = "AWS Fargate pod execution role"
