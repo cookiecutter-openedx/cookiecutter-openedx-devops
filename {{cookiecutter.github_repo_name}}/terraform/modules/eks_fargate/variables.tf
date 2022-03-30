@@ -48,18 +48,3 @@ variable "enable_irsa" {
 variable "eks_cluster_version" {
   type = string
 }
-variable "eks_worker_group_instance_type" {
-  type = string
-}
-
-variable "eks_worker_group_min_size" {
-  type = number
-}
-
-variable "eks_worker_group_max_size" {
-  type = number
-}
-
-variable "eks_worker_group_desired_size" {
-  type = number
-}
