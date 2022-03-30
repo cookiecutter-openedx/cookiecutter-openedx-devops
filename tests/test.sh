@@ -26,4 +26,6 @@ cookiecutter --checkout $GITHUB_BRANCH \
              global_aws_route53_hosted_zone_id=Z049210026A5G6XHV84CF \
              global_ec2_ssh_key_name=stepwisemath-ohio \
              environment_name=fargate \
-             environment_subdomain=fargate
+             environment_subdomain=fargate \
+             eks_cluster_compute_type=Fargate \
+             eks_cluster_load_balancer_type=ALB

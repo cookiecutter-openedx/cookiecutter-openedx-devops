@@ -38,6 +38,24 @@ def remove_alb_files():
     if os.path.exists(ci_dir_path):
         shutil.rmtree(ci_dir_path)
 
+def remove_ec2_files():
+    component_dir_path = os.path.join("terraform", "modules", "eks_ec2")
+    if os.path.exists(component_dir_path):
+        shutil.rmtree(component_dir_path)
+
+    terragrunt_dir_path = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "eks_ec2")
+    if os.path.exists(terragrunt_dir_path):
+        shutil.rmtree(terragrunt_dir_path)
+
+def remove_fargate_files():
+    component_dir_path = os.path.join("terraform", "modules", "eks_fargate")
+    if os.path.exists(component_dir_path):
+        shutil.rmtree(component_dir_path)
+
+    terragrunt_dir_path = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "eks_fargate")
+    if os.path.exists(terragrunt_dir_path):
+        shutil.rmtree(terragrunt_dir_path)
+
 # move kubernetes manifests into the k8s folder and remove the original source folder.
 def move_manifests(folder = ""):
     source = os.path.join("ci", "tutor-deploy", "environments", "{{ cookiecutter.environment_name }}", "k8s", folder)
@@ -50,6 +68,7 @@ def move_manifests(folder = ""):
     shutil.rmtree(source)
 
 def main():
+    compute_type = "{{ cookiecutter.eks_cluster_compute_type }}".upper()
 
     if "{{ cookiecutter.eks_cluster_load_balancer_type }}" == "CLB":
         remove_alb_files()
@@ -58,6 +77,12 @@ def main():
     if "{{ cookiecutter.eks_cluster_load_balancer_type }}" == "ALB":
         remove_clb_files()
         move_manifests("eks_alb")
+
+    if (compute_type == "EC2"):
+        remove_fargate_files()
+
+    if (compute_type == "FARGATE"):
+        remove_ec2_files()
 
     print(SUCCESS + "Your Open edX devops repo has been initialized." + TERMINATOR)
 
