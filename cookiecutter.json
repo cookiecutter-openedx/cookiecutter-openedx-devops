@@ -62,7 +62,7 @@
     "terraform_aws_modules_eks": "~> 18.15",
     "terraform_aws_modules_iam": "~> 4.14",
     "terraform_aws_modules_rds": "~> 4.2.0",
-    "terraform_aws_modules_s3": "~> 2.15",
+    "terraform_aws_modules_s3": "~> 3.0",
     "terraform_aws_modules_sg": "~> 4.9",
     "terraform_aws_modules_vpc": "~> 3.13",
     "terraform_helm_ingress_nginx": "~> 4",

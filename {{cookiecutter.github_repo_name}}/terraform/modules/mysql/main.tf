@@ -11,6 +11,19 @@ locals {
 
 }
 
+data "aws_vpc" "environment" {
+
+  filter {
+    name   = "tag-value"
+    values = ["${var.environment_namespace}"]
+  }
+  filter {
+    name   = "tag-key"
+    values = ["Name"]
+  }
+
+}
+
 ################################################################################
 # Supporting Resources
 ################################################################################
@@ -21,7 +34,7 @@ module "security_group" {
 
   name        = local.name
   description = "Allow access to MySQL"
-  vpc_id      = var.vpc_id
+  vpc_id      = data.aws_vpc.id
 
   # ingress
   ingress_with_cidr_blocks = [
@@ -57,14 +70,14 @@ module "db" {
   max_allocated_storage = var.max_allocated_storage
   storage_encrypted     = var.storage_encrypted
 
-  name     = var.name
+  db_name  = var.name
   username = var.username
   port     = var.port
 
   create_random_password = var.create_random_password
 
   multi_az               = var.multi_az
-  subnet_ids             = var.subnet_ids
+  subnet_ids             = data.aws_vpc.database_subnets
   vpc_security_group_ids = [module.security_group.security_group_id]
 
   maintenance_window              = var.maintenance_window
