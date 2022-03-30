@@ -40,9 +40,9 @@ module "security_group" {
 ################################################################################
 # RDS Module
 ################################################################################
-
 module "db" {
-  source = "git::https://github.com/terraform-aws-modules/terraform-aws-rds.git?ref=v3.0.0"
+  source  = "terraform-aws-modules/rds/aws"
+  version = "{{cookiecutter.terraform_aws_modules_rds}}"
 
   identifier = var.identifier
 
