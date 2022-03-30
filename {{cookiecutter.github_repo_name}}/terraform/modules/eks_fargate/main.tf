@@ -178,18 +178,28 @@ data "aws_security_group" "eks" {
   depends_on = [module.eks]
 }
 
+data "aws_vpc" "environment" {
+
+  filter {
+    name   = "name"
+    values = ["${var.environment_namespace}"]
+  }
+
+}
+
+
 #------------------------------------------------------------------------------
 # mcdaniel mar-2022
-# this is needed so that Fargate nodes can receive traffic from the ALB.
-# FIX NOTE: tighten up the cidr block so that we only accept traffic from the ALB.
+# this is needed so that Fargate nodes can receive traffic from resources
+# inside the VPC; namely, the ALB.
 #------------------------------------------------------------------------------
 resource "aws_security_group_rule" "nginx" {
-  description       = "http port 80 from anywhere"
+  description       = "http port 80 from inside the VPC"
   type              = "ingress"
   from_port         = 80
   to_port           = 80
   protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
+  cidr_blocks       = data.aws_vpc.environment.vpc_cidr_block
   security_group_id = data.aws_security_group.eks.id
   depends_on        = [module.eks]
 }
