@@ -18,7 +18,7 @@ locals {
 
 module "security_group" {
   source  = "terraform-aws-modules/security-group/aws"
-  version = "~> 4"
+  version = "{{ cookiecutter.terraform_aws_modules_sg }}"
 
   name        = local.name
   description = "Allow access to MySQL"
