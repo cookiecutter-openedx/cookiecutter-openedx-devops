@@ -18,14 +18,14 @@ cookiecutter --checkout $GITHUB_BRANCH \
              --overwrite-if-exists \
              --no-input \
              $GITHUB_REPO \
-             global_platform_name=sandbox \
-             global_platform_region=ohio \
+             global_platform_name=prod \
+             global_platform_region=mexico \
              global_aws_region=us-east-2 \
              global_account_id=320713933456 \
              global_root_domain=stepwisemath.ai \
              global_aws_route53_hosted_zone_id=Z049210026A5G6XHV84CF \
              global_ec2_ssh_key_name=stepwisemath-ohio \
-             environment_name=fargate \
-             environment_subdomain=fargate \
+             environment_name=stepwisemath \
+             environment_subdomain=web \
              eks_cluster_compute_type=Fargate \
              eks_cluster_load_balancer_type=ALB
