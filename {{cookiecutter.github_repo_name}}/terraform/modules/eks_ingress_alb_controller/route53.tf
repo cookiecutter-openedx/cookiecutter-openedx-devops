@@ -44,7 +44,7 @@ resource "aws_route53_record" "naked" {
 
   depends_on = [
     kubernetes_service.nginx,
-    kubernetes_ingress.nginx
+    kubernetes_ingress.alb
   ]
 }
 
@@ -61,6 +61,6 @@ resource "aws_route53_record" "wildcard" {
 
   depends_on = [
     kubernetes_service.nginx,
-    kubernetes_ingress.nginx
+    kubernetes_ingress.alb
   ]
 }
