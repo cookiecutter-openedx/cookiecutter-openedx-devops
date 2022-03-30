@@ -79,6 +79,14 @@ Important Considerations
 - **BE ADVISED** that MySQL RDS, MongoDB and Redis ElastiCache are vertically scaled **manually** and therefore require some insight and potential adjustments on your part. All of these services are defaulted to their minimum instance sizes which you can modify in the environment configuration file.
 - TO DO: `NSA Updated: Kubernetes Hardening Guide <https://www.cisa.gov/uscert/ncas/current-activity/2022/03/15/updated-kubernetes-hardening-guide>`_
 
+Known Issues
+------------
+
+- Terraform may fail to destroy the Elastic Kubernetes Cluster (EKS) when you choose the Fargate compute option. The temporary resolution is to manually delete the EKS which itself might require individually deleting some components of the EKS.
+- Terraform fails to destroy the Application Load Balancer ingress. This is due to a dependency problem which I'm still trouble shooting. The temporary resolution is to delete the Terraform file `terraform/modules/eks_ingress_alb_controller/ingress.tf` and then run `terraform apply`.
+- Your colleagues might lack permissions to view EKS resources in the AWS console, even if they have `admin` permissions or are logged in as the root account user. This is an AWS issue. I'm working on a set of instructions for configuring permissions for other users.
+- If Terraform is interrupted during execution then it is possible that it will lose track of its state, leading to Terraform attempting to create already-existing resources which will result in run-time errors. This is the expected behavior of Terraform, but it can be a huge pain in the neck to resolve.
+
 Usage
 -----
 
