@@ -110,7 +110,9 @@ Now run it against this repo, using the following example usage pattern:
                 global_root_domain=schoolofrock.edu \
                 global_aws_route53_hosted_zone_id=Z123456789ABCDEFGHIJK \
                 environment_name=live \
-                environment_subdomain=courses
+                environment_subdomain=courses \
+                eks_cluster_compute_type=EC2 \
+                eks_cluster_load_balancer_type=ALB
 
 
 Alternatively, you can run Cookiecutter without providing any prompts, which will result in it generating a questionnair that includes all of the 75 or so input parameters. You'll be prompted for some values. Provide them, then a complete git repository will be created for you, with Github Actions workflows to automate the build and deployment of your Tutor Open edX platform, and Terraform scripts to automate the build of your AWS backend.
