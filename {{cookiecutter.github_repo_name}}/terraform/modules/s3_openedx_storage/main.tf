@@ -6,6 +6,7 @@
 #
 # usage: create an AWS S3 bucket to offload Open edX file storage.
 #------------------------------------------------------------------------------
+
 module "data_backup_s3_bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "{{ cookiecutter.terraform_aws_modules_s3 }}"
