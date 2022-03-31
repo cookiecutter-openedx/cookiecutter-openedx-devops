@@ -202,29 +202,25 @@ We also recommend that you install `k9s <https://k9scli.io/>`_, a popular tool f
 .. code-block:: shell
 
   # -------------------------------------
-  # to manage an individual resource
+  # to build the entire backend
+  # -------------------------------------
+  cd ./terraform/environments/{{ cookiecutter.environment_name }}/vpc
+  terragrunt run-all init
+  terragrunt run-all apply
+
+  # -------------------------------------
+  # or, to manage an individual resource
   # -------------------------------------
   cd ./terraform/environments/{{ cookiecutter.environment_name }}/mongodb
   terragrunt init
+  terragrunt validate
   terragrunt plan
   terragrunt apply
   terragrunt destroy
 
-  # -------------------------------------
-  # to build the entire backend
-  # -------------------------------------
-
-  # 1. create the VPC
-  cd ./terraform/environments/{{ cookiecutter.environment_name }}/vpc
-  terragrunt apply
-
-  # 2. create the Elastic Kubernetes Cluster
-  cd ../kubernetes
-  terragrunt apply
-
-  # 3. create everthing else
-  cd ..
-  terragrunt run-all apply
+.. image:: doc/terragrunt-init.png
+  :width: 900
+  :alt: terragrunt run-all init
 
 
 IV. Connect To Your backend Services
