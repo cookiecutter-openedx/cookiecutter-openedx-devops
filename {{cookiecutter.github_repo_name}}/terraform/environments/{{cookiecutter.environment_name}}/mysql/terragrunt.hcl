@@ -85,12 +85,12 @@ inputs = {
   max_allocated_storage = 0
   storage_encrypted     = true
   multi_az              = false
-  enabled_cloudwatch_logs_exports = false
+  enabled_cloudwatch_logs_exports = []
   performance_insights_enabled = false
   performance_insights_retention_period = 7
   create_monitoring_role = false
   monitoring_interval = 0
-
+  create_db_subnet_group = false
 
   # backups and maintenance
   maintenance_window    = "{{ cookiecutter.mysql_maintenance_window }}"

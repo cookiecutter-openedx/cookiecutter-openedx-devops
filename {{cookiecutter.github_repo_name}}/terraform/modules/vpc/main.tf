@@ -13,6 +13,13 @@
 #        see https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest
 #------------------------------------------------------------------------------
 
+# we need this for terraform-aws-modules/rds/aws
+resource "aws_db_subnet_group" "mysql_subnet_group" {
+  name       = "mysql_subnet_group"
+  subnet_ids = var.database_subnets
+  tags       = var.tags
+}
+
 module "vpc" {
   source                 = "terraform-aws-modules/vpc/aws"
   version                = "{{ cookiecutter.terraform_aws_modules_vpc }}"

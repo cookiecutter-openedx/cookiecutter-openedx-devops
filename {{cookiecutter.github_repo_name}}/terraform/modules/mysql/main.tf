@@ -15,6 +15,11 @@ locals {
 # Supporting Resources
 ################################################################################
 
+# this gets created in module vpc
+data "aws_db_subnet_group" "mysql_subnet_group" {
+  name = "mysql_subnet_group"
+}
+
 module "security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "{{ cookiecutter.terraform_aws_modules_sg }}"
@@ -37,10 +42,11 @@ module "security_group" {
 }
 
 
-################################################################################
+#------------------------------------------------------------------------------
 # RDS Module
-# All available versions: http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_MySQL.html#MySQL.Concepts.VersionMgmt
-################################################################################
+#
+# see: https://stackoverflow.com/questions/53386811/terraform-the-db-instance-and-ec2-security-group-are-in-different-vpcs
+#------------------------------------------------------------------------------
 module "db" {
   source  = "terraform-aws-modules/rds/aws"
   version = "{{cookiecutter.terraform_aws_modules_rds}}"
@@ -56,7 +62,7 @@ module "db" {
   #cloudwatch_log_group_kms_key_id =
   db_name = var.name
   #db_subnet_group_description =
-  #db_subnet_group_name =
+  db_subnet_group_name = data.aws_db_subnet_group.mysql_subnet_group.name
   #domain =
   #domain_iam_role_name =
   engine         = var.engine
