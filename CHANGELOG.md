@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - added version constraint parameters to cookiecutter for all terraform-aws-modules
 - added mock outputs to terragrunt scripts to facilitate `run-all` init and validate operations in environments
 - added this change log
+- resolved deprecation warnings in all modules
 - restructured terraform folders
 
 
