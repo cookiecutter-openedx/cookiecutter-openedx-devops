@@ -28,7 +28,7 @@ locals {
 }
 
 dependencies {
-  paths = ["../s3"]
+  paths = ["../vpc", "../s3_openedx_storage"]
 }
 
 
