@@ -12,16 +12,26 @@ locals {
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
-  subdomains                      = local.environment_vars.locals.subdomains
+  env                             = local.environment_vars.locals.environment
   environment_domain              = local.environment_vars.locals.environment_domain
   environment_namespace           = local.environment_vars.locals.environment_namespace
+  subdomains                      = local.environment_vars.locals.subdomains
   root_domain                     = local.global_vars.locals.root_domain
+  platform_name                   = local.global_vars.locals.platform_name
+  platform_region                 = local.global_vars.locals.platform_region
+  account_id                      = local.global_vars.locals.account_id
   aws_region                      = local.global_vars.locals.aws_region
+
+  kubernetes_version              = local.environment_vars.locals.kubernetes_version
+  eks_worker_group_instance_type  = local.environment_vars.locals.eks_worker_group_instance_type
+  eks_worker_group_min_size       = local.environment_vars.locals.eks_worker_group_min_size
+  eks_worker_group_max_size       = local.environment_vars.locals.eks_worker_group_max_size
+  eks_worker_group_desired_size   = local.environment_vars.locals.eks_worker_group_desired_size
 
   tags = merge(
     local.environment_vars.locals.tags,
     local.global_vars.locals.tags,
-    { Name = "${local.environment_namespace}-alb" }
+    { Name = "${local.environment_namespace}-eks" }
   )
 }
 
@@ -39,14 +49,10 @@ dependency "vpc" {
 
 }
 
-dependency "eks" {
-  config_path = "../eks"
-}
-
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
-  source = "../../../modules//eks_ingress_alb_controller"
+  source = "../../../modules//kubernetes"
 }
 
 # Include all settings from the root terragrunt.hcl file
@@ -56,11 +62,21 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  root_domain = local.root_domain
-  subdomains = local.subdomains
-  environment_namespace = local.environment_namespace
-  environment_domain = local.environment_domain
   aws_region = local.aws_region
+  environment_domain = local.environment_domain
+  root_domain = local.root_domain
+  environment_namespace = local.environment_namespace
+  subdomains = local.subdomains
+
+  private_subnet_ids = dependency.vpc.outputs.private_subnets
+  public_subnet_ids = dependency.vpc.outputs.public_subnets
   vpc_id  = dependency.vpc.outputs.vpc_id
+
+  eks_cluster_version = local.kubernetes_version
+  eks_worker_group_instance_type  = local.eks_worker_group_instance_type
+  eks_worker_group_min_size = local.eks_worker_group_min_size
+  eks_worker_group_max_size = local.eks_worker_group_max_size
+  eks_worker_group_desired_size = local.eks_worker_group_desired_size
+
   tags = local.tags
 }
