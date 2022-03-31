@@ -26,7 +26,7 @@ terraform {
 }
 
 dependencies {
-  paths = ["../vpc", "../kubernetes"]
+  paths = ["../vpc"]
 }
 
 dependency "vpc" {
