@@ -138,14 +138,11 @@ module "eks" {
     # of the various namespaces that we're including the selectors, "default"
     # bears mentioning because, as the name implies, any deployments that do
     # not have a declared namespace are going to be sent here.
-    fargate-node = {
-      name = "application"
+    openedx = {
+      name = "openedx"
       selectors = [
         {
-          namespace = "application"
-        },
-        {
-          namespace = "${var.environment_namespace}"
+          namespace = "openedx"
         },
         {
           namespace = "default"
@@ -241,27 +238,16 @@ module "vpc_cni_irsa" {
 }
 
 #------------------------------------------------------------------------------
-# These are two of the three namespaces included in the Fargate node selector.
-# The third, "default", doesn't need to be created.
-#
 # The Github Actions deployment workflow deploys all of the Tutor docker
-# containers into the "environment" namespace.
-#
-# The namespace "application" is an extra that i'm adding for future use.
+# containers into this "openedx" namespace.
 #------------------------------------------------------------------------------
-resource "kubernetes_namespace" "application" {
+resource "kubernetes_namespace" "openedx" {
   metadata {
-    name = "application"
+    name = "openedx"
   }
   depends_on = [module.eks]
 }
 
-resource "kubernetes_namespace" "environment" {
-  metadata {
-    name = var.environment_namespace
-  }
-  depends_on = [module.eks]
-}
 
 #------------------------------------------------------------------------------
 # mcdaniel mar-2022: before you create a Fargate profile, you must create an IAM
