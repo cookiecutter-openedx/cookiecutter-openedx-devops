@@ -93,21 +93,21 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
     - {{ cookiecutter.kubernetes_cluster_ingress_controller_version }}
   * - `Terraform <https://www.terraform.io/>`_
     - {{ cookiecutter.terraform_required_version }}
-  * - Terraform `terraform-aws-modules/acm/aws <https://registry.terraform.io/modules/terraform-aws-modules/acm/aws/latest>`_
+  * - Terraform `terraform-aws-modules/acm <https://registry.terraform.io/modules/terraform-aws-modules/acm/aws/latest>`_
     - {{ cookiecutter.terraform_aws_modules_acm }}
-  * - Terraform `terraform-aws-modules/cloudfront/aws <https://registry.terraform.io/modules/terraform-aws-modules/cloudfront/aws/latest>`_
+  * - Terraform `terraform-aws-modules/cloudfront <https://registry.terraform.io/modules/terraform-aws-modules/cloudfront/aws/latest>`_
     - {{ cookiecutter.terraform_aws_modules_cloudfront }}
-  * - Terraform `terraform-aws-modules/eks/aws <https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest>`_
+  * - Terraform `terraform-aws-modules/eks <https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest>`_
     - {{ cookiecutter.terraform_aws_modules_eks }}
-  * - Terraform `terraform-aws-modules/iam/aws <https://registry.terraform.io/modules/terraform-aws-modules/iam/aws/latest>`_
+  * - Terraform `terraform-aws-modules/iam <https://registry.terraform.io/modules/terraform-aws-modules/iam/aws/latest>`_
     - {{ cookiecutter.terraform_aws_modules_iam }}
-  * - Terraform `terraform-aws-modules/rds/aws <https://registry.terraform.io/modules/terraform-aws-modules/rds/aws/latest>`_
+  * - Terraform `terraform-aws-modules/rds <https://registry.terraform.io/modules/terraform-aws-modules/rds/aws/latest>`_
     - {{ cookiecutter.terraform_aws_modules_rds }}
-  * - Terraform `terraform-aws-modules/s3-bucket/aws <https://registry.terraform.io/modules/terraform-aws-modules/s3-bucket/aws/latest>`_
+  * - Terraform `terraform-aws-modules/s3-bucket <https://registry.terraform.io/modules/terraform-aws-modules/s3-bucket/aws/latest>`_
     - {{ cookiecutter.terraform_aws_modules_s3 }}
-  * - Terraform `terraform-aws-modules/security-group/aws <https://registry.terraform.io/modules/terraform-aws-modules/security-group/aws/latest>`_
+  * - Terraform `terraform-aws-modules/security-group <https://registry.terraform.io/modules/terraform-aws-modules/security-group/aws/latest>`_
     - {{ cookiecutter.terraform_aws_modules_sg }}
-  * - Terraform `terraform-aws-modules/vpc/aws <https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest>`_
+  * - Terraform `terraform-aws-modules/vpc <https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest>`_
     - {{ cookiecutter.terraform_aws_modules_vpc }}
   * - Terraform `Helm ingress-alb-controller <https://github.com/kubernetes-sigs/aws-load-balancer-controller/>`_
     - {{ cookiecutter.terraform_helm_alb_controller_chart_version }}
