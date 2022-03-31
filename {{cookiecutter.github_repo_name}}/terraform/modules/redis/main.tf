@@ -41,15 +41,15 @@ module "security_group" {
 module "redis" {
   source = "./modules/elasticache"
 
-  replication_group_description = var.replication_group_description
-  create_random_auth_token      = var.create_random_auth_token
+  description              = local.name
+  create_random_auth_token = var.create_random_auth_token
 
   # DB subnet group
   subnet_ids = var.subnet_ids
 
   engine                     = var.engine
   engine_version             = var.engine_version
-  number_cache_clusters      = var.number_cache_clusters
+  num_cache_clusters         = var.num_cache_clusters
   port                       = var.port
   vpc_security_group_ids     = [module.security_group.security_group_id]
   transit_encryption_enabled = var.transit_encryption_enabled

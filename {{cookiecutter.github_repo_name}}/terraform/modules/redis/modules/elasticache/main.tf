@@ -48,7 +48,7 @@ resource "aws_elasticache_replication_group" "this" {
   engine                     = var.engine
   engine_version             = var.engine_version
   node_type                  = var.node_type
-  number_cache_clusters      = var.number_cache_clusters
+  num_cache_clusters         = var.num_cache_clusters
   port                       = var.port
   subnet_group_name          = local.elasticache_subnet_group_name
   at_rest_encryption_enabled = var.at_rest_encryption_enabled

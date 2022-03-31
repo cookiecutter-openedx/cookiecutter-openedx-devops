@@ -88,7 +88,7 @@ inputs = {
   # cache engine configuration
   engine                        = "redis"
   engine_version                = "{{ cookiecutter.redis_engine_version }}"
-  number_cache_clusters         = {{ cookiecutter.redis_number_cache_clusters }}
+  num_cache_clusters         = {{ cookiecutter.redis_num_cache_clusters }}
   port                          = {{ cookiecutter.redis_port }}
   family                        = "{{ cookiecutter.redis_family }}"
   node_type                     = local.redis_node_type
