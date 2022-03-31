@@ -9,7 +9,7 @@
 #
 #------------------------------------------------------------------------------
 locals {
-  namespace = "application"
+  namespace = "openedx"
 }
 
 data "aws_acm_certificate" "issued" {
