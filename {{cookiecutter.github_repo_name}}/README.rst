@@ -88,9 +88,9 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
   * - `Tutor Plugin: Object storage for Open edX with S3 <https://github.com/hastexo/tutor-contrib-s3>`_
     - {{ cookiecutter.ci_deploy_hastexo_tutor_contrib_s3_version }}
   * - `Kubernetes Cluster <https://kubernetes.io/>`_
-    - {{ cookiecutter.eks_cluster_version }}
+    - {{ cookiecutter.kubernetes_cluster_version }}
   * - Kubernetes `amazon/aws-alb-ingress-controller <https://hub.docker.com/r/amazon/aws-alb-ingress-controller/>`_
-    - {{ cookiecutter.eks_cluster_alb_ingress_controller_version }}
+    - {{ cookiecutter.kubernetes_cluster_ingress_controller_version }}
   * - `Terraform <https://www.terraform.io/>`_
     - {{ cookiecutter.terraform_required_version }}
   * - Terraform `terraform-aws-modules/vpc/aws <https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest>`_

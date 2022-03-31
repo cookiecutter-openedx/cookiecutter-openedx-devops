@@ -72,7 +72,7 @@ inputs = {
   public_subnet_ids = dependency.vpc.outputs.public_subnets
   vpc_id  = dependency.vpc.outputs.vpc_id
 
-  eks_cluster_version = local.kubernetes_version
+  kubernetes_cluster_version = local.kubernetes_version
   eks_worker_group_instance_type  = local.eks_worker_group_instance_type
   eks_worker_group_min_size = local.eks_worker_group_min_size
   eks_worker_group_max_size = local.eks_worker_group_max_size

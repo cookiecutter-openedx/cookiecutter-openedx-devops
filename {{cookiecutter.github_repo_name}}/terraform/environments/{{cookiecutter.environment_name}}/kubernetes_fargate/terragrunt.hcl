@@ -66,6 +66,6 @@ inputs = {
   private_subnet_ids = dependency.vpc.outputs.private_subnets
   public_subnet_ids = dependency.vpc.outputs.public_subnets
   vpc_id  = dependency.vpc.outputs.vpc_id
-  eks_cluster_version = local.kubernetes_version
+  kubernetes_cluster_version = local.kubernetes_version
   tags = local.tags
 }

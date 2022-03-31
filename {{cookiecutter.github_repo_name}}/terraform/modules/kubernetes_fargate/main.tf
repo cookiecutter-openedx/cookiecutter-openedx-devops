@@ -17,7 +17,7 @@ module "eks" {
   source                          = "terraform-aws-modules/eks/aws"
   version                         = "{{ cookiecutter.terraform_aws_modules_eks }}"
   cluster_name                    = var.environment_namespace
-  cluster_version                 = var.eks_cluster_version
+  cluster_version                 = var.kubernetes_cluster_version
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = true
   enable_irsa                     = true

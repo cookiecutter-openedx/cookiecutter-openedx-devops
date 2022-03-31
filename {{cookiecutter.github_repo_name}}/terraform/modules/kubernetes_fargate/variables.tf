@@ -45,6 +45,6 @@ variable "enable_irsa" {
   default = true
 }
 
-variable "eks_cluster_version" {
+variable "kubernetes_cluster_version" {
   type = string
 }
