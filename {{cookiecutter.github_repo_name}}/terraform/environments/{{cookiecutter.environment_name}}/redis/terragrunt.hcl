@@ -38,6 +38,8 @@ dependency "vpc" {
   mock_outputs = {
     vpc_id           = "fake-vpc-id"
     database_subnets = ["fake-subnetid-01", "fake-subnetid-02"]
+    elasticache_subnets = ["fake-elasticache-subnet-01", "fake-elasticache-subnet-02"]
+    vpc_cidr_block = "fake-cidr-block"
   }
 }
 
