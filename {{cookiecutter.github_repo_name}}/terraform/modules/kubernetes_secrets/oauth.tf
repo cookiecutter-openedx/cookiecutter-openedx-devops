@@ -27,7 +27,7 @@ resource "random_password" "clientsecret_edx" {
 resource "kubernetes_secret" "openedx" {
   metadata {
     name      = "edx-api"
-    namespace = var.environment_namespace
+    namespace = var.namespace
   }
 
   data = {

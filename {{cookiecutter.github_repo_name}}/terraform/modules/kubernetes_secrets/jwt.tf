@@ -15,7 +15,7 @@ resource "tls_private_key" "jwt_rsa_private_key" {
 resource "kubernetes_secret" "jtw" {
   metadata {
     name      = "jwt"
-    namespace = var.environment_namespace
+    namespace = var.namespace
   }
 
   data = {

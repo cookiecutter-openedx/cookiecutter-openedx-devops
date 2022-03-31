@@ -11,7 +11,8 @@ locals {
   environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
-  resource_name = "${local.environment_vars.locals.environment_namespace}"
+  resource_name = local.environment_vars.locals.environment_namespace
+  environment_namespace = local.environment_vars.locals.environment_namespace
 
   tags = merge(
     local.environment_vars.locals.tags,
@@ -54,5 +55,7 @@ include {
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
   resource_name = local.resource_name
+  environment_namespace = local.environment_namespace
+  namespace = "openedx"
   tags          = local.tags
 }

@@ -5,6 +5,11 @@
 # date: Aug-2021
 #------------------------------------------------------------------------------
 variable "environment_namespace" {
+  description = "universal identifier for most resources"
+  type        = string
+}
+
+variable "namespace" {
   description = "kubernetes namespace where to place resources"
   type        = string
 }
