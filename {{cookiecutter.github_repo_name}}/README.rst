@@ -93,16 +93,22 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
     - {{ cookiecutter.kubernetes_cluster_ingress_controller_version }}
   * - `Terraform <https://www.terraform.io/>`_
     - {{ cookiecutter.terraform_required_version }}
-  * - Terraform `terraform-aws-modules/vpc/aws <https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest>`_
-    - {{ cookiecutter.terraform_aws_modules_vpc }}
-  * - Terraform `terraform-aws-modules/eks/aws <https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest>`_
-    - {{ cookiecutter.terraform_aws_modules_eks }}
   * - Terraform `terraform-aws-modules/acm/aws <https://registry.terraform.io/modules/terraform-aws-modules/acm/aws/latest>`_
     - {{ cookiecutter.terraform_aws_modules_acm }}
+  * - Terraform `terraform-aws-modules/cloudfront/aws <https://registry.terraform.io/modules/terraform-aws-modules/cloudfront/aws/latest>`_
+    - {{ cookiecutter.terraform_aws_modules_cloudfront }}
+  * - Terraform `terraform-aws-modules/eks/aws <https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest>`_
+    - {{ cookiecutter.terraform_aws_modules_eks }}
   * - Terraform `terraform-aws-modules/iam/aws <https://registry.terraform.io/modules/terraform-aws-modules/iam/aws/latest>`_
     - {{ cookiecutter.terraform_aws_modules_iam }}
+  * - Terraform `terraform-aws-modules/rds/aws <https://registry.terraform.io/modules/terraform-aws-modules/rds/aws/latest>`_
+    - {{ cookiecutter.terraform_aws_modules_rds }}
   * - Terraform `terraform-aws-modules/s3-bucket/aws <https://registry.terraform.io/modules/terraform-aws-modules/s3-bucket/aws/latest>`_
     - {{ cookiecutter.terraform_aws_modules_s3 }}
+  * - Terraform `terraform-aws-modules/security-group/aws <https://registry.terraform.io/modules/terraform-aws-modules/security-group/aws/latest>`_
+    - {{ cookiecutter.terraform_aws_modules_sg }}
+  * - Terraform `terraform-aws-modules/vpc/aws <https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest>`_
+    - {{ cookiecutter.terraform_aws_modules_vpc }}
   * - Terraform `Helm ingress-alb-controller <https://github.com/kubernetes-sigs/aws-load-balancer-controller/>`_
     - {{ cookiecutter.terraform_helm_alb_controller_chart_version }}
   * - Terraform `Helm cert-manager <https://charts.jetstack.io>`_
@@ -295,19 +301,21 @@ These scripts will create the following resources in your AWS account:
 Fargate Release Notes
 ---------------------
 
-Fargate is a compute alternative to provisioning EC2 instances. This is an **experimental** part of the Open edX devops stack. While the Fargate compute service itself
+Fargate is a serverless compute alternative to EC2 instances. This is an **experimental** part of the Open edX devops stack. While the Fargate compute service itself
 is both stable and robust, it's integration with Terraform for purposes providing the compute layer for a kubernetes cluster is a relatively new thing, and comes with some headaches.
 For the avoidance of any doubt, Fargate runs well inside a Kubernetes cluster and for the most part is indistinguishable from a traditional EC2 server, aside from the obvious luxury of not needing to
-directly administer this aspect of the cluster. But on the other hand, Terraform's life cycle management of a kubernets cluster running Fargate is imperfect. Before you deploy Fargate into a production
+directly administer this aspect of the cluster. But on the other hand, Terraform's life cycle management of a kubernetes cluster running Fargate is imperfect. Before you deploy Fargate into a production
 environment please consider the following:
 
 Known Issues
 ~~~~~~~~~~~~
 
-- When using Terraform to create an EKS Kubernetes Cluster configured to use Fargate, the apply will fail on the first attempt. See error message below. This is a known issue that is caused by a race condition between coredns and creation of the Fargate node on which it runs. Re-attempting with `Terraform apply` resolves the problem.
+- When using Terraform to create an EKS Kubernetes Cluster configured to use Fargate, the apply operation will fail on your first attempt. See error message below. This is a known issue that is caused by a race condition between coredns and creation of the Fargate node on which it runs. Re-attempting with `terragrunt apply` resolves the problem.
 - When using Terraform to destroy an EKS Kubernetes Cluster configured to use Fargate instead of EC2, you might experience any of the following:
-  - Terraform fails to destroy some of the IAM roles when destroying the EKS. Each is an eks Service-Linked Role. This is a known bug in the Terraform module.
-  - Terraform fails to destroy one of the EKS security groups. This is a known bug in the Terraform module.
+
+  a) Terraform fails to destroy some of the IAM roles when destroying the EKS. Each is an eks Service-Linked Role. This is a known bug in the Terraform module.
+  b) Terraform fails to destroy one or more of the EKS security groups. This is a known bug in the Terraform module.
+
 - Terraform fails to destroy the Application Load Balancer ingress. This is due to a dependency problem which I'm still trouble shooting. The temporary resolution is to delete the Terraform file `terraform/modules/kubernetes_ingress_alb_controller/ingress.tf` and then run `terraform apply`.
 - Other AWS admin users might lack permissions to view EKS resources in the AWS console, even if they have `admin` permissions or are logged in as the root account user. This is an AWS issue. I'm working on a set of instructions for configuring permissions for other users.
 - If Terraform is interrupted during execution then it is possible that it will lose track of its state, leading to Terraform attempting to create already-existing resources which will result in run-time errors. This is the expected behavior of Terraform, but it can be a huge pain in the neck to resolve.
