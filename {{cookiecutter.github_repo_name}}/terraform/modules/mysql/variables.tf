@@ -177,14 +177,12 @@ variable "storage_encrypted" {
 variable "subnet_ids" {
   description = "A list of VPC subnet IDs"
   type        = list(string)
-  default     = []
 }
 
 
 variable "vpc_id" {
   description = "ID of  the VPC where to create security groups"
   type        = string
-  default     = null
 }
 
 variable "skip_final_snapshot" {

@@ -82,6 +82,15 @@ inputs = {
   # db server size
   instance_class        = local.mysql_instance_class
   allocated_storage     = {{ cookiecutter.mysql_allocated_storage }}
+  max_allocated_storage = 0
+  storage_encrypted     = true
+  multi_az              = false
+  enabled_cloudwatch_logs_exports = false
+  performance_insights_enabled = false
+  performance_insights_retention_period = 7
+  create_monitoring_role = false
+  monitoring_interval = 0
+
 
   # backups and maintenance
   maintenance_window    = "{{ cookiecutter.mysql_maintenance_window }}"
@@ -89,6 +98,7 @@ inputs = {
   backup_retention_period = {{ cookiecutter.mysql_backup_retention_period }}
   deletion_protection   = {{ cookiecutter.mysql_deletion_protection }}
   skip_final_snapshot   = {{ cookiecutter.mysql_skip_final_snapshot }}
+
 
   # network configuration
   subnet_ids            = dependency.vpc.outputs.database_subnets

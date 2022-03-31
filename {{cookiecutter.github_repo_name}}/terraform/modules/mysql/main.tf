@@ -39,47 +39,67 @@ module "security_group" {
 
 ################################################################################
 # RDS Module
+# All available versions: http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_MySQL.html#MySQL.Concepts.VersionMgmt
 ################################################################################
 module "db" {
   source  = "terraform-aws-modules/rds/aws"
   version = "{{cookiecutter.terraform_aws_modules_rds}}"
 
-  identifier = var.identifier
-
-  # All available versions: http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_MySQL.html#MySQL.Concepts.VersionMgmt
-  engine               = var.engine
-  engine_version       = var.engine_version
-  family               = var.family
-  major_engine_version = var.major_engine_version
-  instance_class       = var.instance_class
-
-  allocated_storage     = var.allocated_storage
-  max_allocated_storage = var.max_allocated_storage
-  storage_encrypted     = var.storage_encrypted
-
-  db_name  = var.name
-  username = var.username
-  port     = var.port
-
-  create_random_password = var.create_random_password
-
-  multi_az               = var.multi_az
-  subnet_ids             = var.subnet_ids
-  vpc_security_group_ids = [module.security_group.security_group_id]
-
-  maintenance_window              = var.maintenance_window
-  backup_window                   = var.backup_window
-  enabled_cloudwatch_logs_exports = var.enabled_cloudwatch_logs_exports
-
+  # required parameters (unless we like the default value)
+  # ---------------------------------------------------------------------------
+  allocated_storage = var.allocated_storage
+  #availability_zone =
   backup_retention_period = var.backup_retention_period
-  skip_final_snapshot     = var.skip_final_snapshot
-  deletion_protection     = var.deletion_protection
+  backup_window           = var.backup_window
+  #ca_cert_identifier =
+  #character_set_name =
+  #cloudwatch_log_group_kms_key_id =
+  db_name = var.name
+  #db_subnet_group_description =
+  #db_subnet_group_name =
+  #domain =
+  #domain_iam_role_name =
+  engine         = var.engine
+  engine_version = var.engine_version
+  family         = var.family
+  identifier     = var.identifier
+  instance_class = var.instance_class
+  #kms_key_id =
+  #license_model =
+  maintenance_window   = var.maintenance_window
+  major_engine_version = var.major_engine_version
+  #monitoring_role_arn =
+  #monitoring_role_description =
+  #option_group_description =
+  #option_group_name =
+  #parameter_group_description =
+  #parameter_group_name =
+  #password =
+  #performance_insights_kms_key_id =
+  port = var.port
+  #replica_mode =
+  #replicate_source_db =
+  #s3_import =
+  #snapshot_identifier  =
+  #storage_type =
+  #timezone =
+  username = var.username
 
+  # optional parameters
+  # ---------------------------------------------------------------------------
+  max_allocated_storage                 = var.max_allocated_storage
+  storage_encrypted                     = var.storage_encrypted
+  create_random_password                = var.create_random_password
+  multi_az                              = var.multi_az
+  subnet_ids                            = var.subnet_ids
+  vpc_security_group_ids                = [module.security_group.security_group_id]
+  enabled_cloudwatch_logs_exports       = var.enabled_cloudwatch_logs_exports
+  skip_final_snapshot                   = var.skip_final_snapshot
+  deletion_protection                   = var.deletion_protection
   performance_insights_enabled          = var.performance_insights_enabled
   performance_insights_retention_period = var.performance_insights_retention_period
   create_monitoring_role                = var.create_monitoring_role
   monitoring_interval                   = var.monitoring_interval
-
-  parameters = var.parameters
-  tags       = var.tags
+  parameters                            = var.parameters
+  tags                                  = var.tags
 }
