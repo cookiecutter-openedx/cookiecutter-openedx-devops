@@ -50,7 +50,7 @@ def remove_ec2_files():
     # rename terraform eks_fargate to eks
     old_fargate_module = os.path.join("terraform", "modules", "eks_fargate")
     new_fargate_module = os.path.join("terraform", "modules", "eks")
-    if os.path.exists(old_fargate_module):
+    if os.path.exists(new_fargate_module):
         shutil.rmtree(new_fargate_module)
     if os.path.exists(old_fargate_module):
         os.rename(old_fargate_module, new_fargate_module)
