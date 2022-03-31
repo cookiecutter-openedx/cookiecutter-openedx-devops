@@ -14,15 +14,46 @@
 #
 #------------------------------------------------------------------------------
 
-resource "helm_release" "aws_efs_csi_driver" {
-  name       = local.resource_name
+resource "helm_release" "aws-efs-csi-driver" {
+  name       = var.environment_namespace
   repository = "https://kubernetes-sigs.github.io/aws-efs-csi-driver/"
   chart      = "aws-efs-csi-driver"
   version    = "{{ cookiecutter.terraform_helm_aws_efs_csi_driver_version }}"
   namespace  = "kube-system"
-  atomic     = true
-  timeout    = 900
   depends_on = [
     data.aws_eks_cluster.cluster
+  ]
+}
+
+resource "kubernetes_persistent_volume_claim" "caddy" {
+  metadata {
+    name = "caddy-pvc"
+  }
+  spec {
+    access_modes       = ["ReadWriteMany"]
+    storage_class_name = "efs-sc"
+    resources {
+      requests = {
+        storage = "10Gi"
+      }
+    }
+  }
+  depends_on = [
+    helm_release.aws-efs-csi-driver
+  ]
+}
+
+resource "kubernetes_storage_class" "efs-sc" {
+  metadata {
+    name = "efs-sc"
+  }
+  storage_provisioner = "efs.csi.aws.com"
+  parameters = {
+    provisioningMode = "efs-ap"
+    fileSystemId     = "caddy"
+    directoryPerms   = 700
+  }
+  depends_on = [
+    helm_release.aws-efs-csi-driver
   ]
 }
