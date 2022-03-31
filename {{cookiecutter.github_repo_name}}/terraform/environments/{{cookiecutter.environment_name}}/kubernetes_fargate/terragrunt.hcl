@@ -39,6 +39,7 @@ dependency "vpc" {
   mock_outputs_allowed_terraform_commands = ["init", "validate"]
   mock_outputs = {
     vpc_id           = "fake-vpc-id"
+    public_subnets   = ["fake-public-subnet-01", "fake-public-subnet-02"]
     private_subnets  = ["fake-private-subnet-01", "fake-private-subnet-02"]
     database_subnets = ["fake-database-subnet-01", "fake-database-subnet-02"]
   }

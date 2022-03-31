@@ -9,12 +9,12 @@
 #
 # Technical documentation:
 # - https://docs.aws.amazon.com/kubernetes
-# - https://registry.terraform.io/modules/terraform-aws-modules/kubernetes/aws/
+# - https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/
 # - https://docs.aws.amazon.com/kubernetes/latest/userguide/fargate-profile.html
 #
 #------------------------------------------------------------------------------
 module "eks" {
-  source                          = "terraform-aws-modules/kubernetes/aws"
+  source                          = "terraform-aws-modules/eks/aws"
   version                         = "{{ cookiecutter.terraform_aws_modules_eks }}"
   cluster_name                    = var.environment_namespace
   cluster_version                 = var.kubernetes_cluster_version
@@ -160,7 +160,7 @@ module "eks" {
 #------------------------------------------------------------------------------
 # This security group is created automatically by the EKS and is one of three
 # security groups associated with the cluster. The terraform module
-# terraform-aws-modules/kubernetes/aws, above, provides hooks for the other two, but
+# terraform-aws-modules/eks/aws, above, provides hooks for the other two, but
 # does not provide us with a way to modify this one.
 #
 # We have to rely on the kubernetes-managed resource tags to identify it.
