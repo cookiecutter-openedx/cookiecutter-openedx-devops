@@ -15,10 +15,13 @@ locals {
 # Supporting Resources
 ################################################################################
 
-# this gets created in module vpc
-data "aws_db_subnet_group" "mysql_subnet_group" {
-  name = "mysql_subnet_group"
+# we need this for terraform-aws-modules/rds/aws
+resource "aws_db_subnet_group" "mysql_subnet_group" {
+  name       = "mysql_subnet_group"
+  subnet_ids = var.subnet_ids
+  tags       = var.tags
 }
+
 
 module "security_group" {
   source  = "terraform-aws-modules/security-group/aws"
@@ -62,7 +65,7 @@ module "db" {
   #cloudwatch_log_group_kms_key_id =
   db_name = var.name
   #db_subnet_group_description =
-  db_subnet_group_name = data.aws_db_subnet_group.mysql_subnet_group.name
+  db_subnet_group_name = aws_db_subnet_group.mysql_subnet_group.name
   #domain =
   #domain_iam_role_name =
   engine         = var.engine
