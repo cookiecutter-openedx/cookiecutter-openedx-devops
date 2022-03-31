@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - upgraded AWS RDS Terraform module to v4
 - added AWS certficates in us-east-1 and the aws region specified in environments/global.hcl
 - added new module for Cloudfront distribution and DNS record for 'cdn' subdomain
-- added new module for EC2 Bastion and DNS record for subdomain
+- added new optional module for EC2 Bastion and DNS record for subdomain
 - added version constraint parameters to cookiecutter for all terraform-aws-modules
 - added mock outputs to terragrunt scripts to facilitate `run-all` init and validate operations in environments
 - added this change log

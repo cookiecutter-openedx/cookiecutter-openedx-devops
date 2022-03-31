@@ -26,6 +26,7 @@ cookiecutter --checkout $GITHUB_BRANCH \
              global_aws_route53_hosted_zone_id=Z049210026A5G6XHV84CF \
              global_ec2_ssh_key_name=stepwisemath-ohio \
              environment_name=prod \
+             environment_add_bastion=N \
              environment_subdomain=web \
              kubernetes_cluster_compute_type=Fargate \
              kubernetes_cluster_load_balancer_type=ALB

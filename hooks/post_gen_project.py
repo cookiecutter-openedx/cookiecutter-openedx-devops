@@ -11,6 +11,14 @@ INFO = "\x1b[1;33m [INFO]: "
 HINT = "\x1b[3;33m"
 SUCCESS = "\x1b[1;32m [SUCCESS]: "
 
+def remove_bastion():
+    module_dir_path = os.path.join("terraform", "modules", "ec2_bastion")
+    if os.path.exists(module_dir_path):
+        shutil.rmtree(module_dir_path)
+
+    terragrunt_dir_path = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "ec2_bastion")
+    if os.path.exists(terragrunt_dir_path):
+        shutil.rmtree(terragrunt_dir_path)
 
 def remove_clb_files():
     module_dir_path = os.path.join("terraform", "modules", "kubernetes_ingress_clb_controller")
@@ -106,11 +114,13 @@ def move_manifests(folder = ""):
 def main():
     compute_type = "{{ cookiecutter.kubernetes_cluster_compute_type }}".upper()
 
-    if "{{ cookiecutter.kubernetes_cluster_load_balancer_type }}" == "CLB":
+    if "{{ cookiecutter.environment_add_bastion }}".upper() != "Y":
+        remove_bastion()
+
+    if "{{ cookiecutter.kubernetes_cluster_load_balancer_type }}".upper() == "CLB":
         remove_alb_files()
         move_manifests("kubernetes_clb")
-
-    if "{{ cookiecutter.kubernetes_cluster_load_balancer_type }}" == "ALB":
+    else:
         remove_clb_files()
         move_manifests("kubernetes_alb")
 
