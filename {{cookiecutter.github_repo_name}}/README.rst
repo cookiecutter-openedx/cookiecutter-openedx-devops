@@ -304,13 +304,29 @@ environment please consider the following:
 Known Issues
 ~~~~~~~~~~~~
 
-- When using Terraform to create an EKS Kubernetes Cluster configured to use Fargate, the apply will fail on the first attempt, with a timeout like the following: module.eks.aws_eks_addon.this["coredns"]: Still creating... [20m0s elapsed]. This is a known issue that is caused by a race condition between coredns and creation of the Fargate node on which it runs. Re-attempting with `Terraform apply` resolves the problem.
+- When using Terraform to create an EKS Kubernetes Cluster configured to use Fargate, the apply will fail on the first attempt. See error message below. This is a known issue that is caused by a race condition between coredns and creation of the Fargate node on which it runs. Re-attempting with `Terraform apply` resolves the problem.
 - When using Terraform to destroy an EKS Kubernetes Cluster configured to use Fargate instead of EC2, you might experience any of the following:
   - Terraform fails to destroy some of the IAM roles when destroying the EKS. Each is an eks Service-Linked Role. This is a known bug in the Terraform module.
   - Terraform fails to destroy one of the EKS security groups. This is a known bug in the Terraform module.
 - Terraform fails to destroy the Application Load Balancer ingress. This is due to a dependency problem which I'm still trouble shooting. The temporary resolution is to delete the Terraform file `terraform/modules/kubernetes_ingress_alb_controller/ingress.tf` and then run `terraform apply`.
 - Other AWS admin users might lack permissions to view EKS resources in the AWS console, even if they have `admin` permissions or are logged in as the root account user. This is an AWS issue. I'm working on a set of instructions for configuring permissions for other users.
 - If Terraform is interrupted during execution then it is possible that it will lose track of its state, leading to Terraform attempting to create already-existing resources which will result in run-time errors. This is the expected behavior of Terraform, but it can be a huge pain in the neck to resolve.
+
+.. code-block:: bash
+
+  module.eks.aws_eks_addon.this["coredns"]: Still creating... [20m0s elapsed]
+  ╷
+  │ Error: unexpected EKS Add-On (prod-stepwisemath-mexico:coredns) state returned during creation: timeout while waiting for state to become 'ACTIVE' (last state: 'DEGRADED', timeout: 20m0s)
+  │ [WARNING] Running terraform apply again will remove the kubernetes add-on and attempt to create it again effectively purging previous add-on configuration
+  │
+  │   with module.eks.aws_eks_addon.this["coredns"],
+  │   on .terraform/modules/eks/main.tf line 298, in resource "aws_eks_addon" "this":
+  │  298: resource "aws_eks_addon" "this" {
+  │
+  ╵
+  Releasing state lock. This may take a few moments...
+  ERRO[1950] 1 error occurred:
+    * exit status 1
 
 
 FAQ
