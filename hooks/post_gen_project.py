@@ -47,14 +47,10 @@ def remove_ec2_files():
     if os.path.exists(terragrunt_dir_path):
         shutil.rmtree(terragrunt_dir_path)
 
-    terragrunt_alb_dir_path = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "eks_ingress_alb_controller", "terragrunt_ec2.hcl")
-    if os.path.exists(terragrunt_alb_dir_path):
-        os.remove(terragrunt_alb_dir_path)
-
     # rename eks_fargate to eks
     old_fargate_module = os.path.join("terraform", "modules", "eks_fargate")
     new_fargate_module = os.path.join("terraform", "modules", "eks")
-    if os.path.exists(module_dir_path):
+    if os.path.exists(old_fargate_module):
         os.rename(old_fargate_module, new_fargate_module)
 
 def remove_fargate_files():
@@ -73,7 +69,7 @@ def remove_fargate_files():
     # rename eks_ec2 to eks
     old_ec2_module = os.path.join("terraform", "modules", "eks_ec2")
     new_ec2_module = os.path.join("terraform", "modules", "eks")
-    if os.path.exists(module_dir_path):
+    if os.path.exists(old_ec2_module):
         os.rename(old_ec2_module, new_ec2_module)
 
 # move kubernetes manifests into the k8s folder and remove the original source folder.
