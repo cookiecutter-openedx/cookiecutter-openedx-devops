@@ -22,7 +22,7 @@ locals {
 }
 
 dependencies {
-  paths = ["../eks", "../vpc", "../kubernetes"]
+  paths = ["../vpc", "../kubernetes"]
 }
 
 dependency "vpc" {
@@ -43,7 +43,7 @@ dependency "vpc" {
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 
 terraform {
-  source = "../../../modules//secrets"
+  source = "../../../modules//kubernetes_secrets"
 }
 
 # Include all settings from the root terragrunt.hcl file
