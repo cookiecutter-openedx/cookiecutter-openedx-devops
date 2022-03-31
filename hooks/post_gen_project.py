@@ -48,8 +48,8 @@ def remove_ec2_files():
         shutil.rmtree(terragrunt_dir_path)
 
     # rename eks_fargate to eks
-    old_fargate_module = os.path.join("terraform", "modules", "eks_fargate")
-    new_fargate_module = os.path.join("terraform", "modules", "eks")
+    old_fargate_module = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "eks_fargate")
+    new_fargate_module = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "eks")
     if os.path.exists(old_fargate_module):
         os.rename(old_fargate_module, new_fargate_module)
 
@@ -67,8 +67,8 @@ def remove_fargate_files():
         os.remove(terragrunt_alb_dir_path)
 
     # rename eks_ec2 to eks
-    old_ec2_module = os.path.join("terraform", "modules", "eks_ec2")
-    new_ec2_module = os.path.join("terraform", "modules", "eks")
+    old_ec2_module = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "eks_ec2")
+    new_ec2_module = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "eks")
     if os.path.exists(old_ec2_module):
         os.rename(old_ec2_module, new_ec2_module)
 
