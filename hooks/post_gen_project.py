@@ -13,9 +13,9 @@ SUCCESS = "\x1b[1;32m [SUCCESS]: "
 
 
 def remove_clb_files():
-    component_dir_path = os.path.join("terraform", "modules", "eks_ingress_clb_controller")
-    if os.path.exists(component_dir_path):
-        shutil.rmtree(component_dir_path)
+    module_dir_path = os.path.join("terraform", "modules", "eks_ingress_clb_controller")
+    if os.path.exists(module_dir_path):
+        shutil.rmtree(module_dir_path)
 
     terragrunt_dir_path = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "eks_ingress_clb_controller")
     if os.path.exists(terragrunt_dir_path):
@@ -26,9 +26,9 @@ def remove_clb_files():
         shutil.rmtree(ci_dir_path)
 
 def remove_alb_files():
-    component_dir_path = os.path.join("terraform", "modules", "eks_ingress_alb_controller")
-    if os.path.exists(component_dir_path):
-        shutil.rmtree(component_dir_path)
+    module_dir_path = os.path.join("terraform", "modules", "eks_ingress_alb_controller")
+    if os.path.exists(module_dir_path):
+        shutil.rmtree(module_dir_path)
 
     terragrunt_dir_path = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "eks_ingress_alb_controller")
     if os.path.exists(terragrunt_dir_path):
@@ -39,9 +39,9 @@ def remove_alb_files():
         shutil.rmtree(ci_dir_path)
 
 def remove_ec2_files():
-    component_dir_path = os.path.join("terraform", "modules", "eks_ec2")
-    if os.path.exists(component_dir_path):
-        shutil.rmtree(component_dir_path)
+    module_dir_path = os.path.join("terraform", "modules", "eks_ec2")
+    if os.path.exists(module_dir_path):
+        shutil.rmtree(module_dir_path)
 
     terragrunt_dir_path = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "eks_ec2")
     if os.path.exists(terragrunt_dir_path):
@@ -51,16 +51,16 @@ def remove_ec2_files():
     if os.path.exists(terragrunt_alb_dir_path):
         os.remove(terragrunt_alb_dir_path)
 
-    # rename the fargate version to terragrunt.hcl
-    terragrunt_alb_dir_old_name = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "eks_ingress_alb_controller", "terragrunt_fargate.hcl")
-    terragrunt_alb_dir_new_name = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "eks_ingress_alb_controller", "terragrunt.hcl")
-    if os.path.exists(terragrunt_alb_dir_old_name):
-        os.rename(terragrunt_alb_dir_old_name, terragrunt_alb_dir_new_name)
+    # rename eks_fargate to eks
+    old_fargate_module = os.path.join("terraform", "modules", "eks_fargate")
+    new_fargate_module = os.path.join("terraform", "modules", "eks")
+    if os.path.exists(module_dir_path):
+        os.rename(old_fargate_module, new_fargate_module)
 
 def remove_fargate_files():
-    component_dir_path = os.path.join("terraform", "modules", "eks_fargate")
-    if os.path.exists(component_dir_path):
-        shutil.rmtree(component_dir_path)
+    module_dir_path = os.path.join("terraform", "modules", "eks_fargate")
+    if os.path.exists(module_dir_path):
+        shutil.rmtree(module_dir_path)
 
     terragrunt_dir_path = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "eks_fargate")
     if os.path.exists(terragrunt_dir_path):
@@ -70,11 +70,11 @@ def remove_fargate_files():
     if os.path.exists(terragrunt_alb_dir_path):
         os.remove(terragrunt_alb_dir_path)
 
-    # rename the ec2 version to terragrunt.hcl
-    terragrunt_alb_dir_old_name = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "eks_ingress_alb_controller", "terragrunt_ec2.hcl")
-    terragrunt_alb_dir_new_name = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "eks_ingress_alb_controller", "terragrunt.hcl")
-    if os.path.exists(terragrunt_alb_dir_old_name):
-        os.rename(terragrunt_alb_dir_old_name, terragrunt_alb_dir_new_name)
+    # rename eks_ec2 to eks
+    old_ec2_module = os.path.join("terraform", "modules", "eks_ec2")
+    new_ec2_module = os.path.join("terraform", "modules", "eks")
+    if os.path.exists(module_dir_path):
+        os.rename(old_ec2_module, new_ec2_module)
 
 # move kubernetes manifests into the k8s folder and remove the original source folder.
 def move_manifests(folder = ""):
