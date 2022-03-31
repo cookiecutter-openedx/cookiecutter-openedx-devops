@@ -35,7 +35,7 @@ data "aws_route53_zone" "environment_domain" {
 data "aws_acm_certificate" "environment_domain" {
   domain   = var.environment_domain
   statuses = ["ISSUED"]
-  provider = "aws.us-east-1"
+  provider = aws.us-east-1
 }
 
 data "aws_s3_bucket" "environment_domain" {
