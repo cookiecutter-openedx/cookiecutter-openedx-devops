@@ -292,6 +292,27 @@ These scripts will create the following resources in your AWS account:
 - **Network Design**. uses `Amazon Virtual Private Cloud (Amazon VPC) <https://aws.amazon.com/vpc/>`_ based on the AWS account number provided in the `global configuration file <terraform/environments/global.hcl>`_ to take a top-down approach to compartmentalize all cloud resources and to customize the operating enviroment for your Open edX resources. Terraform will create a new virtual private cloud into which all resource will be provisioned. It creates a sensible arrangment of private and public subnets, network security settings and security groups. See additional VPC documentation  `here <terraform/environments/{{ cookiecutter.environment_name }}/vpc>`_
 - **Proxy Access to Backend Services**. uses an `Amazon EC2 <https://aws.amazon.com/ec2/>`_ t2.micro Ubuntu instance publicly accessible via ssh as bastion.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}:22 using the ssh key specified in the `global configuration file <terraform/environments/global.hcl>`_.  For security as well as performance reasons all backend services like MySQL, Mongo, Redis and the Kubernetes cluster are deployed into their own private subnets, meaning that none of these are publicly accessible. See additional Bastion documentation  `here <terraform/environments/{{ cookiecutter.environment_name }}/bastion>`_. Terraform creates a t2.micro EC2 instance to which you can connect via ssh. In turn you can connect to services like MySQL via the bastion. Common configuration settings `are located here <terraform/environments/{{ cookiecutter.environment_name }}/bastion/terragrunt.hcl>`_. Note that if you are cost conscious then you could alternatively use `AWS Cloud9 <https://aws.amazon.com/cloud9/>`_ to gain access to all backend services.
 
+Fargate Release Notes
+---------------------
+
+Fargate is a compute alternative to provisioning EC2 instances. This is an **experimental** part of the Open edX devops stack. While the Fargate compute service itself
+is both stable and robust, it's integration with Terraform for purposes providing the compute layer for a kubernetes cluster is a relatively new thing, and comes with some headaches.
+For the avoidance of any doubt, Fargate runs well inside a Kubernetes cluster and for the most part is indistinguishable from a traditional EC2 server, aside from the obvious luxury of not needing to
+directly administer this aspect of the cluster. But on the other hand, Terraform's life cycle management of a kubernets cluster running Fargate is imperfect. Before you deploy Fargate into a production
+environment please consider the following:
+
+Known Issues
+~~~~~~~~~~~~
+
+- When using Terraform to create an EKS Kubernetes Cluster configured to use Fargate, the apply will fail on the first attempt, with a timeout like the following: module.eks.aws_eks_addon.this["coredns"]: Still creating... [20m0s elapsed]. This is a known issue that is caused by a race condition between coredns and creation of the Fargate node on which it runs. Re-attempting with `Terraform apply` resolves the problem.
+- When using Terraform to destroy an EKS Kubernetes Cluster configured to use Fargate instead of EC2, you might experience any of the following:
+  - Terraform fails to destroy some of the IAM roles when destroying the EKS. Each is an eks Service-Linked Role. This is a known bug in the Terraform module.
+  - Terraform fails to destroy one of the EKS security groups. This is a known bug in the Terraform module.
+- Terraform fails to destroy the Application Load Balancer ingress. This is due to a dependency problem which I'm still trouble shooting. The temporary resolution is to delete the Terraform file `terraform/modules/kubernetes_ingress_alb_controller/ingress.tf` and then run `terraform apply`.
+- Other AWS admin users might lack permissions to view EKS resources in the AWS console, even if they have `admin` permissions or are logged in as the root account user. This is an AWS issue. I'm working on a set of instructions for configuring permissions for other users.
+- If Terraform is interrupted during execution then it is possible that it will lose track of its state, leading to Terraform attempting to create already-existing resources which will result in run-time errors. This is the expected behavior of Terraform, but it can be a huge pain in the neck to resolve.
+
+
 FAQ
 ---
 

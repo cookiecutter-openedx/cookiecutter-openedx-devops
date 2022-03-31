@@ -79,17 +79,6 @@ Important Considerations
 - **BE ADVISED** that MySQL RDS, MongoDB and Redis ElastiCache are vertically scaled **manually** and therefore require some insight and potential adjustments on your part. All of these services are defaulted to their minimum instance sizes which you can modify in the environment configuration file.
 - TO DO: `NSA Updated: Kubernetes Hardening Guide <https://www.cisa.gov/uscert/ncas/current-activity/2022/03/15/updated-kubernetes-hardening-guide>`_
 
-Known Issues
-------------
-
-- When using Terraform to create an EKS Kubernetes Cluster configured to use Fargate, the apply will fail on the first attempt, with a timeout like the following: module.eks.aws_eks_addon.this["coredns"]: Still creating... [20m0s elapsed]. This is a known issue that is caused by a race condition between coredns and creation of the Fargate node on which it runs. Re-attempting with `Terraform apply` resolves the problem.
-- When using Terraform to destroy an EKS Kubernetes Cluster configured to use Fargate instead of EC2, you might experience any of the following:
-  - Terraform fails to destroy some of the IAM roles when destroying the EKS. Each is an eks Service-Linked Role. This is a known bug in the Terraform module.
-  - Terraform fails to destroy one of the EKS security groups. This is a known bug in the Terraform module.
-- Terraform fails to destroy the Application Load Balancer ingress. This is due to a dependency problem which I'm still trouble shooting. The temporary resolution is to delete the Terraform file `terraform/modules/kubernetes_ingress_alb_controller/ingress.tf` and then run `terraform apply`.
-- Other AWS admin users might lack permissions to view EKS resources in the AWS console, even if they have `admin` permissions or are logged in as the root account user. This is an AWS issue. I'm working on a set of instructions for configuring permissions for other users.
-- If Terraform is interrupted during execution then it is possible that it will lose track of its state, leading to Terraform attempting to create already-existing resources which will result in run-time errors. This is the expected behavior of Terraform, but it can be a huge pain in the neck to resolve.
-
 Usage
 -----
 
