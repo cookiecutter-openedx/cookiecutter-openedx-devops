@@ -312,6 +312,12 @@ Known Issues
 - Other AWS admin users might lack permissions to view EKS resources in the AWS console, even if they have `admin` permissions or are logged in as the root account user. This is an AWS issue. I'm working on a set of instructions for configuring permissions for other users.
 - If Terraform is interrupted during execution then it is possible that it will lose track of its state, leading to Terraform attempting to create already-existing resources which will result in run-time errors. This is the expected behavior of Terraform, but it can be a huge pain in the neck to resolve.
 
+Build Error
+~~~~~~~~~~~
+
+On your first build attempt you will encounter the following error aproximately 30 minutes into the kubernetes build. This is a know bug caused by a race condition in coredns installation when it is configured to run on Fargate nodes rather than EC2 instances.
+Restarting the build resolves the error, and the build should complete normally.
+
 .. code-block:: bash
 
   module.eks.aws_eks_addon.this["coredns"]: Still creating... [20m0s elapsed]
