@@ -8,11 +8,13 @@
 #        can communicate with the kubernetes api.
 #------------------------------------------------------------------------------
 data "aws_eks_cluster" "cluster" {
-  name = var.environment_namespace
+  name       = var.environment_namespace
+  depends_on = [module.eks]
 }
 
 data "aws_eks_cluster_auth" "cluster" {
-  name = var.environment_namespace
+  name       = var.environment_namespace
+  depends_on = [module.eks]
 }
 
 provider "kubernetes" {
