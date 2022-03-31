@@ -4,7 +4,7 @@ variable "create_elasticache_instance" {
   default     = true
 }
 
-variable "replication_group_description" {
+variable "description" {
   description = "A user-created description for the replication group."
   type        = string
 }

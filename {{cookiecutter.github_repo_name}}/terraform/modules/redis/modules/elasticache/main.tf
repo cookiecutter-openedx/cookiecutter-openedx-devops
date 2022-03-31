@@ -3,8 +3,8 @@ locals {
   elasticache_subnet_group_name = coalesce(var.elasticache_subnet_group_name, module.elasticache_subnet_group.db_subnet_group_id)
   parameter_group_name_id       = var.create_elasticache_parameter_group ? module.elasticache_parameter_group.elasticache_parameter_group_id : var.parameter_group_name
 
-  replication_group_id          = random_string.id.result
-  replication_group_description = "elasticache-${random_string.id.result}"
+  replication_group_id = random_string.id.result
+  description          = "elasticache-${random_string.id.result}"
 }
 
 # Random string to use as auth token
@@ -43,17 +43,17 @@ module "elasticache_parameter_group" {
 #checkov:skip=CKV_AWS_31:Ensure all data stored in the Elasticache Replication Group is securely encrypted at transit and has auth token
 
 resource "aws_elasticache_replication_group" "this" {
-  replication_group_id          = local.replication_group_id
-  replication_group_description = var.replication_group_description
-  engine                        = var.engine
-  engine_version                = var.engine_version
-  node_type                     = var.node_type
-  number_cache_clusters         = var.number_cache_clusters
-  port                          = var.port
-  subnet_group_name             = local.elasticache_subnet_group_name
-  at_rest_encryption_enabled    = var.at_rest_encryption_enabled
-  transit_encryption_enabled    = var.transit_encryption_enabled
-  auth_token                    = local.auth_token
-  parameter_group_name          = local.parameter_group_name_id
-  security_group_ids            = var.vpc_security_group_ids
+  replication_group_id       = local.replication_group_id
+  description                = var.description
+  engine                     = var.engine
+  engine_version             = var.engine_version
+  node_type                  = var.node_type
+  number_cache_clusters      = var.number_cache_clusters
+  port                       = var.port
+  subnet_group_name          = local.elasticache_subnet_group_name
+  at_rest_encryption_enabled = var.at_rest_encryption_enabled
+  transit_encryption_enabled = var.transit_encryption_enabled
+  auth_token                 = local.auth_token
+  parameter_group_name       = local.parameter_group_name_id
+  security_group_ids         = var.vpc_security_group_ids
 }
