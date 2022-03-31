@@ -38,7 +38,7 @@ How it works
 
 `Kubernetes Ingress <https://kubernetes.io/docs/concepts/services-networking/ingress/>`_ is an API resource that allows you manage external or internal HTTP(S) access to `Kubernetes services <https://kubernetes.io/docs/concepts/services-networking/service/>`_ running in a cluster. `Amazon Elastic Load Balancing Application Load Balancer (ALB) <https://aws.amazon.com/elasticloadbalancing/features/#Details_for_Elastic_Load_Balancing_Products>`_ is a popular AWS service that load balances incoming traffic at the application layer (layer 7) across multiple targets, such as Amazon EC2 instances, in a region. ALB supports multiple features including host or path based routing, TLS (Transport Layer Security) termination, WebSockets, HTTP/2, AWS WAF (Web Application Firewall) integration, integrated access logs, and health checks.
 
-The open source `AWS ALB Ingress controller <https://github.com/kubernetes-sigs/aws-alb-ingress-controller>`_ triggers the creation of an `ALB <https://aws.amazon.com/elasticloadbalancing/features/#Details_for_Elastic_Load_Balancing_Products>`_ and the necessary supporting AWS resources whenever a Kubernetes user declares an Ingress resource in the cluster. The Ingress resource uses the ALB to route HTTP(S) traffic to different endpoints within the cluster. The AWS ALB Ingress controller works on any Kubernetes cluster including Amazon Elastic Kubernetes Service (`Amazon EKS <https://aws.amazon.com/eks/>`_).
+The open source `AWS ALB Ingress controller <https://github.com/kubernetes-sigs/aws-alb-ingress-controller>`_ triggers the creation of an `ALB <https://aws.amazon.com/elasticloadbalancing/features/#Details_for_Elastic_Load_Balancing_Products>`_ and the necessary supporting AWS resources whenever a Kubernetes user declares an Ingress resource in the cluster. The Ingress resource uses the ALB to route HTTP(S) traffic to different endpoints within the cluster. The AWS ALB Ingress controller works on any Kubernetes cluster including Amazon Elastic Kubernetes Service (`Amazon EKS <https://aws.amazon.com/kubernetes/>`_).
 
 How Kubernetes Ingress works with aws-alb-ingress-controller
 ------------------------------------------------------------
@@ -97,8 +97,8 @@ Further reading
 
 1. AWS published a few good technical resources to help you get up to speed on how this works.
 
-  - https://docs.aws.amazon.com/eks/latest/userguide/alb-ingress.html
-  - https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html
+  - https://docs.aws.amazon.com/kubernetes/latest/userguide/alb-ingress.html
+  - https://docs.aws.amazon.com/kubernetes/latest/userguide/aws-load-balancer-controller.html
   - https://aws.amazon.com/blogs/opensource/kubernetes-ingress-aws-alb-ingress-controller/
 
 2. Youtuber `Anton Putra <https://www.youtube.com/channel/UCeLvlbC754U6FyFQbKc0UnQ>`_ created a good `blog article <https://antonputra.com/terraform/how-to-create-eks-cluster-using-terraform/>`_ and `video tutorial <https://www.youtube.com/watch?v=MZyrxzb7yAU>`_ on how to implement an ALB on EKS.

@@ -103,7 +103,7 @@ resource "aws_security_group" "sg_alb" {
 # Amazon EKS pods running on AWS Fargate now support custom security groups
 # https://aws.amazon.com/about-aws/whats-new/2021/06/amazon-eks-pods-running-aws-fargate-support-custom-security-groups/
 #
-# https://github.com/weaveworks/eksctl/issues/1640
+# https://github.com/weaveworks/kubernetesctl/issues/1640
 # For exposing an HTTP service, it so far only supports ALB with IP mode and you should specify your service as ClusterIP.
 #------------------------------------------------------------------------------
 resource "kubernetes_service" "nginx" {

@@ -8,13 +8,13 @@
 #        plus a Fargate profile for serverless computing.
 #
 # Technical documentation:
-# - https://docs.aws.amazon.com/eks
-# - https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/
-# - https://docs.aws.amazon.com/eks/latest/userguide/fargate-profile.html
+# - https://docs.aws.amazon.com/kubernetes
+# - https://registry.terraform.io/modules/terraform-aws-modules/kubernetes/aws/
+# - https://docs.aws.amazon.com/kubernetes/latest/userguide/fargate-profile.html
 #
 #------------------------------------------------------------------------------
 module "eks" {
-  source                          = "terraform-aws-modules/eks/aws"
+  source                          = "terraform-aws-modules/kubernetes/aws"
   version                         = "{{ cookiecutter.terraform_aws_modules_eks }}"
   cluster_name                    = var.environment_namespace
   cluster_version                 = var.kubernetes_cluster_version
@@ -37,8 +37,8 @@ module "eks" {
   # cluster_addons
   #
   # AWS Load Balancer Controller add-on
-  #   Moved to its own module in this repo: ../eks_ingress_alb_controller
-  #   https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html
+  #   Moved to its own module in this repo: ../kubernetes_ingress_alb_controller
+  #   https://docs.aws.amazon.com/kubernetes/latest/userguide/aws-load-balancer-controller.html
   #
   # coredns:
   #   CoreDNS is a flexible, extensible DNS server that can serve as the
@@ -50,19 +50,19 @@ module "eks" {
   #   includes an AWS Fargate profile with a namespace that matches the
   #   namespace for the CoreDNS Deployment.
   #
-  #   https://docs.aws.amazon.com/eks/latest/userguide/fargate-getting-started.html#fargate-gs-coredns
+  #   https://docs.aws.amazon.com/kubernetes/latest/userguide/fargate-getting-started.html#fargate-gs-coredns
   #
   # vpc-cni:
   #   Amazon EKS supports native VPC networking with the Amazon VPC Container
   #   Network Interface (CNI) plugin for Kubernetes. Using this plugin allows
   #   Kubernetes pods to have the same IP address inside the pod as they do on
   #   the VPC network. For more information, see Pod networking (CNI).
-  #   https://docs.aws.amazon.com/eks/latest/userguide/pod-networking.html
+  #   https://docs.aws.amazon.com/kubernetes/latest/userguide/pod-networking.html
   #
   # kube-proxy:
   #   Kube-proxy maintains network rules on each Amazon EC2 node. It enables network
   #   communication to your pods. Kube-proxy is not deployed to Fargate nodes."
-  #   https://docs.aws.amazon.com/eks/latest/userguide/managing-kube-proxy.html
+  #   https://docs.aws.amazon.com/kubernetes/latest/userguide/managing-kube-proxy.html
   #
   #----------------------------------------------------------------------------
   cluster_addons = {
@@ -160,7 +160,7 @@ module "eks" {
 #------------------------------------------------------------------------------
 # This security group is created automatically by the EKS and is one of three
 # security groups associated with the cluster. The terraform module
-# terraform-aws-modules/eks/aws, above, provides hooks for the other two, but
+# terraform-aws-modules/kubernetes/aws, above, provides hooks for the other two, but
 # does not provide us with a way to modify this one.
 #
 # We have to rely on the kubernetes-managed resource tags to identify it.
@@ -256,7 +256,7 @@ resource "kubernetes_namespace" "openedx" {
 # This is the policy: https://us-east-1.console.aws.amazon.com/iam/home?region=us-east-1#/policies/arn:aws:iam::aws:policy/AmazonEKSFargatePodExecutionRolePolicy$jsonEditor
 #
 # see:
-# - https://docs.aws.amazon.com/eks/latest/userguide/pod-execution-role.html#create-pod-execution-role
+# - https://docs.aws.amazon.com/kubernetes/latest/userguide/pod-execution-role.html#create-pod-execution-role
 #------------------------------------------------------------------------------
 resource "aws_iam_role" "fargate_pod_execution_role" {
   name                  = "${var.environment_namespace}-EKSFargatePodExecutionRole"

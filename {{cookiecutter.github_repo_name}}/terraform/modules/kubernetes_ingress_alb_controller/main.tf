@@ -9,14 +9,14 @@
 #
 # Setup instructions:
 # -------------------
-# - https://aws.github.io/eks-charts/aws-load-balancer-controller
-# - https://github.com/aws/eks-charts/tree/v0.0.82/stable/aws-load-balancer-controller
-# - https://aws.amazon.com/premiumsupport/knowledge-center/eks-alb-ingress-controller-fargate/
+# - https://aws.github.io/kubernetes-charts/aws-load-balancer-controller
+# - https://github.com/aws/kubernetes-charts/tree/v0.0.82/stable/aws-load-balancer-controller
+# - https://aws.amazon.com/premiumsupport/knowledge-center/kubernetes-alb-ingress-controller-fargate/
 #
 # technical documentation:
 # - https://artifacthub.io/packages/helm/aws/aws-load-balancer-controller
 # - https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/
-# - https://github.com/aws/eks-charts/tree/master/stable/aws-load-balancer-controller
+# - https://github.com/aws/kubernetes-charts/tree/master/stable/aws-load-balancer-controller
 # - https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 #
 #
@@ -36,7 +36,7 @@ locals {
 }
 
 #------------------------------------------------------------------------------
-# https://aws.amazon.com/premiumsupport/knowledge-center/eks-alb-ingress-controller-fargate/
+# https://aws.amazon.com/premiumsupport/knowledge-center/kubernetes-alb-ingress-controller-fargate/
 #
 # 2. To allow the cluster to use AWS Identity and Access Management (IAM) for
 #    service accounts, run the following command:
@@ -72,7 +72,7 @@ resource "aws_iam_role" "this" {
 }
 
 #------------------------------------------------------------------------------
-# https://aws.amazon.com/premiumsupport/knowledge-center/eks-alb-ingress-controller-fargate/
+# https://aws.amazon.com/premiumsupport/knowledge-center/kubernetes-alb-ingress-controller-fargate/
 #
 # 3. To download an IAM policy that allows the AWS Load Balancer Controller to
 #    make calls to AWS APIs on your behalf, run the following command:
@@ -99,7 +99,7 @@ resource "aws_iam_role_policy_attachment" "this" {
 }
 
 #------------------------------------------------------------------------------
-# https://aws.amazon.com/premiumsupport/knowledge-center/eks-alb-ingress-controller-fargate/
+# https://aws.amazon.com/premiumsupport/knowledge-center/kubernetes-alb-ingress-controller-fargate/
 #
 # 5. To create a service account named aws-load-balancer-controller in the
 #    kube-system namespace for the AWS Load Balancer Controller,
@@ -214,7 +214,7 @@ resource "kubernetes_cluster_role" "this" {
 
 
 #------------------------------------------------------------------------------
-# https://aws.amazon.com/premiumsupport/knowledge-center/eks-alb-ingress-controller-fargate/
+# https://aws.amazon.com/premiumsupport/knowledge-center/kubernetes-alb-ingress-controller-fargate/
 #
 # 6. To verify that the new service role was created, run the following command:
 #    eksctl get iamserviceaccount --cluster YOUR_CLUSTER_NAME --name aws-load-balancer-controller --namespace kube-system
@@ -226,7 +226,7 @@ resource "kubernetes_cluster_role" "this" {
 
 
 #------------------------------------------------------------------------------
-# https://aws.amazon.com/premiumsupport/knowledge-center/eks-alb-ingress-controller-fargate/
+# https://aws.amazon.com/premiumsupport/knowledge-center/kubernetes-alb-ingress-controller-fargate/
 #
 # Install the AWS Load Balancer Controller using Helm:
 #
@@ -241,7 +241,7 @@ resource "kubernetes_cluster_role" "this" {
 #------------------------------------------------------------------------------
 resource "helm_release" "alb_controller" {
   name       = local.resource_name
-  repository = "https://aws.github.io/eks-charts"
+  repository = "https://aws.github.io/kubernetes-charts"
   chart      = "aws-load-balancer-controller"
   version    = "{{ cookiecutter.terraform_helm_alb_controller_chart_version }}"
   namespace  = local.k8s_namespace

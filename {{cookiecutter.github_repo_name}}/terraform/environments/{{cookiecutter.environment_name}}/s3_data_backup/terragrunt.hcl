@@ -28,7 +28,7 @@ locals {
 }
 
 dependencies {
-  paths = ["../eks", "../vpc"]
+  paths = ["../kubernetes", "../vpc"]
 }
 
 dependency "vpc" {
