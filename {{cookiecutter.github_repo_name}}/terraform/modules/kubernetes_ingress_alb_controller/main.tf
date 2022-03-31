@@ -241,7 +241,7 @@ resource "kubernetes_cluster_role" "this" {
 #------------------------------------------------------------------------------
 resource "helm_release" "alb_controller" {
   name       = local.resource_name
-  repository = "https://aws.github.io/kubernetes-charts"
+  repository = "https://aws.github.io/eks-charts"
   chart      = "aws-load-balancer-controller"
   version    = "{{ cookiecutter.terraform_helm_alb_controller_chart_version }}"
   namespace  = local.k8s_namespace
