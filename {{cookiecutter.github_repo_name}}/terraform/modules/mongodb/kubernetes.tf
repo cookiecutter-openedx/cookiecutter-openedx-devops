@@ -39,7 +39,7 @@ resource "random_password" "mongodb_admin" {
 resource "kubernetes_secret" "mongodb_admin" {
   metadata {
     name      = "mongodb-admin"
-    namespace = var.environment_namespace
+    namespace = "openedx"
   }
 
   data = {

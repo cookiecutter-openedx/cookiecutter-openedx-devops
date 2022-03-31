@@ -24,7 +24,7 @@ provider "kubernetes" {
 resource "kubernetes_secret" "mysql_root" {
   metadata {
     name      = "mysql-root"
-    namespace = var.environment_namespace
+    namespace = "openedx"
   }
 
   data = {
@@ -48,7 +48,7 @@ resource "random_password" "mysql_openedx" {
 resource "kubernetes_secret" "openedx" {
   metadata {
     name      = "mysql-openedx"
-    namespace = var.environment_namespace
+    namespace = "openedx"
   }
 
   data = {

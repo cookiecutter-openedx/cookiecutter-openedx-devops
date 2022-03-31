@@ -15,7 +15,7 @@ provider "kubernetes" {
 resource "kubernetes_secret" "s3" {
   metadata {
     name      = var.secret_name
-    namespace = var.environment_namespace
+    namespace = "openedx"
   }
 
   data = {
