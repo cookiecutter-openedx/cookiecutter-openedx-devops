@@ -22,12 +22,3 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
   token                  = data.aws_eks_cluster_auth.cluster.token
 }
-
-# to install https://github.com/kubernetes-sigs/aws-efs-csi-driver
-provider "helm" {
-  kubernetes {
-    host                   = data.aws_eks_cluster.cluster.endpoint
-    cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
-    token                  = data.aws_eks_cluster_auth.cluster.token
-  }
-}
