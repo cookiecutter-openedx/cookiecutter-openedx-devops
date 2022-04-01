@@ -49,13 +49,14 @@ metadata:
     run: nginx
   annotations:
     alb.ingress.kubernetes.io/target-type: ip
-
 spec:
   type: ClusterIP
   selector:
     app: nginx
   ports:
-  - port: 80
+  - name: http
     protocol: TCP
+    port: 80
+    targetPort: 80
   selector:
     run: nginx
