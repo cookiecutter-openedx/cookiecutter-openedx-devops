@@ -1,0 +1,31 @@
+#------------------------------------------------------------------------------
+#
+# https://docs.nginx.com/nginx-ingress-controller/configuration/virtualserver-and-virtualserverroute-resources/
+#
+#------------------------------------------------------------------------------
+apiVersion: k8s.nginx.org/v1
+kind: VirtualServer
+metadata:
+  name: lms
+spec:
+  host: web.stepwisemath.ai
+  upstreams:
+  - name: tea
+    service: tea-svc
+    port: 80
+  - name: coffee
+    service: coffee-svc
+    port: 80
+  routes:
+  - path: /tea
+    action:
+      pass: tea
+  - path: /coffee
+    action:
+      pass: coffee
+  - path: ~ ^/decaf/.*\\.jpg$
+    action:
+      pass: coffee
+  - path: = /green/tea
+    action:
+      pass: tea

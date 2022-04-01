@@ -1,7 +1,28 @@
+#------------------------------------------------------------------------------
+# Nginx container deployment
 #
 # https://levelup.gitconnected.com/mount-files-into-your-kubernetes-deployment-via-configmaps-bedfe5350e25
 #
+#------------------------------------------------------------------------------
 
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cfgmap-splash-page
+  namespace: openedx
+data:
+  configmap_splash_page: |
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <title>Stepwise Math</title>
+      </head>
+      <body>
+        <h1>Open edX</h1>
+        <h2>Looks like you caught us at an awkward moment</h2>
+      </body>
+    </html>
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -33,10 +54,10 @@ spec:
         ports:
         - containerPort: 80
         volumeMounts:
-          - name: site-lms
+          - name: splash-page
             mountPath: /usr/share/nginx/html/index.html
-            subPath: configmap_site_lms
+            subPath: configmap_splash_page
       volumes:
-      - name: site-lms
+      - name: splash-page
         configMap:
-          name: cfgmap-nginx-lms
+          name: cfgmap-splash-page

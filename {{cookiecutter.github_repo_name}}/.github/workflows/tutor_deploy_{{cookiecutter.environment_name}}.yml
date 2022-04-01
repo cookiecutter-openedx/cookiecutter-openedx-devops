@@ -126,7 +126,8 @@ jobs:
           echo "TUTOR_K8S_NAMESPACE=$NAMESPACE" >> $GITHUB_ENV
           echo "TUTOR_DOCKER_IMAGE_OPENEDX=$DOCKER_IMAGE_OPENEDX" >> $GITHUB_ENV
           echo "TUTOR_RUN_CADDY=false" >> $GITHUB_ENV
-          echo "TUTOR_RUN_NGINX=false" >> $GITHUB_ENV
+          echo "TUTOR_RUN_NGINX=true" >> $GITHUB_ENV
+          echo "ENABLE_WEB_PROXY=false" >> $GITHUB_ENV
 
       # note that the Kubernetes additional config data is locally
       # stored in ci/tutor-deploy/environments/{{ cookiecutter.environment_name }}/k8s/
