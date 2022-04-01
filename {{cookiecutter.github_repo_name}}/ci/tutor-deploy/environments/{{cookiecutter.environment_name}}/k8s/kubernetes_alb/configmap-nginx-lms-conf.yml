@@ -13,7 +13,7 @@ data:
       listen 80;
       server_name {{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }} preview.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }};
 
-      #access_log /var/log/nginx/access.log;
+      access_log /var/log/nginx/access.log;
       client_max_body_size 4M;
       server_tokens off;
 
