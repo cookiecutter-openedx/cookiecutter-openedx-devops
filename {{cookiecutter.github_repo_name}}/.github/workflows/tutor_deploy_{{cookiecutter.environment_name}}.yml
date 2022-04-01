@@ -134,7 +134,7 @@ jobs:
       - name: Create Kubernetes add-on resources
         run:  |-
           # Create kubernetes ingress and other environment resources
-          kubectl apply -f "ci/tutor-deploy/environments/$ENVIRONMENT_ID/k8s"
+          kubectl apply -f "ci/tutor-deploy/environments/$ENVIRONMENT_ID/k8s/*.yml"
 
       # Notes: OPENEDX_AWS_ACCESS_KEY, OPENEDX_AWS_SECRET_ACCESS_KEY and S3_STORAGE_BUCKET
       #        are stored in EKS kubernetes secrets, viewable from k9s.

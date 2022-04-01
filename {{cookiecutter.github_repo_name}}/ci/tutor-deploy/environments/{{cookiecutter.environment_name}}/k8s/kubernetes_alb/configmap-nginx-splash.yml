@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cfgmap-nginx-splash-page
+  namespace: openedx
+data:
+  configmap_splash_page: |
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <title>Stepwise Math</title>
+      </head>
+      <body>
+        <h1>Open edX</h1>
+        <h2>Looks like you caught us at an awkward moment</h2>
+      </body>
+    </html>
