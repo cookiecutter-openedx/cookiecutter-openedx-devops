@@ -158,7 +158,6 @@ resource "kubernetes_ingress" "alb" {
   depends_on = [
     helm_release.alb_controller,
     aws_security_group.sg_alb,
-    kubernetes_deployment.nginx,
     kubernetes_service.nginx
   ]
 }
