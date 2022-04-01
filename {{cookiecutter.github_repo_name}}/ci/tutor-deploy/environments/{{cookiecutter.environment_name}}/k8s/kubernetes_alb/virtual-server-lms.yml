@@ -9,8 +9,8 @@ metadata:
   name: lms
 spec:
   ingressClassName: ?????
-  host: {{ cookiecutter.environment_domain }}
-  host: "preview.{{ cookiecutter.environment_domain }}"
+  host: {{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
+  host: preview.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
   #access_log:
   #server_tokens: off
   client-max-body-size: 4M
