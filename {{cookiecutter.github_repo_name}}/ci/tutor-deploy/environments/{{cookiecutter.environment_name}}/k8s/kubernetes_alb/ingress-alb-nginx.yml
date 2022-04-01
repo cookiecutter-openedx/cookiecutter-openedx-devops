@@ -33,10 +33,10 @@ spec:
         ports:
         - containerPort: 80
         volumeMounts:
-          - name: mnt
+          - name: site-lms
             mountPath: /usr/share/nginx/html/index.html
-            subPath: file-from-cfgmap
+            subPath: configmap_site_lms
       volumes:
-      - name: mnt
+      - name: site-lms
         configMap:
-          name: nginx-cfgmap-lms
+          name: cfgmap-nginx-lms
