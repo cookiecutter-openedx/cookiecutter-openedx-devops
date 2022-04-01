@@ -1,0 +1,122 @@
+#------------------------------------------------------------------------------
+# Nginx container deployment
+#
+# https://levelup.gitconnected.com/mount-files-into-your-kubernetes-deployment-via-configmaps-bedfe5350e25
+# https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/configmap.md
+#
+#------------------------------------------------------------------------------
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cfgmap-nginx-splash-page
+  namespace: openedx
+data:
+  configmap_splash_page: |
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <title>Stepwise Math</title>
+      </head>
+      <body>
+        <h1>Open edX</h1>
+        <h2>Looks like you caught us at an awkward moment</h2>
+      </body>
+    </html>
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cfgmap-nginx-lms
+  namespace: openedx
+data:
+  configmap_lms_conf: |
+    upstream lms-backend {
+        server lms:8000 fail_timeout=0;
+    }
+
+    server {
+      listen 80;
+      server_name {{ cookiecutter.environment_domain }} preview.{{ cookiecutter.environment_domain }};
+
+      #access_log /var/log/nginx/access.log tutor;
+      client_max_body_size 4M;
+      #server_tokens off;
+
+      rewrite ^(.*)/favicon.ico$ /static/images/favicon.ico last;
+
+      # Allow large cookies
+      proxy_buffer_size 8k;
+
+    location @proxy_to_lms_app {
+        proxy_redirect off;
+        proxy_set_header Host $http_host;
+        proxy_pass http://lms-backend;
+      }
+
+      location / {
+        try_files $uri @proxy_to_lms_app;
+      }
+
+      # /login?next=<any image> can be used by 3rd party sites in <img> tags to
+      # determine whether a user on their site is logged into edX.
+      # The most common image to use is favicon.ico.
+      location /login {
+        if ( $arg_next ~* "favicon.ico" ) {
+          return 403;
+        }
+        try_files $uri @proxy_to_lms_app;
+      }
+
+    # Need a separate location for the image uploads endpoint to limit upload sizes
+      location ~ ^/api/profile_images/[^/]*/[^/]*/upload$ {
+        try_files $uri @proxy_to_lms_app;
+        client_max_body_size 1049576;
+      }
+
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  namespace: openedx
+  labels:
+    app: nginx
+  annotations:
+    # mcdaniel
+    # https://www.cyberciti.biz/faq/nginx-upstream-sent-too-big-header-while-reading-response-header-from-upstream/
+    # to fix "[error] 199#199: *15739 upstream sent too big header while reading response header from upstream"
+    # ---------------------
+    nginx.ingress.kubernetes.io/proxy-busy-buffers-size: "512k"
+    nginx.ingress.kubernetes.io/proxy-buffers: "4 512k"
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "256k"
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - name: splash-page
+            mountPath: /usr/share/nginx/html/index.html
+            subPath: configmap_splash_page
+        volumeMounts:
+          - name: lms-conf
+            mountPath: /etc/nginx/sites-enabled/lms
+            subPath: configmap_lms_conf
+      volumes:
+      - name: splash-page
+        configMap:
+          name: cfgmap-nginx-splash-page
+      - name: lms-conf
+        configMap:
+          name: cfgmap-nginx-lms

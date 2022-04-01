@@ -8,21 +8,30 @@ kind: VirtualServer
 metadata:
   name: lms
 spec:
-  host: web.stepwisemath.ai
+  ingressClassName: ?????
+  host: {{ cookiecutter.environment_domain }}
+  host: "preview.{{ cookiecutter.environment_domain }}"
+  #access_log:
+  #server_tokens: off
+  client-max-body-size: 4M
+  buffer-size: 8k
   upstreams:
-  - name: tea
-    service: tea-svc
-    port: 80
-  - name: coffee
-    service: coffee-svc
-    port: 80
+  - name: lms-backend
+    service: lms
+    port: 8000
+  proxy:
+    upstream: proxy_to_lms_app
+    requestHeaders:
+      pass: true
+      set:
+      - name: Host
+        value: $http_host
+      pass:
+      - Server
   routes:
   - path: /tea
     action:
       pass: tea
-  - path: /coffee
-    action:
-      pass: coffee
   - path: ~ ^/decaf/.*\\.jpg$
     action:
       pass: coffee
