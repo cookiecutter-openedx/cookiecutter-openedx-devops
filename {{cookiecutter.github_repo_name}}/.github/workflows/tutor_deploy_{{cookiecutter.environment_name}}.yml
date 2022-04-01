@@ -125,6 +125,7 @@ jobs:
           echo "TUTOR_CMS_HOST=$CMS_HOSTNAME" >> $GITHUB_ENV
           echo "TUTOR_K8S_NAMESPACE=$NAMESPACE" >> $GITHUB_ENV
           echo "TUTOR_DOCKER_IMAGE_OPENEDX=$DOCKER_IMAGE_OPENEDX" >> $GITHUB_ENV
+          echo "TUTOR_RUN_ELASTICSEARCH=false" >> $GITHUB_ENV
           echo "TUTOR_RUN_CADDY=false" >> $GITHUB_ENV
           echo "TUTOR_RUN_NGINX=true" >> $GITHUB_ENV
           echo "ENABLE_WEB_PROXY=false" >> $GITHUB_ENV
