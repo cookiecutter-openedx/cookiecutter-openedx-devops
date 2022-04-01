@@ -57,10 +57,10 @@ variable "eks_worker_group_max_size" {
   type = number
 }
 
-variabe "eks_worker_group_desired_size" {
+variable "eks_worker_group_desired_size" {
   type = number
 }
 
-variabe "eks_worker_group_instance_type" {
+variable "eks_worker_group_instance_type" {
   type = string
 }
