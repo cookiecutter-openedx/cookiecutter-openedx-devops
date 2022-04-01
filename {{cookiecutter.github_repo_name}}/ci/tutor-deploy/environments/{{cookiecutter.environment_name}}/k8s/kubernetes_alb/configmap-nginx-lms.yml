@@ -4,7 +4,7 @@ metadata:
   name: nginx-cfgmap-lms
   namespace: openedx
 data:
-  file-from-cfgmap: |
+  configmap_site_lms: |
     <!DOCTYPE html>
     <html lang="en">
       <head>
