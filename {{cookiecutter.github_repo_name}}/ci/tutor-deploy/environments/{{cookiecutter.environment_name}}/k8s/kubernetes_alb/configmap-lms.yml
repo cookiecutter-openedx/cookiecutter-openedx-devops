@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-cfgmap-lms
+data:
+  file-from-cfgmap: |
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <title>From config map</title>
+      </head>
+      <body>
+
+        <h1>Loaded from config map!</h1>
+
+      </body>
+    </html>

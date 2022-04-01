@@ -1,0 +1,60 @@
+#
+# https://levelup.gitconnected.com/mount-files-into-your-kubernetes-deployment-via-configmaps-bedfe5350e25
+#
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+  annotations:
+    # mcdaniel
+    # https://www.cyberciti.biz/faq/nginx-upstream-sent-too-big-header-while-reading-response-header-from-upstream/
+    # to fix "[error] 199#199: *15739 upstream sent too big header while reading response header from upstream"
+    # ---------------------
+    nginx.ingress.kubernetes.io/proxy-busy-buffers-size: "512k"
+    nginx.ingress.kubernetes.io/proxy-buffers: "4 512k"
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "256k"
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - name: mnt
+            mountPath: /usr/share/nginx/html/index.html
+            subPath: file-from-cfgmap
+      volumes:
+      - name: mnt
+        configMap:
+          name: nginx-cfgmap-lms
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  labels:
+    run: nginx
+  annotations:
+    alb.ingress.kubernetes.io/target-type: ip
+
+spec:
+  type: ClusterIP
+  selector:
+    app: nginx
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    run: nginx
