@@ -23,6 +23,10 @@ locals {
   aws_region                      = local.global_vars.locals.aws_region
 
   kubernetes_version              = local.environment_vars.locals.kubernetes_version
+  eks_worker_group_instance_type  = local.environment_vars.locals.eks_worker_group_instance_type
+  eks_worker_group_min_size       = local.environment_vars.locals.eks_worker_group_min_size
+  eks_worker_group_max_size       = local.environment_vars.locals.eks_worker_group_max_size
+  eks_worker_group_desired_size   = local.environment_vars.locals.eks_worker_group_desired_size
 
   tags = merge(
     local.environment_vars.locals.tags,
@@ -68,5 +72,9 @@ inputs = {
   public_subnet_ids = dependency.vpc.outputs.public_subnets
   vpc_id  = dependency.vpc.outputs.vpc_id
   kubernetes_cluster_version = local.kubernetes_version
+  eks_worker_group_instance_type  = local.eks_worker_group_instance_type
+  eks_worker_group_min_size = local.eks_worker_group_min_size
+  eks_worker_group_max_size = local.eks_worker_group_max_size
+  eks_worker_group_desired_size = local.eks_worker_group_desired_size
   tags = local.tags
 }

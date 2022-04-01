@@ -28,7 +28,7 @@ module "eks" {
   # mcdaniel mar-2022: pushing create to 30 minutes because of the coredns add-on,
   # which takes around 25 minutes.
   cluster_timeouts = {
-    create = "30m"
+    create = "20m"
     update = "20m"
     delete = "20m"
   }
@@ -119,41 +119,27 @@ module "eks" {
     }
   }
 
-  # see: https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/
-  fargate_profiles = {
-    coredns = {
-      name       = "coredns"
-      subnet_ids = var.private_subnet_ids
-
-      selectors = [
-        {
-          namespace = "kube-system"
-          labels = {
-            k8s-app = "kube-dns"
-          }
-        },
-        {
-          namespace = "kube-system"
-        }
-
-      ]
+  eks_managed_node_groups = {
+    default = {
+      min_size       = var.eks_worker_group_min_size
+      max_size       = var.eks_worker_group_max_size
+      desired_size   = var.eks_worker_group_desired_size
+      instance_types = [var.eks_worker_group_instance_type]
+      labels = {
+        Environment = var.environment_namespace
+        GithubRepo  = "terraform-aws-eks"
+        GithubOrg   = "terraform-aws-modules"
+      }
       tags = var.tags
-      # this is redundant, since aws_iam_role.this sets its assume_role_policy
-      # to point to this exact fargate profile.
-      pod_execution_role = aws_iam_role.fargate_pod_execution_role
     }
+  }
 
-    # of the various namespaces that we're including the selectors, "default"
-    # bears mentioning because, as the name implies, any deployments that do
-    # not have a declared namespace are going to be sent here.
-    openedx = {
-      name = "openedx"
+  fargate_profiles = {
+    fargate = {
+      name = "fargate"
       selectors = [
         {
-          namespace = "openedx"
-        },
-        {
-          namespace = "default"
+          namespace = "fargate"
         }
       ]
       tags = var.tags

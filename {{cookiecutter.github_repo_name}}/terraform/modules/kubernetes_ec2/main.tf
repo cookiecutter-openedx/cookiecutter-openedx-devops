@@ -64,6 +64,9 @@ module "eks" {
   #   communication to your pods. Kube-proxy is not deployed to Fargate nodes."
   #   https://docs.aws.amazon.com/kubernetes/latest/userguide/managing-kube-proxy.html
   #
+  # aws-ebs-csi-driver:
+  #   we need this if we want to run caddy and elasticsearch on Fargate.
+  #   see: https://dev.to/aws-builders/install-manage-amazon-eks-add-ons-with-terraform-2dea
   #----------------------------------------------------------------------------
   cluster_addons = {
     coredns = {
@@ -75,6 +78,11 @@ module "eks" {
       resolve_conflicts        = "OVERWRITE"
       tags                     = var.tags
       service_account_role_arn = module.vpc_cni_irsa.iam_role_arn
+    }
+    aws-ebs-csi-driver = {
+      resolve_conflicts        = "OVERWRITE"
+      tags                     = var.tags
+      service_account_role_arn = aws_iam_role.fargate_pod_execution_role.arn
     }
   }
 
