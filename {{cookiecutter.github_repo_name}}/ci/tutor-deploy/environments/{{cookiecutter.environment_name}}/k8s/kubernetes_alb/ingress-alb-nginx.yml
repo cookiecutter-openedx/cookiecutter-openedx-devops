@@ -39,11 +39,9 @@ spec:
           - name: splash-page
             mountPath: /usr/share/nginx/html/index.html
             subPath: configmap_splash_page
-        volumeMounts:
           - name: lms-conf
             mountPath: /etc/nginx/sites-enabled/lms
             subPath: configmap_lms_conf
-        volumeMounts:
           - name: cms-conf
             mountPath: /etc/nginx/sites-enabled/cms
             subPath: configmap_cms_conf
