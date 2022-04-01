@@ -79,11 +79,11 @@ module "eks" {
       tags                     = var.tags
       service_account_role_arn = module.vpc_cni_irsa.iam_role_arn
     }
-    aws-ebs-csi-driver = {
-      resolve_conflicts        = "OVERWRITE"
-      tags                     = var.tags
-      service_account_role_arn = aws_iam_role.fargate_pod_execution_role.arn
-    }
+    #aws-ebs-csi-driver = {
+    #  resolve_conflicts        = "OVERWRITE"
+    #  tags                     = var.tags
+    #  service_account_role_arn = aws_iam_role.fargate_pod_execution_role.arn
+    #}
   }
 
   #----------------------------------------------------------------------------

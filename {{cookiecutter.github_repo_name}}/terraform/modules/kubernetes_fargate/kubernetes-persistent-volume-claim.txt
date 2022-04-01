@@ -4,6 +4,7 @@
 # for PersistentVolumeClaim by caddy and elasticsearch.
 #
 # see:
+# - https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html
 # - https://ntorga.com/deploying-wordpress-with-kubernetes-and-terraform-on-aws/
 # - https://medium.com/@muneeburrehman2610/kubernetes-persistent-volume-for-beginners-a13cbe5bdeea
 #------------------------------------------------------------------------------
@@ -21,8 +22,9 @@ resource "kubernetes_persistent_volume" "caddy" {
     }
     access_modes = ["ReadWriteMany"]
     persistent_volume_source {
-      vsphere_volume {
-        volume_path = "/home/caddy/vol"
+      aws_elastic_block_store {
+        fs_type = "ext4"
+        volume_id =
       }
     }
   }
@@ -35,6 +37,9 @@ resource "kubernetes_persistent_volume" "caddy" {
 resource "kubernetes_storage_class" "ebs-sc" {
   metadata {
     name = "ebs-sc"
+    labels = {
+      name = "ebs-sc"
+    }
   }
   storage_provisioner = "kubernetes.io/aws-ebs"
   parameters = {
@@ -61,7 +66,9 @@ resource "kubernetes_persistent_volume_claim" "caddy" {
     access_modes       = ["ReadWriteMany"]
     storage_class_name = "ebs-sc"
     selector {
-
+      match_labels = {
+        name = "ebs-sc"
+      }
     }
     resources {
       requests = {
