@@ -228,7 +228,9 @@ jobs:
 
       - name: Run tutor init
         run:  |-
-          tutor k8s init
+          tutor k8s init --limit lms
+          tutor k8s init --limit cms
+          tutor k8s init --limit smtp
 
       - name: Set theme
         run:  |-
