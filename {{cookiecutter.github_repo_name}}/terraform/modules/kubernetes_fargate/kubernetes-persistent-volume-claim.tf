@@ -42,9 +42,8 @@ resource "kubernetes_storage_class" "ebs-sc" {
     fsType    = "ext4"
     encrypted = "false"
   }
-  reclaim_policy         = "Immediate"
+  reclaim_policy         = "Delete"
   allow_volume_expansion = true
-  tags                   = var.tags
   depends_on = [
     module.eks
   ]
@@ -56,12 +55,14 @@ resource "kubernetes_storage_class" "ebs-sc" {
 resource "kubernetes_persistent_volume_claim" "caddy" {
   metadata {
     name      = "caddy"
-    namespace = var.environment_namespace
+    namespace = "openedx"
   }
   spec {
     access_modes       = ["ReadWriteMany"]
     storage_class_name = "ebs-sc"
-    selector           = {}
+    selector {
+
+    }
     resources {
       requests = {
         storage = "500M"
@@ -69,8 +70,10 @@ resource "kubernetes_persistent_volume_claim" "caddy" {
     }
     volume_name = kubernetes_persistent_volume.caddy.metadata.0.name
   }
-  wait_until_bound = true
+  wait_until_bound = false
   depends_on = [
-    module.eks
+    module.eks,
+    kubernetes_storage_class.ebs-sc,
+    kubernetes_persistent_volume.caddy
   ]
 }
