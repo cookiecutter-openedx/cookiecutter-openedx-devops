@@ -1,49 +1,75 @@
 #------------------------------------------------------------------------------
-# Amazon EFS CSI Driver
+# Amazon EBS CSI Driver
 #
-# for PersistentVolumeClaim by caddy and elasticsearch. For static provisioning,
-# AWS EFS file system needs to be created manually on AWS first.
-# After that it can be mounted inside a container as a volume using the driver.
+# for PersistentVolumeClaim by caddy and elasticsearch.
 #
-#
-# see: https://github.com/kubernetes-sigs/aws-efs-csi-driver
-#
-# helm repo add aws-efs-csi-driver https://kubernetes-sigs.github.io/aws-efs-csi-driver/
-# helm repo update
-# helm upgrade --install aws-efs-csi-driver --namespace kube-system aws-efs-csi-driver/aws-efs-csi-driver
-#
-# see: https://ntorga.com/deploying-wordpress-with-kubernetes-and-terraform-on-aws/
+# see:
+# - https://ntorga.com/deploying-wordpress-with-kubernetes-and-terraform-on-aws/
+# - https://medium.com/@muneeburrehman2610/kubernetes-persistent-volume-for-beginners-a13cbe5bdeea
 #------------------------------------------------------------------------------
 
-
-resource "kubernetes_persistent_volume_claim" "caddy" {
+#------------------------------------------------------------------------------
+# https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/persistent_volume
+#------------------------------------------------------------------------------
+resource "kubernetes_persistent_volume" "caddy" {
   metadata {
-    name = "caddy-pvc"
+    name = "caddy"
   }
   spec {
-    access_modes       = ["ReadWriteMany"]
-    storage_class_name = "efs-sc"
-    resources {
-      requests = {
-        storage = "10Gi"
+    capacity = {
+      storage = "500M"
+    }
+    access_modes = ["ReadWriteMany"]
+    persistent_volume_source {
+      vsphere_volume {
+        volume_path = "/home/caddy/vol"
       }
     }
   }
+}
+
+#------------------------------------------------------------------------------
+# see: https://kubernetes.io/docs/concepts/storage/storage-classes/#aws-ebs
+#
+#------------------------------------------------------------------------------
+resource "kubernetes_storage_class" "ebs-sc" {
+  metadata {
+    name = "ebs-sc"
+  }
+  storage_provisioner = "kubernetes.io/aws-ebs"
+  parameters = {
+    type      = "gp3"
+    fsType    = "ext4"
+    encrypted = "false"
+  }
+  reclaim_policy         = "Immediate"
+  allow_volume_expansion = true
+  tags                   = var.tags
   depends_on = [
     module.eks
   ]
 }
 
-resource "kubernetes_storage_class" "efs-sc" {
+#------------------------------------------------------------------------------
+# https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/persistent_volume_claim
+#------------------------------------------------------------------------------
+resource "kubernetes_persistent_volume_claim" "caddy" {
   metadata {
-    name = "efs-sc"
+    name      = "caddy"
+    namespace = var.environment_namespace
   }
-  storage_provisioner = "efs.csi.aws.com"
-  parameters = {
-    provisioningMode = "efs-ap"
-    fileSystemId     = "caddy"
-    directoryPerms   = 700
+  spec {
+    access_modes       = ["ReadWriteMany"]
+    storage_class_name = "ebs-sc"
+    selector           = {}
+    resources {
+      requests = {
+        storage = "500M"
+      }
+    }
+    volume_name = kubernetes_persistent_volume.caddy.metadata.0.name
   }
+  wait_until_bound = true
   depends_on = [
     module.eks
   ]
