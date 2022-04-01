@@ -12,18 +12,9 @@
 # helm repo update
 # helm upgrade --install aws-efs-csi-driver --namespace kube-system aws-efs-csi-driver/aws-efs-csi-driver
 #
+# see: https://ntorga.com/deploying-wordpress-with-kubernetes-and-terraform-on-aws/
 #------------------------------------------------------------------------------
 
-resource "helm_release" "aws-efs-csi-driver" {
-  name       = var.environment_namespace
-  repository = "https://kubernetes-sigs.github.io/aws-efs-csi-driver/"
-  chart      = "aws-efs-csi-driver"
-  version    = "{{ cookiecutter.terraform_helm_aws_efs_csi_driver_version }}"
-  namespace  = "kube-system"
-  depends_on = [
-    data.aws_eks_cluster.cluster
-  ]
-}
 
 resource "kubernetes_persistent_volume_claim" "caddy" {
   metadata {
@@ -39,7 +30,7 @@ resource "kubernetes_persistent_volume_claim" "caddy" {
     }
   }
   depends_on = [
-    helm_release.aws-efs-csi-driver
+    module.eks
   ]
 }
 
@@ -54,6 +45,6 @@ resource "kubernetes_storage_class" "efs-sc" {
     directoryPerms   = 700
   }
   depends_on = [
-    helm_release.aws-efs-csi-driver
+    module.eks
   ]
 }
