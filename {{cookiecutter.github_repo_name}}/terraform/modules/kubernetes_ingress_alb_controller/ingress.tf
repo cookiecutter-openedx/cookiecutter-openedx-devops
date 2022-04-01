@@ -51,6 +51,35 @@ resource "aws_security_group" "sg_alb" {
   tags = var.tags
 }
 
+#------------------------------------------------------------------------------
+# Amazon EKS pods running on AWS Fargate now support custom security groups
+# https://aws.amazon.com/about-aws/whats-new/2021/06/amazon-eks-pods-running-aws-fargate-support-custom-security-groups/
+#
+# https://github.com/weaveworks/kubernetesctl/issues/1640
+# For exposing an HTTP service, it so far only supports ALB with IP mode and you should specify your service as ClusterIP.
+#------------------------------------------------------------------------------
+resource "kubernetes_service" "nginx" {
+  metadata {
+    name      = "ingress-service"
+    namespace = local.namespace
+    annotations = {
+      "alb.ingress.kubernetes.io/target-type" = "ip"
+    }
+  }
+  spec {
+    type = "ClusterIP"
+    selector = {
+      app = "nginx"
+    }
+    port {
+      port        = 80
+      target_port = 80
+      protocol    = "TCP"
+    }
+
+  }
+}
+
 
 #------------------------------------------------------------------------------
 # This works with the EKS ALB controller (see main.tf) to create and configure
@@ -106,7 +135,7 @@ resource "kubernetes_ingress" "alb" {
       ]
     }
     backend {
-      service_name = "openedx"
+      service_name = kubernetes_service.nginx.metadata.0.name
       service_port = 80
     }
     rule {
@@ -114,7 +143,7 @@ resource "kubernetes_ingress" "alb" {
         path {
           path = "/*"
           backend {
-            service_name = "openedx"
+            service_name = kubernetes_service.nginx.metadata.0.name
             service_port = 80
           }
         }
@@ -125,5 +154,6 @@ resource "kubernetes_ingress" "alb" {
   depends_on = [
     helm_release.alb_controller,
     aws_security_group.sg_alb,
+    kubernetes_service.nginx
   ]
 }

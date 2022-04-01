@@ -40,23 +40,3 @@ spec:
       - name: mnt
         configMap:
           name: nginx-cfgmap-lms
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: nginx
-  labels:
-    run: nginx
-  annotations:
-    alb.ingress.kubernetes.io/target-type: ip
-spec:
-  type: ClusterIP
-  selector:
-    app: nginx
-  ports:
-  - name: http
-    protocol: TCP
-    port: 80
-    targetPort: 80
-  selector:
-    run: nginx
