@@ -6,28 +6,23 @@
 #
 # usage: build an EKS cluster load balancer
 #------------------------------------------------------------------------------
-locals {
-  name = var.cluster_name
-  tags = var.tags
-}
 
 data "aws_eks_cluster" "eks" {
   name = var.environment_namespace
 }
 
 data "aws_eks_cluster" "cluster" {
-  name = data.aws_eks_cluster.eks.cluster_id
+  name = var.environment_namespace
 }
 
 data "aws_eks_cluster_auth" "cluster" {
-  name = data.aws_eks_cluster.eks.cluster_id
+  name = var.environment_namespace
 }
 
 provider "kubernetes" {
   host                   = data.aws_eks_cluster.cluster.endpoint
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
   token                  = data.aws_eks_cluster_auth.cluster.token
-  load_config_file       = false
 }
 
 resource "aws_security_group" "worker_group_mgmt" {
@@ -69,5 +64,5 @@ resource "aws_security_group" "all_worker_mgmt" {
 }
 
 data "tls_certificate" "cluster" {
-  url = data.aws_eks_cluster.eks.cluster_oidc_issuer_url
+  url = aws_eks_cluster.eks.identity[0].oidc[0].issuer
 }
