@@ -245,7 +245,6 @@ resource "helm_release" "alb_controller" {
   chart      = "aws-load-balancer-controller"
   version    = "{{ cookiecutter.terraform_helm_alb_controller_chart_version }}"
   namespace  = local.k8s_namespace
-  atomic     = true
   timeout    = 900
   depends_on = [
     data.aws_eks_cluster.cluster,
