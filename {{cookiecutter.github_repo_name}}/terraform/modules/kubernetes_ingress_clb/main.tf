@@ -64,5 +64,5 @@ resource "aws_security_group" "all_worker_mgmt" {
 }
 
 data "tls_certificate" "cluster" {
-  url = aws_eks_cluster.eks.identity[0].oidc[0].issuer
+  url = data.aws_eks_cluster.eks.identity[0].oidc[0].issuer
 }
