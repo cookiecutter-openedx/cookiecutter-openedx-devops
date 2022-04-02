@@ -25,7 +25,7 @@ locals {
   tags = merge(
     local.environment_vars.locals.tags,
     local.global_vars.locals.tags,
-    { Name = "${local.environment_namespace}-eks" }
+    { Name = "${local.environment_namespace}-eks-ingress" }
   )
 }
 
