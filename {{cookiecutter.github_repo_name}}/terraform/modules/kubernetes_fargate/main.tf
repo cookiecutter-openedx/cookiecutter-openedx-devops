@@ -119,7 +119,6 @@ module "eks" {
     }
   }
 
-
   eks_managed_node_groups = {
     default = {
       min_size       = var.eks_worker_group_min_size
@@ -128,8 +127,7 @@ module "eks" {
       instance_types = [var.eks_worker_group_instance_type]
       labels = {
         Environment = var.environment_namespace
-        GithubRepo  = "terraform-aws-eks"
-        GithubOrg   = "terraform-aws-modules"
+        Namespace   = "openedx"
       }
       tags = var.tags
     }
@@ -147,9 +145,6 @@ module "eks" {
           labels = {
             k8s-app = "kube-dns"
           }
-        },
-        {
-          namespace = "kube-system"
         }
 
       ]
