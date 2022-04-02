@@ -6,12 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-## [0.1.0]
+## [0.0.4]
 
 - parameterized deployment yaml manifests with cookiecutter
 - refactored VPC and EKS modules based on the current latest version of terraform-aws-modules modules
-- added choice of Load Balancer type: Application Load Balancer (ALB) or Classic Load Balancer (CLB)
-- added choice of EKS compute node type: EC2 or Fargate
 - upgraded AWS RDS Terraform module to v4
 - added AWS certficates in us-east-1 and the aws region specified in environments/global.hcl
 - added new module for Cloudfront distribution and DNS record for 'cdn' subdomain
