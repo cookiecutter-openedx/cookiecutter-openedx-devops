@@ -120,7 +120,7 @@ module "eks" {
   }
 
   eks_managed_node_groups = {
-    default = {
+    ec2 = {
       min_size       = var.eks_worker_group_min_size
       max_size       = var.eks_worker_group_max_size
       desired_size   = var.eks_worker_group_desired_size
@@ -145,20 +145,9 @@ module "eks" {
           labels = {
             k8s-app = "kube-dns"
           }
-        }
-
-      ]
-      tags = var.tags
-      # this is redundant, since aws_iam_role.this sets its assume_role_policy
-      # to point to this exact fargate profile.
-      pod_execution_role = aws_iam_role.fargate_pod_execution_role
-    }
-
-    fargate = {
-      name = "fargate"
-      selectors = [
+        },
         {
-          namespace = "fargate"
+          namespace = "default"
         }
       ]
       tags = var.tags
