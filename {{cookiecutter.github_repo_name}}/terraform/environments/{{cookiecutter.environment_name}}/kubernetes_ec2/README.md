@@ -1,1 +1,0 @@
-# Elastic Kubernetes Service
