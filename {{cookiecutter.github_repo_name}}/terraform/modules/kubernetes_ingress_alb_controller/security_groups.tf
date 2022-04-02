@@ -21,7 +21,6 @@ data "aws_security_group" "eks" {
     },
   )
 
-  depends_on = [module.eks]
 }
 
 # we need this so that we can pass the cidr of the vpc
@@ -52,5 +51,4 @@ resource "aws_security_group_rule" "nginx" {
   protocol          = "tcp"
   cidr_blocks       = [data.aws_vpc.environment.cidr_block]
   security_group_id = data.aws_security_group.eks.id
-  depends_on        = [module.eks]
 }

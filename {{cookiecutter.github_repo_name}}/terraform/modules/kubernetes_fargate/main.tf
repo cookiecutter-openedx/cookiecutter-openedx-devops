@@ -153,7 +153,30 @@ module "eks" {
     }
   }
 
+  # see: https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/
   fargate_profiles = {
+    coredns = {
+      name       = "coredns"
+      subnet_ids = var.private_subnet_ids
+
+      selectors = [
+        {
+          namespace = "kube-system"
+          labels = {
+            k8s-app = "kube-dns"
+          }
+        },
+        {
+          namespace = "kube-system"
+        }
+
+      ]
+      tags = var.tags
+      # this is redundant, since aws_iam_role.this sets its assume_role_policy
+      # to point to this exact fargate profile.
+      pod_execution_role = aws_iam_role.fargate_pod_execution_role
+    }
+
     fargate = {
       name = "fargate"
       selectors = [
