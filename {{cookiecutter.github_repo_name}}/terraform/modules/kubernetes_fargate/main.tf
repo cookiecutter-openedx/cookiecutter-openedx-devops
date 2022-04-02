@@ -28,7 +28,7 @@ module "eks" {
   # mcdaniel mar-2022: pushing create to 30 minutes because of the coredns add-on,
   # which takes around 25 minutes.
   cluster_timeouts = {
-    create = "20m"
+    create = "30m"
     update = "20m"
     delete = "20m"
   }
@@ -118,25 +118,7 @@ module "eks" {
       ipv6_cidr_blocks = ["::/0"]
     }
   }
-  cluster_security_group_additional_rules = {
-    ingress_self_all = {
-      description = "Node to node all ports/protocols"
-      protocol    = "-1"
-      from_port   = 0
-      to_port     = 0
-      type        = "ingress"
-      self        = true
-    }
-    egress_all = {
-      description      = "Node all egress"
-      protocol         = "-1"
-      from_port        = 0
-      to_port          = 0
-      type             = "egress"
-      cidr_blocks      = ["0.0.0.0/0"]
-      ipv6_cidr_blocks = ["::/0"]
-    }
-  }
+
 
   eks_managed_node_groups = {
     default = {
