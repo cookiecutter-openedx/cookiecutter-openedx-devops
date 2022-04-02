@@ -25,7 +25,19 @@ module "eks" {
   subnet_ids                      = var.private_subnet_ids
   tags                            = var.tags
 
+  cluster_addons = {
+    coredns = {
+      resolve_conflicts = "OVERWRITE"
+      tags              = var.tags
+    }
+    vpc-cni = {
+      resolve_conflicts = "OVERWRITE"
+      tags              = var.tags
+    }
+  }
+
 }
+
 
 #------------------------------------------------------------------------------
 # Tutor deploys into this namespace, bc of a namesapce command-line argument
