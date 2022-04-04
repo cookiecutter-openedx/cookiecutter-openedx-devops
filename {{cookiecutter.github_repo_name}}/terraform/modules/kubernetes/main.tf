@@ -13,6 +13,40 @@
 # - https://docs.aws.amazon.com/kubernetes/latest/userguide/fargate-profile.html
 #
 #------------------------------------------------------------------------------
+locals {
+
+  # see: https://github.com/terraform-aws-modules/terraform-aws-eks/issues/1744
+  # sepehrmavedati commented on Jan 9
+  kubeconfig             = "~/.kube/config"
+  current_auth_configmap = yamldecode(module.eks.aws_auth_configmap_yaml)
+  map_users = [
+    {
+      userarn  = "arn:aws:iam::320713933456:user/ci"
+      username = "ci"
+      groups   = ["system:masters"]
+    },
+    {
+      userarn  = "arn:aws:iam::320713933456:user/kent.fuka"
+      username = "kent.fuka"
+      groups   = ["system:masters"]
+    },
+    {
+      userarn  = "arn:aws:iam::320713933456:user/mcdaniel"
+      username = "mcdaniel"
+      groups   = ["system:masters"]
+    }
+  ]
+  updated_auth_configmap_data = {
+    data = {
+      #mapRoles = yamlencode(
+      #  distinct(concat(
+      #  yamldecode(local.current_auth_configmap.data.mapRoles), local.map_roles, )
+      #))
+      mapUsers = yamlencode(local.map_users)
+    }
+  }
+}
+
 module "eks" {
   source                          = "terraform-aws-modules/eks/aws"
   version                         = "{{ cookiecutter.terraform_aws_modules_eks }}"
@@ -24,6 +58,35 @@ module "eks" {
   vpc_id                          = var.vpc_id
   subnet_ids                      = var.private_subnet_ids
   tags                            = var.tags
+
+  node_security_group_additional_rules = {
+    ingress_self_all = {
+      description = "Added by openedx_devops: Node to node all ports/protocols"
+      protocol    = "-1"
+      from_port   = 0
+      to_port     = 0
+      type        = "ingress"
+      self        = true
+    }
+    port_8443 = {
+      description      = "Added by openedx_devops: open port 8443 to vpc"
+      protocol         = "-1"
+      from_port        = 8443
+      to_port          = 8443
+      type             = "ingress"
+      cidr_blocks      = ["0.0.0.0/0"]
+      ipv6_cidr_blocks = ["::/0"]
+    }
+    egress_all = {
+      description      = "Added by openedx_devops: Node all egress"
+      protocol         = "-1"
+      from_port        = 0
+      to_port          = 0
+      type             = "egress"
+      cidr_blocks      = ["0.0.0.0/0"]
+      ipv6_cidr_blocks = ["::/0"]
+    }
+  }
 
   eks_managed_node_groups = {
     default = {
@@ -46,4 +109,21 @@ resource "kubernetes_namespace" "openedx" {
     name = "openedx"
   }
   depends_on = [module.eks]
+}
+
+# see: https://github.com/terraform-aws-modules/terraform-aws-eks/issues/1744
+# sepehrmavedati commented on Jan 9
+resource "null_resource" "patch_aws_auth_configmap" {
+  triggers = {
+    cmd_patch = "kubectl patch configmap/aws-auth -n kube-system --type merge -p '${chomp(jsonencode(local.updated_auth_configmap_data))}' --kubeconfig <(echo $KUBECONFIG | base64 --decode)"
+  }
+
+  provisioner "local-exec" {
+    interpreter = ["/bin/bash", "-c"]
+    command     = self.triggers.cmd_patch
+
+    environment = {
+      KUBECONFIG = base64encode(local.kubeconfig)
+    }
+  }
 }

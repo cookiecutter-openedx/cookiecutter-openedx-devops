@@ -77,4 +77,12 @@ inputs = {
   eks_worker_group_max_size = local.eks_worker_group_max_size
   eks_worker_group_desired_size = local.eks_worker_group_desired_size
   tags = local.tags
+  map_users = [
+    {
+      userarn  = "arn:aws:iam::{{ cookiecutter.account_id }}:user/ci"
+      username = "ci"
+      groups   = ["system:masters"]
+    }
+  ]
+
 }

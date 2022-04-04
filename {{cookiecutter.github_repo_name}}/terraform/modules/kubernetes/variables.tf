@@ -64,3 +64,13 @@ variable "eks_worker_group_desired_size" {
 variable "eks_worker_group_instance_type" {
   type = string
 }
+
+variable "map_users" {
+  description = "Additional IAM users to add to the aws-auth configmap. See examples/basic/variables.tf for example format."
+  type = list(object({
+    userarn  = string
+    username = string
+    groups   = list(string)
+  }))
+  default = []
+}
