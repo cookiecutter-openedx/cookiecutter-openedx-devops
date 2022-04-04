@@ -25,23 +25,3 @@ provider "aws" {
   alias  = "us-east-1"
   region = "us-east-1"
 }
-
-data "aws_route53_zone" "root_domain" {
-  name = var.root_domain
-}
-
-data "aws_route53_zone" "environment_domain" {
-  name = var.environment_domain
-}
-
-data "aws_acm_certificate" "root_domain" {
-  domain   = var.root_domain
-  statuses = ["ISSUED"]
-  provider = aws.us-east-1
-}
-
-data "aws_acm_certificate" "environment_domain" {
-  domain   = var.environment_domain
-  statuses = ["ISSUED"]
-  provider = aws.us-east-1
-}
