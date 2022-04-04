@@ -7,13 +7,9 @@
 # usage: setup a DocumentDB MongoDB cluster with connectivity
 #        to anything inside the VPN. create DNS records for master and reader.
 #------------------------------------------------------------------------------
-locals {
-
-}
-
 resource "aws_security_group" "mongo_cluster" {
   name        = var.resource_name
-  description = "Security Group for DocumentDB cluster"
+  description = "Added by openedx_devops: DocumentDB cluster"
   vpc_id      = var.vpc_id
   tags        = var.tags
 }

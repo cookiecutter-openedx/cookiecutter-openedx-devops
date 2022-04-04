@@ -26,8 +26,20 @@ module "security_group" {
       from_port   = 3306
       to_port     = 3306
       protocol    = "tcp"
-      description = "MySQL access from within VPC"
+      description = "Added by openedx_devops: MySQL access from within VPC"
       cidr_blocks = join(",", var.ingress_cidr_blocks)
+    },
+  ]
+
+  egress_with_cidr_blocks = [
+    {
+      description      = "Added by openedx_devops: Node all egress"
+      protocol         = "-1"
+      from_port        = 0
+      to_port          = 0
+      type             = "egress"
+      cidr_blocks      = ["0.0.0.0/0"]
+      ipv6_cidr_blocks = ["::/0"]
     },
   ]
   tags = var.tags
