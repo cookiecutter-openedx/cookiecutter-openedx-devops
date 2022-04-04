@@ -94,20 +94,3 @@ resource "kubernetes_namespace" "openedx" {
   }
   depends_on = [module.eks]
 }
-
-# see: https://github.com/terraform-aws-modules/terraform-aws-eks/issues/1744
-# sepehrmavedati commented on Jan 9
-resource "null_resource" "patch_aws_auth_configmap" {
-  triggers = {
-    cmd_patch = "kubectl patch configmap/aws-auth -n kube-system --type merge -p '${chomp(jsonencode(local.updated_auth_configmap_data))}' --kubeconfig <(echo $KUBECONFIG | base64 --decode)"
-  }
-
-  provisioner "local-exec" {
-    interpreter = ["/bin/bash", "-c"]
-    command     = self.triggers.cmd_patch
-
-    environment = {
-      KUBECONFIG = base64encode(local.kubeconfig)
-    }
-  }
-}
