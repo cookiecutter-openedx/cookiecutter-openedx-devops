@@ -85,16 +85,40 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
     - {{ cookiecutter.redis_engine_version }}
   * - `Tutor Docker-based Open edX Installer <https://docs.tutor.overhang.io/>`_
     - {{ cookiecutter.ci_build_tutor_version }}
+  * - `Tutor Plugin: Object storage for Open edX with S3 <https://github.com/hastexo/tutor-contrib-s3>`_
+    - {{ cookiecutter.ci_deploy_hastexo_tutor_contrib_s3_version }}
   * - `Kubernetes Cluster <https://kubernetes.io/>`_
-    - {{ cookiecutter.eks_cluster_version }}
+    - {{ cookiecutter.kubernetes_cluster_version }}
   * - Kubernetes `amazon/aws-alb-ingress-controller <https://hub.docker.com/r/amazon/aws-alb-ingress-controller/>`_
-    - {{ cookiecutter.eks_cluster_alb_ingress_controller_version }}
+    - {{ cookiecutter.kubernetes_cluster_ingress_controller_version }}
   * - `Terraform <https://www.terraform.io/>`_
     - {{ cookiecutter.terraform_required_version }}
+  * - `terraform-aws-modules/acm <https://registry.terraform.io/modules/terraform-aws-modules/acm/aws/latest>`_
+    - {{ cookiecutter.terraform_aws_modules_acm }}
+  * - `terraform-aws-modules/cloudfront <https://registry.terraform.io/modules/terraform-aws-modules/cloudfront/aws/latest>`_
+    - {{ cookiecutter.terraform_aws_modules_cloudfront }}
+  * - `terraform-aws-modules/eks <https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest>`_
+    - {{ cookiecutter.terraform_aws_modules_eks }}
+  * - `terraform-aws-modules/iam <https://registry.terraform.io/modules/terraform-aws-modules/iam/aws/latest>`_
+    - {{ cookiecutter.terraform_aws_modules_iam }}
+  * - `terraform-aws-modules/rds <https://registry.terraform.io/modules/terraform-aws-modules/rds/aws/latest>`_
+    - {{ cookiecutter.terraform_aws_modules_rds }}
+  * - `terraform-aws-modules/s3-bucket <https://registry.terraform.io/modules/terraform-aws-modules/s3-bucket/aws/latest>`_
+    - {{ cookiecutter.terraform_aws_modules_s3 }}
+  * - `terraform-aws-modules/security-group <https://registry.terraform.io/modules/terraform-aws-modules/security-group/aws/latest>`_
+    - {{ cookiecutter.terraform_aws_modules_sg }}
+  * - `terraform-aws-modules/vpc <https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest>`_
+    - {{ cookiecutter.terraform_aws_modules_vpc }}
+  * - Terraform `Helm ingress-alb-controller <https://github.com/kubernetes-sigs/aws-load-balancer-controller/>`_
+    - {{ cookiecutter.terraform_helm_alb_controller_chart_version }}
+  * - Terraform `Helm cert-manager <https://charts.jetstack.io>`_
+    - {{ cookiecutter.terraform_helm_cert_manager }}
   * - Terraform `Kubernetes Provider <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs>`_
     - {{ cookiecutter.terraform_provider_kubernetes_version }}
   * - Terraform `AWS Provider <https://registry.terraform.io/providers/hashicorp/aws/latest/docs>`_
     - {{ cookiecutter.terraform_provider_hashicorp_aws_version }}
+  * - Terraform `Helm Provider <https://registry.terraform.io/providers/hashicorp/helm/latest/docs>`_
+    - {{ cookiecutter.terraform_provider_hashicorp_helm_version }}
   * - Terraform `Local Provider <https://registry.terraform.io/providers/hashicorp/local/latest/docs>`_
     - {{ cookiecutter.terraform_provider_hashicorp_local_version }}
   * - Terraform `Random Provider <https://registry.terraform.io/providers/hashicorp/random/latest/docs>`_
@@ -110,7 +134,7 @@ Important Considerations
 - the Github Actions workflows depend on secrets `located here <settings> (see 'secrets/actions' from the left menu bar) `_
 - the Github Actions use an AWS IAM key pair from `this manually-created user named *ci* <https://console.aws.amazon.com/iam/home#/users/ci?section=security_credentials>`_
 - the collection of resources created by these scripts **will generate AWS costs of around $0.41 USD per hour ($10.00 USD per day)** while the platform is in a mostly-idle pre-production state. This cost will grow proportionally to your production work loads. You can view your `AWS Billing dashboard here <https://console.aws.amazon.com/billing/home?region={{ cookiecutter.global_aws_region }}#/>`_
-- **BE ADVISED** that `MySQL RDS <https://{{ cookiecutter.global_aws_region }}.console.aws.amazon.com/rds/home?region={{ cookiecutter.global_aws_region }}#databases:>`_, `MongoDB <https://{{ cookiecutter.global_aws_region }}.console.aws.amazon.com/docdb/home?region={{ cookiecutter.global_aws_region }}#subnetGroups>`_ and `Redis ElastiCache <https://{{ cookiecutter.global_aws_region }}.console.aws.amazon.com/elasticache/home?region={{ cookiecutter.global_aws_region }}#redis:>`_ are vertically scaled **manually** and therefore require some insight and potential adjustments on your part. All of these services are defaulted to their minimum instance sizes which you can modify in the `environment configuration file <terraform/environments/prod/env.hcl>`_
+- **BE ADVISED** that `MySQL RDS <https://{{ cookiecutter.global_aws_region }}.console.aws.amazon.com/rds/home?region={{ cookiecutter.global_aws_region }}#databases:>`_, `MongoDB <https://{{ cookiecutter.global_aws_region }}.console.aws.amazon.com/docdb/home?region={{ cookiecutter.global_aws_region }}#subnetGroups>`_ and `Redis ElastiCache <https://{{ cookiecutter.global_aws_region }}.console.aws.amazon.com/elasticache/home?region={{ cookiecutter.global_aws_region }}#redis:>`_ are vertically scaled **manually** and therefore require some insight and potential adjustments on your part. All of these services are defaulted to their minimum instance sizes which you can modify in the `environment configuration file <terraform/environments/{{ cookiecutter.environment_name }}/env.hcl>`_
 
 Quick Start
 -----------
@@ -142,7 +166,7 @@ Set your `global parameters <terraform/environments/global.hcl>`_
   }
 
 
-Set your `production environment parameters <terraform/environments/prod/env.hcl>`_
+Set your `production environment parameters <terraform/environments/{{ cookiecutter.environment_name }}/env.hcl>`_
 
 .. code-block:: hcl
 
@@ -184,29 +208,25 @@ We also recommend that you install `k9s <https://k9scli.io/>`_, a popular tool f
 .. code-block:: shell
 
   # -------------------------------------
-  # to manage an individual resource
+  # to build the entire backend
   # -------------------------------------
-  cd ./terraform/environments/prod/mongodb
+  cd ./terraform/environments/{{ cookiecutter.environment_name }}/vpc
+  terragrunt run-all init
+  terragrunt run-all apply
+
+  # -------------------------------------
+  # or, to manage an individual resource
+  # -------------------------------------
+  cd ./terraform/environments/{{ cookiecutter.environment_name }}/mongodb
   terragrunt init
+  terragrunt validate
   terragrunt plan
   terragrunt apply
   terragrunt destroy
 
-  # -------------------------------------
-  # to build the entire backend
-  # -------------------------------------
-
-  # 1. create the VPC
-  cd ./terraform/environments/prod/vpc
-  terragrunt apply
-
-  # 2. create the Elastic Kubernetes Cluster
-  cd ../eks
-  terragrunt apply
-
-  # 3. create everthing else
-  cd ..
-  terragrunt run-all apply
+.. image:: doc/terragrunt-init.png
+  :width: 900
+  :alt: terragrunt run-all init
 
 
 IV. Connect To Your backend Services
@@ -250,7 +270,7 @@ II. Deploy your Docker Image to a Kubernetes Cluster
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Use `this automated Github Actions workflow <https://github.com/{{ cookiecutter.github_account_name }}/{{ cookiecutter.github_repo_name }}/actions/workflows/tutor_deploy_prod.yml>`_ to deploy your customized Docker container to a Kubernetes Cluster.
-Open edX LMS and Studio configuration parameters are located `here <ci/tutor-deploy/environments/prod/settings_merge.json>`_.
+Open edX LMS and Studio configuration parameters are located `here <ci/tutor-deploy/environments/{{ cookiecutter.environment_name }}/settings_merge.json>`_.
 
 
 About The Open edX Platform Back End
@@ -265,18 +285,63 @@ These scripts will create the following resources in your AWS account:
 
 - **Compute Cluster**. uses either `AWS EC2 <https://aws.amazon.com/ec2/>`_ behind a Classic Load Balancer (the default) or AWS' serverless compute cluster, `Fargate <https://aws.amazon.com/fargate/>`_ behind an Application Load Balancer.
 - **Kubernetes**. Uses `AWS Elastic Kubernetes Service `_ to implement a Kubernetes cluster onto which all applications and scheduled jobs are deployed as pods.
-- **MySQL**. uses `AWS RDS <https://aws.amazon.com/rds/>`_ for all MySQL data, accessible inside the vpc as mysql.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}:3306. Instance size settings are located in the `environment configuration file <terraform/environments/prod/env.hcl>`_, and other common configuration settings `are located here <terraform/environments/prod/rds/terragrunt.hcl>`_. Passwords are stored in `Kubernetes Secrets <https://kubernetes.io/docs/concepts/configuration/secret/>`_ accessible from the EKS cluster.
-- **MongoDB**. uses `AWS DocumentDB <https://aws.amazon.com/documentdb/>`_ for all MongoDB data, accessible insid the vpc as mongodb.master.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}:27017 and mongodb.reader.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}. Instance size settings are located in the `environment configuration file <terraform/environments/prod/env.hcl>`_, and other common configuration settings `are located here <terraform/components/documentdb>`_. Passwords are stored in `Kubernetes Secrets <https://kubernetes.io/docs/concepts/configuration/secret/>`_ accessible from the EKS cluster.
-- **Redis**. uses `AWS ElastiCache <https://aws.amazon.com/elasticache/>`_ for all Django application caches, accessible inside the vpc as cache.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}. Instance size settings are located in the `environment configuration file <terraform/environments/prod/env.hcl>`_. This is necessary in order to make the Open edX application layer completely ephemeral. Most importantly, user's login session tokens are persisted in Redis and so these need to be accessible to all app containers from a single Redis cache. Common configuration settings `are located here <terraform/environments/prod/redis/terragrunt.hcl>`_. Passwords are stored in `Kubernetes Secrets <https://kubernetes.io/docs/concepts/configuration/secret/>`_ accessible from the EKS cluster.
-- **Container Registry**. uses this `automated Github Actions workflow <.github/workflows/tutor_build_image.yml>`_ to build your `tutor Open edX container <https://docs.tutor.overhang.io/>`_ and then register it in `Amazon Elastic Container Registry (Amazon ECR) <https://aws.amazon.com/ecr/>`_. Uses this `automated Github Actions workflow <.github/workflows/tutor_deploy_prod.yml>`_ to deploy your container to `AWS Amazon Elastic Kubernetes Service (EKS) <https://aws.amazon.com/eks/>`_. EKS worker instance size settings are located in the `environment configuration file <terraform/environments/prod/env.hcl>`_. Note that tutor provides out-of-the-box support for Kubernetes. Terraform leverages Elastic Kubernetes Service to create a Kubernetes cluster onto which all services are deployed. Common configuration settings `are located here <terraform/environments/prod/eks/terragrunt.hcl>`_
-- **User Data**. uses `AWS S3 <https://aws.amazon.com/s3/>`_ for storage of user data. This installation makes use of a `Tutor plugin to offload object storage <https://github.com/hastexo/tutor-contrib-s3>`_ from the Ubuntu file system to AWS S3. It creates a public read-only bucket named of the form {{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-storage, with write access provided to edxapp so that app-generated static content like user profile images, xblock-generated file content, application badges, e-commerce pdf receipts, instructor grades downloads and so on will be saved to this bucket. This is not only a necessary step for making your application layer ephemeral but it also facilitates the implementation of a CDN (which Terraform implements for you). Terraform additionally implements a completely separate, more secure S3 bucket for archiving your daily data backups of MySQL and MongoDB. Common configuration settings `are located here <terraform/environments/prod/s3/terragrunt.hcl>`_
-- **CDN**. uses `AWS Cloudfront <https://aws.amazon.com/cloudfront/>`_ as a CDN, publicly acccessible as https://cdn.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}. Terraform creates Cloudfront distributions for each of your enviornments. These are linked to the respective public-facing S3 Bucket for each environment, and the requisite SSL/TLS ACM-issued certificate is linked. Terraform also automatically creates all Route53 DNS records of form cdn.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}. Common configuration settings `are located here <terraform/environments/prod/cloudfront/terragrunt.hcl>`_
-- **Password & Secrets Management** uses `Kubernetes Secrets <https://kubernetes.io/docs/concepts/configuration/secret/>`_ in the EKS cluster. Open edX software relies on many passwords and keys, collectively referred to in this documentation simply as, "*secrets*". For all back services, including all Open edX applications, system account and root passwords are randomly and strongluy generated during automated deployment and then archived in EKS' secrets repository. This methodology facilitates routine updates to all of your passwords and other secrets, which is good practice these days. Common configuration settings `are located here <terraform/environments/prod/secrets/terragrunt.hcl>`_
-- **SSL Certs**. Uses `AWS Certificate Manager <https://aws.amazon.com/certificate-manager/>`_ and LetsEncrypt. Terraform creates all SSL/TLS certificates. It uses a combination of AWS Certificate Manager (ACM) as well as LetsEncrypt. Additionally, the ACM certificates are stored in two locations: your aws-region as well as in us-east-1 (as is required by AWS CloudFront). Common configuration settings `are located here <terraform/components/eks/acm.tf>`_
-- **DNS Management** uses `AWS Route53 <https://aws.amazon.com/route53/>`_ hosted zones for DNS management. Terraform expects to find your root domain already present in Route53 as a hosted zone. It will automatically create additional hosted zones, one per environment for production, dev, test and so on. It automatically adds NS records to your root domain hosted zone as necessary to link the zones together. Configuration data exists within several components but the highest-level settings `are located here <terraform/components/eks/route53.tf>`_
+- **MySQL**. uses `AWS RDS <https://aws.amazon.com/rds/>`_ for all MySQL data, accessible inside the vpc as mysql.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}:3306. Instance size settings are located in the `environment configuration file <terraform/environments/{{ cookiecutter.environment_name }}/env.hcl>`_, and other common configuration settings `are located here <terraform/environments/{{ cookiecutter.environment_name }}/rds/terragrunt.hcl>`_. Passwords are stored in `Kubernetes Secrets <https://kubernetes.io/docs/concepts/configuration/secret/>`_ accessible from the EKS cluster.
+- **MongoDB**. uses `AWS DocumentDB <https://aws.amazon.com/documentdb/>`_ for all MongoDB data, accessible insid the vpc as mongodb.master.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}:27017 and mongodb.reader.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}. Instance size settings are located in the `environment configuration file <terraform/environments/{{ cookiecutter.environment_name }}/env.hcl>`_, and other common configuration settings `are located here <terraform/modules/documentdb>`_. Passwords are stored in `Kubernetes Secrets <https://kubernetes.io/docs/concepts/configuration/secret/>`_ accessible from the EKS cluster.
+- **Redis**. uses `AWS ElastiCache <https://aws.amazon.com/elasticache/>`_ for all Django application caches, accessible inside the vpc as cache.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}. Instance size settings are located in the `environment configuration file <terraform/environments/{{ cookiecutter.environment_name }}/env.hcl>`_. This is necessary in order to make the Open edX application layer completely ephemeral. Most importantly, user's login session tokens are persisted in Redis and so these need to be accessible to all app containers from a single Redis cache. Common configuration settings `are located here <terraform/environments/{{ cookiecutter.environment_name }}/redis/terragrunt.hcl>`_. Passwords are stored in `Kubernetes Secrets <https://kubernetes.io/docs/concepts/configuration/secret/>`_ accessible from the EKS cluster.
+- **Container Registry**. uses this `automated Github Actions workflow <.github/workflows/tutor_build_image.yml>`_ to build your `tutor Open edX container <https://docs.tutor.overhang.io/>`_ and then register it in `Amazon Elastic Container Registry (Amazon ECR) <https://aws.amazon.com/ecr/>`_. Uses this `automated Github Actions workflow <.github/workflows/tutor_deploy_prod.yml>`_ to deploy your container to `AWS Amazon Elastic Kubernetes Service (EKS) <https://aws.amazon.com/kubernetes/>`_. EKS worker instance size settings are located in the `environment configuration file <terraform/environments/{{ cookiecutter.environment_name }}/env.hcl>`_. Note that tutor provides out-of-the-box support for Kubernetes. Terraform leverages Elastic Kubernetes Service to create a Kubernetes cluster onto which all services are deployed. Common configuration settings `are located here <terraform/environments/{{ cookiecutter.environment_name }}/kubernetes/terragrunt.hcl>`_
+- **User Data**. uses `AWS S3 <https://aws.amazon.com/s3/>`_ for storage of user data. This installation makes use of a `Tutor plugin to offload object storage <https://github.com/hastexo/tutor-contrib-s3>`_ from the Ubuntu file system to AWS S3. It creates a public read-only bucket named of the form {{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-storage, with write access provided to edxapp so that app-generated static content like user profile images, xblock-generated file content, application badges, e-commerce pdf receipts, instructor grades downloads and so on will be saved to this bucket. This is not only a necessary step for making your application layer ephemeral but it also facilitates the implementation of a CDN (which Terraform implements for you). Terraform additionally implements a completely separate, more secure S3 bucket for archiving your daily data backups of MySQL and MongoDB. Common configuration settings `are located here <terraform/environments/{{ cookiecutter.environment_name }}/s3/terragrunt.hcl>`_
+- **CDN**. uses `AWS Cloudfront <https://aws.amazon.com/cloudfront/>`_ as a CDN, publicly acccessible as https://cdn.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}. Terraform creates Cloudfront distributions for each of your enviornments. These are linked to the respective public-facing S3 Bucket for each environment, and the requisite SSL/TLS ACM-issued certificate is linked. Terraform also automatically creates all Route53 DNS records of form cdn.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}. Common configuration settings `are located here <terraform/environments/{{ cookiecutter.environment_name }}/cloudfront/terragrunt.hcl>`_
+- **Password & Secrets Management** uses `Kubernetes Secrets <https://kubernetes.io/docs/concepts/configuration/secret/>`_ in the EKS cluster. Open edX software relies on many passwords and keys, collectively referred to in this documentation simply as, "*secrets*". For all back services, including all Open edX applications, system account and root passwords are randomly and strongluy generated during automated deployment and then archived in EKS' secrets repository. This methodology facilitates routine updates to all of your passwords and other secrets, which is good practice these days. Common configuration settings `are located here <terraform/environments/{{ cookiecutter.environment_name }}/secrets/terragrunt.hcl>`_
+- **SSL Certs**. Uses `AWS Certificate Manager <https://aws.amazon.com/certificate-manager/>`_ and LetsEncrypt. Terraform creates all SSL/TLS certificates. It uses a combination of AWS Certificate Manager (ACM) as well as LetsEncrypt. Additionally, the ACM certificates are stored in two locations: your aws-region as well as in us-east-1 (as is required by AWS CloudFront). Common configuration settings `are located here <terraform/modules/kubernetes/acm.tf>`_
+- **DNS Management** uses `AWS Route53 <https://aws.amazon.com/route53/>`_ hosted zones for DNS management. Terraform expects to find your root domain already present in Route53 as a hosted zone. It will automatically create additional hosted zones, one per environment for production, dev, test and so on. It automatically adds NS records to your root domain hosted zone as necessary to link the zones together. Configuration data exists within several modules but the highest-level settings `are located here <terraform/modules/kubernetes/route53.tf>`_
 - **System Access** uses `AWS Identity and Access Management (IAM) <https://aws.amazon.com/iam/>`_ to manage all system users and roles. Terraform will create several user accounts with custom roles, one or more per service.
-- **Network Design**. uses `Amazon Virtual Private Cloud (Amazon VPC) <https://aws.amazon.com/vpc/>`_ based on the AWS account number provided in the `global configuration file <terraform/environments/global.hcl>`_ to take a top-down approach to compartmentalize all cloud resources and to customize the operating enviroment for your Open edX resources. Terraform will create a new virtual private cloud into which all resource will be provisioned. It creates a sensible arrangment of private and public subnets, network security settings and security groups. See additional VPC documentation  `here <terraform/environments/prod/vpc>`_
-- **Proxy Access to Backend Services**. uses an `Amazon EC2 <https://aws.amazon.com/ec2/>`_ t2.micro Ubuntu instance publicly accessible via ssh as bastion.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}:22 using the ssh key specified in the `global configuration file <terraform/environments/global.hcl>`_.  For security as well as performance reasons all backend services like MySQL, Mongo, Redis and the Kubernetes cluster are deployed into their own private subnets, meaning that none of these are publicly accessible. See additional Bastion documentation  `here <terraform/environments/prod/bastion>`_. Terraform creates a t2.micro EC2 instance to which you can connect via ssh. In turn you can connect to services like MySQL via the bastion. Common configuration settings `are located here <terraform/environments/prod/bastion/terragrunt.hcl>`_. Note that if you are cost conscious then you could alternatively use `AWS Cloud9 <https://aws.amazon.com/cloud9/>`_ to gain access to all backend services.
+- **Network Design**. uses `Amazon Virtual Private Cloud (Amazon VPC) <https://aws.amazon.com/vpc/>`_ based on the AWS account number provided in the `global configuration file <terraform/environments/global.hcl>`_ to take a top-down approach to compartmentalize all cloud resources and to customize the operating enviroment for your Open edX resources. Terraform will create a new virtual private cloud into which all resource will be provisioned. It creates a sensible arrangment of private and public subnets, network security settings and security groups. See additional VPC documentation  `here <terraform/environments/{{ cookiecutter.environment_name }}/vpc>`_
+- **Proxy Access to Backend Services**. uses an `Amazon EC2 <https://aws.amazon.com/ec2/>`_ t2.micro Ubuntu instance publicly accessible via ssh as bastion.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}:22 using the ssh key specified in the `global configuration file <terraform/environments/global.hcl>`_.  For security as well as performance reasons all backend services like MySQL, Mongo, Redis and the Kubernetes cluster are deployed into their own private subnets, meaning that none of these are publicly accessible. See additional Bastion documentation  `here <terraform/environments/{{ cookiecutter.environment_name }}/bastion>`_. Terraform creates a t2.micro EC2 instance to which you can connect via ssh. In turn you can connect to services like MySQL via the bastion. Common configuration settings `are located here <terraform/environments/{{ cookiecutter.environment_name }}/bastion/terragrunt.hcl>`_. Note that if you are cost conscious then you could alternatively use `AWS Cloud9 <https://aws.amazon.com/cloud9/>`_ to gain access to all backend services.
+
+Fargate Release Notes
+---------------------
+
+Fargate is a serverless compute alternative to EC2 instances. This is an **experimental** part of the Open edX devops stack. While the Fargate compute service itself
+is both stable and robust, it's integration with Terraform for purposes providing the compute layer for a kubernetes cluster is a relatively new thing, and comes with some headaches.
+For the avoidance of any doubt, Fargate runs well inside a Kubernetes cluster and for the most part is indistinguishable from a traditional EC2 server, aside from the obvious luxury of not needing to
+directly administer this aspect of the cluster. But on the other hand, Terraform's life cycle management of a kubernetes cluster running Fargate is imperfect. Before you deploy Fargate into a production
+environment please consider the following:
+
+Known Issues
+~~~~~~~~~~~~
+
+- When using Terraform to create an EKS Kubernetes Cluster configured to use Fargate, the apply operation will fail on your first attempt. See error message below. This is a known issue that is caused by a race condition between coredns and creation of the Fargate node on which it runs. Re-attempting with `terragrunt apply` resolves the problem.
+- When using Terraform to destroy an EKS Kubernetes Cluster configured to use Fargate instead of EC2, you might experience any of the following:
+
+  a) Terraform fails to destroy some of the IAM roles when destroying the EKS. Each is an eks Service-Linked Role. This is a known bug in the Terraform module.
+  b) Terraform fails to destroy one or more of the EKS security groups. This is a known bug in the Terraform module.
+
+- Terraform fails to destroy the Application Load Balancer ingress. This is due to a dependency problem which I'm still trouble shooting. The temporary resolution is to delete the Terraform file `terraform/modules/kubernetes_ingress_alb_controller/ingress.tf` and then run `terraform apply`.
+- Other AWS admin users might lack permissions to view EKS resources in the AWS console, even if they have `admin` permissions or are logged in as the root account user. This is an AWS issue. I'm working on a set of instructions for configuring permissions for other users.
+- If Terraform is interrupted during execution then it is possible that it will lose track of its state, leading to Terraform attempting to create already-existing resources which will result in run-time errors. This is the expected behavior of Terraform, but it can be a huge pain in the neck to resolve.
+
+Build Error
+~~~~~~~~~~~
+
+On your first build attempt you will encounter the following error aproximately 30 minutes into the kubernetes build. This is a know bug caused by a race condition in coredns installation when it is configured to run on Fargate nodes rather than EC2 instances.
+Restarting the build resolves the error, and the build should complete normally.
+
+.. code-block:: bash
+
+  module.eks.aws_eks_addon.this["coredns"]: Still creating... [20m0s elapsed]
+  ╷
+  │ Error: unexpected EKS Add-On (prod-stepwisemath-mexico:coredns) state returned during creation: timeout while waiting for state to become 'ACTIVE' (last state: 'DEGRADED', timeout: 20m0s)
+  │ [WARNING] Running terraform apply again will remove the kubernetes add-on and attempt to create it again effectively purging previous add-on configuration
+  │
+  │   with module.eks.aws_eks_addon.this["coredns"],
+  │   on .terraform/modules/eks/main.tf line 298, in resource "aws_eks_addon" "this":
+  │  298: resource "aws_eks_addon" "this" {
+  │
+  ╵
+  Releasing state lock. This may take a few moments...
+  ERRO[1950] 1 error occurred:
+    * exit status 1
+
 
 FAQ
 ---
@@ -315,7 +380,7 @@ Behind the scenes Kubernetes (EKS in our case) uses an EC2 Elastic Load Balancer
 Why Use Terraform?
 ~~~~~~~~~~~~~~~~~~
 
-`Terraform <https://www.terraform.io/>`_ allows you to manage the entire lifecycle of your AWS cloud infrastructure using `infrastructure as code (IAC) <https://en.wikipedia.org/wiki/Infrastructure_as_code>`_. That means declaring infrastructure components in configuration files that are then used by Terraform to provision, adjust and tear down your AWS cloud infrastructure. There are tangential benefits to using IAC.
+`Terraform <https://www.terraform.io/>`_ allows you to manage the entire lifecycle of your AWS cloud infrastructure using `infrastructure as code (IAC) <https://en.wikipedia.org/wiki/Infrastructure_as_code>`_. That means declaring infrastructure resources in configuration files that are then used by Terraform to provision, adjust and tear down your AWS cloud infrastructure. There are tangential benefits to using IAC.
 
 1. **Maintain all of your backend configuration data in a single location**. This allows you to take a more holistic, top-down approach to planning and managing your backend resources, which leads to more reliable service for your users.
 2. **Leverage git**. This is a big deal! Managing your backend as IAC means you can track individual changes to your configuration over time. More importantly, it means you can reverse backend configuration changes that didn't go as planned.

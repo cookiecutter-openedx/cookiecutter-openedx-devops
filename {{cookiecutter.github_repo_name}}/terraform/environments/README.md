@@ -4,9 +4,7 @@ Terraform environments give you the ability to create multiple, distinct AWS VPC
 
 The general strategy is that a common set of parameters are defined in [terraform/environments/global.hcl](./global.hcl) that each environment uses, plus, each environment maintains its own set of parameters for environment-specific settings like domain names and resource instances sizes for example.
 
-On an aside, choosing appropriate names for Terragrunt environments was a struggle. the environment named **prod** in this folder was originally named **live** as a means of differentiating it from alternative environments like say, **sandbox**. This was sensible, but it also complicates managing consistent namespaces in AWS and in Kubernetes. We opted to rename this to **prod** since Cookiecutter only creates one single environment for you, and this is where your prod environment resides. Unfortunately, this creates some potential confusion given that the recommended way of creating dev / qa / test environments is to add appropriately named subdomains to prod.
-
-So, to be clear, creating additional Terragrunt environments might be more separation than you actually require, and add more costs than your budget can bear. Keep in mind that this is probably more easily accomplished simply by adding subdomains to the one VPC that is created based on the settings in [terraform/environments/prod/env.hcl](./prod/env.hcl), as follows:
+So, to be clear, creating additional Terragrunt environments might be more separation than you actually require, and add more costs than your budget can bear. Keep in mind that this is probably more easily accomplished simply by adding subdomains to the one VPC that is created based on the settings in [terraform/environments/{{ cookiecutter.environment_name }}/env.hcl](./{{ cookiecutter.environment_name }}/env.hcl), as follows:
 
 ```
 locals {
@@ -26,4 +24,4 @@ The difference between these two methodologies is that the former creates an ent
 
 ### Why wouldn't you create an additional Terragrunt environment?
 
-Contrastly, if you are budget conscious and you are otherwise indifferent to how and where your development and qa environments are housed -- provided of course that these are reasonably isolated from your prod environment -- then you would simply add subdomains to [terraform/environments/prod/env.hcl](terraform/environments/prod/env.hcl).
+Contrastly, if you are budget conscious and you are otherwise indifferent to how and where your development and qa environments are housed -- provided of course that these are reasonably isolated from your prod environment -- then you would simply add subdomains to [terraform/environments/{{ cookiecutter.environment_name }}/env.hcl](terraform/environments/{{ cookiecutter.environment_name }}/env.hcl).

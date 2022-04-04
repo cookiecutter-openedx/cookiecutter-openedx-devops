@@ -12,6 +12,7 @@ locals {
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   resource_name         = "${local.environment_vars.locals.environment_namespace}"
+  identifier            = "${local.environment_vars.locals.environment}"
   mysql_instance_class  = local.environment_vars.locals.mysql_instance_class
 
   tags = merge(
@@ -23,25 +24,52 @@ locals {
 }
 
 dependencies {
-  paths = ["../vpc", "../kubernetes"]
+  paths = ["../kubernetes", "../kubernetes_secrets", "../vpc"]
 }
 
 dependency "vpc" {
   config_path = "../vpc"
 
-  # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
+  # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["validate"]
+  mock_outputs_allowed_terraform_commands = ["init", "validate"]
   mock_outputs = {
     vpc_id           = "fake-vpc-id"
     database_subnets = ["fake-subnetid-01", "fake-subnetid-02"]
+    vpc_cidr_block = "fake-cidr-block"
+  }
+}
+
+dependency "kubernetes" {
+  config_path = "../kubernetes"
+
+  # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
+  # module hasn't been applied yet.
+  mock_outputs_allowed_terraform_commands = ["init", "validate"]
+  mock_outputs = {
+    cluster_arn           = "fake-cluster-arn"
+    cluster_certificate_authority_data = "fake-cert"
+    cluster_endpoint = "fake-cluster-endpoint"
+    cluster_id = "fake-cluster-id"
+    cluster_oidc_issuer_url = "fake-oidc-issuer-url"
+    cluster_platform_version = "fake-cluster-version"
+    cluster_security_group_arn = "fake-security-group-arn"
+    cluster_security_group_id = "fake-security-group-id"
+    cluster_status = "fake-cluster-status"
+    cluster_version = "fake-cluster-version"
+    eks_managed_node_groups = "fake-managed-node-group"
+    fargate_profiles = "fake-fargate-profile"
+    node_security_group_arn = "fake-security-group-arn"
+    node_security_group_id = "fake-security-group-id"
+    oidc_provider = "fake-oidc-provider"
+    oidc_provider_arn = "fake-provider-arn"
   }
 }
 
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
-  source = "../../../components//mysql"
+  source = "../../../modules//mysql"
 }
 
 # Include all settings from the root terragrunt.hcl file
@@ -54,10 +82,10 @@ inputs = {
   # AWS RDS instance identifying information
   resource_name         = local.resource_name
   tags                  = local.tags
-  identifier            = "${local.resource_name}"
 
   # database identifying information
   name                                = "openedx"
+  identifier                          = local.identifier
   username                            = "{{ cookiecutter.mysql_username }}"
   create_random_password              = {{ cookiecutter.mysql_create_random_password }}
   iam_database_authentication_enabled = {{ cookiecutter.mysql_iam_database_authentication_enabled }}
@@ -82,6 +110,15 @@ inputs = {
   # db server size
   instance_class        = local.mysql_instance_class
   allocated_storage     = {{ cookiecutter.mysql_allocated_storage }}
+  max_allocated_storage = 0
+  storage_encrypted     = true
+  multi_az              = false
+  enabled_cloudwatch_logs_exports = []
+  performance_insights_enabled = false
+  performance_insights_retention_period = 7
+  create_monitoring_role = false
+  monitoring_interval = 0
+  create_db_subnet_group = false
 
   # backups and maintenance
   maintenance_window    = "{{ cookiecutter.mysql_maintenance_window }}"
@@ -89,6 +126,7 @@ inputs = {
   backup_retention_period = {{ cookiecutter.mysql_backup_retention_period }}
   deletion_protection   = {{ cookiecutter.mysql_deletion_protection }}
   skip_final_snapshot   = {{ cookiecutter.mysql_skip_final_snapshot }}
+
 
   # network configuration
   subnet_ids            = dependency.vpc.outputs.database_subnets

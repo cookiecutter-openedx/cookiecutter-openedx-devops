@@ -30,7 +30,7 @@ locals {
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 
 terraform {
-  source = "../../../components//vpc"
+  source = "../../../modules//vpc"
 }
 
 # Include all settings from the root terragrunt.hcl file
