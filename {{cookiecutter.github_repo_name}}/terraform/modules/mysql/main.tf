@@ -6,11 +6,6 @@
 #
 # usage: create an RDS MySQL instance.
 #------------------------------------------------------------------------------
-locals {
-  name = var.identifier
-
-}
-
 resource "aws_db_subnet_group" "mysql_subnet_group" {
   name       = "mysql_subnet_group"
   subnet_ids = var.subnet_ids
@@ -21,7 +16,7 @@ module "security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "{{ cookiecutter.terraform_aws_modules_sg }}"
 
-  name        = local.name
+  name        = "${var.environment_namespace}-mysql"
   description = "Allow access to MySQL"
   vpc_id      = var.vpc_id
 

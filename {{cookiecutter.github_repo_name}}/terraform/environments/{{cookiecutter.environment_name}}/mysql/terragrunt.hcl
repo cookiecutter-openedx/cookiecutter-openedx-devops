@@ -81,7 +81,6 @@ inputs = {
   # AWS RDS instance identifying information
   resource_name         = local.resource_name
   tags                  = local.tags
-  identifier            = "${local.resource_name}"
 
   # database identifying information
   name                                = "openedx"
