@@ -19,65 +19,29 @@
 # than as data
 #------------------------------------------------------------------------------
 
+# FIX NOTE: do we even need this for anything?
+
 provider "aws" {
   alias  = "us-east-1"
   region = "us-east-1"
 }
 
-module "acm_root_domain" {
-  source  = "terraform-aws-modules/acm/aws"
-  version = "~> 3.0"
-
-  providers = {
-    aws = aws.us-east-1
-  }
-
-  domain_name = var.root_domain
-  zone_id     = data.aws_route53_zone.root_domain.id
-
-  subject_alternative_names = [
-    "*.${var.root_domain}",
-  ]
-
-  wait_for_validation = true
-  tags                = var.tags
+data "aws_route53_zone" "root_domain" {
+  name = var.root_domain
 }
 
-module "acm_environment_domain" {
-  source  = "terraform-aws-modules/acm/aws"
-  version = "~> 3.0"
-
-  providers = {
-    aws = aws.us-east-1
-  }
-
-  domain_name = var.environment_domain
-  zone_id     = data.aws_route53_zone.environment_domain.id
-
-  subject_alternative_names = [
-    "*.${var.environment_domain}",
-  ]
-
-  wait_for_validation = true
-  tags                = var.tags
+data "aws_route53_zone" "environment_domain" {
+  name = var.environment_domain
 }
 
-module "acm_subdomains" {
-  source  = "terraform-aws-modules/acm/aws"
-  version = "~> 3.0"
+data "aws_acm_certificate" "root_domain" {
+  domain   = var.root_domain
+  statuses = ["ISSUED"]
+  provider = aws.us-east-1
+}
 
-  providers = {
-    aws = aws.us-east-1
-  }
-
-  count       = length(var.subdomains)
-  domain_name = aws_route53_zone.subdomain[count.index].name
-  zone_id     = aws_route53_zone.subdomain[count.index].id
-
-  subject_alternative_names = [
-    "*.${aws_route53_zone.subdomain[count.index].name}",
-  ]
-
-  wait_for_validation = true
-  tags                = var.tags
+data "aws_acm_certificate" "environment_domain" {
+  domain   = var.environment_domain
+  statuses = ["ISSUED"]
+  provider = aws.us-east-1
 }
