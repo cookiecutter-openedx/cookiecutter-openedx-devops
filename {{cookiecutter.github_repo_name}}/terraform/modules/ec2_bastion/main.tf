@@ -44,7 +44,7 @@ resource "aws_security_group" "sg_bastion" {
   vpc_id      = var.vpc_id
 
   ingress {
-    description = "Added by openedx_devops: public ssh from anywhere"
+    description = "openedx_devops: public ssh from anywhere"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
@@ -52,7 +52,7 @@ resource "aws_security_group" "sg_bastion" {
   }
 
   egress {
-    description      = "Added by openedx_devops: public ssh out to anywhere"
+    description      = "openedx_devops: public ssh out to anywhere"
     from_port        = 0
     to_port          = 0
     protocol         = "-1"

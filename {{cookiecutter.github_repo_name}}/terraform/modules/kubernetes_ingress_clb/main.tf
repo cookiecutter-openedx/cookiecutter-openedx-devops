@@ -31,7 +31,7 @@ resource "aws_security_group" "worker_group_mgmt" {
   vpc_id      = var.vpc_id
 
   ingress {
-    description = "Added by openedx_devops: Ingress CLB"
+    description = "openedx_devops: Ingress CLB"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
@@ -51,7 +51,7 @@ resource "aws_security_group" "all_worker_mgmt" {
   vpc_id      = var.vpc_id
 
   ingress {
-    description = "Added by openedx_devops: Ingress CLB"
+    description = "openedx_devops: Ingress CLB"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"

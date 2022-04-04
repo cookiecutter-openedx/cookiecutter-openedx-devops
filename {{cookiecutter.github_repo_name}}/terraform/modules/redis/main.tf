@@ -27,7 +27,7 @@ module "security_group" {
   # ingress
   ingress_with_cidr_blocks = [
     {
-      description = "Added by openedx_devops: Redis access from within VPC"
+      description = "openedx_devops: Redis access from within VPC"
       from_port   = var.port
       to_port     = var.port
       protocol    = "tcp"
@@ -37,7 +37,7 @@ module "security_group" {
 
   egress_with_cidr_blocks = [
     {
-      description      = "Added by openedx_devops: Node all egress"
+      description      = "openedx_devops: Node all egress"
       protocol         = "-1"
       from_port        = 0
       to_port          = 0

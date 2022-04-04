@@ -45,7 +45,7 @@ module "eks" {
 
   node_security_group_additional_rules = {
     ingress_self_all = {
-      description = "Added by openedx_devops: Node to node all ports/protocols"
+      description = "openedx_devops: Node to node all ports/protocols"
       protocol    = "-1"
       from_port   = 0
       to_port     = 0
@@ -53,7 +53,7 @@ module "eks" {
       self        = true
     }
     port_8443 = {
-      description      = "Added by openedx_devops: open port 8443 to vpc"
+      description      = "openedx_devops: open port 8443 to vpc"
       protocol         = "-1"
       from_port        = 8443
       to_port          = 8443
@@ -62,7 +62,7 @@ module "eks" {
       ipv6_cidr_blocks = ["::/0"]
     }
     egress_all = {
-      description      = "Added by openedx_devops: Node all egress"
+      description      = "openedx_devops: Node all egress"
       protocol         = "-1"
       from_port        = 0
       to_port          = 0
