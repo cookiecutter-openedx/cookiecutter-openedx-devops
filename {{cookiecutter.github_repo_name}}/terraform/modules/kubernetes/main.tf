@@ -18,23 +18,7 @@ locals {
   # sepehrmavedati commented on Jan 9
   kubeconfig             = "~/.kube/config"
   current_auth_configmap = yamldecode(module.eks.aws_auth_configmap_yaml)
-  map_users = [
-    {
-      userarn  = "arn:aws:iam::320713933456:user/ci"
-      username = "ci"
-      groups   = ["system:masters"]
-    },
-    {
-      userarn  = "arn:aws:iam::320713933456:user/kent.fuka"
-      username = "kent.fuka"
-      groups   = ["system:masters"]
-    },
-    {
-      userarn  = "arn:aws:iam::320713933456:user/mcdaniel"
-      username = "mcdaniel"
-      groups   = ["system:masters"]
-    }
-  ]
+  map_users              = var.map_users
   updated_auth_configmap_data = {
     data = {
       #mapRoles = yamlencode(
