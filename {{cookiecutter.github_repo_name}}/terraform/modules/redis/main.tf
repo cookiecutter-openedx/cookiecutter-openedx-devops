@@ -31,7 +31,6 @@ module "security_group" {
       from_port   = var.port
       to_port     = var.port
       protocol    = "tcp"
-      description = "Redis access from within VPC"
       cidr_blocks = join(",", var.ingress_cidr_blocks)
     },
   ]

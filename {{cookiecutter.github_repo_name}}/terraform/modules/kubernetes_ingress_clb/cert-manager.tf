@@ -38,7 +38,7 @@ resource "helm_release" "cert-manager" {
 resource "aws_iam_policy" "cert_manager_policy" {
   name        = "${var.environment_namespace}-cert-manager-policy"
   path        = "/"
-  description = "Policy, which allows CertManager to create Route53 records"
+  description = "openedx_devops: Policy, which allows CertManager to create Route53 records"
 
   policy = jsonencode({
     "Version" : "2012-10-17",

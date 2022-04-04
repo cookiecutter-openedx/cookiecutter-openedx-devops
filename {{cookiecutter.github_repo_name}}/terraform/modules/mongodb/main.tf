@@ -27,7 +27,7 @@ resource "aws_security_group" "mongo_cluster" {
 
 resource "aws_security_group_rule" "ingress_security_groups" {
   type              = "ingress"
-  description       = "Allow inbound traffic from the VPC"
+  description       = "openedx_devops: mongodb llow inbound traffic from the VPC"
   from_port         = var.db_port
   to_port           = var.db_port
   protocol          = "tcp"
@@ -70,7 +70,7 @@ resource "aws_docdb_cluster_instance" "default" {
 
 resource "aws_docdb_subnet_group" "default" {
   name        = "mongodb_subnet_group"
-  description = "Allowed subnets for DB cluster instances"
+  description = "openedx_devops: mongodb allowed subnets for DB cluster instances"
   subnet_ids  = var.subnet_ids
   tags        = var.tags
 }
@@ -83,7 +83,7 @@ resource "aws_docdb_subnet_group" "default" {
 resource "aws_docdb_cluster_parameter_group" "no_tls" {
   family      = "docdb3.6"
   name        = "mongo-cluster-param-group"
-  description = "disable tls"
+  description = "openedx_devops: mongodb - disable tls"
 
   parameter {
     apply_method = "pending-reboot"
