@@ -10,7 +10,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: openedx
-  namespace: ingress-nginx
+  namespace: openedx
   annotations:
     # mcdaniel
     # https://www.cyberciti.biz/faq/nginx-upstream-sent-too-big-header-while-reading-response-header-from-upstream/
