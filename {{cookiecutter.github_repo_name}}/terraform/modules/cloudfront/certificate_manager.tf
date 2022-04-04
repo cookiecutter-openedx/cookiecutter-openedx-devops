@@ -20,14 +20,6 @@
 # than as data
 #------------------------------------------------------------------------------
 
-data "aws_route53_zone" "root_domain" {
-  name = var.root_domain
-}
-
-data "aws_route53_zone" "environment_domain" {
-  name = var.environment_domain
-}
-
 #------------------------------------------------------------------------------
 # SSL/TLS certs issued in the AWS region for ALB
 #------------------------------------------------------------------------------
@@ -39,33 +31,10 @@ provider "aws" {
 #------------------------------------------------------------------------------
 # SSL/TLS certs issued in us-east-1 for Cloudfront
 #------------------------------------------------------------------------------
-provider "aws" {
-  alias  = "us-east-1"
-  region = "us-east-1"
-}
-
-module "acm_root_domain" {
-  source  = "terraform-aws-modules/acm/aws"
-  version = "{{ cookiecutter.terraform_aws_modules_acm }}"
-
-  providers = {
-    aws = aws.us-east-1
-  }
-
-  domain_name = var.root_domain
-  zone_id     = data.aws_route53_zone.root_domain.id
-
-  subject_alternative_names = [
-    "*.${var.root_domain}",
-  ]
-
-  wait_for_validation = true
-  tags                = var.tags
-}
 
 module "acm_environment_domain" {
   source  = "terraform-aws-modules/acm/aws"
-  version = "{{ cookiecutter.terraform_aws_modules_acm }}"
+  version = "~> 3.4"
 
   providers = {
     aws = aws.us-east-1
@@ -79,5 +48,12 @@ module "acm_environment_domain" {
   ]
 
   wait_for_validation = true
-  tags                = var.tags
+
+  # adding the Usage tag as a way to differentiate this cert from the one created by
+  # the eks clb ingress, of which we have no control.
+  tags = merge(
+    var.tags,
+    { Usage = "Cloudfront" }
+  )
+
 }
