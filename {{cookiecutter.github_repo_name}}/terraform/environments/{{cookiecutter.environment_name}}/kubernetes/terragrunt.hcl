@@ -79,7 +79,7 @@ inputs = {
   tags = local.tags
   map_users = [
     {
-      userarn  = "arn:aws:iam::{{ cookiecutter.account_id }}:user/ci"
+      userarn  = "arn:aws:iam::{{ cookiecutter.global_account_id }}:user/ci"
       username = "ci"
       groups   = ["system:masters"]
     }

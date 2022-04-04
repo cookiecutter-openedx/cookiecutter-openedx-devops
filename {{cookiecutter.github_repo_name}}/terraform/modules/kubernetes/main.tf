@@ -10,7 +10,6 @@
 # Technical documentation:
 # - https://docs.aws.amazon.com/kubernetes
 # - https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/
-# - https://docs.aws.amazon.com/kubernetes/latest/userguide/fargate-profile.html
 #
 #------------------------------------------------------------------------------
 locals {
