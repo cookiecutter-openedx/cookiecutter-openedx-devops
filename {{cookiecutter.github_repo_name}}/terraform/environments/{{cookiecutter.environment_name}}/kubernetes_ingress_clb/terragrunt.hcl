@@ -29,6 +29,10 @@ locals {
   )
 }
 
+dependencies {
+  paths = ["../vpc", "../kubernetes"]
+}
+
 dependency "vpc" {
   config_path = "../vpc"
 
