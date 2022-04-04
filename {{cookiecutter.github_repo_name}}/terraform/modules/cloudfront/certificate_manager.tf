@@ -34,7 +34,7 @@ provider "aws" {
 
 module "acm_environment_domain" {
   source  = "terraform-aws-modules/acm/aws"
-  version = "~> 3.4"
+  version = "{{ cookiecutter.terraform_aws_modules_acm }}"
 
   providers = {
     aws = aws.us-east-1
