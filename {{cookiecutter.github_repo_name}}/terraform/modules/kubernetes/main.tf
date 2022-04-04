@@ -19,12 +19,13 @@ locals {
   kubeconfig             = "~/.kube/config"
   current_auth_configmap = yamldecode(module.eks.aws_auth_configmap_yaml)
   map_users              = var.map_users
+  map_roles              = var.map_roles
   updated_auth_configmap_data = {
     data = {
-      #mapRoles = yamlencode(
-      #  distinct(concat(
-      #  yamldecode(local.current_auth_configmap.data.mapRoles), local.map_roles, )
-      #))
+      mapRoles = yamlencode(
+        distinct(concat(
+          yamldecode(local.current_auth_configmap.data.mapRoles), local.map_roles, )
+      ))
       mapUsers = yamlencode(local.map_users)
     }
   }

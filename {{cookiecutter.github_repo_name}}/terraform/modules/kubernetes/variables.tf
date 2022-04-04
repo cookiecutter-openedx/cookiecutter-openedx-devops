@@ -66,7 +66,17 @@ variable "eks_worker_group_instance_type" {
 }
 
 variable "map_users" {
-  description = "Additional IAM users to add to the aws-auth configmap. See examples/basic/variables.tf for example format."
+  description = "Additional IAM users to add to the aws-auth configmap."
+  type = list(object({
+    userarn  = string
+    username = string
+    groups   = list(string)
+  }))
+  default = []
+}
+
+variable "map_roles" {
+  description = "Additional IAM roles to add to the aws-auth configmap."
   type = list(object({
     userarn  = string
     username = string
