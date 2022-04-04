@@ -27,6 +27,7 @@ provider "kubernetes" {
 
 resource "aws_security_group" "worker_group_mgmt" {
   name_prefix = "${var.environment_namespace}-eks_worker_group_mgmt"
+  description = "openedx_devops: Ingress CLB worker group management"
   vpc_id      = var.vpc_id
 
   ingress {
@@ -46,6 +47,7 @@ resource "aws_security_group" "worker_group_mgmt" {
 
 resource "aws_security_group" "all_worker_mgmt" {
   name_prefix = "${var.environment_namespace}-eks_all_worker_management"
+  description = "openedx_devops: Ingress CLB worker management"
   vpc_id      = var.vpc_id
 
   ingress {

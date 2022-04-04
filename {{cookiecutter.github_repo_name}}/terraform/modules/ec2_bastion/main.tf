@@ -40,7 +40,7 @@ data "aws_key_pair" "common_key" {
 
 resource "aws_security_group" "sg_bastion" {
   name_prefix = "${var.environment_namespace}-bastion"
-  description = "Public ssh access"
+  description = "openedx_devops: Public ssh access"
   vpc_id      = var.vpc_id
 
   ingress {

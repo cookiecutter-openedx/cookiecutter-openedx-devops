@@ -21,7 +21,7 @@ module "security_group" {
   version = "{{ cookiecutter.terraform_aws_modules_sg }}"
 
   name        = local.name
-  description = "Allow access to MySQL"
+  description = "openedx_devops: Allow access to MySQL"
   vpc_id      = var.vpc_id
 
   # ingress

@@ -9,7 +9,7 @@
 #------------------------------------------------------------------------------
 resource "aws_security_group" "mongo_cluster" {
   name        = var.resource_name
-  description = "Added by openedx_devops: DocumentDB cluster"
+  description = "openedx_devops: DocumentDB cluster"
   vpc_id      = var.vpc_id
   tags        = var.tags
 }
