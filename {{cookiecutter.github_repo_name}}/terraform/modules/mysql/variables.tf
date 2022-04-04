@@ -84,6 +84,11 @@ variable "iam_database_authentication_enabled" {
   default     = false
 }
 
+variable "identifier" {
+  description = "The name of the RDS instance, if omitted, Terraform will assign a random, unique identifier"
+  type        = string
+}
+
 variable "ingress_cidr_blocks" {
   description = "List of IPv4 CIDR ranges to use on all ingress rules"
   type        = list(string)

@@ -12,6 +12,7 @@ locals {
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   resource_name         = "${local.environment_vars.locals.environment_namespace}"
+  identifier            = "${local.environment_vars.locals.environment}"
   mysql_instance_class  = local.environment_vars.locals.mysql_instance_class
 
   tags = merge(
@@ -84,6 +85,7 @@ inputs = {
 
   # database identifying information
   name                                = "openedx"
+  identifier                          = local.identifier
   username                            = "{{ cookiecutter.mysql_username }}"
   create_random_password              = {{ cookiecutter.mysql_create_random_password }}
   iam_database_authentication_enabled = {{ cookiecutter.mysql_iam_database_authentication_enabled }}
