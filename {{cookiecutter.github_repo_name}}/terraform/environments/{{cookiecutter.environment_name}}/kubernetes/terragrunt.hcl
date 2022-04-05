@@ -15,7 +15,6 @@ locals {
   env                             = local.environment_vars.locals.environment
   environment_domain              = local.environment_vars.locals.environment_domain
   environment_namespace           = local.environment_vars.locals.environment_namespace
-  subdomains                      = local.environment_vars.locals.subdomains
   root_domain                     = local.global_vars.locals.root_domain
   platform_name                   = local.global_vars.locals.platform_name
   platform_region                 = local.global_vars.locals.platform_region
@@ -67,7 +66,6 @@ inputs = {
   environment_domain = local.environment_domain
   root_domain = local.root_domain
   environment_namespace = local.environment_namespace
-  subdomains = local.subdomains
   private_subnet_ids = dependency.vpc.outputs.private_subnets
   public_subnet_ids = dependency.vpc.outputs.public_subnets
   vpc_id  = dependency.vpc.outputs.vpc_id

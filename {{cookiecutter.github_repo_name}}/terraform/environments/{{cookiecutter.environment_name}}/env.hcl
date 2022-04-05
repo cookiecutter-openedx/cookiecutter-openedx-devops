@@ -12,7 +12,6 @@ locals {
 
   environment           = "{{ cookiecutter.environment_name }}"
   environment_subdomain = "{{ cookiecutter.environment_subdomain }}"
-  subdomains            = []
   environment_domain    = "${local.environment_subdomain}.${local.global_vars.locals.root_domain}"
   environment_namespace = "${local.environment}-${local.global_vars.locals.platform_name}-${local.global_vars.locals.platform_region}"
 

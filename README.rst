@@ -195,7 +195,6 @@ Review your production environment parameters.
   locals {
 
   environment           = "courses"
-  subdomains            = ["dev", "test"]
 
                           # defaults to this value
   environment_domain    = "courses.yourschool.edu"

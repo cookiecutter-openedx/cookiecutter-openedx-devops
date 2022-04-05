@@ -6,11 +6,6 @@
 #
 # usage: create a VPC to contain all Open edX backend resources.
 #------------------------------------------------------------------------------
-variable "subdomains" {
-  description = "Base domain (route53 zone) for the default cluster ingress"
-  type        = list(string)
-}
-
 variable "aws_region" {
   description = "The region in which the origin S3 bucket was created."
   type        = string
