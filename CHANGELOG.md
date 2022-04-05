@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [0.0.5]
+
+- removed subdomains list
+
 ## [0.0.4]
 
 - parameterized deployment yaml manifests with cookiecutter
