@@ -1,6 +1,8 @@
 Amazon Elastic Kubernetes Service (EKS)
 =======================================
 
+see: curl -o eks-console-full-access.yaml https://s3.us-west-2.amazonaws.com/amazon-eks/docs/eks-console-full-access.yaml
+
 Implements a `Kubernetes Cluster <https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/>`_ via `AWS Elastic Kubernetes Service (EKS) <https://aws.amazon.com/kubernetes/>`_. A Kubernetes cluster is a set of nodes that run containerized applications that are grouped in pods and organized with namespaces. Containerizing an application into a Docker container means packaging that app with its dependences and its required services into a single binary run-time file that can be downloaded directly from the Docker registry.
 Our Kubernetes Cluster resides inside the VPC on a private subnet, meaning that it is generally not visible to the public. In order to be able to receive traffic from the outside world we implement `Kubernetes Ingress Controllers <https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/>`_ which in turn implement a `Kubernetes Ingress <https://kubernetes.io/docs/concepts/services-networking/ingress/>`_
 for both an `AWS Application Load Balancer <https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html>`_ as well as our `Nginx proxy server <https://www.nginx.com/>`_.

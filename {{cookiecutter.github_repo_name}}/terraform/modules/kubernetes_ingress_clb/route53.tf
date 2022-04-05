@@ -14,20 +14,6 @@ data "aws_route53_zone" "environment_domain" {
   name = var.environment_domain
 }
 
-resource "aws_route53_zone" "subdomain" {
-  count = length(var.subdomains)
-  name  = "${element(var.subdomains, count.index)}.${var.environment_domain}"
-}
-
-resource "aws_route53_record" "subdomain-ns" {
-  count   = length(var.subdomains)
-  zone_id = data.aws_route53_zone.environment_domain.zone_id
-  name    = "${element(var.subdomains, count.index)}.${var.environment_domain}"
-  type    = "NS"
-  ttl     = "30"
-  records = aws_route53_zone.subdomain[count.index].name_servers
-}
-
 resource "aws_route53_record" "naked" {
   zone_id = data.aws_route53_zone.environment_domain.id
   name    = var.environment_domain

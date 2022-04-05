@@ -173,7 +173,6 @@ Set your `production environment parameters <terraform/environments/{{ cookiecut
   locals {
 
   environment           = "{{ cookiecutter.environment_subdomain }}"
-  subdomains            = ["dev", "test"]
   environment_domain    = "${local.environment}.${local.global_vars.locals.root_domain}"
   environment_namespace = "${local.environment}-${local.global_vars.locals.platform_name}-${local.global_vars.locals.platform_region}"
 

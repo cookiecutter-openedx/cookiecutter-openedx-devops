@@ -10,7 +10,7 @@
 #------------------------------------------------------------------------------
 
 GITHUB_REPO="gh:lpm0073/cookiecutter-openedx-devops"
-GITHUB_BRANCH="eks_alb"
+GITHUB_BRANCH="subdomain"
 OUTPUT_FOLDER="/Users/mcdaniel/cookiecutter/"
 
 cookiecutter --checkout $GITHUB_BRANCH \

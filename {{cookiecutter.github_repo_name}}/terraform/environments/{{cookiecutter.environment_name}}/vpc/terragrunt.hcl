@@ -17,7 +17,6 @@ locals {
   aws_region            = local.global_vars.locals.aws_region
   environment           = local.environment_vars.locals.environment
   environment_namespace = local.environment_vars.locals.environment_namespace
-  subdomains            = local.environment_vars.locals.subdomains
 
   tags = merge(
     local.environment_vars.locals.tags,
@@ -42,7 +41,6 @@ include {
 inputs = {
   aws_region            = local.aws_region
   environment_namespace = local.environment_namespace
-  subdomains            = local.subdomains
   name                  = "${local.environment_namespace}"
   cidr                  = "192.168.0.0/20"
   azs                   = ["${local.aws_region}a", "${local.aws_region}b", "${local.aws_region}c"]
