@@ -6,15 +6,12 @@
 #        The openedx docker image is created by a Github action in tutor-build.git.
 #
 #        The general work flow in this action is:
-#        1. Setup Tutor inside a Github ubuntu workspace
-#        2. Setup the AWS Kubernetes controller inside the Github ubuntu workspace
-#        3. Grab backing service login credentials that were previously stored in
-#           Kubernetes secrets by terraform-openedx.git
-#        4. map the openedx docker container to use (stored in AWS Elastic Container Service)
-#        5. configure all backing services: mysql, mongo, redis, smtp, s3
-#        6. add all edxapp lms/studio configuration (ie stuff from lms.yml and studio.yml)
-#        7. use Tutor to startup the edxapp platform
-#        8. initialize Kubernetes, and then let it take over
+#        ----------------------------------------
+#        I.   Bootstrap the Github Actions Ubuntu instance.
+#        II.  Get backend services configuration data stored in Kubernetes secrets
+#        III. Configure Open edX by setting environment variables
+#        IV.  Merge all of the configuration data into Tutor's Open edX configuration files
+#        V.   Deploy Open edX into the Kubernetes cluster
 #------------------------------------------------------------------------------
 name: Tutor Deploy {{ cookiecutter.environment_name }}
 
@@ -24,6 +21,8 @@ jobs:
   deploy:
     runs-on: ubuntu-20.04
     env:
+      # Fix Note: KUBECONFIG is orphaned and could be removed. we're getting kubeconfig
+      # from AWS EKS via the AWS CLI key/secret.
       KUBECONFIG: /home/runner/.kube/config
       ENVIRONMENT_ID: {{ cookiecutter.environment_name }}
       NAMESPACE: openedx
@@ -34,8 +33,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
 
+      #------------------------------------------------------------------------
+      # I. Bootstrap the Github Actions Ubuntu instance.
+      #------------------------------------------------------------------------
+
       # grab the AWS IAM key and scret for the IAM user named 'ci'
-      # These were manually stored in https://github.com/{{ cookiecutter.github_account_name }}/tutor-deploy/settings/secrets/actions
+      # These are manually stored in https://github.com/{{ cookiecutter.github_account_name }}/{{ cookiecutter.github_repo_name }}/settings
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -43,16 +46,27 @@ jobs:
           aws-secret-access-key: {% raw %}${{ secrets.AWS_SECRET_ACCESS_KEY }}{% endraw %}
           aws-region: {{ cookiecutter.global_aws_region }}
 
+      # get the Kubernetes kubeconfig for our cluster. This is a prerequisite to getting any other data about or contained within our cluster.
+      # see: https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/
+      #
+      # summarizing: the kubeconfig (Kubernetes Configuration) is a text file that contains at a minimum
+      # three values that are necessary in order to access the Kubernetes cluster using kubectl command line:
+      #   - API server endpoint
+      #   - EKS Cluster ARN
+      #   - Certificate authority (ie the private ssh key)
       - name: Get Kube config
         run: aws eks --region {{ cookiecutter.global_aws_region }} update-kubeconfig --name {{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }} --alias eks-{{ cookiecutter.environment_name }}
 
+      # install the kubectl command-line tools which we'll use for making calls to the kubernetes api
       - name: Install kubectl
         uses: azure/setup-kubectl@v1
         id: install-kubectl
 
+      # install the latest version of python3 which is a prerequisite for running Tutor
       - name: Setup Python
         run: sudo apt install python3 python3-pip libyaml-dev
 
+      # install Tutor which we'll use for configuring and deploying Open edX
       - name: Install Tutor (from source)
         run: |-
           pip install --upgrade pyyaml
@@ -63,33 +77,42 @@ jobs:
           pip install -e .
           echo "TUTOR_VERSION=$(tutor --version | cut -f3 -d' ')" >> $GITHUB_ENV
 
+      #------------------------------------------------------------------------
+      # II. Get all of our backend configuration data that was stored in
+      #     Kubernetes secrets by various Terraform modules
+      #------------------------------------------------------------------------
       - name: Configure Open edX version
         run: |-
           echo "OPENEDX_COMMON_VERSION=$OPENEDX_COMMON_VERSION" >> $GITHUB_ENV
 
-      # see: https://github.com/{{ cookiecutter.github_account_name }}/terraform-openedx/tree/main/ci/tutor-deploy/environments/{{ cookiecutter.environment_name }}/jwt
+      # see: https://github.com/{{ cookiecutter.github_account_name }}/{{ cookiecutter.github_repo_name }}/blob/main/terraform/modules/kubernetes_secrets/main.tf
       - name: Fetch JWT token
         run: |-
           ### Fetch secrets from Kubernetes into Environment
           kubectl get secret jwt -n $NAMESPACE -o json |  jq  '.data| map_values(@base64d)'  | jq -r 'keys[] as $k | "\(.[$k])"' > jwt_private_key
 
-      # see: https://github.com/{{ cookiecutter.github_account_name }}/terraform-openedx/tree/main/ci/tutor-deploy/environments/{{ cookiecutter.environment_name }}/rds
+      # see: https://github.com/{{ cookiecutter.github_account_name }}/{{ cookiecutter.github_repo_name }}/blob/main/terraform/modules/mysql/main.tf
       - name: MySQL
         run: |-
           echo "TUTOR_RUN_MYSQL=false" >> $GITHUB_ENV
           kubectl get secret mysql-root -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"' >> $GITHUB_ENV
           kubectl get secret mysql-openedx -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"' >> $GITHUB_ENV
 
+      # see: https://github.com/{{ cookiecutter.github_account_name }}/{{ cookiecutter.github_repo_name }}/blob/main/terraform/modules/mongodb/main.tf
       - name: MongoDB
         run: |-
           echo "TUTOR_RUN_MONGODB=false" >> $GITHUB_ENV
           kubectl get secret mongodb-admin -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"' >> $GITHUB_ENV
 
-      # see: https://github.com/{{ cookiecutter.github_account_name }}/terraform-openedx/tree/main/ci/tutor-deploy/environments/{{ cookiecutter.environment_name }}/redis
+      # see: https://github.com/{{ cookiecutter.github_account_name }}/{{ cookiecutter.github_repo_name }}/blob/main/terraform/modules/redis/main.tf
       - name: Redis
         run: |-
           echo "TUTOR_RUN_REDIS=false" >> $GITHUB_ENV
           kubectl get secret redis -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"' >> $GITHUB_ENV
+
+      #------------------------------------------------------------------------
+      # III. Configure Open edX by setting environment variables
+      #------------------------------------------------------------------------
 
       # ---------------------------------------------------------------------------------
       # Note: We're not managing AWS SES with Terraform simply because the service is fiddly
@@ -105,7 +128,7 @@ jobs:
                             --set EMAIL_PORT={{ cookiecutter.ci_deploy_EMAIL_PORT }} \
                             --set EMAIL_USE_TLS={{ cookiecutter.ci_deploy_EMAIL_USE_TLS }}
 
-      # see: https://github.com/{{ cookiecutter.github_account_name }}/terraform-openedx/blob/main/components/secrets/session.tf
+      # see: https://github.com/{{ cookiecutter.github_account_name }}/{{ cookiecutter.github_repo_name }}/blob/main/terraform/modules/kubernetes_secrets/main.tf
       - name: EDX Secret Key
         run: |-
           kubectl get secret edx-secret-key -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"' >> $GITHUB_ENV
@@ -130,6 +153,7 @@ jobs:
 
       # note that the Kubernetes additional config data is locally
       # stored in ci/tutor-deploy/environments/{{ cookiecutter.environment_name }}/k8s/
+      # in Kubernetes manifest yaml format
       - name: Create Kubernetes add-on resources
         run:  |-
           # Create kubernetes ingress and other environment resources
@@ -191,9 +215,15 @@ jobs:
           tutor config save
           cat $TUTOR_ROOT/config.yml
 
-      # in this step we're combining our custom configuration data
-      # from ci/tutor-deploy/environments/{{ cookiecutter.environment_name }}/settings_merge.json with the default
-      # config that was created when we built the openedx docker image with tutor
+      #------------------------------------------------------------------------
+      # IV. Merge all of the configuration data into Tutor's Open edX
+      #     configuration files: config.yml, lms.env.json, cms.env.json
+      #
+      # In this step we're combining three sources of data:
+      # 1. sensitive configuration data retrieved from Kubernetes secrets in section II above
+      # 2. Open edx application and services configuration data created here in section III
+      # 3. LMS and CMS application configuration data stored in our repo at ci/tutor-deploy/environments/{{ cookiecutter.environment_name }}/settings_merge.json
+      #------------------------------------------------------------------------
       - name: Patch Generated Configuration (Static)
         run:  |-
           echo "config.yml full path: $(tutor config printroot)/config.yml"
@@ -221,6 +251,9 @@ jobs:
           echo ""
           echo ""
 
+      #------------------------------------------------------------------------
+      # V. Deploy Open edX
+      #------------------------------------------------------------------------
       - name: Deploy Tutor
         run:  |-
           tutor k8s start
