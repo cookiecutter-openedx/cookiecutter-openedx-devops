@@ -85,12 +85,22 @@ jobs:
         run: |-
           echo "OPENEDX_COMMON_VERSION=$OPENEDX_COMMON_VERSION" >> $GITHUB_ENV
 
+      # retrieve the Open edX JWT token that we created with Terraform and
+      # then stored in Kubernetes secrets
       # see: https://github.com/{{ cookiecutter.github_account_name }}/{{ cookiecutter.github_repo_name }}/blob/main/terraform/modules/kubernetes_secrets/main.tf
       - name: Fetch JWT token
         run: |-
           ### Fetch secrets from Kubernetes into Environment
           kubectl get secret jwt -n $NAMESPACE -o json |  jq  '.data| map_values(@base64d)'  | jq -r 'keys[] as $k | "\(.[$k])"' > jwt_private_key
 
+      # retrieve the MySQL connection parameters that we created in Terraform
+      # and then stored in Kubernetes secrets. These include:
+      #   MYSQL_HOST: mysql.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
+      #   MYSQL_PORT: "3306"
+      #   OPENEDX_MYSQL_PASSWORD: **************
+      #   OPENEDX_MYSQL_USERNAME: openedx
+      # Also note that we are using jq to add a prefix of "TUTOR_" to each of the parameter names
+      #
       # see: https://github.com/{{ cookiecutter.github_account_name }}/{{ cookiecutter.github_repo_name }}/blob/main/terraform/modules/mysql/main.tf
       - name: MySQL
         run: |-
@@ -98,12 +108,23 @@ jobs:
           kubectl get secret mysql-root -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"' >> $GITHUB_ENV
           kubectl get secret mysql-openedx -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"' >> $GITHUB_ENV
 
+      # retrieve the MongoDB connection parameters that we created in Terraform
+      # and then stored in Kubernetes secrets. These include:
+      #   MONGODB_HOST: mongodb.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
+      #   MONGODB_PORT: "27017"
+      #   MONGODB_PASSWORD: **************
+      #   MONGODB_USERNAME: root
+      # Also note that we are using jq to add a prefix of "TUTOR_" to each of the parameter names
+      #
       # see: https://github.com/{{ cookiecutter.github_account_name }}/{{ cookiecutter.github_repo_name }}/blob/main/terraform/modules/mongodb/main.tf
       - name: MongoDB
         run: |-
           echo "TUTOR_RUN_MONGODB=false" >> $GITHUB_ENV
           kubectl get secret mongodb-admin -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"' >> $GITHUB_ENV
 
+      # retrieve the Redis connection parameter that we created in Terraform:
+      #   REDIS_HOST: redis.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
+      #
       # see: https://github.com/{{ cookiecutter.github_account_name }}/{{ cookiecutter.github_repo_name }}/blob/main/terraform/modules/redis/main.tf
       - name: Redis
         run: |-
