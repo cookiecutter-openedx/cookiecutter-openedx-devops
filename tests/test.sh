@@ -10,14 +10,16 @@
 #------------------------------------------------------------------------------
 
 GITHUB_REPO="gh:lpm0073/cookiecutter-openedx-devops"
-GITHUB_BRANCH="subdomain"
-OUTPUT_FOLDER="/Users/mcdaniel/cookiecutter/"
+GITHUB_BRANCH="main"
+OUTPUT_FOLDER="/Users/mcdaniel/github/stepwisemath.ai/"
 
 cookiecutter --checkout $GITHUB_BRANCH \
              --output-dir $OUTPUT_FOLDER \
              --overwrite-if-exists \
              --no-input \
              $GITHUB_REPO \
+             github_account_name=StepwiseMath \
+             github_repo_name=openedx_devops \
              global_platform_name=stepwisemath \
              global_platform_region=mexico \
              global_aws_region=us-east-2 \
@@ -28,5 +30,3 @@ cookiecutter --checkout $GITHUB_BRANCH \
              environment_name=prod \
              environment_add_bastion=N \
              environment_subdomain=web \
-             kubernetes_cluster_compute_type=Fargate \
-             kubernetes_cluster_load_balancer_type=ALB

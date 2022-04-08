@@ -1,8 +1,8 @@
 #------------------------------------------------------------------------------
-# written by: Miguel Afonso
-#             https://www.linkedin.com/in/mmafonso/
+# written by: Lawrence McDaniel
+#             https://lawrencemcdaniel.com
 #
-# date: Aug-2021
+# date: April 2022
 #
 # usage: create an RDS MySQL instance.
 #------------------------------------------------------------------------------

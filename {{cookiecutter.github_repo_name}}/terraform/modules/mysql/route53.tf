@@ -1,3 +1,11 @@
+#------------------------------------------------------------------------------
+# written by: Lawrence McDaniel
+#             https://lawrencemcdaniel.com
+#
+# date: April 2022
+#
+# usage: create an RDS MySQL instance.
+#------------------------------------------------------------------------------
 
 data "aws_route53_zone" "environment_domain" {
   name = var.environment_domain
