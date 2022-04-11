@@ -211,21 +211,22 @@ jobs:
       #          ]
       #      }
       #
+      - name: Extract S3 secrets from Kubernetes cluster
+        run: |-
+          kubectl get secret s3-openedx-storage -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"' >> $GITHUB_ENV
+
       - name: Install S3 plugin
         run: |-
           pip install git+https://github.com/hastexo/tutor-contrib-s3@v0.2.0
           tutor plugins enable s3
-          tutor config save
 
-          kubectl get secret s3-openedx-storage -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"' >> $GITHUB_ENV
-
-          tutor config save --set OPENEDX_AWS_ACCESS_KEY="$OPENEDX_AWS_ACCESS_KEY" \
-                            --set OPENEDX_AWS_SECRET_ACCESS_KEY="$OPENEDX_AWS_SECRET_ACCESS_KEY" \
+          tutor config save --set OPENEDX_AWS_ACCESS_KEY="${{ env.TUTOR_OPENEDX_AWS_ACCESS_KEY }}" \
+                            --set OPENEDX_AWS_SECRET_ACCESS_KEY="${{ env.TUTOR_OPENEDX_AWS_SECRET_ACCESS_KEY }}" \
                             --set OPENEDX_AWS_QUERYSTRING_AUTH="False" \
                             --set OPENEDX_AWS_S3_SECURE_URLS="False" \
-                            --set S3_STORAGE_BUCKET="$S3_STORAGE_BUCKET" \
-                            --set S3_CUSTOM_DOMAIN="$S3_CUSTOM_DOMAIN" \
-                            --set S3_REGION="$S3_REGION"
+                            --set S3_STORAGE_BUCKET="${{ env.TUTOR_S3_STORAGE_BUCKET }}" \
+                            --set S3_CUSTOM_DOMAIN="${{ env.TUTOR_S3_CUSTOM_DOMAIN }}" \
+                            --set S3_REGION="${{ env.TUTOR_S3_REGION }}"
 
       - name: Configure 3rd Party Authentication
         run:  |-
