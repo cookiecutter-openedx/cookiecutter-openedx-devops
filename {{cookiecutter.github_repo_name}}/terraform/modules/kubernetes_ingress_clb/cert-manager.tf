@@ -5,10 +5,11 @@
 # date: Aug-2021
 #
 # usage: Add tls certs for EKS cluster load balancer
+#        see https://cert-manager.io/docs/
 #------------------------------------------------------------------------------
 module "cert_manager_irsa" {
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "{{ cookiecutter.terraform_aws_iam_assumable_role_with_oidc }}"
+  version                       = "{{ cookiecutter.terraform_aws_modules_iam_assumable_role_with_oidc }}"
   create_role                   = true
   role_name                     = "${var.environment_namespace}-cert_manager-irsa"
   provider_url                  = replace(data.aws_eks_cluster.eks.identity[0].oidc[0].issuer, "https://", "")

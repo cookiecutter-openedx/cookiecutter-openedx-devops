@@ -3,10 +3,10 @@ global:
     enabled: true
     useAppArmor: true
 image:
-  tag: v1.4.0
+  tag: {{ cookiecutter.terraform_helm_cert_manager_image_tag }}
 webhook:
   image:
-    tag: v1.4.0
+    tag: {{ cookiecutter.terraform_helm_cert_manager_image_tag }}
 prometheus:
   enabled: false
 installCRDs: true
