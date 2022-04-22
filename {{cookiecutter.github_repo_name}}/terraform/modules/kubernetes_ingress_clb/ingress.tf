@@ -18,21 +18,6 @@ provider "helm" {
   }
 }
 
-resource "helm_release" "nginx" {
-  name             = "ingress-nginx"
-  namespace        = "ingress-nginx"
-  create_namespace = true
-
-  chart      = "ingress-nginx"
-  repository = "https://kubernetes.github.io/ingress-nginx"
-  version    = "{{ cookiecutter.terraform_helm_ingress_nginx }}"
-
-  set {
-    name  = "service.type"
-    value = "ClusterIP"
-  }
-}
-
 data "kubernetes_service" "ingress_nginx_controller" {
   metadata {
     name      = "ingress-nginx-controller"
@@ -42,3 +27,17 @@ data "kubernetes_service" "ingress_nginx_controller" {
 }
 
 data "aws_elb_hosted_zone_id" "main" {}
+
+resource "helm_release" "nginx" {
+  name             = "ingress-nginx"
+  namespace        = "ingress-nginx"
+  create_namespace = true
+
+  chart      = "ingress-nginx"
+  repository = "stable/ingress-nginx"
+
+  set {
+    name  = "service.type"
+    value = "ClusterIP"
+  }
+}
