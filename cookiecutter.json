@@ -27,7 +27,7 @@
     "ci_deploy_EMAIL_HOST": "email-smtp.{{ cookiecutter.global_aws_region|lower|replace(' ', '-') }}.amazonaws.com",
     "ci_deploy_EMAIL_PORT": 587,
     "ci_deploy_EMAIL_USE_TLS": "true",
-    "kubernetes_cluster_version": "1.22.6",
+    "kubernetes_cluster_version": "1.22",
     "kubernetes_cluster_compute_type": ["EC2", "Fargate"],
     "kubernetes_cluster_load_balancer_type": ["ALB", "CLB"],
     "kubernetes_cluster_ingress_controller_version": "v2.4.1",
