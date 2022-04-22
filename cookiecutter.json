@@ -4,7 +4,7 @@
     "environment_name": "prod",
     "environment_subdomain": "courses",
     "environment_add_bastion": ["N", "Y"],
-    "environment_add_dynamodb": ["N", "Y"],
+    "environment_add_documentdb": ["N", "Y"],
     "global_platform_name": "yourschool",
     "global_platform_description": "Your School",
     "global_platform_region": "usa_east",

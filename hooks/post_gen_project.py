@@ -34,7 +34,7 @@ def main():
     if "{{ cookiecutter.environment_add_bastion }}".upper() != "Y":
         remove_bastion()
 
-    if "{{ cookiecutter.environment_add_dynamodb }}".upper() != "Y":
+    if "{{ cookiecutter.environment_add_documentdb }}".upper() != "Y":
         remove_dynamodb()
 
     print(SUCCESS + "Your Open edX devops repo has been initialized." + TERMINATOR)
