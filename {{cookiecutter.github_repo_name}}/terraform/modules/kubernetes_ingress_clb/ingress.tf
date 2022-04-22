@@ -34,7 +34,8 @@ resource "helm_release" "nginx" {
   create_namespace = true
 
   chart      = "ingress-nginx"
-  repository = "stable/ingress-nginx"
+  repository = "https://kubernetes.github.io/ingress-nginx"
+  version    = "{{ cookiecutter.terraform_helm_ingress_nginx }}"
 
   set {
     name  = "service.type"
