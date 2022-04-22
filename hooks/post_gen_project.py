@@ -20,8 +20,21 @@ def remove_bastion():
     if os.path.exists(terragrunt_dir_path):
         shutil.rmtree(terragrunt_dir_path)
 
+def remove_dynamodb():
+    module_dir_path = os.path.join("terraform", "modules", "mongodb")
+    if os.path.exists(module_dir_path):
+        shutil.rmtree(module_dir_path)
+
+    terragrunt_dir_path = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "mongodb")
+    if os.path.exists(terragrunt_dir_path):
+        shutil.rmtree(terragrunt_dir_path)
+
+
 def main():
     if "{{ cookiecutter.environment_add_bastion }}".upper() != "Y":
+        remove_bastion()
+
+    if "{{ cookiecutter.environment_add_dynamodb }}".upper() != "Y":
         remove_bastion()
 
     print(SUCCESS + "Your Open edX devops repo has been initialized." + TERMINATOR)
