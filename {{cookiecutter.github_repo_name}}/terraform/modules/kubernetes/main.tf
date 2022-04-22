@@ -31,6 +31,48 @@ locals {
   }
 }
 
+resource "aws_security_group" "worker_group_mgmt" {
+  name_prefix = "${var.environment_namespace}-eks_worker_group_mgmt"
+  description = "openedx_devops: Ingress CLB worker group management"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    description = "openedx_devops: Ingress CLB"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+
+    cidr_blocks = [
+      "10.0.0.0/8",
+    ]
+  }
+
+  tags = var.tags
+
+}
+
+resource "aws_security_group" "all_worker_mgmt" {
+  name_prefix = "${var.environment_namespace}-eks_all_worker_management"
+  description = "openedx_devops: Ingress CLB worker management"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    description = "openedx_devops: Ingress CLB"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+
+    cidr_blocks = [
+      "10.0.0.0/8",
+      "172.16.0.0/12",
+      "192.168.0.0/16",
+    ]
+  }
+
+  tags = var.tags
+
+}
+
 module "eks" {
   source                          = "terraform-aws-modules/eks/aws"
   version                         = "{{ cookiecutter.terraform_aws_modules_eks }}"

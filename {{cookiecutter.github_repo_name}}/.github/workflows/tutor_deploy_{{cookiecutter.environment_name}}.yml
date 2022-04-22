@@ -120,10 +120,15 @@ jobs:
       # Also note that we are using jq to add a prefix of "TUTOR_" to each of the parameter names
       #
       # see: https://github.com/{{ cookiecutter.github_account_name }}/{{ cookiecutter.github_repo_name }}/blob/main/terraform/modules/mongodb/main.tf
-      - name: MongoDB
-        run: |-
-          echo "TUTOR_RUN_MONGODB=false" >> $GITHUB_ENV
-          kubectl get secret mongodb-admin -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"' >> $GITHUB_ENV
+
+      #--------------------------------------------------------------------
+      # UN-COMMENT THIS BLOCK TO USE DYNAMODB INSTEAD OF MONGODB
+      #--------------------------------------------------------------------
+      #- name: MongoDB
+      #  run: |-
+      #    echo "TUTOR_RUN_MONGODB=false" >> $GITHUB_ENV
+      #    kubectl get secret mongodb-admin -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"' >> $GITHUB_ENV
+      #--------------------------------------------------------------------
 
       # retrieve the Redis connection parameter that we created in Terraform:
       #   REDIS_HOST: redis.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}

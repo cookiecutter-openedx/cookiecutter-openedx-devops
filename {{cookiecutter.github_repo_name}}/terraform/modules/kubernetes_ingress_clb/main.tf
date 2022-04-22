@@ -7,6 +7,10 @@
 # usage: build an EKS cluster load balancer
 #------------------------------------------------------------------------------
 
+#data "tls_certificate" "cluster" {
+#  url = data.aws_eks_cluster.eks.identity[0].oidc[0].issuer
+#}
+
 data "aws_eks_cluster" "eks" {
   name = var.environment_namespace
 }
@@ -25,48 +29,35 @@ provider "kubernetes" {
   token                  = data.aws_eks_cluster_auth.cluster.token
 }
 
-resource "aws_security_group" "worker_group_mgmt" {
-  name_prefix = "${var.environment_namespace}-eks_worker_group_mgmt"
-  description = "openedx_devops: Ingress CLB worker group management"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    description = "openedx_devops: Ingress CLB"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-
-    cidr_blocks = [
-      "10.0.0.0/8",
-    ]
+provider "helm" {
+  kubernetes {
+    host                   = data.aws_eks_cluster.cluster.endpoint
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
+    token                  = data.aws_eks_cluster_auth.cluster.token
   }
-
-  tags = var.tags
-
 }
 
-resource "aws_security_group" "all_worker_mgmt" {
-  name_prefix = "${var.environment_namespace}-eks_all_worker_management"
-  description = "openedx_devops: Ingress CLB worker management"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    description = "openedx_devops: Ingress CLB"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-
-    cidr_blocks = [
-      "10.0.0.0/8",
-      "172.16.0.0/12",
-      "192.168.0.0/16",
-    ]
+data "kubernetes_service" "ingress_nginx_controller" {
+  metadata {
+    name      = "ingress-nginx-controller"
+    namespace = "ingress-nginx"
   }
-
-  tags = var.tags
-
+  depends_on = [helm_release.nginx]
 }
 
-data "tls_certificate" "cluster" {
-  url = data.aws_eks_cluster.eks.identity[0].oidc[0].issuer
+data "aws_elb_hosted_zone_id" "main" {}
+
+resource "helm_release" "nginx" {
+  name             = "ingress-nginx"
+  namespace        = "ingress-nginx"
+  create_namespace = true
+
+  chart      = "ingress-nginx"
+  repository = "https://kubernetes.github.io/ingress-nginx"
+  version    = "{{ cookiecutter.terraform_helm_ingress_nginx }}"
+
+  set {
+    name  = "service.type"
+    value = "ClusterIP"
+  }
 }
