@@ -10,7 +10,7 @@
 #------------------------------------------------------------------------------
 
 GITHUB_REPO="gh:lpm0073/cookiecutter-openedx-devops"
-GITHUB_BRANCH="mcdanie_20220422_mongodb"
+GITHUB_BRANCH="main"
 OUTPUT_FOLDER="/Users/mcdaniel/github/stepwisemath.ai/"
 
 cookiecutter --checkout $GITHUB_BRANCH \
