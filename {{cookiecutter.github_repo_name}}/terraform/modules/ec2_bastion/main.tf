@@ -6,7 +6,6 @@
 #
 # usage: create an EC2 instance with ssh access and a DNS record.
 #------------------------------------------------------------------------------
-provider "random" {}
 
 data "aws_route53_zone" "environment" {
   name = var.environment_domain
@@ -30,9 +29,6 @@ data "aws_ami" "ubuntu" {
 
   owners = ["099720109477"]
 }
-
-
-resource "random_pet" "name" {}
 
 data "aws_key_pair" "common_key" {
   key_name = var.ec2_ssh_key_name
@@ -64,21 +60,23 @@ resource "aws_security_group" "sg_bastion" {
 }
 
 
-resource "aws_instance" "bastion" {
+module "bastion" {
+  source = "terraform-aws-modules/ec2-instance/aws"
+
   ami               = data.aws_ami.ubuntu.id
   instance_type     = "t2.micro"
   availability_zone = var.availability_zone
   key_name          = data.aws_key_pair.common_key.key_name
 
   vpc_security_group_ids = [resource.aws_security_group.sg_bastion.id]
-
-  subnet_id = var.subnet_id
+  root_block_device      = [{ volume_size = 100 }]
+  subnet_id              = var.subnet_id
 
   tags = var.tags
 }
 
 resource "aws_eip" "elasticip" {
-  instance = aws_instance.bastion.id
+  instance = module.bastion.id
   tags     = var.tags
 }
 
