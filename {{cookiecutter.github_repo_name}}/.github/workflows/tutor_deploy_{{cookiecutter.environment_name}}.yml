@@ -54,19 +54,22 @@ jobs:
       #   - API server endpoint
       #   - EKS Cluster ARN
       #   - Certificate authority (ie the private ssh key)
-      - name: Get Kube config
-        run: aws eks --region {{ cookiecutter.global_aws_region }} update-kubeconfig --name {{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }} --alias eks-{{ cookiecutter.environment_name }}
-
-      # install the kubectl command-line tools which we'll use for making calls to the kubernetes api
+      #
       # mcdaniel: may-2022
       #  installing a downgraded version of kubectl as a workaround to a breaking change introduced in awscli latest
       #     "error: exec plugin: invalid apiVersion "client.authentication.k8s.io/v1alpha1""
       #  see: https://github.com/aws/aws-cli/issues/6920
-      - name: Install kubectl
-        uses: azure/setup-kubectl@v2.1
-        with:
-          version: '1.23.6'
-        id: install-kubectl
+      - name: Get Kube config
+        run: |-
+          sudo snap install kubectl --channel=1.23/stable --classic
+          aws eks --region {{ cookiecutter.global_aws_region }} update-kubeconfig --name {{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }} --alias eks-{{ cookiecutter.environment_name }}
+
+      # install the kubectl command-line tools which we'll use for making calls to the kubernetes api
+      #- name: Install kubectl
+      #  uses: azure/setup-kubectl@v2.1
+      #  with:
+      #    version: '1.23.6'
+      #  id: install-kubectl
 
       # install the latest version of python3 which is a prerequisite for running Tutor
       - name: Setup Python
