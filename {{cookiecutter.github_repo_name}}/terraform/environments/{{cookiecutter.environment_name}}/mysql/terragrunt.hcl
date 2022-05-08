@@ -110,7 +110,7 @@ inputs = {
   # db server size
   instance_class        = local.mysql_instance_class
   allocated_storage     = {{ cookiecutter.mysql_allocated_storage }}
-  max_allocated_storage = 0
+  max_allocated_storage = 100
   storage_encrypted     = true
   multi_az              = false
   enabled_cloudwatch_logs_exports = []
