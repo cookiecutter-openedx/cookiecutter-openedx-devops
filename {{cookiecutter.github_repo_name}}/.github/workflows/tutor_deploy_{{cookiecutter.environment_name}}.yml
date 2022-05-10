@@ -247,6 +247,24 @@ jobs:
           tutor config save --set OPENEDX_FACEBOOK_APP_ID="{% raw %}${{ secrets.FACEBOOK_APP_ID }}{% endraw %}" \
                             --set OPENEDX_FACEBOOK_APP_SECRET="{% raw %}${{ secrets.FACEBOOK_APP_SECRET }}{% endraw %}"
 
+      - name: Enable the Notes plugin
+        run: |-
+          pip install git+https://github.com/overhangio/tutor-notes
+          tutor plugins enable notes
+          tutor config save
+
+      - name: Enable the Discovery plugin
+        run: |-
+          pip install git+https://github.com/overhangio/tutor-discovery.git
+          tutor plugins enable discovery
+          tutor config save
+
+      - name: Enable the MFE plugin
+        run: |-
+          pip install git+https://github.com/overhangio/tutor-mfe.git
+          tutor plugins enable mfe
+          tutor config save
+
       - name: Generate Tutor Config
         run:  |-
           export TUTOR_JWT_RSA_PRIVATE_KEY=\'$(sed -E 's/$/\n/g' ./jwt_private_key)\'

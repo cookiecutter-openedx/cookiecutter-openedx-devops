@@ -20,6 +20,8 @@ spec:
     server: https://acme-v02.api.letsencrypt.org/directory
     solvers:
       - dns01:
+          # NOTE: make sure that this is the hosted Zone ID for
+          # for the environment domain.
           route53:
             region: {{ cookiecutter.global_aws_region }}
             hostedZoneID: {{ cookiecutter.global_aws_route53_hosted_zone_id }}

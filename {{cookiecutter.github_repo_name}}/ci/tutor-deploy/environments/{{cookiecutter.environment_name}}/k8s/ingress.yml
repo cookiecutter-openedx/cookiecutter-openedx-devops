@@ -51,3 +51,43 @@ spec:
             name: cms
             port:
               number: 8000
+  - host: discovery.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: discovery
+            port:
+              number: 8000
+  - host: notes.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: notes
+            port:
+              number: 8000
+  - host: apps.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: mfe
+            port:
+              number: 8000
+  - host: store.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: store
+            port:
+              number: 8000
