@@ -261,7 +261,8 @@ jobs:
 
       - name: Enable the MFE plugin
         run: |-
-          pip install git+https://github.com/overhangio/tutor-mfe.git
+          tutor config save --set MFE_DOCKER_IMAGE=${DOCKER_IMAGE_MFE}
+          pip install git+https://github.com/overhangio/tutor-mfe
           tutor plugins enable mfe
           tutor config save
 
