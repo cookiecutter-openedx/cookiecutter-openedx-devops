@@ -11,17 +11,16 @@
 #        - various Xblocks
 #        Registers the new container in AWS ECR.
 #------------------------------------------------------------------------------
-name: Tutor Build Image
+name: Prod Build openedx Image
 
 on: workflow_dispatch
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     env:
       ECR_REPOSITORY: openedx
       ECR_REGISTRY: {{ cookiecutter.global_account_id }}.dkr.ecr.{{ cookiecutter.global_aws_region }}.amazonaws.com
-      TUTOR_VERSION: {{ cookiecutter.ci_build_tutor_version }}
     steps:
       - uses: actions/checkout@v1
 
@@ -39,16 +38,12 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Install Tutor (from source)
+      - name: Install Tutor
         run: |-
           pip install --upgrade pyyaml
           echo "TUTOR_ROOT=$GITHUB_WORKSPACE/tutor" >> $GITHUB_ENV
-          git clone https://github.com/overhangio/tutor.git
-          cd tutor
-          git checkout ${TUTOR_VERSION}
-          pip install -e .
+          pip install "tutor[full]"
           echo "TUTOR_VERSION=$(tutor --version | cut -f3 -d' ')" >> $GITHUB_ENV
-
 
       - name: Set Tutor Root in the Workspace
         run: |

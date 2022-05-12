@@ -14,7 +14,6 @@
     "global_account_id": "123456789012",
     "global_ec2_ssh_key_name": "any-valid-pem-key-file-name",
     "ci_build_open_edx_version": "maple.3",
-    "ci_build_tutor_version": "v13.2.0",
     "ci_build_theme_repository": "lpm0073/edx-theme-example",
     "ci_build_theme_ref": "main",
     "ci_build_plugin_repository": "lpm0073/openedx-plugin-example",

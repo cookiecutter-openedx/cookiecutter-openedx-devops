@@ -1,0 +1,10 @@
+DISCOVERY_API_BASE_URL=''
+LMS_BASE_URL='http://www.myopenedx.com:8000'
+LOGIN_URL='http://www.myopenedx.com:8000/login'
+LOGO_URL='http://www.myopenedx.com:8000/theming/asset/images/logo.png'
+LOGO_TRADEMARK_URL='http://www.myopenedx.com:8000/theming/asset/images/logo.png'
+LOGOUT_URL='http://www.myopenedx.com:8000/logout'
+MARKETING_SITE_BASE_URL='http://www.myopenedx.com:8000'
+NODE_ENV=development
+REFRESH_ACCESS_TOKEN_ENDPOINT='http://www.myopenedx.com:8000/login_refresh'
+STUDIO_BASE_URL='http://studio.www.myopenedx.com:8001'

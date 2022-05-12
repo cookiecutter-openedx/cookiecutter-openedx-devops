@@ -13,25 +13,21 @@
 #        IV.  Merge all of the configuration data into Tutor's Open edX configuration files
 #        V.   Deploy Open edX into the Kubernetes cluster
 #------------------------------------------------------------------------------
-name: Tutor Deploy {{ cookiecutter.environment_name }}
+name: {{ cookiecutter.environment_name }} Deploy to Kubernetes
 
 on: [workflow_dispatch]
 
 jobs:
   deploy:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     env:
-      # Fix Note: KUBECONFIG is orphaned and could be removed. we're getting kubeconfig
-      # from AWS EKS via the AWS CLI key/secret.
-      KUBECONFIG: /home/runner/.kube/config
       ENVIRONMENT_ID: {{ cookiecutter.environment_name }}
       NAMESPACE: openedx
-      TUTOR_VERSION: {{ cookiecutter.ci_build_tutor_version }}
       OPENEDX_COMMON_VERSION: {{ cookiecutter.ci_deploy_OPENEDX_COMMON_VERSION }}
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
 
       #------------------------------------------------------------------------
       # I. Bootstrap the Github Actions Ubuntu instance.
@@ -54,36 +50,30 @@ jobs:
       #   - API server endpoint
       #   - EKS Cluster ARN
       #   - Certificate authority (ie the private ssh key)
-      #
-      # mcdaniel: may-2022
-      #  installing a downgraded version of kubectl as a workaround to a breaking change introduced in awscli latest
-      #     "error: exec plugin: invalid apiVersion "client.authentication.k8s.io/v1alpha1""
-      #  see: https://github.com/aws/aws-cli/issues/6920
       - name: Get Kube config
         run: |-
           sudo snap install kubectl --channel=1.23/stable --classic
           aws eks --region {{ cookiecutter.global_aws_region }} update-kubeconfig --name {{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }} --alias eks-{{ cookiecutter.environment_name }}
 
-      # install the kubectl command-line tools which we'll use for making calls to the kubernetes api
-      #- name: Install kubectl
-      #  uses: azure/setup-kubectl@v2.1
-      #  with:
-      #    version: '1.23.6'
-      #  id: install-kubectl
+      # dump version information for aws cli and kubectl to the console
+      - name: Check environments versions
+        run: |-
+          echo "kubectl version:"
+          kubectl version --short
+          echo
+          echo "aws cli version:"
+          aws --version
 
       # install the latest version of python3 which is a prerequisite for running Tutor
       - name: Setup Python
         run: sudo apt install python3 python3-pip libyaml-dev
 
       # install Tutor which we'll use for configuring and deploying Open edX
-      - name: Install Tutor (from source)
+      - name: Install Tutor
         run: |-
           pip install --upgrade pyyaml
           echo "TUTOR_ROOT=$GITHUB_WORKSPACE/tutor" >> $GITHUB_ENV
-          git clone https://github.com/overhangio/tutor.git
-          cd tutor
-          git checkout ${TUTOR_VERSION}
-          pip install -e .
+          pip install "tutor[full]"
           echo "TUTOR_VERSION=$(tutor --version | cut -f3 -d' ')" >> $GITHUB_ENV
 
       #------------------------------------------------------------------------
@@ -99,7 +89,6 @@ jobs:
       # see: https://github.com/{{ cookiecutter.github_account_name }}/{{ cookiecutter.github_repo_name }}/blob/main/terraform/modules/kubernetes_secrets/main.tf
       - name: Fetch JWT token
         run: |-
-          ### Fetch secrets from Kubernetes into Environment
           kubectl get secret jwt -n $NAMESPACE -o json |  jq  '.data| map_values(@base64d)'  | jq -r 'keys[] as $k | "\(.[$k])"' > jwt_private_key
 
       # retrieve the MySQL connection parameters that we created in Terraform
@@ -114,7 +103,7 @@ jobs:
       # Also note that we are using jq to add a prefix of "TUTOR_" to each of the parameter names
       #
       # see: https://github.com/{{ cookiecutter.github_account_name }}/{{ cookiecutter.github_repo_name }}/blob/main/terraform/modules/mysql/main.tf
-      - name: MySQL
+      - name: fetch MySQL configuration from Kubernetes secrets
         run: |-
           echo "TUTOR_RUN_MYSQL=false" >> $GITHUB_ENV
           kubectl get secret mysql-root -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"' >> $GITHUB_ENV
@@ -147,7 +136,7 @@ jobs:
       #   REDIS_HOST: redis.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
       #
       # see: https://github.com/{{ cookiecutter.github_account_name }}/{{ cookiecutter.github_repo_name }}/blob/main/terraform/modules/redis/main.tf
-      - name: Redis
+      - name: fetch Redis configuration from Kubernetes secrets
         run: |-
           echo "TUTOR_RUN_REDIS=false" >> $GITHUB_ENV
           kubectl get secret redis -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"' >> $GITHUB_ENV
@@ -171,7 +160,7 @@ jobs:
                             --set EMAIL_USE_TLS={{ cookiecutter.ci_deploy_EMAIL_USE_TLS }}
 
       # see: https://github.com/{{ cookiecutter.github_account_name }}/{{ cookiecutter.github_repo_name }}/blob/main/terraform/modules/kubernetes_secrets/main.tf
-      - name: EDX Secret Key
+      - name: fetch EDX Secret Key from Kubernetes secrets
         run: |-
           kubectl get secret edx-secret-key -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"' >> $GITHUB_ENV
 
@@ -229,11 +218,18 @@ jobs:
       #          ]
       #      }
       #
-      - name: Extract S3 secrets from Kubernetes cluster
+      - name: fetch S3 secrets from Kubernetes secrets
         run: |-
           kubectl get secret s3-openedx-storage -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"' >> $GITHUB_ENV
 
-      - name: Install S3 plugin
+      - name: Enable the MFE plugin
+        run: |-
+          pip install tutor-mfe
+          tutor plugins enable mfe
+          tutor config save --set MFE_DOCKER_IMAGE=${DOCKER_IMAGE_MFE} \
+                            --set MFE_ENABLE_HTTPS=true
+
+      - name: Enable plugin for S3
         run: |-
           pip install git+https://github.com/hastexo/tutor-contrib-s3@v0.2.0
           tutor plugins enable s3
@@ -246,34 +242,55 @@ jobs:
                             --set S3_CUSTOM_DOMAIN="$S3_CUSTOM_DOMAIN" \
                             --set S3_REGION="$S3_REGION"
 
-      - name: Configure 3rd Party Authentication
-        run:  |-
-          tutor config save --set OPENEDX_FACEBOOK_APP_ID="{% raw %}${{ secrets.FACEBOOK_APP_ID }}{% endraw %}" \
-                            --set OPENEDX_FACEBOOK_APP_SECRET="{% raw %}${{ secrets.FACEBOOK_APP_SECRET }}{% endraw %}"
+      - name: Enable the Xqueue plugin
+        run: |-
+          pip install tutor-xqueue
+          tutor plugins enable xqueue
+          tutor config save
 
       - name: Enable the Notes plugin
         run: |-
-          pip install git+https://github.com/overhangio/tutor-notes
+          pip install tutor-notes
           tutor plugins enable notes
           tutor config save
 
       - name: Enable the Discovery plugin
         run: |-
-          pip install git+https://github.com/overhangio/tutor-discovery.git
+          pip install tutor-discovery
           tutor plugins enable discovery
           tutor config save
 
-      - name: Enable the MFE plugin
+      - name: Configure 3rd Party Authentication
+        run:  |-
+          tutor config save --set OPENEDX_FACEBOOK_APP_ID="${{ secrets.FACEBOOK_APP_ID }}" \
+                            --set OPENEDX_FACEBOOK_APP_SECRET="${{ secrets.FACEBOOK_APP_SECRET }}"
+
+      - name: Enable and configure ecommerce plugin
         run: |-
-          tutor config save --set MFE_DOCKER_IMAGE=${DOCKER_IMAGE_MFE}
-          pip install git+https://github.com/overhangio/tutor-mfe
-          tutor plugins enable mfe
+          pip install tutor-ecommerce
+          tutor plugins enable ecommerce
+          tutor config save --set ECOMMERCE_ENABLE_IDENTITY_VERIFICATION=false \
+                            --set ECOMMERCE_ENABLED_CLIENT_SIDE_PAYMENT_PROCESSORS=[] \
+                            --set ECOMMERCE_CURRENCY=USD
+      #--set ECOMMERCE_ENABLED_PAYMENT_PROCESSORS=["stripe", "paypal"]
+      #--set ECOMMERCE_PAYMENT_PROCESSORS=\'$(sed -E 's/$/\n/g' ${{ secrets.ECOMMERCE_PAYMENT_PROCESSORS }})\'
+
+      - name: Configure Discussion Forum
+        run:  |-
+          pip install tutor-forum
+          tutor plugins enable forum
           tutor config save
+
+      # see: https://github.com/overhangio/tutor-android
+      #- name: Configure Android plugin
+      #  run:  |-
+      #    pip install tutor-android
+      #    tutor plugins enable android
+      #    tutor config save
 
       - name: Generate Tutor Config
         run:  |-
           export TUTOR_JWT_RSA_PRIVATE_KEY=\'$(sed -E 's/$/\n/g' ./jwt_private_key)\'
-          tutor --version
           tutor config save
           cat $TUTOR_ROOT/config.yml
 
@@ -284,7 +301,7 @@ jobs:
       # In this step we're combining three sources of data:
       # 1. sensitive configuration data retrieved from Kubernetes secrets in section II above
       # 2. Open edx application and services configuration data created here in section III
-      # 3. LMS and CMS application configuration data stored in our repo at ci/tutor-deploy/environments/{{ cookiecutter.environment_name }}/settings_merge.json
+      # 3. LMS and CMS application configuration data stored in our repo at ci/tutor-deploy/environments/prod/settings_merge.json
       #------------------------------------------------------------------------
       - name: Patch Generated Configuration (Static)
         run:  |-
@@ -326,7 +343,7 @@ jobs:
 
       - name: Set theme
         run:  |-
-          tutor k8s settheme custom-edx-theme
+          tutor k8s settheme edx-theme
 
       - name: Create admin user
         run:  |-
