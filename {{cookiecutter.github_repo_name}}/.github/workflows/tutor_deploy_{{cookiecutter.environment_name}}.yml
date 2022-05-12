@@ -231,7 +231,7 @@ jobs:
 
       - name: Enable plugin for S3
         run: |-
-          pip install git+https://github.com/hastexo/tutor-contrib-s3@v0.2.0
+          pip install git+https://github.com/hastexo/tutor-contrib-s3@v0.2.2
           tutor plugins enable s3
 
           tutor config save --set OPENEDX_AWS_ACCESS_KEY="$OPENEDX_AWS_ACCESS_KEY" \
