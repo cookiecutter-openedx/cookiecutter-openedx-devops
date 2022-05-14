@@ -80,14 +80,34 @@ spec:
           service:
             name: mfe
             port:
-              number: 8000
-  - host: store.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
+              number: 8002
+  - host: ecommerce.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: store
+            name: ecommerce
+            port:
+              number: 8000
+  - host: orders.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: mfe
+            port:
+              number: 8002
+  - host: credentials.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: credentials
             port:
               number: 8000
