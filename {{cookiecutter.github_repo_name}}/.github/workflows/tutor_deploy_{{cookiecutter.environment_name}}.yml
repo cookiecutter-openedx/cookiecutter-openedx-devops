@@ -24,6 +24,7 @@ jobs:
       ENVIRONMENT_ID: {{ cookiecutter.environment_name }}
       NAMESPACE: openedx
       OPENEDX_COMMON_VERSION: {{ cookiecutter.ci_deploy_OPENEDX_COMMON_VERSION }}
+      COMMON_LOGO_URL: {{ cookiecutter.global_platform_logo_url }}
 
     steps:
       - name: Checkout
@@ -222,13 +223,6 @@ jobs:
         run: |-
           kubectl get secret s3-openedx-storage -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"' >> $GITHUB_ENV
 
-      - name: Enable the MFE plugin
-        run: |-
-          pip install tutor-mfe
-          tutor plugins enable mfe
-          tutor config save --set MFE_DOCKER_IMAGE=${DOCKER_IMAGE_MFE} \
-                            --set MFE_ENABLE_HTTPS=true
-
       - name: Enable plugin for S3
         run: |-
           pip install git+https://github.com/hastexo/tutor-contrib-s3@v0.2.2
@@ -242,6 +236,41 @@ jobs:
                             --set S3_CUSTOM_DOMAIN="$S3_CUSTOM_DOMAIN" \
                             --set S3_REGION="$S3_REGION"
 
+      - name: Enable the Discovery plugin
+        run: |-
+          pip install tutor-discovery
+          tutor plugins enable discovery
+          tutor config save
+
+      - name: Enable the MFE plugin
+        run: |-
+          pip install tutor-mfe
+          tutor plugins enable mfe
+          tutor config save --set MFE_DOCKER_IMAGE=${DOCKER_IMAGE_MFE} \
+                            --set MFE_ENABLE_HTTPS=true
+
+      - name: Enable and configure credentials plugin
+        run: |-
+          pip install git+https://github.com/lpm0073/tutor-contrib-credentials@v13.0.1
+          tutor plugins enable credentials
+          tutor config save --set CREDENTIALS_DOCKER_IMAGE=${DOCKER_IMAGE_CREDENTIALS} \
+                            --set CREDENTIALS_HOST="credentials.${LMS_HOSTNAME}" \
+                            --set CREDENTIALS_LMS_HOST=${LMS_HOSTNAME} \
+                            --set CREDENTIALS_LMS_URL_ROOT=${LMS_HOSTNAME} \
+                            --set CREDENTIALS_LMS_URL=${LMS_HOSTNAME} \
+                            --set CREDENTIALS_CATALOG_API_URL=${LMS_HOSTNAME} \
+                            --set CREDENTIALS_PRIVACY_POLICY_URL="${LMS_HOSTNAME}/pricacy-policy" \
+                            --set CREDENTIALS_SECRET_KEY="${TUTOR_OPENEDX_SECRET_KEY}" \
+                            --set CREDENTIALS_SITE_NAME={{ cookiecutter.global_platform_description }} \
+                            --set CREDENTIALS_TOS_URL="${LMS_HOSTNAME}/tos" \
+                            --set CREDENTIALS_LOGO_URL="${COMMON_LOGO_URL}" \
+                            --set CREDENTIALS_LOGO_URL_PNG="${COMMON_LOGO_URL}" \
+                            --set CREDENTIALS_LOGO_URL_SVG="" \
+                            --set CREDENTIALS_LOGO_WHITE_URL="${COMMON_LOGO_URL}" \
+                            --set CREDENTIALS_LOGO_WHITE_URL_PNG="${COMMON_LOGO_URL}" \
+                            --set CREDENTIALS_LOGO_WHITE_URL_SVG="" \
+                            --set CREDENTIALS_FAVICON_URL="${COMMON_LOGO_URL}" \
+
       - name: Enable the Xqueue plugin
         run: |-
           pip install tutor-xqueue
@@ -252,12 +281,6 @@ jobs:
         run: |-
           pip install tutor-notes
           tutor plugins enable notes
-          tutor config save
-
-      - name: Enable the Discovery plugin
-        run: |-
-          pip install tutor-discovery
-          tutor plugins enable discovery
           tutor config save
 
       - name: Configure 3rd Party Authentication
