@@ -295,8 +295,6 @@ jobs:
           tutor config save --set ECOMMERCE_ENABLE_IDENTITY_VERIFICATION=false \
                             --set ECOMMERCE_ENABLED_CLIENT_SIDE_PAYMENT_PROCESSORS=[] \
                             --set ECOMMERCE_CURRENCY=USD
-      #--set ECOMMERCE_ENABLED_PAYMENT_PROCESSORS=["stripe", "paypal"]
-      #--set ECOMMERCE_PAYMENT_PROCESSORS=\'$(sed -E 's/$/\n/g' ${{ secrets.ECOMMERCE_PAYMENT_PROCESSORS }})\'
 
       - name: Configure Discussion Forum
         run:  |-
