@@ -285,8 +285,8 @@ jobs:
 
       - name: Configure 3rd Party Authentication
         run:  |-
-          tutor config save --set OPENEDX_FACEBOOK_APP_ID="${{ secrets.FACEBOOK_APP_ID }}" \
-                            --set OPENEDX_FACEBOOK_APP_SECRET="${{ secrets.FACEBOOK_APP_SECRET }}"
+          tutor config save --set OPENEDX_FACEBOOK_APP_ID="{% raw %}${{ secrets.FACEBOOK_APP_ID }}{% endraw %}" \
+                            --set OPENEDX_FACEBOOK_APP_SECRET="{% raw %}${{ secrets.FACEBOOK_APP_SECRET }}{% endraw %}"
 
       - name: Enable and configure ecommerce plugin
         run: |-
