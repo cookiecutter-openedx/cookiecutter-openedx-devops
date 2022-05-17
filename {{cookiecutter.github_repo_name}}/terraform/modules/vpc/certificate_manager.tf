@@ -7,21 +7,11 @@
 # usage: Add DNS records and tls certs to environment aws_region for ELB.
 # Also add certs to us-east-1 for Cloudfront distributions.
 #------------------------------------------------------------------------------
-data "aws_route53_zone" "root_domain" {
-  name = var.root_domain
-}
-
-data "aws_route53_zone" "environment_domain" {
-  name = var.environment_domain
-}
-
-#------------------------------------------------------------------------------
-# SSL/TLS certs issued in the AWS region for ELB
-#------------------------------------------------------------------------------
 provider "aws" {
   alias  = "environment_region"
   region = var.aws_region
 }
+
 
 module "acm_root_domain_environment_region" {
   source  = "terraform-aws-modules/acm/aws"
@@ -51,7 +41,7 @@ module "acm_environment_environment_region" {
   }
 
   domain_name = var.environment_domain
-  zone_id     = data.aws_route53_zone.environment_domain.id
+  zone_id     = aws_route53_zone.environment_domain.id
 
   subject_alternative_names = [
     "*.${var.environment_domain}",
