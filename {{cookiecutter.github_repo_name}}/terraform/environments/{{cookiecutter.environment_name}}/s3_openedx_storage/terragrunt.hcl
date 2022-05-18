@@ -13,7 +13,7 @@ locals {
 
   # Extract out common variables for reuse
   environment_namespace = local.environment_vars.locals.environment_namespace
-  kubernetes_name       = "{{ cookiecutter.global_platform_shared_resource_prefix }}-${local.global_vars.locals.platform_name}-${local.global_vars.locals.platform_region}"
+  kubernetes_name       = "{{ cookiecutter.global_platform_shared_resource_identifier }}-${local.global_vars.locals.platform_name}-${local.global_vars.locals.platform_region}"
   aws_region            = local.global_vars.locals.aws_region
   resource_name         = "${local.environment_vars.locals.environment_namespace}-storage"
 

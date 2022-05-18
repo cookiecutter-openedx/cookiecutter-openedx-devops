@@ -14,7 +14,7 @@ locals {
   # Extract out common variables for reuse
   env                             = local.environment_vars.locals.environment
   environment_domain              = local.environment_vars.locals.environment_domain
-  environment_namespace           = "{{ cookiecutter.global_platform_shared_resource_prefix }}-${local.global_vars.locals.platform_name}-${local.global_vars.locals.platform_region}"
+  environment_namespace           = "${local.global_vars.locals.platform_name}-${local.global_vars.locals.platform_region}-{{ cookiecutter.global_platform_shared_resource_identifier }}"
   root_domain                     = local.global_vars.locals.root_domain
   platform_name                   = local.global_vars.locals.platform_name
   platform_region                 = local.global_vars.locals.platform_region
