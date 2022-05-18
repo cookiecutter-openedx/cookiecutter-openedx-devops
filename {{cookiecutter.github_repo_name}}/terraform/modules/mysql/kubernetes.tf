@@ -8,11 +8,11 @@
 #        store the MySQL credentials in Kubernetes Secrets
 #------------------------------------------------------------------------------
 data "aws_eks_cluster" "eks" {
-  name = var.environment_namespace
+  name = var.resource_name
 }
 
 data "aws_eks_cluster_auth" "eks" {
-  name = var.environment_namespace
+  name = var.resource_name
 }
 
 provider "kubernetes" {

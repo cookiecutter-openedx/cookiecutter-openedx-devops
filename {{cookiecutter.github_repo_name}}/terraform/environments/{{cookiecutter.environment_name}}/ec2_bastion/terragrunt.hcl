@@ -16,11 +16,8 @@ locals {
   platform_region  = local.global_vars.locals.platform_region
   ec2_ssh_key_name = local.global_vars.locals.ec2_ssh_key_name
   environment      = local.environment_vars.locals.environment
-
-  environment_namespace = local.environment_vars.locals.environment_namespace
-  aws_region            = local.global_vars.locals.aws_region
-
-  resource_name = "${local.environment_namespace}-bastion"
+  aws_region       = local.global_vars.locals.aws_region
+  resource_name    = "live-${local.global_vars.locals.platform_name}-${local.global_vars.locals.platform_region}-bastion"
 
   tags = merge(
     local.environment_vars.locals.tags,

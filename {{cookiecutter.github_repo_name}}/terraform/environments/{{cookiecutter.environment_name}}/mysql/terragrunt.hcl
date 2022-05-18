@@ -11,8 +11,8 @@ locals {
   environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
-  resource_name         = "${local.environment_vars.locals.environment_namespace}"
-  identifier            = "${local.environment_vars.locals.environment}"
+  resource_name         = "live-${local.global_vars.locals.platform_name}-${local.global_vars.locals.platform_region}"
+  identifier            = "${local.resource_name}"
   mysql_instance_class  = local.environment_vars.locals.mysql_instance_class
 
   tags = merge(
@@ -86,16 +86,16 @@ inputs = {
   # database identifying information
   name                                = "openedx"
   identifier                          = local.identifier
-  username                            = "{{ cookiecutter.mysql_username }}"
-  create_random_password              = {{ cookiecutter.mysql_create_random_password }}
-  iam_database_authentication_enabled = {{ cookiecutter.mysql_iam_database_authentication_enabled }}
+  username                            = "root"
+  create_random_password              = true
+  iam_database_authentication_enabled = false
 
   # db server parameters
-  port                  = "{{ cookiecutter.mysql_port }}"
-  engine                = "{{ cookiecutter.mysql_engine }}"
-  engine_version        = "{{ cookiecutter.mysql_engine_version }}"
-  family                = "{{ cookiecutter.mysql_family }}"
-  major_engine_version  = "{{ cookiecutter.mysql_major_engine_version }}"
+  port                  = "3306"
+  engine                = "mysql"
+  engine_version        = "5.7.33"
+  family                = "mysql5.7"
+  major_engine_version  = "5.7"
   parameters = [
     {
       name  = "character_set_client"
@@ -109,7 +109,7 @@ inputs = {
 
   # db server size
   instance_class        = local.mysql_instance_class
-  allocated_storage     = {{ cookiecutter.mysql_allocated_storage }}
+  allocated_storage     = 10
   max_allocated_storage = 100
   storage_encrypted     = true
   multi_az              = false
@@ -121,11 +121,11 @@ inputs = {
   create_db_subnet_group = false
 
   # backups and maintenance
-  maintenance_window    = "{{ cookiecutter.mysql_maintenance_window }}"
-  backup_window         = "{{ cookiecutter.mysql_backup_window }}"
-  backup_retention_period = {{ cookiecutter.mysql_backup_retention_period }}
-  deletion_protection   = {{ cookiecutter.mysql_deletion_protection }}
-  skip_final_snapshot   = {{ cookiecutter.mysql_skip_final_snapshot }}
+  maintenance_window    = "Sun:00:00-Sun:03:00"
+  backup_window         = "03:00-06:00"
+  backup_retention_period = 7
+  deletion_protection   = false
+  skip_final_snapshot   = true
 
 
   # network configuration

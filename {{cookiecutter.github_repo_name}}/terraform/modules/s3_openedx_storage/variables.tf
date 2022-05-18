@@ -16,6 +16,10 @@ variable "environment_namespace" {
   type        = string
 }
 
+variable "kubernetes_name" {
+  description = "for identifying the kubernetes cluster"
+  type        = string
+}
 
 variable "environment_domain" {
   description = "base domain for service"

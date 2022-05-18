@@ -13,9 +13,9 @@ locals {
 
   # Extract out common variables for reuse
   environment_namespace = local.environment_vars.locals.environment_namespace
+  kubernetes_name       = "live-${local.global_vars.locals.platform_name}-${local.global_vars.locals.platform_region}"
   aws_region            = local.global_vars.locals.aws_region
-
-  resource_name = "${local.environment_vars.locals.environment_namespace}-storage"
+  resource_name         = "${local.environment_vars.locals.environment_namespace}-storage"
 
   tags = merge(
     local.environment_vars.locals.tags,
@@ -82,9 +82,10 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  secret_name   = "s3-openedx-storage"
-  aws_region    = "${local.aws_region}"
-  resource_name = local.resource_name
-  tags          = local.tags
+  secret_name     = "s3-openedx-storage"
+  aws_region      = "${local.aws_region}"
+  resource_name   = local.resource_name
+  kubernetes_name = local.kubernetes_name
+  tags            = local.tags
 
 }
