@@ -54,7 +54,7 @@ jobs:
       - name: Get Kube config
         run: |-
           sudo snap install kubectl --channel=1.23/stable --classic
-          aws eks --region {{ cookiecutter.global_aws_region }} update-kubeconfig --name {{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }} --alias eks-{{ cookiecutter.environment_name }}
+          aws eks --region {{ cookiecutter.global_aws_region }} update-kubeconfig --name {{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.global_platform_shared_resource_identifier }} --alias eks-{{ cookiecutter.environment_name }}
 
       # dump version information for aws cli and kubectl to the console
       - name: Check environments versions
