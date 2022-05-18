@@ -12,7 +12,7 @@ locals {
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   resource_name           = local.environment_vars.locals.environment_namespace
-  environment_namespace   = "{{ cookiecutter.global_platform_shared_resource_identifier }}-${local.global_vars.locals.platform_name}-${local.global_vars.locals.platform_region}"
+  environment_namespace   = "${local.global_vars.locals.platform_name}-${local.global_vars.locals.platform_region}-{{ cookiecutter.global_platform_shared_resource_identifier }}"
 
   tags = merge(
     local.environment_vars.locals.tags,
