@@ -13,7 +13,7 @@ locals {
 
   # Extract out common variables for reuse
   environment_namespace = local.environment_vars.locals.environment_namespace
-  kubernetes_name       = "${local.global_vars.locals.platform_name}-${local.global_vars.locals.platform_region}-${local.global_vars.shared_resource_identifier}"
+  kubernetes_name       = local.environment_vars.locals.shared_resource_namespace
   aws_region            = local.global_vars.locals.aws_region
   resource_name         = "${local.environment_vars.locals.environment_namespace}-storage"
 

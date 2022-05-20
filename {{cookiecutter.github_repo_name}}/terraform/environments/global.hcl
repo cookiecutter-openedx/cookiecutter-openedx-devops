@@ -8,13 +8,13 @@
 #        Terragrunt modules in this repository.
 #------------------------------------------------------------------------------
 locals {
-  platform_name    = "{{ cookiecutter.global_platform_name }}"
-  platform_region  = "{{ cookiecutter.global_platform_region }}"
-  shared_resource_identifier = "{{ cookiecutter.global_platform_shared_resource_identifier }}"
-  root_domain      = "{{ cookiecutter.global_root_domain }}"
-  aws_region       = "{{ cookiecutter.global_aws_region }}"
-  account_id       = "{{ cookiecutter.global_account_id }}"
-  ec2_ssh_key_name = "{{ cookiecutter.global_ec2_ssh_key_name }}"
+  platform_name    = "mrionline"
+  platform_region  = "global"
+  shared_resource_identifier = "live"
+  root_domain      = "mrionline.com"
+  aws_region       = "us-east-2"
+  account_id       = "621672204142"
+  ec2_ssh_key_name = "mrionline-live"
 
   tags = {
     Platform        = local.platform_name

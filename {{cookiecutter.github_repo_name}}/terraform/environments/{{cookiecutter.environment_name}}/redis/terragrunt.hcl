@@ -11,7 +11,7 @@ locals {
   environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
-  resource_name   = "${local.global_vars.locals.platform_name}-${local.global_vars.locals.platform_region}-${local.global_vars.shared_resource_identifier}"
+  resource_name   = local.environment_vars.locals.shared_resource_namespace
   redis_node_type = local.environment_vars.locals.redis_node_type
 
   tags = merge(
@@ -87,10 +87,10 @@ inputs = {
 
   # cache engine configuration
   engine                        = "redis"
-  engine_version                = "{{ cookiecutter.redis_engine_version }}"
-  num_cache_clusters            = {{ cookiecutter.redis_num_cache_clusters }}
-  port                          = {{ cookiecutter.redis_port }}
-  family                        = "{{ cookiecutter.redis_family }}"
+  engine_version                = "6.x"
+  num_cache_clusters            = 1
+  port                          = 6379
+  family                        = "redis6.x"
   node_type                     = local.redis_node_type
   transit_encryption_enabled    = false
 
