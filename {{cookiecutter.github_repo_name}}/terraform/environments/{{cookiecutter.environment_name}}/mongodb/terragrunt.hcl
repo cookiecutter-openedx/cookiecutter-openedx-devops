@@ -12,7 +12,7 @@ locals {
   environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
-  resource_name           = "${local.global_vars.locals.platform_name}-${local.global_vars.locals.platform_region}-{{ cookiecutter.global_platform_shared_resource_identifier }}-mongodb"
+  resource_name           = "${local.global_vars.locals.platform_name}-${local.global_vars.locals.platform_region}-${local.global_vars.shared_resource_identifier}-mongodb"
   aws_region              = local.global_vars.locals.aws_region
   mongodb_instance_class  = local.environment_vars.locals.mongodb_instance_class
   mongodb_cluster_size    = local.environment_vars.locals.mongodb_cluster_size

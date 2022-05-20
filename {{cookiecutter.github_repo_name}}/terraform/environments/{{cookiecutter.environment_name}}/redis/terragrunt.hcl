@@ -11,7 +11,7 @@ locals {
   environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
-  resource_name   = "${local.global_vars.locals.platform_name}-${local.global_vars.locals.platform_region}-{{ cookiecutter.global_platform_shared_resource_identifier }}"
+  resource_name   = "${local.global_vars.locals.platform_name}-${local.global_vars.locals.platform_region}-${local.global_vars.shared_resource_identifier}"
   redis_node_type = local.environment_vars.locals.redis_node_type
 
   tags = merge(
