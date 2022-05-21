@@ -251,6 +251,46 @@ Specifically with regard to MySQL, several 3rd party analytics tools provide out
   :width: 700
   :alt: Connecting to MySQL Workbench
 
+V. Add more Kubernetes admins
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+By default your AWS IAM user account will be the only user who can view, interact with and manage your new Kubernetes cluster. Other IAM users with admin permissions will still need to be explicitly added to the list of Kluster admins.
+If you're new to Kubernetes then you'll find detailed technical how-to instructions in the AWS EKS documentation, `Enabling IAM user and role access to your cluster <https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html>`_.
+You'll need kubectl in order to modify the aws-auth pod in your Kubernets cluster.
+
+.. code-block:: bash
+
+    kubectl edit -n kube-system configmap/aws-auth
+
+Following is an example aws-auth configMap with additional IAM user accounts added to the admin "masters" group.
+
+.. code-block:: yaml
+
+    # Please edit the object below. Lines beginning with a '#' will be ignored,
+    # and an empty file will abort the edit. If an error occurs while saving this file will be
+    # reopened with the relevant failures.
+    #
+    apiVersion: v1
+    data:
+      mapRoles: |
+        - groups:
+          - system:bootstrappers
+          - system:nodes
+          rolearn: arn:aws:iam::012345678942:role/default-eks-node-group-20220518182244174100000002
+          username: system:node:{{EC2PrivateDNSName}}
+      mapUsers: |
+        - groups:
+          - system:masters
+          userarn: arn:aws:iam::012345678942:user/lawrence.mcdaniel
+          username: lawrence.mcdaniel
+    kind: ConfigMap
+    metadata:
+      creationTimestamp: "2022-05-18T18:38:29Z"
+      name: aws-auth
+      namespace: kube-system
+      resourceVersion: "499488"
+      uid: 52d6e7fd-01b7-4c80-b831-b971507e5228
+
 
 Continuous Integration (CI)
 ---------------------------
