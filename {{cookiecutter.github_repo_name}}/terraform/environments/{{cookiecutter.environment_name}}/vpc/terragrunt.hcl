@@ -16,7 +16,7 @@ locals {
   platform_region       = local.global_vars.locals.platform_region
   aws_region            = local.global_vars.locals.aws_region
   environment           = local.environment_vars.locals.environment
-  environment_namespace = local.environment_vars.locals.environment_namespace
+  namespace             = local.environment_vars.locals.shared_resource_namespace
   resource_name         = local.environment_vars.locals.shared_resource_namespace
 
   tags = merge(
@@ -41,7 +41,7 @@ include {
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
   aws_region            = local.aws_region
-  environment_namespace = local.environment_namespace
+  environment_namespace = local.namespace
   name                  = "${local.resource_name}"
   cidr                  = "192.168.0.0/20"
   azs                   = ["${local.aws_region}a", "${local.aws_region}b", "${local.aws_region}c"]
@@ -68,12 +68,12 @@ inputs = {
   # these tags are required, regardless of whether we're using EKS with EC2 worker nodes
   # or with a Fargate Compute Cluster.
   public_subnet_tags = {
-    "kubernetes.io/cluster/${local.environment_namespace}" = "shared"
+    "kubernetes.io/cluster/${local.namespace}" = "shared"
     "kubernetes.io/role/elb"                               = "1"
   }
 
   private_subnet_tags = {
-    "kubernetes.io/cluster/${local.environment_namespace}" = "shared"
+    "kubernetes.io/cluster/${local.namespace}" = "shared"
     "kubernetes.io/role/internal-elb"                      = "1"
   }
 

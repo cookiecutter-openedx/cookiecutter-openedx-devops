@@ -13,7 +13,6 @@ locals {
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
-  environment_namespace = local.environment_vars.locals.environment_namespace
   environment_domain    = local.environment_vars.locals.environment_domain
   aws_region            = local.global_vars.locals.aws_region
 
@@ -46,7 +45,6 @@ include {
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
   aws_region            = local.aws_region
-  environment_namespace = local.environment_namespace
   environment_domain    = local.environment_domain
   resource_name         = local.resource_name
   tags                  = local.tags

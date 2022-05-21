@@ -4,7 +4,7 @@
 #
 # date: Aug-2021
 #------------------------------------------------------------------------------
-variable "environment_namespace" {
+variable "namespace" {
   description = "universal identifier for most resources"
   type        = string
 }

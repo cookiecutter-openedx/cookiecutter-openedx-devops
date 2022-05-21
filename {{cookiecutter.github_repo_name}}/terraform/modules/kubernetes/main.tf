@@ -32,7 +32,7 @@ locals {
 }
 
 resource "aws_security_group" "worker_group_mgmt" {
-  name_prefix = "${var.environment_namespace}-eks_worker_group_mgmt"
+  name_prefix = "${var.namespace}-eks_worker_group_mgmt"
   description = "openedx_devops: Ingress CLB worker group management"
   vpc_id      = var.vpc_id
 
@@ -52,7 +52,7 @@ resource "aws_security_group" "worker_group_mgmt" {
 }
 
 resource "aws_security_group" "all_worker_mgmt" {
-  name_prefix = "${var.environment_namespace}-eks_all_worker_management"
+  name_prefix = "${var.namespace}-eks_all_worker_management"
   description = "openedx_devops: Ingress CLB worker management"
   vpc_id      = var.vpc_id
 
@@ -76,7 +76,7 @@ resource "aws_security_group" "all_worker_mgmt" {
 module "eks" {
   source                          = "terraform-aws-modules/eks/aws"
   version                         = "{{ cookiecutter.terraform_aws_modules_eks }}"
-  cluster_name                    = var.environment_namespace
+  cluster_name                    = var.namespace
   cluster_version                 = var.kubernetes_cluster_version
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = true

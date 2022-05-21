@@ -12,7 +12,6 @@ locals {
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
-  environment_namespace = local.environment_vars.locals.environment_namespace
   kubernetes_name       = local.environment_vars.locals.shared_resource_namespace
   aws_region            = local.global_vars.locals.aws_region
   resource_name         = "${local.environment_vars.locals.environment_namespace}-storage"

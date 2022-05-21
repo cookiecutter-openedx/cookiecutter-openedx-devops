@@ -7,11 +7,11 @@
 # usage: create ca certificate for EKS Kubernetes cluster.
 #------------------------------------------------------------------------------
 data "aws_eks_cluster" "eks" {
-  name = var.environment_namespace
+  name = var.namespace
 }
 
 data "aws_eks_cluster_auth" "eks" {
-  name = var.environment_namespace
+  name = var.namespace
 }
 
 provider "kubernetes" {

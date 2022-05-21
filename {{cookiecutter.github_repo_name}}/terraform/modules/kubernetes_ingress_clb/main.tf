@@ -12,15 +12,15 @@
 #}
 
 data "aws_eks_cluster" "eks" {
-  name = var.environment_namespace
+  name = var.namespace
 }
 
 data "aws_eks_cluster" "cluster" {
-  name = var.environment_namespace
+  name = var.namespace
 }
 
 data "aws_eks_cluster_auth" "cluster" {
-  name = var.environment_namespace
+  name = var.namespace
 }
 
 provider "kubernetes" {

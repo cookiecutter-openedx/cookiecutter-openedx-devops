@@ -14,7 +14,7 @@ locals {
   # Extract out common variables for reuse
   env                             = local.environment_vars.locals.environment
   environment_domain              = local.environment_vars.locals.environment_domain
-  environment_namespace           = local.environment_vars.locals.shared_resource_namespace
+  namespace                       = local.environment_vars.locals.shared_resource_namespace
   root_domain                     = local.global_vars.locals.root_domain
   platform_name                   = local.global_vars.locals.platform_name
   platform_region                 = local.global_vars.locals.platform_region
@@ -24,7 +24,7 @@ locals {
   tags = merge(
     local.environment_vars.locals.tags,
     local.global_vars.locals.tags,
-    { Name = "${local.environment_namespace}-eks-ingress" }
+    { Name = "${local.namespace}-eks-ingress" }
   )
 }
 
@@ -63,7 +63,7 @@ inputs = {
   aws_region = local.aws_region
   environment_domain = local.environment_domain
   root_domain = local.root_domain
-  environment_namespace = local.environment_namespace
+  namespace = local.namespace
   private_subnet_ids = dependency.vpc.outputs.private_subnets
   public_subnet_ids = dependency.vpc.outputs.public_subnets
   vpc_id  = dependency.vpc.outputs.vpc_id

@@ -11,7 +11,7 @@ module "cert_manager_irsa" {
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   version                       = "{{ cookiecutter.terraform_aws_modules_iam_assumable_role_with_oidc }}"
   create_role                   = true
-  role_name                     = "${var.environment_namespace}-cert_manager-irsa"
+  role_name                     = "${var.namespace}-cert_manager-irsa"
   provider_url                  = replace(data.aws_eks_cluster.eks.identity[0].oidc[0].issuer, "https://", "")
   role_policy_arns              = [aws_iam_policy.cert_manager_policy.arn]
   oidc_fully_qualified_subjects = ["system:serviceaccount:cert-manager:cert-manager"]
@@ -37,7 +37,7 @@ resource "helm_release" "cert-manager" {
 }
 
 resource "aws_iam_policy" "cert_manager_policy" {
-  name        = "${var.environment_namespace}-cert-manager-policy"
+  name        = "${var.namespace}-cert-manager-policy"
   path        = "/"
   description = "openedx_devops: Policy, which allows CertManager to create Route53 records"
 

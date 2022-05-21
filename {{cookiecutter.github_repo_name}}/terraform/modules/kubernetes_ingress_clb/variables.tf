@@ -10,7 +10,7 @@ variable "environment_domain" {
   type = string
 }
 
-variable "environment_namespace" {
+variable "namespace" {
   type = string
 }
 
