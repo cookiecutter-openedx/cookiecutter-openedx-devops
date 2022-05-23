@@ -38,10 +38,6 @@ variable "environment_domain" {
   type = string
 }
 
-variable "environment_namespace" {
-  type = string
-}
-
 variable "platform_name" {
   type = string
 }

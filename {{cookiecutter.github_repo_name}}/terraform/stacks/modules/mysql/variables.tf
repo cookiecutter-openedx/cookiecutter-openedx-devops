@@ -61,12 +61,6 @@ variable "engine_version" {
 }
 
 
-variable "environment_namespace" {
-  description = "Name of the EKS cluster to use (AWS cluster name)"
-  type        = string
-}
-
-
 variable "family" {
   description = "The family of the DB parameter group"
   type        = string

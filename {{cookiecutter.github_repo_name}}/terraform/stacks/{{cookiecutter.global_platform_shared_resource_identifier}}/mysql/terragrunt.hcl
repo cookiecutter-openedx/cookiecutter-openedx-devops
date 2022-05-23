@@ -83,7 +83,6 @@ inputs = {
   tags                  = local.tags
 
   # database identifying information
-  name                                = "openedx"
   username                            = "root"
   create_random_password              = true
   iam_database_authentication_enabled = false
