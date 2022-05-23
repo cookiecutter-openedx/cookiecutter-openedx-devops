@@ -184,7 +184,6 @@ Review your global parameters. These will be pre-populated from your responses t
     root_domain      = "yourschool.edu"
     aws_region       = "us-east-1"
     account_id       = "123456789012"
-    ec2_ssh_key_name = "any-valid-pem-key-file-name"
   }
 
 
