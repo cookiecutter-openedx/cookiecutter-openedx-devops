@@ -8,30 +8,14 @@
 #------------------------------------------------------------------------------
 locals {
   # Automatically load environment-level variables
-  environment_vars = read_terragrunt_config(find_in_parent_folders("{{ cookiecutter.global_platform_shared_resource_identifier }}.hcl"))
+  environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   environment           = local.environment_vars.locals.environment
   resource_name         = local.environment_vars.locals.shared_resource_namespace
 }
 
-dependencies {
-  paths = ["../vpc", "../kubernetes"]
-}
 
-dependency "vpc" {
-  config_path = "../vpc"
-
-  # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
-  # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "validate"]
-  mock_outputs = {
-    vpc_id                     = "fake-vpc-id"
-    public_subnets             = ["fake-public-subnet-01", "fake-public-subnet-02"]
-    public_subnets_cidr_blocks = ["fake-subnet-cidr-block-01", "fake-subnet-cidr-block-01"]
-    security_group_name_prefix = "fake-group-name-prefix"
-  }
-}
 
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.

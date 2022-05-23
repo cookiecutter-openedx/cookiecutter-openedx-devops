@@ -7,10 +7,10 @@
 # usage: create an EKS cluster
 #------------------------------------------------------------------------------
 
-input "resource_name" {
+variable "resource_name" {
   type = string
 }
 
-input "environment_name" {
+variable "environment_name" {
   type = string
 }
