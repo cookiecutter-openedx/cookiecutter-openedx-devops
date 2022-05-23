@@ -13,7 +13,6 @@ locals {
 
   # Extract out common variables for reuse
   env                             = local.stack_vars.locals.stack
-  environment_domain              = local.stack_vars.locals.environment_domain
   namespace                       = local.stack_vars.locals.stack_namespace
   root_domain                     = local.global_vars.locals.root_domain
   platform_name                   = local.global_vars.locals.platform_name
@@ -52,7 +51,7 @@ dependency "vpc" {
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
-  source = "../../../modules//kubernetes"
+  source = "../../modules//kubernetes"
 }
 
 # Include all settings from the root terragrunt.hcl file
@@ -63,7 +62,6 @@ include {
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
   aws_region = local.aws_region
-  environment_domain = local.environment_domain
   root_domain = local.root_domain
   namespace = local.namespace
   private_subnet_ids = dependency.vpc.outputs.private_subnets
