@@ -84,7 +84,6 @@ inputs = {
 
   # database identifying information
   name                                = "openedx"
-  identifier                          = local.identifier
   username                            = "root"
   create_random_password              = true
   iam_database_authentication_enabled = false

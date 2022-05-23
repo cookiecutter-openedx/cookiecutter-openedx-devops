@@ -64,7 +64,7 @@ module "db" {
   #ca_cert_identifier =
   #character_set_name =
   #cloudwatch_log_group_kms_key_id =
-  db_name = var.name
+  #db_name =
   #db_subnet_group_description =
   db_subnet_group_name = aws_db_subnet_group.mysql_subnet_group.name
   #domain =
