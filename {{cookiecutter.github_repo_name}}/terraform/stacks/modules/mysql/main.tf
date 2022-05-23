@@ -16,7 +16,7 @@ module "security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "{{ cookiecutter.terraform_aws_modules_sg }}"
 
-  name        = "${var.environment_namespace}-mysql"
+  name        = "${var.resource_name}-mysql"
   description = "openedx_devops: Allow access to MySQL"
   vpc_id      = var.vpc_id
 
@@ -72,7 +72,7 @@ module "db" {
   engine         = var.engine
   engine_version = var.engine_version
   family         = var.family
-  identifier     = var.identifier
+  identifier     = var.resource_name
   instance_class = var.instance_class
   #kms_key_id =
   #license_model =

@@ -6,11 +6,6 @@
 #
 # usage: create an RDS MySQL instance.
 #------------------------------------------------------------------------------
-variable "environment_domain" {
-  type    = string
-  default = ""
-}
-
 variable "allocated_storage" {
   description = "The allocated storage in gigabytes"
   type        = string
@@ -82,11 +77,6 @@ variable "iam_database_authentication_enabled" {
   description = "Specifies whether or not the mappings of AWS Identity and Access Management (IAM) accounts to database accounts are enabled"
   type        = bool
   default     = false
-}
-
-variable "identifier" {
-  description = "The name of the RDS instance, if omitted, Terraform will assign a random, unique identifier"
-  type        = string
 }
 
 variable "ingress_cidr_blocks" {
