@@ -99,7 +99,7 @@ resource "aws_route53_record" "bastion" {
 resource "kubernetes_secret" "ssh_secret" {
   metadata {
     name      = "bastion-ssh-key"
-    namespace = "openedx"
+    namespace = "openedx-shared"
   }
 
   data = {

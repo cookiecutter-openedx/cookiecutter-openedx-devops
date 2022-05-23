@@ -11,6 +11,7 @@ locals {
   environment_vars = read_terragrunt_config(find_in_parent_folders("{{ cookiecutter.global_platform_shared_resource_identifier }}.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
+  environment = local.environment_vars.locals.environment
   resource_name   = local.environment_vars.locals.shared_resource_namespace
   redis_node_type = local.environment_vars.locals.redis_node_type
 
@@ -83,6 +84,7 @@ inputs = {
 
   # AWS Elasticache identifying information
   resource_name                 = local.resource_name
+  environment                   = local.environment
   tags                          = local.tags
 
   # cache instance identifying information

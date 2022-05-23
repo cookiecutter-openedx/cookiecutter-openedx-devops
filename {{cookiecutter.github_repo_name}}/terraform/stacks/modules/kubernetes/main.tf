@@ -130,9 +130,9 @@ module "eks" {
 # Tutor deploys into this namespace, bc of a namesapce command-line argument
 # that we pass inside of GitHub Actions deploy workflow
 #------------------------------------------------------------------------------
-resource "kubernetes_namespace" "openedx" {
+resource "kubernetes_namespace" "openedx-shared" {
   metadata {
-    name = "openedx"
+    name = "openedx-shared"
   }
   depends_on = [module.eks]
 }

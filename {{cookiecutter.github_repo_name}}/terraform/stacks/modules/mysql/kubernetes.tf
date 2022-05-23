@@ -24,131 +24,13 @@ provider "kubernetes" {
 resource "kubernetes_secret" "mysql_root" {
   metadata {
     name      = "mysql-root"
-    namespace = "openedx"
+    namespace = "openedx-shared"
   }
 
   data = {
     MYSQL_ROOT_USERNAME = module.db.db_instance_username
     MYSQL_ROOT_PASSWORD = module.db.db_instance_password
-    MYSQL_HOST          = aws_route53_record.mysql.fqdn
+    MYSQL_HOST          = module.db.db_instance_endpoint
     MYSQL_PORT          = module.db.db_instance_port
-  }
-}
-
-
-resource "random_password" "mysql_openedx" {
-  length           = 16
-  special          = true
-  override_special = "_%@"
-  keepers = {
-    version = "1"
-  }
-}
-
-resource "kubernetes_secret" "openedx" {
-  metadata {
-    name      = "mysql-openedx"
-    namespace = "openedx"
-  }
-
-  data = {
-    OPENEDX_MYSQL_USERNAME = "openedx"
-    OPENEDX_MYSQL_PASSWORD = random_password.mysql_openedx.result
-    MYSQL_HOST             = aws_route53_record.mysql.fqdn
-    MYSQL_PORT             = module.db.db_instance_port
-  }
-}
-
-resource "random_password" "mysql_discovery" {
-  length           = 16
-  special          = true
-  override_special = "_%@"
-  keepers = {
-    version = "1"
-  }
-}
-
-resource "kubernetes_secret" "discovery" {
-  metadata {
-    name      = "mysql-discovery"
-    namespace = "openedx"
-  }
-
-  data = {
-    DISCOVERY_MYSQL_USERNAME = "discovery"
-    DISCOVERY_MYSQL_PASSWORD = random_password.mysql_discovery.result
-    MYSQL_HOST               = aws_route53_record.mysql.fqdn
-    MYSQL_PORT               = module.db.db_instance_port
-  }
-}
-
-
-resource "random_password" "mysql_ecommerce" {
-  length           = 16
-  special          = true
-  override_special = "_%@"
-  keepers = {
-    version = "1"
-  }
-}
-
-resource "kubernetes_secret" "ecommerce" {
-  metadata {
-    name      = "mysql-ecommerce"
-    namespace = "openedx"
-  }
-
-  data = {
-    ECOMMERCE_MYSQL_USERNAME = "ecommerce"
-    ECOMMERCE_MYSQL_PASSWORD = random_password.mysql_ecommerce.result
-    MYSQL_HOST               = aws_route53_record.mysql.fqdn
-    MYSQL_PORT               = module.db.db_instance_port
-  }
-}
-
-
-resource "random_password" "mysql_notes" {
-  length           = 16
-  special          = true
-  override_special = "_%@"
-  keepers = {
-    version = "1"
-  }
-}
-
-resource "kubernetes_secret" "notes" {
-  metadata {
-    name      = "mysql-notes"
-    namespace = "openedx"
-  }
-
-  data = {
-    NOTES_MYSQL_USERNAME = "notes"
-    NOTES_MYSQL_PASSWORD = random_password.mysql_notes.result
-    MYSQL_HOST           = aws_route53_record.mysql.fqdn
-    MYSQL_PORT           = module.db.db_instance_port
-  }
-}
-
-resource "random_password" "mysql_xqueue" {
-  length           = 16
-  special          = true
-  override_special = "_%@"
-  keepers = {
-    version = "1"
-  }
-}
-
-resource "kubernetes_secret" "xqueue" {
-  metadata {
-    name      = "mysql-xqueue"
-    namespace = "openedx"
-  }
-
-  data = {
-    XQUEUE_MYSQL_USERNAME = "xqueue"
-    XQUEUE_MYSQL_PASSWORD = random_password.mysql_xqueue.result
-    MYSQL_HOST            = aws_route53_record.mysql.fqdn
-    MYSQL_PORT            = module.db.db_instance_port
   }
 }

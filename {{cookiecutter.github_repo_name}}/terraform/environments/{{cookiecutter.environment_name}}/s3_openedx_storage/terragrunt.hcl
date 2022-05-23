@@ -15,6 +15,7 @@ locals {
   kubernetes_name       = local.environment_vars.locals.shared_resource_namespace
   aws_region            = local.global_vars.locals.aws_region
   resource_name         = "${local.environment_vars.locals.environment_namespace}-storage"
+  environment         = local.environment_vars.locals.environment
 
   tags = merge(
     local.environment_vars.locals.tags,
@@ -85,6 +86,7 @@ include {
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
   secret_name     = "s3-openedx-storage"
+  environment     = local.environment
   aws_region      = "${local.aws_region}"
   resource_name   = local.resource_name
   kubernetes_name = local.kubernetes_name
