@@ -16,9 +16,6 @@ variable "kubernetes_name" {
   type        = string
 }
 
-variable "environment" {
-  type = string
-}
 variable "environment_domain" {
   description = "base domain for service"
   type        = string
