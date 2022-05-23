@@ -8,7 +8,7 @@
 #------------------------------------------------------------------------------
 
 data "aws_route53_zone" "stack" {
-  name = var.environment_domain
+  name = var.root_domain
 }
 
 # Ubuntu 20.04 LTS AMI
@@ -41,7 +41,7 @@ resource "aws_key_pair" "bastion" {
 }
 
 resource "aws_security_group" "sg_bastion" {
-  name_prefix = "${var.environment_namespace}-bastion"
+  name_prefix = var.resource_name
   description = "openedx_devops: Public ssh access"
   vpc_id      = var.vpc_id
 
@@ -88,7 +88,7 @@ resource "aws_eip" "elasticip" {
 
 resource "aws_route53_record" "bastion" {
   zone_id = data.aws_route53_zone.stack.id
-  name    = "bastion.${var.environment_domain}"
+  name    = "bastion.${var.root_domain}"
   type    = "A"
   ttl     = "600"
 

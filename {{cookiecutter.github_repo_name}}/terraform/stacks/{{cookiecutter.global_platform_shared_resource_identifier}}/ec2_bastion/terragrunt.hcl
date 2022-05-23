@@ -12,9 +12,7 @@ locals {
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
-  platform_name    = local.global_vars.locals.platform_name
-  platform_region  = local.global_vars.locals.platform_region
-  stack      = local.stack_vars.locals.stack
+  root_domain      = local.global_vars.locals.root_domain
   aws_region       = local.global_vars.locals.aws_region
   resource_name    = "${local.stack_vars.locals.stack_namespace}-bastion"
 
@@ -57,16 +55,11 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  platform_name    = local.platform_name
-  platform_region  = local.platform_region
-  stack      = local.stack
+  root_domain      = local.root_domain
   resource_name    = local.resource_name
-
   vpc_id            = dependency.vpc.outputs.vpc_id
   availability_zone = "${local.aws_region}a"
-
   ingress_cidr_blocks = dependency.vpc.outputs.public_subnets_cidr_blocks
-
   security_group_name_prefix = local.resource_name
 
   # FIX NOTE: how to choose only one subnet????
