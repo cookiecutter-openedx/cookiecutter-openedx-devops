@@ -16,7 +16,7 @@ locals {
   platform_region  = local.global_vars.locals.platform_region
   environment      = local.environment_vars.locals.environment
   aws_region       = local.global_vars.locals.aws_region
-  resource_name    = "${local.environment_vars.locals.shared_resource_namespace}-bastion"
+  resource_name    = "${local.environment_vars.locals.stack_namespace}-bastion"
 
   tags = merge(
     local.environment_vars.locals.tags,

@@ -11,7 +11,7 @@ locals {
   environment_vars = read_terragrunt_config(find_in_parent_folders("{{ cookiecutter.global_platform_shared_resource_identifier }}.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
-  resource_name         = local.environment_vars.locals.shared_resource_namespace
+  resource_name         = local.environment_vars.locals.stack_namespace
   identifier            = "${local.resource_name}"
   mysql_instance_class  = local.environment_vars.locals.mysql_instance_class
 

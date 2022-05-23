@@ -12,7 +12,7 @@ locals {
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   resource_name           = local.environment_vars.locals.environment_namespace
-  namespace   = local.environment_vars.locals.shared_resource_namespace
+  namespace   = local.environment_vars.locals.stack_namespace
 
   tags = merge(
     local.environment_vars.locals.tags,
