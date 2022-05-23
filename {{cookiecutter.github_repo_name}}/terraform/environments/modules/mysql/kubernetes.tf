@@ -21,19 +21,6 @@ provider "kubernetes" {
   token                  = data.aws_eks_cluster_auth.eks.token
 }
 
-resource "kubernetes_secret" "mysql_root" {
-  metadata {
-    name      = "mysql-root"
-    namespace = var.namespace
-  }
-
-  data = {
-    MYSQL_ROOT_USERNAME = data.aws_rds_cluster.clusterName.db_instance_username
-    MYSQL_ROOT_PASSWORD = data.aws_rds_cluster.clusterName.db_instance_password
-    MYSQL_HOST          = aws_route53_record.mysql.fqdn
-    MYSQL_PORT          = data.aws_rds_cluster.clusterName.db_instance_port
-  }
-}
 
 
 resource "random_password" "mysql_openedx" {
@@ -55,7 +42,7 @@ resource "kubernetes_secret" "openedx" {
     OPENEDX_MYSQL_USERNAME = "openedx"
     OPENEDX_MYSQL_PASSWORD = random_password.mysql_openedx.result
     MYSQL_HOST             = aws_route53_record.mysql.fqdn
-    MYSQL_PORT             = data.aws_rds_cluster.clusterName.db_instance_port
+    MYSQL_PORT             = data.aws_rds_cluster.clusterName.port
   }
 }
 
@@ -78,7 +65,7 @@ resource "kubernetes_secret" "discovery" {
     DISCOVERY_MYSQL_USERNAME = "discovery"
     DISCOVERY_MYSQL_PASSWORD = random_password.mysql_discovery.result
     MYSQL_HOST               = aws_route53_record.mysql.fqdn
-    MYSQL_PORT               = data.aws_rds_cluster.clusterName.db_instance_port
+    MYSQL_PORT               = data.aws_rds_cluster.clusterName.port
   }
 }
 
@@ -102,7 +89,7 @@ resource "kubernetes_secret" "ecommerce" {
     ECOMMERCE_MYSQL_USERNAME = "ecommerce"
     ECOMMERCE_MYSQL_PASSWORD = random_password.mysql_ecommerce.result
     MYSQL_HOST               = aws_route53_record.mysql.fqdn
-    MYSQL_PORT               = data.aws_rds_cluster.clusterName.db_instance_port
+    MYSQL_PORT               = data.aws_rds_cluster.clusterName.port
   }
 }
 
@@ -126,7 +113,7 @@ resource "kubernetes_secret" "notes" {
     NOTES_MYSQL_USERNAME = "notes"
     NOTES_MYSQL_PASSWORD = random_password.mysql_notes.result
     MYSQL_HOST           = aws_route53_record.mysql.fqdn
-    MYSQL_PORT           = data.aws_rds_cluster.clusterName.db_instance_port
+    MYSQL_PORT           = data.aws_rds_cluster.clusterName.port
   }
 }
 
@@ -149,6 +136,6 @@ resource "kubernetes_secret" "xqueue" {
     XQUEUE_MYSQL_USERNAME = "xqueue"
     XQUEUE_MYSQL_PASSWORD = random_password.mysql_xqueue.result
     MYSQL_HOST            = aws_route53_record.mysql.fqdn
-    MYSQL_PORT            = data.aws_rds_cluster.clusterName.db_instance_port
+    MYSQL_PORT            = data.aws_rds_cluster.clusterName.port
   }
 }
