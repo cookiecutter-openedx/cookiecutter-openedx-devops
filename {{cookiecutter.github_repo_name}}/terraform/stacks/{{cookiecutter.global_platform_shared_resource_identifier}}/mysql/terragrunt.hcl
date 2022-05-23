@@ -23,7 +23,7 @@ locals {
 }
 
 dependencies {
-  paths = ["../kubernetes", "../kubernetes_secrets", "../vpc"]
+  paths = ["../kubernetes", "../vpc"]
 }
 
 dependency "vpc" {
