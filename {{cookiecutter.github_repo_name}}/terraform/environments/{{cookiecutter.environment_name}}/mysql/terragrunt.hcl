@@ -33,5 +33,6 @@ inputs = {
   # AWS RDS instance identifying information
   resource_name         = local.resource_name
   environment_domain    = local.environment_domain
+  environment           = local.environment
   namespace             = "openedx-${local.environment}"
 }

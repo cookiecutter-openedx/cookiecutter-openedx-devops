@@ -19,3 +19,7 @@ variable "environment_domain" {
 variable "namespace" {
   type = string
 }
+
+variable "environment" {
+  type = string
+}

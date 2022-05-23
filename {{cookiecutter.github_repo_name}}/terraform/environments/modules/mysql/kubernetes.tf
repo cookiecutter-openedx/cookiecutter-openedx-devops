@@ -63,7 +63,7 @@ resource "kubernetes_secret" "openedx" {
   }
 
   data = {
-    OPENEDX_MYSQL_USERNAME = "openedx"
+    OPENEDX_MYSQL_USERNAME = "${var.environment}-openedx"
     OPENEDX_MYSQL_PASSWORD = random_password.mysql_openedx.result
     MYSQL_HOST             = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
     MYSQL_PORT             = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
@@ -86,7 +86,7 @@ resource "kubernetes_secret" "discovery" {
   }
 
   data = {
-    DISCOVERY_MYSQL_USERNAME = "discovery"
+    DISCOVERY_MYSQL_USERNAME = "${var.environment}-discovery"
     DISCOVERY_MYSQL_PASSWORD = random_password.mysql_discovery.result
     MYSQL_HOST               = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
     MYSQL_PORT               = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
@@ -110,7 +110,7 @@ resource "kubernetes_secret" "ecommerce" {
   }
 
   data = {
-    ECOMMERCE_MYSQL_USERNAME = "ecommerce"
+    ECOMMERCE_MYSQL_USERNAME = "${var.environment}-ecommerce"
     ECOMMERCE_MYSQL_PASSWORD = random_password.mysql_ecommerce.result
     MYSQL_HOST               = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
     MYSQL_PORT               = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
@@ -134,7 +134,7 @@ resource "kubernetes_secret" "notes" {
   }
 
   data = {
-    NOTES_MYSQL_USERNAME = "notes"
+    NOTES_MYSQL_USERNAME = "${var.environment}-notes"
     NOTES_MYSQL_PASSWORD = random_password.mysql_notes.result
     MYSQL_HOST           = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
     MYSQL_PORT           = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
@@ -157,7 +157,7 @@ resource "kubernetes_secret" "xqueue" {
   }
 
   data = {
-    XQUEUE_MYSQL_USERNAME = "xqueue"
+    XQUEUE_MYSQL_USERNAME = "${var.environment}-xqueue"
     XQUEUE_MYSQL_PASSWORD = random_password.mysql_xqueue.result
     MYSQL_HOST            = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
     MYSQL_PORT            = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
