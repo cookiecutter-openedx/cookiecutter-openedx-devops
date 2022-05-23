@@ -22,34 +22,13 @@ provider "kubernetes" {
 }
 
 
+# Retrieve the mysql_root connection parameters from openedx-shared namespace.
+# we'll refer to this data for the HOST and PORT assignments on all of ther MySQL
+# secrets.
 data "kubernetes_secret" "mysql_root" {
   metadata {
     name      = "mysql-root"
     namespace = "openedx-shared"
-  }
-}
-resource "kubernetes_secret" "mysql_root" {
-  metadata {
-    name      = "mysql-root"
-    namespace = "openedx-shared"
-  }
-
-  data = {
-    MYSQL_ROOT_USERNAME = module.db.db_instance_username
-    MYSQL_ROOT_PASSWORD = module.db.db_instance_password
-    MYSQL_HOST          = module.db.db_instance_address
-    MYSQL_PORT          = module.db.db_instance_port
-  }
-}
-
-
-
-resource "random_password" "mysql_openedx" {
-  length           = 16
-  special          = true
-  override_special = "_%@"
-  keepers = {
-    version = "1"
   }
 }
 
@@ -64,6 +43,15 @@ resource "kubernetes_secret" "mysql_root" {
     MYSQL_ROOT_PASSWORD = data.kubernetes_secret.mysql_root.data.MYSQL_ROOT_PASSWORD
     MYSQL_HOST          = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
     MYSQL_PORT          = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
+  }
+}
+
+resource "random_password" "mysql_openedx" {
+  length           = 16
+  special          = true
+  override_special = "_%@"
+  keepers = {
+    version = "1"
   }
 }
 
