@@ -11,8 +11,7 @@ locals {
   environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
-  environment = local.environment_vars.locals.environment
-  resource_name   = local.environment_vars.locals.shared_resource_namespace
+  resource_name   = "${local.environment_vars.locals.environment_namespace}"
   redis_node_type = local.environment_vars.locals.redis_node_type
 
   tags = merge(
@@ -36,8 +35,30 @@ dependency "vpc" {
   }
 }
 
-terraform {
-  source = "../../modules//redis"
+dependency "kubernetes" {
+  config_path = "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/kubernetes"
+
+  # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
+  # module hasn't been applied yet.
+  mock_outputs_allowed_terraform_commands = ["init", "validate"]
+  mock_outputs = {
+    cluster_arn           = "fake-cluster-arn"
+    cluster_certificate_authority_data = "fake-cert"
+    cluster_endpoint = "fake-cluster-endpoint"
+    cluster_id = "fake-cluster-id"
+    cluster_oidc_issuer_url = "fake-oidc-issuer-url"
+    cluster_platform_version = "fake-cluster-version"
+    cluster_security_group_arn = "fake-security-group-arn"
+    cluster_security_group_id = "fake-security-group-id"
+    cluster_status = "fake-cluster-status"
+    cluster_version = "fake-cluster-version"
+    eks_managed_node_groups = "fake-managed-node-group"
+    fargate_profiles = "fake-fargate-profile"
+    node_security_group_arn = "fake-security-group-arn"
+    node_security_group_id = "fake-security-group-id"
+    oidc_provider = "fake-oidc-provider"
+    oidc_provider_arn = "fake-provider-arn"
+  }
 }
 
 # Include all settings from the root terragrunt.hcl file
@@ -50,7 +71,6 @@ inputs = {
 
   # AWS Elasticache identifying information
   resource_name                 = local.resource_name
-  environment                   = local.environment
   tags                          = local.tags
 
   # cache instance identifying information
@@ -59,11 +79,16 @@ inputs = {
 
   # cache engine configuration
   engine                        = "redis"
-  engine_version                = "6.x"
-  num_cache_clusters            = 1
-  port                          = 6379
-  family                        = "redis6.x"
+  engine_version                = "{{ cookiecutter.redis_engine_version }}"
+  num_cache_clusters         = {{ cookiecutter.redis_num_cache_clusters }}
+  port                          = {{ cookiecutter.redis_port }}
+  family                        = "{{ cookiecutter.redis_family }}"
   node_type                     = local.redis_node_type
   transit_encryption_enabled    = false
+
+  # networking configuration
+  subnet_ids                    = dependency.vpc.outputs.elasticache_subnets
+  vpc_id                        = dependency.vpc.outputs.vpc_id
+  ingress_cidr_blocks           = [dependency.vpc.outputs.vpc_cidr_block]
 
 }
