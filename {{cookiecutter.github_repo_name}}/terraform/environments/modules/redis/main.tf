@@ -65,4 +65,5 @@ module "redis" {
   transit_encryption_enabled = var.transit_encryption_enabled
   family                     = var.family
   node_type                  = var.node_type
+  tags                       = var.tags
 }
