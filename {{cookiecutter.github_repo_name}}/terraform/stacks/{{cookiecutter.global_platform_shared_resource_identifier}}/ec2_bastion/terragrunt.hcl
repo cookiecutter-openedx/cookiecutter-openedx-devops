@@ -14,7 +14,7 @@ locals {
   # Extract out common variables for reuse
   root_domain      = local.global_vars.locals.root_domain
   aws_region       = local.global_vars.locals.aws_region
-  resource_name    = "${local.stack_vars.locals.stack_namespace}-bastion"
+  resource_name    = local.stack_vars.locals.stack_namespace
 
   tags = merge(
     local.stack_vars.locals.tags,

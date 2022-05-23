@@ -36,12 +36,12 @@ resource "tls_private_key" "bastion" {
 }
 
 resource "aws_key_pair" "bastion" {
-  key_name   = var.resource_name
+  key_name   = "${var.resource_name}-bastion"
   public_key = tls_private_key.bastion.public_key_openssh
 }
 
 resource "aws_security_group" "sg_bastion" {
-  name_prefix = var.resource_name
+  name_prefix = "${var.resource_name}-bastion"
   description = "openedx_devops: Public ssh access"
   vpc_id      = var.vpc_id
 
