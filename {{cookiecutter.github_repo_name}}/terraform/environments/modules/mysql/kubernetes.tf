@@ -22,6 +22,27 @@ provider "kubernetes" {
 }
 
 
+data "kubernetes_secret" "mysql_root" {
+  metadata {
+    name      = "mysql-root"
+    namespace = "openedx-shared"
+  }
+}
+resource "kubernetes_secret" "mysql_root" {
+  metadata {
+    name      = "mysql-root"
+    namespace = "openedx-shared"
+  }
+
+  data = {
+    MYSQL_ROOT_USERNAME = module.db.db_instance_username
+    MYSQL_ROOT_PASSWORD = module.db.db_instance_password
+    MYSQL_HOST          = module.db.db_instance_address
+    MYSQL_PORT          = module.db.db_instance_port
+  }
+}
+
+
 
 resource "random_password" "mysql_openedx" {
   length           = 16
@@ -32,6 +53,21 @@ resource "random_password" "mysql_openedx" {
   }
 }
 
+resource "kubernetes_secret" "mysql_root" {
+  metadata {
+    name      = "mysql-root"
+    namespace = var.namespace
+  }
+
+  data = {
+    MYSQL_ROOT_USERNAME = data.kubernetes_secret.mysql_root.data.MYSQL_ROOT_USERNAME
+    MYSQL_ROOT_PASSWORD = data.kubernetes_secret.mysql_root.data.MYSQL_ROOT_PASSWORD
+    MYSQL_HOST          = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
+    MYSQL_PORT          = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
+  }
+}
+
+
 resource "kubernetes_secret" "openedx" {
   metadata {
     name      = "mysql-openedx"
@@ -41,8 +77,8 @@ resource "kubernetes_secret" "openedx" {
   data = {
     OPENEDX_MYSQL_USERNAME = "openedx"
     OPENEDX_MYSQL_PASSWORD = random_password.mysql_openedx.result
-    MYSQL_HOST             = aws_route53_record.mysql.fqdn
-    MYSQL_PORT             = data.aws_rds_cluster.clusterName.port
+    MYSQL_HOST             = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
+    MYSQL_PORT             = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
   }
 }
 
@@ -64,8 +100,8 @@ resource "kubernetes_secret" "discovery" {
   data = {
     DISCOVERY_MYSQL_USERNAME = "discovery"
     DISCOVERY_MYSQL_PASSWORD = random_password.mysql_discovery.result
-    MYSQL_HOST               = aws_route53_record.mysql.fqdn
-    MYSQL_PORT               = data.aws_rds_cluster.clusterName.port
+    MYSQL_HOST               = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
+    MYSQL_PORT               = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
   }
 }
 
@@ -88,8 +124,8 @@ resource "kubernetes_secret" "ecommerce" {
   data = {
     ECOMMERCE_MYSQL_USERNAME = "ecommerce"
     ECOMMERCE_MYSQL_PASSWORD = random_password.mysql_ecommerce.result
-    MYSQL_HOST               = aws_route53_record.mysql.fqdn
-    MYSQL_PORT               = data.aws_rds_cluster.clusterName.port
+    MYSQL_HOST               = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
+    MYSQL_PORT               = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
   }
 }
 
@@ -112,8 +148,8 @@ resource "kubernetes_secret" "notes" {
   data = {
     NOTES_MYSQL_USERNAME = "notes"
     NOTES_MYSQL_PASSWORD = random_password.mysql_notes.result
-    MYSQL_HOST           = aws_route53_record.mysql.fqdn
-    MYSQL_PORT           = data.aws_rds_cluster.clusterName.port
+    MYSQL_HOST           = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
+    MYSQL_PORT           = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
   }
 }
 
@@ -135,7 +171,7 @@ resource "kubernetes_secret" "xqueue" {
   data = {
     XQUEUE_MYSQL_USERNAME = "xqueue"
     XQUEUE_MYSQL_PASSWORD = random_password.mysql_xqueue.result
-    MYSQL_HOST            = aws_route53_record.mysql.fqdn
-    MYSQL_PORT            = data.aws_rds_cluster.clusterName.port
+    MYSQL_HOST            = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
+    MYSQL_PORT            = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
   }
 }
