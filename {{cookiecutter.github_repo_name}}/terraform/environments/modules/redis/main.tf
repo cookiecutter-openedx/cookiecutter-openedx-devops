@@ -12,6 +12,13 @@ locals {
   name = var.replication_group_description
 }
 
+data "aws_vpc" "openedx" {
+  id = var.resource_name
+}
+
+data "aws_subnet_ids" "openedx" {
+  vpc_id = data.aws_vpc.openedx.id
+}
 ################################################################################
 # Supporting Resources
 ################################################################################
@@ -22,7 +29,7 @@ module "security_group" {
 
   name        = local.name
   description = "openedx_devops: Allow access to MySQL"
-  vpc_id      = var.vpc_id
+  vpc_id      = data.aws_vpc.openedx.id
 
   # ingress
   ingress_with_cidr_blocks = [
@@ -31,7 +38,7 @@ module "security_group" {
       from_port   = var.port
       to_port     = var.port
       protocol    = "tcp"
-      cidr_blocks = join(",", var.ingress_cidr_blocks)
+      cidr_blocks = join(",", data.aws_vpc.openedx.cidr_block)
     },
   ]
 
@@ -56,7 +63,7 @@ module "redis" {
 
   description                = local.name
   create_random_auth_token   = var.create_random_auth_token
-  subnet_ids                 = var.subnet_ids
+  subnet_ids                 = data.aws_subnet_ids.openedx.ids
   engine                     = var.engine
   engine_version             = var.engine_version
   num_cache_clusters         = var.num_cache_clusters

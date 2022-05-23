@@ -28,10 +28,6 @@ locals {
   )
 }
 
-dependencies {
-  paths = ["../vpc", "../kubernetes"]
-}
-
 
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
@@ -50,8 +46,5 @@ inputs = {
   environment_domain = local.environment_domain
   root_domain = local.root_domain
   namespace = local.namespace
-  private_subnet_ids = dependency.vpc.outputs.private_subnets
-  public_subnet_ids = dependency.vpc.outputs.public_subnets
-  vpc_id  = dependency.vpc.outputs.vpc_id
   tags = local.tags
 }
