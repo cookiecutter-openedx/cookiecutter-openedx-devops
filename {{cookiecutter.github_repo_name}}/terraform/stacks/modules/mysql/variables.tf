@@ -164,7 +164,7 @@ variable "port" {
 }
 
 variable "resource_name" {
-  description = "the full environment-qualified name of this resource."
+  description = "the full stack-qualified name of this resource."
   type        = string
 }
 
@@ -192,7 +192,7 @@ variable "skip_final_snapshot" {
 }
 
 variable "tags" {
-  description = "collection of all tags to add to this resource. execting the combination of global + environment + resouce tags."
+  description = "collection of all tags to add to this resource. execting the combination of global + stack + resouce tags."
   type        = map(string)
   default     = {}
 }

@@ -7,14 +7,14 @@
 # usage: build an EKS with EC2 worker nodes and ALB
 #------------------------------------------------------------------------------
 locals {
-  # Automatically load environment-level variables
-  environment_vars = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
+  # Automatically load stack-level variables
+  stack_vars = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
-  env                             = local.environment_vars.locals.environment
-  environment_domain              = local.environment_vars.locals.environment_domain
-  namespace                       = local.environment_vars.locals.stack_namespace
+  env                             = local.stack_vars.locals.stack
+  environment_domain              = local.stack_vars.locals.environment_domain
+  namespace                       = local.stack_vars.locals.stack_namespace
   root_domain                     = local.global_vars.locals.root_domain
   platform_name                   = local.global_vars.locals.platform_name
   platform_region                 = local.global_vars.locals.platform_region
@@ -22,7 +22,7 @@ locals {
   aws_region                      = local.global_vars.locals.aws_region
 
   tags = merge(
-    local.environment_vars.locals.tags,
+    local.stack_vars.locals.tags,
     local.global_vars.locals.tags,
     { Name = "${local.namespace}-eks-ingress" }
   )

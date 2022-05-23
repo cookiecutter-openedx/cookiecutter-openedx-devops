@@ -48,7 +48,7 @@ variable "platform_name" {
 variable "platform_region" {
   type = string
 }
-variable "environment" {
+variable "stack" {
   type = string
 }
 

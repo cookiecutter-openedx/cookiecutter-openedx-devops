@@ -7,15 +7,15 @@
 # usage: create all the application secrets
 #------------------------------------------------------------------------------
 locals {
-  # Automatically load environment-level variables
-  environment_vars = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
+  # Automatically load stack-level variables
+  stack_vars = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
-  resource_name           = local.environment_vars.locals.environment_namespace
-  namespace   = local.environment_vars.locals.stack_namespace
+  resource_name           = local.stack_vars.locals.environment_namespace
+  namespace   = local.stack_vars.locals.stack_namespace
 
   tags = merge(
-    local.environment_vars.locals.tags,
+    local.stack_vars.locals.tags,
     local.global_vars.locals.tags,
     { Name = "${local.resource_name}" }
   )

@@ -4,7 +4,7 @@
 #
 # date: Feb-2022
 #
-# usage: create environment-level parameters, exposed to all
+# usage: create stack-level parameters, exposed to all
 #        Terragrunt modules in this enironment.
 #------------------------------------------------------------------------------
 locals {

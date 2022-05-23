@@ -8,24 +8,24 @@
 #        to anything inside the VPN. create DNS records for master and reader.
 #------------------------------------------------------------------------------
 locals {
-  # Automatically load environment-level variables
-  environment_vars = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
+  # Automatically load stack-level variables
+  stack_vars = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   resource_name           = "${local.global_vars.locals.platform_name}-${local.global_vars.locals.platform_region}-${local.global_vars.shared_resource_identifier}-mongodb"
   aws_region              = local.global_vars.locals.aws_region
-  mongodb_instance_class  = local.environment_vars.locals.mongodb_instance_class
-  mongodb_cluster_size    = local.environment_vars.locals.mongodb_cluster_size
+  mongodb_instance_class  = local.stack_vars.locals.mongodb_instance_class
+  mongodb_cluster_size    = local.stack_vars.locals.mongodb_cluster_size
 
-  environment_domain      = local.environment_vars.locals.environment_domain
-  environment_namespace   = local.environment_vars.locals.environment_namespace
+  environment_domain      = local.stack_vars.locals.environment_domain
+  environment_namespace   = local.stack_vars.locals.environment_namespace
 
-  environment             = local.environment_vars.locals.environment
+  stack             = local.stack_vars.locals.stack
   platform_name           = local.global_vars.locals.platform_name
   platform_region         = local.global_vars.locals.platform_region
 
   tags = merge(
-    local.environment_vars.locals.tags,
+    local.stack_vars.locals.tags,
     local.global_vars.locals.tags,
     { Name = "${local.resource_name}" }
   )
@@ -95,11 +95,11 @@ inputs = {
   cluster_dns_name      = "mongodb.master"
   reader_dns_name       = "mongodb.reader"
 
-  environment           = local.environment
+  stack           = local.stack
   name                  = local.platform_name
   namespace             = local.platform_region
   region                = local.platform_region
-  label_order           = ["stage", "environment", "name", "namespace", "attributes"]
+  label_order           = ["stage", "stack", "name", "namespace", "attributes"]
   delimiter             = "-"
 
   cluster_parameters    = [

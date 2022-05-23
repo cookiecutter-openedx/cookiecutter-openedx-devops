@@ -7,7 +7,7 @@
 # usage: create an EC2 instance with ssh access and a DNS record.
 #------------------------------------------------------------------------------
 
-data "aws_route53_zone" "environment" {
+data "aws_route53_zone" "stack" {
   name = var.environment_domain
 }
 
@@ -87,7 +87,7 @@ resource "aws_eip" "elasticip" {
 }
 
 resource "aws_route53_record" "bastion" {
-  zone_id = data.aws_route53_zone.environment.id
+  zone_id = data.aws_route53_zone.stack.id
   name    = "bastion.${var.environment_domain}"
   type    = "A"
   ttl     = "600"
