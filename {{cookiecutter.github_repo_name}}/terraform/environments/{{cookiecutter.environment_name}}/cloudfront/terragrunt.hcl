@@ -29,7 +29,7 @@ locals {
 dependencies {
   paths = [
     "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/vpc",
-    "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/s3_openedx_storage"
+    "../s3_openedx_storage"
     ]
 }
 
