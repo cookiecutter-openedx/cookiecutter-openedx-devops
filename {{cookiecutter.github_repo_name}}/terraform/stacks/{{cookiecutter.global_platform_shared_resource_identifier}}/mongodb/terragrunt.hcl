@@ -9,7 +9,7 @@
 #------------------------------------------------------------------------------
 locals {
   # Automatically load environment-level variables
-  environment_vars = read_terragrunt_config(find_in_parent_folders("{{ cookiecutter.global_platform_shared_resource_identifier }}.hcl"))
+  environment_vars = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   resource_name           = "${local.global_vars.locals.platform_name}-${local.global_vars.locals.platform_region}-${local.global_vars.shared_resource_identifier}-mongodb"
