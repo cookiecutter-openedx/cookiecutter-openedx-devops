@@ -13,7 +13,7 @@ locals {
 }
 
 data "aws_vpc" "openedx" {
-  id = var.resource_name
+  name = var.resource_name
 }
 
 data "aws_subnet_ids" "openedx" {

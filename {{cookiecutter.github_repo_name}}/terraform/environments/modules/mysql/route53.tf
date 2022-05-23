@@ -17,6 +17,6 @@ resource "aws_route53_record" "mysql" {
   name    = "mysql"
   type    = "CNAME"
   ttl     = "300"
-  records = ["${data.aws_rds_cluster.clusterName.host}"]
+  records = ["${data.kubernetes_secret.mysql_root.data.MYSQL_HOST}"]
 
 }
