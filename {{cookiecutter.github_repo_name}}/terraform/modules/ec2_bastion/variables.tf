@@ -52,6 +52,6 @@ variable "environment" {
   type = string
 }
 
-variable "ec2_ssh_key_name" {
+variable "resource_name" {
   type = string
 }

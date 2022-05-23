@@ -30,8 +30,14 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"]
 }
 
-data "aws_key_pair" "common_key" {
-  key_name = var.ec2_ssh_key_name
+resource "tls_private_key" "bastion" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "aws_key_pair" "bastion" {
+  key_name   = var.resource_name
+  public_key = tls_private_key.bastion.public_key_openssh
 }
 
 resource "aws_security_group" "sg_bastion" {
@@ -66,7 +72,7 @@ module "bastion" {
   ami               = data.aws_ami.ubuntu.id
   instance_type     = "t2.micro"
   availability_zone = var.availability_zone
-  key_name          = data.aws_key_pair.common_key.key_name
+  key_name          = aws_key_pair.bastion.key_name
 
   vpc_security_group_ids = [resource.aws_security_group.sg_bastion.id]
   root_block_device      = [{ volume_size = 100 }]
@@ -88,4 +94,15 @@ resource "aws_route53_record" "bastion" {
 
 
   records = [aws_eip.elasticip.public_ip]
+}
+
+resource "kubernetes_secret" "ssh_secret" {
+  metadata {
+    name      = "bastion-ssh-key"
+    namespace = "openedx"
+  }
+
+  data = {
+    PRIVATE_KEY_PEM = tls_private_key.bastion.private_key_pem
+  }
 }

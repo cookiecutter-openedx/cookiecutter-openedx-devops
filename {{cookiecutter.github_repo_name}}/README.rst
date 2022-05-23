@@ -162,7 +162,6 @@ Set your `global parameters <terraform/environments/global.hcl>`_
     root_domain      = "{{ cookiecutter.global_root_domain }}.ai"
     aws_region       = "{{ cookiecutter.global_aws_region }}"
     account_id       = "{{ cookiecutter.global_account_id }}"
-    ec2_ssh_key_name = "{{ cookiecutter.global_ec2_ssh_key_name }}"
   }
 
 
@@ -232,11 +231,11 @@ IV. Connect To Your backend Services
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Terraform creates friendly subdomain names for any of the backend services which you are likely to connect: Cloudfront, MySQL, Mongo and Redis.
-Passwords for the root/admin accounts are accessible from Kubernetes Secrets. Note that each of MySQL, MongoDB and Redis reside in private subnets. These services can only be accessed on the command line from the Bastion.
+The ssh private pem key for accessing the EC2 Bastion instance is stored in kubernetes secrets in the openedx namespace. Additionally, passwords for the root/admin accounts are accessible from Kubernetes Secrets. Note that each of MySQL, MongoDB and Redis reside in private subnets. These services can only be accessed on the command line from the Bastion.
 
 .. code-block:: shell
 
-  ssh bastion.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }} -i path/to/{{ cookiecutter.global_ec2_ssh_key_name }}.pem
+  ssh bastion.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }} -i path/to/{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.global_platform_shared_resource_identifier }}-bastion.pem
 
   mysql -h mysql.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }} -u root -p
 

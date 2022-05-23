@@ -14,7 +14,6 @@ locals {
   # Extract out common variables for reuse
   platform_name    = local.global_vars.locals.platform_name
   platform_region  = local.global_vars.locals.platform_region
-  ec2_ssh_key_name = local.global_vars.locals.ec2_ssh_key_name
   environment      = local.environment_vars.locals.environment
   aws_region       = local.global_vars.locals.aws_region
   resource_name    = "${local.environment_vars.locals.shared_resource_namespace}-bastion"
@@ -61,7 +60,7 @@ inputs = {
   platform_name    = local.platform_name
   platform_region  = local.platform_region
   environment      = local.environment
-  ec2_ssh_key_name = local.ec2_ssh_key_name
+  resource_name    = local.resource_name
 
   vpc_id            = dependency.vpc.outputs.vpc_id
   availability_zone = "${local.aws_region}a"
