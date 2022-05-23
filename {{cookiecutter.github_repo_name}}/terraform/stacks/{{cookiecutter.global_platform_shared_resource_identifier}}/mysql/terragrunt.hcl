@@ -4,25 +4,23 @@
 #
 # date: Aug-2021
 #
-# usage: create an ElastiCache Redis cache
+# usage: create an RDS MySQL instance.
 #------------------------------------------------------------------------------
 locals {
   # Automatically load environment-level variables
-  environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
+  environment_vars = read_terragrunt_config(find_in_parent_folders("{{ cookiecutter.global_platform_shared_resource_identifier }}.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
-  resource_name   = local.environment_vars.locals.shared_resource_namespace
-  redis_node_type = local.environment_vars.locals.redis_node_type
+  resource_name         = local.environment_vars.locals.shared_resource_namespace
+  identifier            = "${local.resource_name}"
+  mysql_instance_class  = local.environment_vars.locals.mysql_instance_class
 
   tags = merge(
     local.environment_vars.locals.tags,
     local.global_vars.locals.tags,
     { Name = "${local.resource_name}" }
   )
-}
 
-terraform {
-  source = "../../../modules//redis"
 }
 
 dependencies {
@@ -38,7 +36,6 @@ dependency "vpc" {
   mock_outputs = {
     vpc_id           = "fake-vpc-id"
     database_subnets = ["fake-subnetid-01", "fake-subnetid-02"]
-    elasticache_subnets = ["fake-elasticache-subnet-01", "fake-elasticache-subnet-02"]
     vpc_cidr_block = "fake-cidr-block"
   }
 }
@@ -69,6 +66,12 @@ dependency "kubernetes" {
   }
 }
 
+# Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
+# working directory, into a temporary folder, and execute your Terraform commands in that folder.
+terraform {
+  source = "../../../modules//mysql"
+}
+
 # Include all settings from the root terragrunt.hcl file
 include {
   path = find_in_parent_folders()
@@ -76,27 +79,58 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
+  # AWS RDS instance identifying information
+  resource_name         = local.resource_name
+  tags                  = local.tags
 
-  # AWS Elasticache identifying information
-  resource_name                 = local.resource_name
-  tags                          = local.tags
+  # database identifying information
+  name                                = "openedx"
+  identifier                          = local.identifier
+  username                            = "root"
+  create_random_password              = true
+  iam_database_authentication_enabled = false
 
-  # cache instance identifying information
-  replication_group_description = "${local.environment_vars.locals.environment_namespace}"
-  create_random_auth_token      = "false"
+  # db server parameters
+  port                  = "3306"
+  engine                = "mysql"
+  engine_version        = "5.7.33"
+  family                = "mysql5.7"
+  major_engine_version  = "5.7"
+  parameters = [
+    {
+      name  = "character_set_client"
+      value = "utf8mb4"
+    },
+    {
+      name  = "character_set_server"
+      value = "utf8mb4"
+    }
+  ]
 
-  # cache engine configuration
-  engine                        = "redis"
-  engine_version                = "6.x"
-  num_cache_clusters            = 1
-  port                          = 6379
-  family                        = "redis6.x"
-  node_type                     = local.redis_node_type
-  transit_encryption_enabled    = false
+  # db server size
+  instance_class        = local.mysql_instance_class
+  allocated_storage     = 10
+  max_allocated_storage = 100
+  storage_encrypted     = true
+  multi_az              = false
+  enabled_cloudwatch_logs_exports = []
+  performance_insights_enabled = false
+  performance_insights_retention_period = 7
+  create_monitoring_role = false
+  monitoring_interval = 0
+  create_db_subnet_group = false
 
-  # networking configuration
-  subnet_ids                    = dependency.vpc.outputs.elasticache_subnets
-  vpc_id                        = dependency.vpc.outputs.vpc_id
-  ingress_cidr_blocks           = [dependency.vpc.outputs.vpc_cidr_block]
+  # backups and maintenance
+  maintenance_window    = "Sun:00:00-Sun:03:00"
+  backup_window         = "03:00-06:00"
+  backup_retention_period = 7
+  deletion_protection   = false
+  skip_final_snapshot   = true
+
+
+  # network configuration
+  subnet_ids            = dependency.vpc.outputs.database_subnets
+  vpc_id                = dependency.vpc.outputs.vpc_id
+  ingress_cidr_blocks   = [dependency.vpc.outputs.vpc_cidr_block]
 
 }

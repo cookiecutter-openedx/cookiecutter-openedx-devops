@@ -8,7 +8,7 @@
 #------------------------------------------------------------------------------
 locals {
   # Automatically load environment-level variables
-  environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
+  environment_vars = read_terragrunt_config(find_in_parent_folders("{{ cookiecutter.global_platform_shared_resource_identifier }}.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
@@ -21,15 +21,17 @@ locals {
   account_id                      = local.global_vars.locals.account_id
   aws_region                      = local.global_vars.locals.aws_region
 
+  kubernetes_version              = local.environment_vars.locals.kubernetes_version
+  eks_worker_group_instance_type  = local.environment_vars.locals.eks_worker_group_instance_type
+  eks_worker_group_min_size       = local.environment_vars.locals.eks_worker_group_min_size
+  eks_worker_group_max_size       = local.environment_vars.locals.eks_worker_group_max_size
+  eks_worker_group_desired_size   = local.environment_vars.locals.eks_worker_group_desired_size
+
   tags = merge(
     local.environment_vars.locals.tags,
     local.global_vars.locals.tags,
-    { Name = "${local.namespace}-eks-ingress" }
+    { Name = "${local.namespace}-eks" }
   )
-}
-
-dependencies {
-  paths = ["../vpc", "../kubernetes"]
 }
 
 dependency "vpc" {
@@ -50,7 +52,7 @@ dependency "vpc" {
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
-  source = "../../../modules//kubernetes_ingress_clb"
+  source = "../../../modules//kubernetes"
 }
 
 # Include all settings from the root terragrunt.hcl file
@@ -67,5 +69,19 @@ inputs = {
   private_subnet_ids = dependency.vpc.outputs.private_subnets
   public_subnet_ids = dependency.vpc.outputs.public_subnets
   vpc_id  = dependency.vpc.outputs.vpc_id
+  kubernetes_cluster_version = local.kubernetes_version
+  eks_worker_group_instance_type  = local.eks_worker_group_instance_type
+  eks_worker_group_min_size = local.eks_worker_group_min_size
+  eks_worker_group_max_size = local.eks_worker_group_max_size
+  eks_worker_group_desired_size = local.eks_worker_group_desired_size
   tags = local.tags
+  map_roles = []
+  map_users = [
+    {
+      userarn  = "arn:aws:iam::621672204142:user/ci"
+      username = "ci"
+      groups   = ["system:masters"]
+    }
+  ]
+
 }

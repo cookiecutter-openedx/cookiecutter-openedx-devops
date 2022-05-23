@@ -27,7 +27,10 @@ locals {
 }
 
 dependencies {
-  paths = ["../vpc", "../s3_openedx_storage"]
+  paths = [
+    "../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/vpc",
+    "../s3_openedx_storage"
+    ]
 }
 
 
