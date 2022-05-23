@@ -30,7 +30,7 @@ locals {
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 
 terraform {
-  source = "../../../modules//vpc"
+  source = "../../modules//vpc"
 }
 
 # Include all settings from the root terragrunt.hcl file
@@ -41,7 +41,7 @@ include {
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
   aws_region            = local.aws_region
-  environment_namespace = local.namespace
+  namespace = local.namespace
   name                  = "${local.resource_name}"
   cidr                  = "192.168.0.0/20"
   azs                   = ["${local.aws_region}a", "${local.aws_region}b", "${local.aws_region}c"]

@@ -59,9 +59,6 @@ variable "enable_dns_hostnames" {
   default     = false
 }
 
-variable "environment_domain" {
-  type = string
-}
 
 
 variable "name" {
