@@ -21,6 +21,14 @@ locals {
   )
 }
 
+dependencies {
+  paths = [
+    "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/kubernetes",
+    "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/kubernetes_secrets",
+    "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/vpc"
+    ]
+}
+
 dependency "vpc" {
   config_path = "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/vpc"
 

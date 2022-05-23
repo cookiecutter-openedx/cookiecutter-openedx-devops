@@ -26,6 +26,12 @@ locals {
 
 }
 
+dependencies {
+  paths = [
+    "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/vpc",
+    "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/s3_openedx_storage"
+    ]
+}
 
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.

@@ -21,6 +21,26 @@ locals {
   )
 }
 
+dependencies {
+  paths = [
+    "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/vpc"
+    ]
+}
+
+dependency "vpc" {
+  config_path = "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/vpc"
+
+  # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
+  # module hasn't been applied yet.
+  mock_outputs_allowed_terraform_commands = ["init", "validate"]
+  mock_outputs = {
+    vpc_id           = "fake-vpc-id"
+    database_subnets = ["fake-subnetid-01", "fake-subnetid-02"]
+    elasticache_subnets = ["fake-elasticache-subnet-01", "fake-elasticache-subnet-02"]
+    vpc_cidr_block = "fake-cidr-block"
+  }
+}
+
 
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
