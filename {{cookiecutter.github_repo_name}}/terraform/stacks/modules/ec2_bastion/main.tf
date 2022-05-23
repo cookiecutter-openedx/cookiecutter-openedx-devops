@@ -95,14 +95,3 @@ resource "aws_route53_record" "bastion" {
 
   records = [aws_eip.elasticip.public_ip]
 }
-
-resource "kubernetes_secret" "ssh_secret" {
-  metadata {
-    name      = "bastion-ssh-key"
-    namespace = "openedx-shared"
-  }
-
-  data = {
-    PRIVATE_KEY_PEM = tls_private_key.bastion.private_key_pem
-  }
-}
