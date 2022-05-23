@@ -31,7 +31,8 @@ locals {
 dependencies {
   paths = [
     "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/vpc",
-    "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/kubernetes"
+    "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/kubernetes",
+    "../kubernetes"
     ]
 }
 

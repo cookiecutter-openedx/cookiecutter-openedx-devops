@@ -15,6 +15,14 @@ locals {
   environment_name = local.environment_vars.locals.environment
 }
 
+dependencies {
+  paths = [
+    "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/vpc",
+    "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/kubernetes",
+    "../vpc"
+    ]
+}
+
 dependency "vpc" {
   config_path = "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/vpc"
 
