@@ -8,11 +8,12 @@
 #        Terragrunt modules in this repository.
 #------------------------------------------------------------------------------
 locals {
-  platform_name    = "{{ cookiecutter.global_platform_name }}"
-  platform_region  = "{{ cookiecutter.global_platform_region }}"
-  root_domain      = "{{ cookiecutter.global_root_domain }}"
-  aws_region       = "{{ cookiecutter.global_aws_region }}"
-  account_id       = "{{ cookiecutter.global_account_id }}"
+  platform_name              = "{{ cookiecutter.global_platform_name }}"
+  platform_region            = "{{ cookiecutter.global_platform_region }}"
+  shared_resource_identifier = "{{ cookiecutter.global_platform_shared_resource_identifier }}"
+  root_domain                = "{{ cookiecutter.global_root_domain }}"
+  aws_region                 = "{{ cookiecutter.global_aws_region }}"
+  account_id                 = "{{ cookiecutter.global_account_id }}"
 
   tags = {
     Platform        = local.platform_name
