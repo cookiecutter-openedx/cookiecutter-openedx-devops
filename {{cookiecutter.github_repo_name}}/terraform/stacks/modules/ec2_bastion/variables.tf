@@ -34,10 +34,6 @@ variable "tags" {
   type        = any
   default     = {}
 }
-variable "environment_domain" {
-  type = string
-}
-
 variable "platform_name" {
   type = string
 }
@@ -49,5 +45,9 @@ variable "stack" {
 }
 
 variable "resource_name" {
+  type = string
+}
+
+variable "root_domain" {
   type = string
 }
