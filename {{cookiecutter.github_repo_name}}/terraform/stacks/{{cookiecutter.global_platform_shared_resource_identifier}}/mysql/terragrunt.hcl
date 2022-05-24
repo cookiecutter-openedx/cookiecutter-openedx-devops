@@ -83,16 +83,16 @@ inputs = {
   tags                  = local.tags
 
   # database identifying information
-  username                            = "root"
-  create_random_password              = true
-  iam_database_authentication_enabled = false
+  username                            = "{{ cookiecutter.mysql_username }}"
+  create_random_password              = {{ cookiecutter.mysql_create_random_password }}
+  iam_database_authentication_enabled = {{ cookiecutter.mysql_iam_database_authentication_enabled }}
 
   # db server parameters
-  port                  = "3306"
-  engine                = "mysql"
-  engine_version        = "5.7.33"
-  family                = "mysql5.7"
-  major_engine_version  = "5.7"
+  port                  = "{{ cookiecutter.mysql_port }}"
+  engine                = "{{ cookiecutter.mysql_engine }}"
+  engine_version        = "{{ cookiecutter.mysql_engine_version }}"
+  family                = "{{ cookiecutter.mysql_family }}"
+  major_engine_version  = "{{ cookiecutter.mysql_major_engine_version }}"
   parameters = [
     {
       name  = "character_set_client"
@@ -106,8 +106,8 @@ inputs = {
 
   # db server size
   instance_class        = local.mysql_instance_class
-  allocated_storage     = 10
-  max_allocated_storage = 100
+  allocated_storage     = {{ cookiecutter.mysql_allocated_storage }}
+  max_allocated_storage = 10
   storage_encrypted     = true
   multi_az              = false
   enabled_cloudwatch_logs_exports = []
@@ -118,11 +118,11 @@ inputs = {
   create_db_subnet_group = false
 
   # backups and maintenance
-  maintenance_window    = "Sun:00:00-Sun:03:00"
-  backup_window         = "03:00-06:00"
-  backup_retention_period = 7
-  deletion_protection   = false
-  skip_final_snapshot   = true
+  maintenance_window    = "{{ cookiecutter.mysql_maintenance_window }}"
+  backup_window         = "{{ cookiecutter.mysql_backup_window }}"
+  backup_retention_period = {{ cookiecutter.mysql_backup_retention_period }}
+  deletion_protection   = {{ cookiecutter.mysql_deletion_protection }}
+  skip_final_snapshot   = {{ cookiecutter.mysql_skip_final_snapshot }}
 
 
   # network configuration
