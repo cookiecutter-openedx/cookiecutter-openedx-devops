@@ -89,8 +89,6 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
     - {{ cookiecutter.ci_deploy_hastexo_tutor_contrib_s3_version }}
   * - `Kubernetes Cluster <https://kubernetes.io/>`_
     - {{ cookiecutter.kubernetes_cluster_version }}
-  * - Kubernetes `amazon/aws-alb-ingress-controller <https://hub.docker.com/r/amazon/aws-alb-ingress-controller/>`_
-    - {{ cookiecutter.kubernetes_cluster_ingress_controller_version }}
   * - `Terraform <https://www.terraform.io/>`_
     - {{ cookiecutter.terraform_required_version }}
   * - `terraform-aws-modules/acm <https://registry.terraform.io/modules/terraform-aws-modules/acm/aws/latest>`_
@@ -109,16 +107,12 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
     - {{ cookiecutter.terraform_aws_modules_sg }}
   * - `terraform-aws-modules/vpc <https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest>`_
     - {{ cookiecutter.terraform_aws_modules_vpc }}
-  * - Terraform `Helm ingress-alb-controller <https://github.com/kubernetes-sigs/aws-load-balancer-controller/>`_
-    - {{ cookiecutter.terraform_helm_alb_controller_chart_version }}
   * - Terraform `Helm cert-manager <https://charts.jetstack.io>`_
     - {{ cookiecutter.terraform_helm_cert_manager }}
   * - Terraform `Kubernetes Provider <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs>`_
     - {{ cookiecutter.terraform_provider_kubernetes_version }}
   * - Terraform `AWS Provider <https://registry.terraform.io/providers/hashicorp/aws/latest/docs>`_
     - {{ cookiecutter.terraform_provider_hashicorp_aws_version }}
-  * - Terraform `Helm Provider <https://registry.terraform.io/providers/hashicorp/helm/latest/docs>`_
-    - {{ cookiecutter.terraform_provider_hashicorp_helm_version }}
   * - Terraform `Local Provider <https://registry.terraform.io/providers/hashicorp/local/latest/docs>`_
     - {{ cookiecutter.terraform_provider_hashicorp_local_version }}
   * - Terraform `Random Provider <https://registry.terraform.io/providers/hashicorp/random/latest/docs>`_
