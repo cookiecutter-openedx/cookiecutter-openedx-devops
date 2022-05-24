@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.1.0]
+- Terraform
+  - bumped all version
+- Deployment workflow
+  - bumped all versions
+  - Added installation options for Credentials, Ecommerce, MFE, Discovery, Notes, Forum, Xqueue
+- Stacks
+  - Introduced shared infrastructure stacks consisting of a private VPC, EKS K8S and an option EC2 Bastion. This collection of resources is configured to host external non-openedx platforms such as for example, your custom micro services or a content management system.
+- AWS Services
+  - Bastion: full Bastion management including creation and storage of ssh key
+  - K8s:  added a namespace for shared secrets: Bastion ssh key, MySQL root credentials
+  - RDS: Added storage auto-scaling
+  - Mongo: reverted to Tutor-installed MongoDB pod on k8s
 
 ## [0.0.5]
 
