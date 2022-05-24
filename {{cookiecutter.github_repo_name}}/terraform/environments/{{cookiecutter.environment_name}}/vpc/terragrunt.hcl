@@ -18,7 +18,9 @@ locals {
   tags = merge(
     local.env_vars.locals.tags,
     local.global_vars.locals.tags,
+    {
     Namespace = local.env_vars.locals.environment_namespace
+    }
   )
 }
 
