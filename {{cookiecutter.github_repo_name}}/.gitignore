@@ -1,2 +1,4 @@
 .terragrunt-cache
 .DS_Store
+.terraform
+terraform-provider-aws_v4.15.1_x5
