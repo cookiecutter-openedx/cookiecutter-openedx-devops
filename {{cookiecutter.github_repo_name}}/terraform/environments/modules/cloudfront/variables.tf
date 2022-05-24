@@ -8,6 +8,10 @@ variable "environment_domain" {
   type = string
 }
 
+variable "environment_namespace" {
+  type = string
+}
+
 
 variable "resource_name" {
   type = string

@@ -1,6 +1,9 @@
 
 data "aws_route53_zone" "environment_domain" {
   name = var.environment_domain
+  tags = {
+    Namespace = var.environment_namespace
+  }
 }
 
 resource "aws_route53_record" "primary" {

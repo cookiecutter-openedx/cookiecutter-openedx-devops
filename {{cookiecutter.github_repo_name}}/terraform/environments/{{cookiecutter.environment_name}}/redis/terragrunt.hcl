@@ -11,6 +11,7 @@ locals {
   environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
+  environment_namespace = local.environment_vars.locals.environment_namespace
   resource_name   = "${local.environment_vars.locals.environment_namespace}"
   redis_node_type = local.environment_vars.locals.redis_node_type
 
@@ -78,6 +79,7 @@ include {
 inputs = {
 
   # AWS Elasticache identifying information
+  environment_namespace         = local.environment_namespace
   resource_name                 = local.resource_name
   tags                          = local.tags
 

@@ -14,6 +14,7 @@ locals {
 
   # Extract out common variables for reuse
   environment_domain    = local.environment_vars.locals.environment_domain
+  environment_namespace = local.environment_vars.locals.environment_namespace
   aws_region            = local.global_vars.locals.aws_region
 
   resource_name = "${local.environment_vars.locals.environment_namespace}-storage"
@@ -49,6 +50,7 @@ include {
 inputs = {
   aws_region            = local.aws_region
   environment_domain    = local.environment_domain
+  environment_namespace = local.environment_namespace
   resource_name         = local.resource_name
   tags                  = local.tags
 }
