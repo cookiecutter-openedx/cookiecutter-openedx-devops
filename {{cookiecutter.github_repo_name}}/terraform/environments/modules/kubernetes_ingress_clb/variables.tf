@@ -13,6 +13,10 @@ variable "environment_namespace" {
   type = string
 }
 
+variable "shared_resource_namespace" {
+  type = string
+}
+
 variable "namespace" {
   type = string
 }

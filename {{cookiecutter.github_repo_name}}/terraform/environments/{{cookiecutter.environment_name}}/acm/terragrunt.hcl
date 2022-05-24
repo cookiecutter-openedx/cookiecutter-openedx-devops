@@ -4,8 +4,8 @@
 #
 # date: Feb-2022
 #
-# usage: create one Cloudfront distribution for the environment, plus one more
-#        for each subdomain.
+# usage: create one Amazon certificates for the environment domain and
+#        the root domain.
 #------------------------------------------------------------------------------
 locals {
   # Automatically load environment-level variables

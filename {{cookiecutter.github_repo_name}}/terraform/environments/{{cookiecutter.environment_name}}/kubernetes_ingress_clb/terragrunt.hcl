@@ -15,6 +15,7 @@ locals {
   env                             = local.environment_vars.locals.environment
   environment_domain              = local.environment_vars.locals.environment_domain
   namespace                       = local.environment_vars.locals.environment_namespace
+  shared_resource_namespace       = local.environment_vars.locals.shared_resource_namespace
   root_domain                     = local.global_vars.locals.root_domain
   platform_name                   = local.global_vars.locals.platform_name
   platform_region                 = local.global_vars.locals.platform_region
@@ -67,6 +68,7 @@ inputs = {
   aws_region = local.aws_region
   environment_domain = local.environment_domain
   environment_namespace = local.namespace
+  shared_resource_namespace = local.shared_resource_namespace
   root_domain = local.root_domain
   namespace = local.namespace
   tags = local.tags
