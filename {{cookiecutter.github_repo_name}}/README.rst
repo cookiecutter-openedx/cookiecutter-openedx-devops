@@ -79,8 +79,6 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
     - {{ cookiecutter.ci_build_open_edx_version }}
   * - `MySQL Server <https://www.mysql.com/>`_
     - {{ cookiecutter.mysql_engine_version }}
-  * - `MongoDB Server <https://www.mongodb.com/>`_
-    - {{ cookiecutter.mongodb_engine_version }}
   * - `Redis Cache <https://redis.io/>`_
     - {{ cookiecutter.redis_engine_version }}
   * - `Tutor Docker-based Open edX Installer <https://docs.tutor.overhang.io/>`_
