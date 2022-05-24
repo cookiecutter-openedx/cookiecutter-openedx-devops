@@ -11,7 +11,9 @@ locals {
   environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
-  resource_name   = local.environment_vars.locals.shared_resource_namespace
+  environment_namespace = local.environment_vars.locals.environment_namespace
+  resource_name   = "${local.environment_vars.locals.environment_namespace}"
+  shared_resource_namespace = local.environment_vars.locals.shared_resource_namespace
   redis_node_type = local.environment_vars.locals.redis_node_type
 
   tags = merge(
@@ -21,16 +23,16 @@ locals {
   )
 }
 
-terraform {
-  source = "../../../modules//redis"
-}
-
 dependencies {
-  paths = ["../kubernetes", "../kubernetes_secrets", "../vpc"]
+  paths = [
+    "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/vpc",
+    "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/kubernetes",
+    "../kubernetes_secrets"
+    ]
 }
 
 dependency "vpc" {
-  config_path = "../vpc"
+  config_path = "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/vpc"
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
@@ -44,7 +46,7 @@ dependency "vpc" {
 }
 
 dependency "kubernetes" {
-  config_path = "../kubernetes"
+  config_path = "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/kubernetes"
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
@@ -69,6 +71,12 @@ dependency "kubernetes" {
   }
 }
 
+# Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
+# working directory, into a temporary folder, and execute your Terraform commands in that folder.
+terraform {
+  source = "../../modules//redis"
+}
+
 # Include all settings from the root terragrunt.hcl file
 include {
   path = find_in_parent_folders()
@@ -78,7 +86,9 @@ include {
 inputs = {
 
   # AWS Elasticache identifying information
+  environment_namespace         = local.environment_namespace
   resource_name                 = local.resource_name
+  shared_resource_namespace     = local.shared_resource_namespace
   tags                          = local.tags
 
   # cache instance identifying information
@@ -87,10 +97,10 @@ inputs = {
 
   # cache engine configuration
   engine                        = "redis"
-  engine_version                = "6.x"
-  num_cache_clusters            = 1
-  port                          = 6379
-  family                        = "redis6.x"
+  engine_version                = "{{ cookiecutter.redis_engine_version }}"
+  num_cache_clusters         = {{ cookiecutter.redis_num_cache_clusters }}
+  port                          = {{ cookiecutter.redis_port }}
+  family                        = "{{ cookiecutter.redis_family }}"
   node_type                     = local.redis_node_type
   transit_encryption_enabled    = false
 

@@ -4,8 +4,8 @@
 #
 # date: Feb-2022
 #
-# usage: create one Cloudfront distribution for the environment, plus one more
-#        for each subdomain.
+# usage: create one Amazon certificates for the environment domain and
+#        the root domain.
 #------------------------------------------------------------------------------
 locals {
   # Automatically load environment-level variables
@@ -14,10 +14,10 @@ locals {
 
   # Extract out common variables for reuse
   environment_domain    = local.environment_vars.locals.environment_domain
+  root_domain           = local.global_vars.locals.root_domain
   environment_namespace = local.environment_vars.locals.environment_namespace
+  resource_name = local.environment_vars.locals.environment_namespace
   aws_region            = local.global_vars.locals.aws_region
-
-  resource_name = "${local.environment_vars.locals.environment_namespace}-storage"
 
   tags = merge(
     local.environment_vars.locals.tags,
@@ -30,16 +30,14 @@ locals {
 dependencies {
   paths = [
     "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/vpc",
-    "../s3_openedx_storage",
-    "../vpc",
-    "../acm"
+    "../vpc"
     ]
 }
 
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
-  source = "../../modules//cloudfront"
+  source = "../../modules//acm"
 }
 
 # Include all settings from the root terragrunt.hcl file
@@ -50,6 +48,7 @@ include {
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
   aws_region            = local.aws_region
+  root_domain           = local.root_domain
   environment_domain    = local.environment_domain
   environment_namespace = local.environment_namespace
   resource_name         = local.resource_name

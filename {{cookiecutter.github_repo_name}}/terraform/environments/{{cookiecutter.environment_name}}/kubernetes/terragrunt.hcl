@@ -11,31 +11,20 @@ locals {
   environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
-  # Extract out common variables for reuse
-  env                             = local.environment_vars.locals.environment
-  environment_domain              = local.environment_vars.locals.environment_domain
-  namespace                       = local.environment_vars.locals.shared_resource_namespace
-  root_domain                     = local.global_vars.locals.root_domain
-  platform_name                   = local.global_vars.locals.platform_name
-  platform_region                 = local.global_vars.locals.platform_region
-  account_id                      = local.global_vars.locals.account_id
-  aws_region                      = local.global_vars.locals.aws_region
+  resource_name = local.environment_vars.locals.shared_resource_namespace
+  environment_name = local.environment_vars.locals.environment
+}
 
-  kubernetes_version              = local.environment_vars.locals.kubernetes_version
-  eks_worker_group_instance_type  = local.environment_vars.locals.eks_worker_group_instance_type
-  eks_worker_group_min_size       = local.environment_vars.locals.eks_worker_group_min_size
-  eks_worker_group_max_size       = local.environment_vars.locals.eks_worker_group_max_size
-  eks_worker_group_desired_size   = local.environment_vars.locals.eks_worker_group_desired_size
-
-  tags = merge(
-    local.environment_vars.locals.tags,
-    local.global_vars.locals.tags,
-    { Name = "${local.namespace}-eks" }
-  )
+dependencies {
+  paths = [
+    "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/vpc",
+    "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/kubernetes",
+    "../vpc"
+    ]
 }
 
 dependency "vpc" {
-  config_path = "../vpc"
+  config_path = "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/vpc"
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
@@ -52,7 +41,7 @@ dependency "vpc" {
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
-  source = "../../../modules//kubernetes"
+  source = "../../modules//kubernetes"
 }
 
 # Include all settings from the root terragrunt.hcl file
@@ -62,26 +51,6 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  aws_region = local.aws_region
-  environment_domain = local.environment_domain
-  root_domain = local.root_domain
-  namespace = local.namespace
-  private_subnet_ids = dependency.vpc.outputs.private_subnets
-  public_subnet_ids = dependency.vpc.outputs.public_subnets
-  vpc_id  = dependency.vpc.outputs.vpc_id
-  kubernetes_cluster_version = local.kubernetes_version
-  eks_worker_group_instance_type  = local.eks_worker_group_instance_type
-  eks_worker_group_min_size = local.eks_worker_group_min_size
-  eks_worker_group_max_size = local.eks_worker_group_max_size
-  eks_worker_group_desired_size = local.eks_worker_group_desired_size
-  tags = local.tags
-  map_roles = []
-  map_users = [
-    {
-      userarn  = "arn:aws:iam::621672204142:user/ci"
-      username = "ci"
-      groups   = ["system:masters"]
-    }
-  ]
-
+  environment_name = local.environment_name
+  resource_name = local.resource_name
 }

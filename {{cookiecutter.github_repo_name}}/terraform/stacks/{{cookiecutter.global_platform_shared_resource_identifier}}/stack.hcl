@@ -4,17 +4,14 @@
 #
 # date: Feb-2022
 #
-# usage: create environment-level parameters, exposed to all
+# usage: create stack-level parameters, exposed to all
 #        Terragrunt modules in this enironment.
 #------------------------------------------------------------------------------
 locals {
   global_vars = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
-  environment           = "{{ cookiecutter.environment_name }}"
-  environment_subdomain = "{{ cookiecutter.environment_subdomain }}"
-  environment_domain        = "${local.environment_subdomain}.${local.global_vars.locals.root_domain}"
-  environment_namespace     = "${local.global_vars.locals.platform_name}-${local.global_vars.locals.platform_region}-${local.environment}"
-  shared_resource_namespace = "${local.global_vars.locals.platform_name}-${local.global_vars.locals.platform_region}-${local.global_vars.locals.shared_resource_identifier}"
+  stack           = local.global_vars.locals.shared_resource_identifier
+  stack_namespace = "${local.global_vars.locals.platform_name}-${local.global_vars.locals.platform_region}-${local.global_vars.locals.shared_resource_identifier}"
 
 
   # AWS infrastructure sizing
@@ -56,7 +53,7 @@ locals {
   eks_worker_group_desired_size = 1
 
   tags = {
-    Environment = local.environment
+    Stack = local.stack
   }
 
 }

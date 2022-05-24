@@ -4,21 +4,18 @@
 #
 # date: Aug-2021
 #
-# usage: create an AWS S3 bucket to offload Open edX file storage.
+# usage: create an RDS MySQL instance.
 #------------------------------------------------------------------------------
 locals {
-  # Automatically load environment-level variables
-  environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
+  # Automatically load stack-level variables
+  stack_vars = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
-  # Extract out common variables for reuse
-  kubernetes_name       = local.environment_vars.locals.shared_resource_namespace
-  aws_region            = local.global_vars.locals.aws_region
-  resource_name         = "${local.environment_vars.locals.environment_namespace}-storage"
-  environment         = local.environment_vars.locals.environment
+  resource_name         = local.stack_vars.locals.stack_namespace
+  mysql_instance_class  = local.stack_vars.locals.mysql_instance_class
 
   tags = merge(
-    local.environment_vars.locals.tags,
+    local.stack_vars.locals.tags,
     local.global_vars.locals.tags,
     { Name = "${local.resource_name}" }
   )
@@ -26,15 +23,11 @@ locals {
 }
 
 dependencies {
-  paths = [
-    "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/vpc",
-    "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/kubernetes",
-    "../kubernetes_secrets",
-    ]
+  paths = ["../kubernetes", "../vpc"]
 }
 
 dependency "vpc" {
-  config_path = "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/vpc"
+  config_path = "../vpc"
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
@@ -42,13 +35,12 @@ dependency "vpc" {
   mock_outputs = {
     vpc_id           = "fake-vpc-id"
     database_subnets = ["fake-subnetid-01", "fake-subnetid-02"]
-    elasticache_subnets = ["fake-elasticache-subnet-01", "fake-elasticache-subnet-02"]
     vpc_cidr_block = "fake-cidr-block"
   }
 }
 
 dependency "kubernetes" {
-  config_path = "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/kubernetes"
+  config_path = "../kubernetes"
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
@@ -76,7 +68,7 @@ dependency "kubernetes" {
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
-  source = "../../modules//s3_openedx_storage"
+  source = "../../modules//mysql"
 }
 
 # Include all settings from the root terragrunt.hcl file
@@ -86,11 +78,56 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  secret_name     = "s3-openedx-storage"
-  environment     = local.environment
-  aws_region      = "${local.aws_region}"
-  resource_name   = local.resource_name
-  kubernetes_name = local.kubernetes_name
-  tags            = local.tags
+  # AWS RDS instance identifying information
+  resource_name         = local.resource_name
+  tags                  = local.tags
+
+  # database identifying information
+  username                            = "root"
+  create_random_password              = true
+  iam_database_authentication_enabled = false
+
+  # db server parameters
+  port                  = "3306"
+  engine                = "mysql"
+  engine_version        = "5.7.33"
+  family                = "mysql5.7"
+  major_engine_version  = "5.7"
+  parameters = [
+    {
+      name  = "character_set_client"
+      value = "utf8mb4"
+    },
+    {
+      name  = "character_set_server"
+      value = "utf8mb4"
+    }
+  ]
+
+  # db server size
+  instance_class        = local.mysql_instance_class
+  allocated_storage     = 10
+  max_allocated_storage = 100
+  storage_encrypted     = true
+  multi_az              = false
+  enabled_cloudwatch_logs_exports = []
+  performance_insights_enabled = false
+  performance_insights_retention_period = 7
+  create_monitoring_role = false
+  monitoring_interval = 0
+  create_db_subnet_group = false
+
+  # backups and maintenance
+  maintenance_window    = "Sun:00:00-Sun:03:00"
+  backup_window         = "03:00-06:00"
+  backup_retention_period = 7
+  deletion_protection   = false
+  skip_final_snapshot   = true
+
+
+  # network configuration
+  subnet_ids            = dependency.vpc.outputs.database_subnets
+  vpc_id                = dependency.vpc.outputs.vpc_id
+  ingress_cidr_blocks   = [dependency.vpc.outputs.vpc_cidr_block]
 
 }

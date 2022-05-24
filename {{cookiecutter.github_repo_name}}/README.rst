@@ -231,7 +231,7 @@ IV. Connect To Your backend Services
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Terraform creates friendly subdomain names for any of the backend services which you are likely to connect: Cloudfront, MySQL, Mongo and Redis.
-The ssh private pem key for accessing the EC2 Bastion instance is stored in kubernetes secrets in the openedx namespace. Additionally, passwords for the root/admin accounts are accessible from Kubernetes Secrets. Note that each of MySQL, MongoDB and Redis reside in private subnets. These services can only be accessed on the command line from the Bastion.
+The ssh private pem key for accessing the EC2 Bastion instance is stored in Kubernetes secrets in the openedx namespace. Additionally, passwords for the root/admin accounts are accessible from Kubernetes Secrets. Note that each of MySQL, MongoDB and Redis reside in private subnets. These services can only be accessed on the command line from the Bastion.
 
 .. code-block:: shell
 
