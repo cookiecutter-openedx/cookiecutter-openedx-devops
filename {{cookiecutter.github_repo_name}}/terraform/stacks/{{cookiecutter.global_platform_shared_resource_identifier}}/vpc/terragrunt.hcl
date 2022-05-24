@@ -69,12 +69,12 @@ inputs = {
   # or with a Fargate Compute Cluster.
   public_subnet_tags = {
     "kubernetes.io/cluster/${local.namespace}" = "shared"
-    "kubernetes.io/role/elb"                               = "1"
+    "kubernetes.io/role/elb"                   = "1"
   }
 
   private_subnet_tags = {
     "kubernetes.io/cluster/${local.namespace}" = "shared"
-    "kubernetes.io/role/internal-elb"                      = "1"
+    "kubernetes.io/role/internal-elb"          = "1"
   }
 
   tags = local.tags

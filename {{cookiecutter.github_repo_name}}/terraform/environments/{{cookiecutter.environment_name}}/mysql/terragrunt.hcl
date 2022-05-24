@@ -14,6 +14,7 @@ locals {
   resource_name         = local.environment_vars.locals.shared_resource_namespace
   environment_domain    = local.environment_vars.locals.environment_domain
   environment_namespace = local.environment_vars.locals.environment_namespace
+  shared_resource_namespace = local.environment_vars.locals.shared_resource_namespace
   environment           = local.environment_vars.locals.environment
 }
 
@@ -71,6 +72,7 @@ inputs = {
   resource_name         = local.resource_name
   environment_domain    = local.environment_domain
   environment_namespace = local.environment_namespace
+  shared_resource_namespace = local.shared_resource_namespace
   environment           = local.environment
   namespace             = "openedx-${local.environment}"
 }

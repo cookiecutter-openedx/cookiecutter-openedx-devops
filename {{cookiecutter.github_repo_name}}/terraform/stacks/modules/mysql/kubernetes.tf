@@ -24,7 +24,7 @@ provider "kubernetes" {
 resource "kubernetes_secret" "mysql_root" {
   metadata {
     name      = "mysql-root"
-    namespace = "openedx-shared"
+    namespace = var.resource_name
   }
 
   data = {

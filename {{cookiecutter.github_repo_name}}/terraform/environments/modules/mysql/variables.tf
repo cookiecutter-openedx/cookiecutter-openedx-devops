@@ -12,6 +12,10 @@ variable "resource_name" {
   type        = string
 }
 
+variable "shared_resource_namespace" {
+  type = string
+}
+
 variable "environment_domain" {
   type = string
 }

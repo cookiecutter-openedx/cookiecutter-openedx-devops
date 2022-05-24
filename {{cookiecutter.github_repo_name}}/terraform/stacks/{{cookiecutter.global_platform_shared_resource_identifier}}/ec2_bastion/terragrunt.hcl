@@ -15,6 +15,7 @@ locals {
   root_domain      = local.global_vars.locals.root_domain
   aws_region       = local.global_vars.locals.aws_region
   resource_name    = local.stack_vars.locals.stack_namespace
+  stack_namespace = local.stack_vars.locals.stack_namespace
 
   tags = merge(
     local.stack_vars.locals.tags,
@@ -83,6 +84,7 @@ include {
 inputs = {
   root_domain      = local.root_domain
   resource_name    = local.resource_name
+  stack_namespace  = local.stack_namespace
   vpc_id            = dependency.vpc.outputs.vpc_id
   availability_zone = "${local.aws_region}a"
   ingress_cidr_blocks = dependency.vpc.outputs.public_subnets_cidr_blocks

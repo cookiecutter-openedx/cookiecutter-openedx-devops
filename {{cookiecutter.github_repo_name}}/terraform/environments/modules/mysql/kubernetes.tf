@@ -22,13 +22,13 @@ provider "kubernetes" {
 }
 
 
-# Retrieve the mysql_root connection parameters from openedx-shared namespace.
+# Retrieve the mysql_root connection parameters from the shared resource namespace.
 # we'll refer to this data for the HOST and PORT assignments on all of ther MySQL
 # secrets.
 data "kubernetes_secret" "mysql_root" {
   metadata {
     name      = "mysql-root"
-    namespace = "openedx-shared"
+    namespace = var.shared_resource_namespace
   }
 }
 

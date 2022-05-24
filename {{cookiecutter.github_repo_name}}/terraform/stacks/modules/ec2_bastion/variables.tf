@@ -51,3 +51,7 @@ variable "resource_name" {
 variable "root_domain" {
   type = string
 }
+
+variable "stack_namespace" {
+  type = string
+}

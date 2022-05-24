@@ -24,7 +24,7 @@ provider "kubernetes" {
 resource "kubernetes_secret" "ssh_secret" {
   metadata {
     name      = "bastion-ssh-key"
-    namespace = "openedx-shared"
+    namespace = var.stack_namespace
   }
 
   data = {
