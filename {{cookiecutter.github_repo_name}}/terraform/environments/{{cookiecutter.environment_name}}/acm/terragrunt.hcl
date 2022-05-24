@@ -14,6 +14,7 @@ locals {
 
   # Extract out common variables for reuse
   environment_domain    = local.environment_vars.locals.environment_domain
+  root_domain           = local.global_vars.locals.root_domain
   environment_namespace = local.environment_vars.locals.environment_namespace
   aws_region            = local.global_vars.locals.aws_region
 
@@ -30,16 +31,14 @@ locals {
 dependencies {
   paths = [
     "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/vpc",
-    "../s3_openedx_storage",
     "../vpc"
-    "../acm"
     ]
 }
 
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
-  source = "../../modules//cloudfront"
+  source = "../../modules//acm"
 }
 
 # Include all settings from the root terragrunt.hcl file
@@ -50,6 +49,7 @@ include {
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
   aws_region            = local.aws_region
+  root_domain           = local.root_domain
   environment_domain    = local.environment_domain
   environment_namespace = local.environment_namespace
   resource_name         = local.resource_name
