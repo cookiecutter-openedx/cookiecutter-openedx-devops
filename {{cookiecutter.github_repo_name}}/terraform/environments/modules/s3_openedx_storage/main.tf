@@ -7,7 +7,7 @@
 # usage: create an AWS S3 bucket to offload Open edX file storage.
 #------------------------------------------------------------------------------
 
-module "data_backup_s3_bucket" {
+module "openedx_storage" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "{{ cookiecutter.terraform_aws_modules_s3 }}"
 
@@ -36,7 +36,7 @@ data "aws_iam_policy_document" "bucket_policy" {
       type        = "*"
     }
     resources = [
-      "${module.data_backup_s3_bucket.s3_bucket_arn}/*"
+      "${module.openedx_storage.s3_bucket_arn}/*"
     ]
   }
 }
@@ -57,7 +57,7 @@ data "aws_iam_policy_document" "user_policy" {
       "s3:*"
     ]
     resources = [
-      module.data_backup_s3_bucket.s3_bucket_arn
+      module.openedx_storage.s3_bucket_arn
     ]
   }
   statement {
@@ -65,7 +65,7 @@ data "aws_iam_policy_document" "user_policy" {
       "s3:*"
     ]
     resources = [
-      "${module.data_backup_s3_bucket.s3_bucket_arn}/*"
+      "${module.openedx_storage.s3_bucket_arn}/*"
     ]
   }
 }
