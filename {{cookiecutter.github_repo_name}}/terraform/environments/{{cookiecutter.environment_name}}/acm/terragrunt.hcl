@@ -16,9 +16,8 @@ locals {
   environment_domain    = local.environment_vars.locals.environment_domain
   root_domain           = local.global_vars.locals.root_domain
   environment_namespace = local.environment_vars.locals.environment_namespace
+  resource_name = local.environment_vars.locals.environment_namespace
   aws_region            = local.global_vars.locals.aws_region
-
-  resource_name = "${local.environment_vars.locals.environment_namespace}-storage"
 
   tags = merge(
     local.environment_vars.locals.tags,
