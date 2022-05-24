@@ -58,7 +58,7 @@ module "redis" {
 
   description                = local.name
   create_random_auth_token   = var.create_random_auth_token
-  subnet_ids                 = data.aws_subnet_ids.openedx.ids
+  subnet_ids                 = var.subnet_ids
   engine                     = var.engine
   engine_version             = var.engine_version
   num_cache_clusters         = var.num_cache_clusters

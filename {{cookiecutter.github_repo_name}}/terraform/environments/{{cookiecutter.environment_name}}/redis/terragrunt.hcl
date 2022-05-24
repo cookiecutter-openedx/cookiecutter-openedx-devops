@@ -13,6 +13,7 @@ locals {
 
   environment_namespace = local.environment_vars.locals.environment_namespace
   resource_name   = "${local.environment_vars.locals.environment_namespace}"
+  shared_resource_namespace = local.environment_vars.locals.shared_resource_namespace
   redis_node_type = local.environment_vars.locals.redis_node_type
 
   tags = merge(
@@ -70,6 +71,12 @@ dependency "kubernetes" {
   }
 }
 
+# Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
+# working directory, into a temporary folder, and execute your Terraform commands in that folder.
+terraform {
+  source = "../../modules//redis"
+}
+
 # Include all settings from the root terragrunt.hcl file
 include {
   path = find_in_parent_folders()
@@ -81,6 +88,7 @@ inputs = {
   # AWS Elasticache identifying information
   environment_namespace         = local.environment_namespace
   resource_name                 = local.resource_name
+  shared_resource_namespace     = local.shared_resource_namespace
   tags                          = local.tags
 
   # cache instance identifying information

@@ -8,11 +8,11 @@
 #        stored cache credentials in Kubernetes Secrets.
 #------------------------------------------------------------------------------
 data "aws_eks_cluster" "eks" {
-  name = var.resource_name
+  name = var.shared_resource_namespace
 }
 
 data "aws_eks_cluster_auth" "eks" {
-  name = var.resource_name
+  name = var.shared_resource_namespace
 }
 
 provider "kubernetes" {
