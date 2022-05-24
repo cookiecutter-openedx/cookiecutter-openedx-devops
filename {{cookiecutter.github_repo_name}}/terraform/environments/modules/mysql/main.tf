@@ -6,7 +6,3 @@
 #
 # usage: create an RDS MySQL instance.
 #------------------------------------------------------------------------------
-
-data "aws_rds_cluster" "clusterName" {
-  cluster_identifier = var.db_instance_id
-}
