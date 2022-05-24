@@ -21,6 +21,7 @@ dependencies {
   paths = [
     "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/vpc",
     "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/kubernetes",
+    "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/mysql",
     "../kubernetes_secrets"
     ]
 }
@@ -40,6 +41,18 @@ dependency "vpc" {
 
 }
 
+dependency "mysql" {
+  config_path = "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/mysql"
+
+  # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
+  # module hasn't been applied yet.
+  mock_outputs_allowed_terraform_commands = ["init", "validate"]
+  mock_outputs = {
+    db_instance_id   = "fake-rds-instance-id"
+  }
+
+}
+
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
@@ -54,6 +67,7 @@ include {
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
   # AWS RDS instance identifying information
+  db_instance_id        = dependency.mysql.outputs.db_instance_id
   resource_name         = local.resource_name
   environment_domain    = local.environment_domain
   environment_namespace = local.environment_namespace

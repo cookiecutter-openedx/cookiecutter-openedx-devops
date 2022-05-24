@@ -8,5 +8,5 @@
 #------------------------------------------------------------------------------
 
 data "aws_rds_cluster" "clusterName" {
-  cluster_identifier = var.resource_name
+  cluster_identifier = var.db_instance_id
 }

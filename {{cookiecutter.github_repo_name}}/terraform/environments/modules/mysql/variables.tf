@@ -27,3 +27,7 @@ variable "namespace" {
 variable "environment" {
   type = string
 }
+
+variable "db_instance_id" {
+  type = string
+}
