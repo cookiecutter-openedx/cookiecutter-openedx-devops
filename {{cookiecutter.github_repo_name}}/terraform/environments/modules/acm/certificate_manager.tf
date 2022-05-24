@@ -12,6 +12,14 @@ provider "aws" {
   region = var.aws_region
 }
 
+data "aws_route53_zone" "root_domain" {
+  name = var.root_domain
+}
+
+data "aws_route53_zone" "environment_domain" {
+  name = var.environment_domain
+}
+
 
 module "acm_root_domain_environment_region" {
   source  = "terraform-aws-modules/acm/aws"
@@ -41,7 +49,7 @@ module "acm_environment_environment_region" {
   }
 
   domain_name = var.environment_domain
-  zone_id     = aws_route53_zone.environment_domain.id
+  zone_id     = data.aws_route53_zone.environment_domain.id
 
   subject_alternative_names = [
     "*.${var.environment_domain}",
