@@ -242,7 +242,7 @@ jobs:
                             --set CREDENTIALS_CATALOG_API_URL=${LMS_HOSTNAME} \
                             --set CREDENTIALS_PRIVACY_POLICY_URL="${LMS_HOSTNAME}/pricacy-policy" \
                             --set CREDENTIALS_SECRET_KEY="${TUTOR_OPENEDX_SECRET_KEY}" \
-                            --set CREDENTIALS_SITE_NAME={{ cookiecutter.global_platform_description }} \
+                            --set CREDENTIALS_SITE_NAME="{{ cookiecutter.global_platform_description }}" \
                             --set CREDENTIALS_TOS_URL="${LMS_HOSTNAME}/tos" \
                             --set CREDENTIALS_LOGO_URL="${COMMON_LOGO_URL}" \
                             --set CREDENTIALS_LOGO_URL_PNG="${COMMON_LOGO_URL}" \
