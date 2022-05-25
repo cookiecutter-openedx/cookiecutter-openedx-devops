@@ -31,6 +31,7 @@
     "eks_worker_group_max_size": 2,
     "eks_worker_group_desired_size": 1,
     "kubernetes_cluster_version": "1.22",
+    "kubectl_version": "1.23/stable",
     "mysql_username": "root",
     "mysql_port": 3306,
     "mysql_engine": "mysql",
