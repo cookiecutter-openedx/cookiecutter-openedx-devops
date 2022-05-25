@@ -16,6 +16,9 @@ locals {
   environment_namespace     = "${local.global_vars.locals.platform_name}-${local.global_vars.locals.platform_region}-${local.environment}"
   shared_resource_namespace = "${local.global_vars.locals.platform_name}-${local.global_vars.locals.platform_region}-${local.global_vars.locals.shared_resource_identifier}"
 
+  # AWS instance sizing
+  redis_node_type      = "{{ cookiecutter.redis_node_type }}"
+
   tags = {
     Environment = local.environment
   }
