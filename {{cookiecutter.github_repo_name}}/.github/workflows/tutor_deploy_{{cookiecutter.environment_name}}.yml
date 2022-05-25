@@ -177,7 +177,7 @@ jobs:
       #        example values:
       #          OPENEDX_AWS_ACCESS_KEY: ABDCE123456789OHBBGQ
       #          OPENEDX_AWS_SECRET_ACCESS_KEY: A123456789srJ8lgel+ABCDEFGHIJKabcdefghijk
-      #          S3_STORAGE_BUCKET: {{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-storage
+      #          S3_STORAGE_BUCKET: {{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.environment_name }}-storage
       #          S3_CUSTOM_DOMAIN: cdn.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
       #          S3_REGION: {{ cookiecutter.global_aws_region }}
       #
