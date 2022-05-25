@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ENVIRONMENT_ID: {{ cookiecutter.environment_name }}
-      NAMESPACE: openedx
+      NAMESPACE: openedx-{{ cookiecutter.environment_name }}
       OPENEDX_COMMON_VERSION: {{ cookiecutter.ci_deploy_OPENEDX_COMMON_VERSION }}
       COMMON_LOGO_URL: {{ cookiecutter.global_platform_logo_url }}
 
@@ -53,7 +53,7 @@ jobs:
       #   - Certificate authority (ie the private ssh key)
       - name: Get Kube config
         run: |-
-          sudo snap install kubectl --channel=1.23/stable --classic
+          sudo snap install kubectl --channel={{ cookiecutter.kubectl_version }} --classic
           aws eks --region {{ cookiecutter.global_aws_region }} update-kubeconfig --name {{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.global_platform_shared_resource_identifier }} --alias eks-{{ cookiecutter.environment_name }}
 
       # dump version information for aws cli and kubectl to the console
@@ -113,25 +113,6 @@ jobs:
           kubectl get secret mysql-ecommerce -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"' >> $GITHUB_ENV
           kubectl get secret mysql-notes -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"' >> $GITHUB_ENV
           kubectl get secret mysql-xqueue -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"' >> $GITHUB_ENV
-
-      # retrieve the MongoDB connection parameters that we created in Terraform
-      # and then stored in Kubernetes secrets. These include:
-      #   MONGODB_HOST: mongodb.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
-      #   MONGODB_PORT: "27017"
-      #   MONGODB_PASSWORD: **************
-      #   MONGODB_USERNAME: root
-      # Also note that we are using jq to add a prefix of "TUTOR_" to each of the parameter names
-      #
-      # see: https://github.com/{{ cookiecutter.github_account_name }}/{{ cookiecutter.github_repo_name }}/blob/main/terraform/modules/mongodb/main.tf
-
-      #--------------------------------------------------------------------
-      # UN-COMMENT THIS BLOCK TO USE DYNAMODB INSTEAD OF MONGODB
-      #--------------------------------------------------------------------
-      #- name: MongoDB
-      #  run: |-
-      #    echo "TUTOR_RUN_MONGODB=false" >> $GITHUB_ENV
-      #    kubectl get secret mongodb-admin -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"' >> $GITHUB_ENV
-      #--------------------------------------------------------------------
 
       # retrieve the Redis connection parameter that we created in Terraform:
       #   REDIS_HOST: redis.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
