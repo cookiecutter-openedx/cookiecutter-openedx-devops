@@ -163,3 +163,26 @@ resource "kubernetes_secret" "xqueue" {
     MYSQL_PORT            = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
   }
 }
+
+resource "random_password" "mysql_credentials" {
+  length           = 16
+  special          = true
+  override_special = "_%@"
+  keepers = {
+    version = "1"
+  }
+}
+
+resource "kubernetes_secret" "credentials" {
+  metadata {
+    name      = "mysql-credentials"
+    namespace = var.namespace
+  }
+
+  data = {
+    XQUEUE_MYSQL_USERNAME = "${var.environment}-credentials"
+    XQUEUE_MYSQL_PASSWORD = random_password.mysql_credentials.result
+    MYSQL_HOST            = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
+    MYSQL_PORT            = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
+  }
+}
