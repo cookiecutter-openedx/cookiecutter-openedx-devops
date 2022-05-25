@@ -113,6 +113,7 @@ jobs:
           kubectl get secret mysql-ecommerce -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"' >> $GITHUB_ENV
           kubectl get secret mysql-notes -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"' >> $GITHUB_ENV
           kubectl get secret mysql-xqueue -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"' >> $GITHUB_ENV
+          kubectl get secret mysql-credentials -n $NAMESPACE  -o json | jq  '.data | map_values(@base64d)' | jq -r 'keys[] as $k | "TUTOR_\($k|ascii_upcase)=\(.[$k])"' >> $GITHUB_ENV
 
       # retrieve the Redis connection parameter that we created in Terraform:
       #   REDIS_HOST: redis.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
