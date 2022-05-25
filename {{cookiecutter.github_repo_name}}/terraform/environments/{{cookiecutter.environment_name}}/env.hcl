@@ -19,6 +19,7 @@ locals {
 
   # AWS infrastructure sizing
   mysql_instance_class = "{{ cookiecutter.mysql_instance_class }}"
+  mysql_allocated_storage={{ cookiecutter.mysql_allocated_storage }}
   redis_node_type      = "{{ cookiecutter.redis_node_type }}"
 
   #----------------------------------------------------------------------------

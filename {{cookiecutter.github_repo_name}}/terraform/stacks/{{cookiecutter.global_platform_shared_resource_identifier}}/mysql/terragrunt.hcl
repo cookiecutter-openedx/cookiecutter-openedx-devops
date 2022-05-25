@@ -11,8 +11,9 @@ locals {
   stack_vars = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
-  resource_name         = local.stack_vars.locals.stack_namespace
-  mysql_instance_class  = local.stack_vars.locals.mysql_instance_class
+  resource_name           = local.stack_vars.locals.stack_namespace
+  mysql_instance_class    = local.stack_vars.locals.mysql_instance_class
+  mysql_allocated_storage = local.stack_vars.locals.mysql_allocated_storage
 
   tags = merge(
     local.stack_vars.locals.tags,
@@ -106,9 +107,9 @@ inputs = {
 
   # db server size
   instance_class        = local.mysql_instance_class
-  allocated_storage     = {{ cookiecutter.mysql_allocated_storage }}
+  allocated_storage     = local.mysql_allocated_storage
   max_allocated_storage = 10
-  storage_encrypted     = true
+  storage_encrypted     = false
   multi_az              = false
   enabled_cloudwatch_logs_exports = []
   performance_insights_enabled = false
