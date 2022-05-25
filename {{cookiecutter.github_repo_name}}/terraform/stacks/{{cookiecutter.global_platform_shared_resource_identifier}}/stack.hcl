@@ -13,17 +13,10 @@ locals {
   stack           = local.global_vars.locals.shared_resource_identifier
   stack_namespace = "${local.global_vars.locals.platform_name}-${local.global_vars.locals.platform_region}-${local.global_vars.locals.shared_resource_identifier}"
 
-
-  # AWS infrastructure sizing
-  # 2 vCPU 4gb
-  mongodb_instance_class = "db.t3.medium"
-  mongodb_cluster_size   = 1
-
-  # 1 vCPU 2gb
-  mysql_instance_class = "db.t2.small"
-
-  # 1 vCPU 1.55gb
-  redis_node_type = "cache.t2.small"
+  # AWS instance sizing
+  mysql_instance_class = "{{ cookiecutter.mysql_instance_class }}"
+  mysql_allocated_storage={{ cookiecutter.mysql_allocated_storage }}
+  redis_node_type      = "{{ cookiecutter.redis_node_type }}"
 
   #----------------------------------------------------------------------------
   # AWS Elastic Kubernetes service
@@ -47,10 +40,11 @@ locals {
   # see: https://aws.amazon.com/ec2/instance-types/
   #----------------------------------------------------------------------------
   kubernetes_version = "{{ cookiecutter.kubernetes_cluster_version }}"
-  eks_worker_group_instance_type = "t3.large"
-  eks_worker_group_min_size = 1
-  eks_worker_group_max_size = 2
-  eks_worker_group_desired_size = 1
+  eks_worker_group_instance_type = "{{ cookiecutter.eks_worker_group_instance_type }}"
+  eks_worker_group_min_size = {{ cookiecutter.eks_worker_group_min_size }}
+  eks_worker_group_max_size = {{ cookiecutter.eks_worker_group_max_size }}
+  eks_worker_group_desired_size = {{ cookiecutter.eks_worker_group_desired_size }}
+
 
   tags = {
     Stack = local.stack
