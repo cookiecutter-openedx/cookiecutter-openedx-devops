@@ -200,10 +200,7 @@ Review your production environment parameters.
   environment_namespace = "courses-yourschool-virginia"
 
 
-  # AWS infrastructure sizing
-                                    # 2 vCPU 4gb
-  mongodb_instance_class          = "db.t3.medium"
-  mongodb_cluster_size            = 1
+  # AWS infrastructure default sizing
 
                                     # 1 vCPU 2gb
   mysql_instance_class            = "db.t2.small"

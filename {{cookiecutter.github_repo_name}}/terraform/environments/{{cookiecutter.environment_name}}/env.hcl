@@ -18,15 +18,8 @@ locals {
 
 
   # AWS infrastructure sizing
-  # 2 vCPU 4gb
-  mongodb_instance_class = "db.t3.medium"
-  mongodb_cluster_size   = 1
-
-  # 1 vCPU 2gb
-  mysql_instance_class = "db.t2.small"
-
-  # 1 vCPU 1.55gb
-  redis_node_type = "cache.t2.small"
+  mysql_instance_class = "{{ cookiecutter.mysql_instance_class }}"
+  redis_node_type      = "{{ cookiecutter.redis_node_type }}"
 
   #----------------------------------------------------------------------------
   # AWS Elastic Kubernetes service
@@ -50,10 +43,10 @@ locals {
   # see: https://aws.amazon.com/ec2/instance-types/
   #----------------------------------------------------------------------------
   kubernetes_version = "{{ cookiecutter.kubernetes_cluster_version }}"
-  eks_worker_group_instance_type = "t3.large"
-  eks_worker_group_min_size = 1
-  eks_worker_group_max_size = 2
-  eks_worker_group_desired_size = 1
+  eks_worker_group_instance_type = "{{ cookiecutter.eks_worker_group_instance_type }}"
+  eks_worker_group_min_size = {{ cookiecutter.eks_worker_group_min_size }}
+  eks_worker_group_max_size = {{ cookiecutter.eks_worker_group_max_size }}
+  eks_worker_group_desired_size = {{ cookiecutter.eks_worker_group_desired_size }}
 
   tags = {
     Environment = local.environment
