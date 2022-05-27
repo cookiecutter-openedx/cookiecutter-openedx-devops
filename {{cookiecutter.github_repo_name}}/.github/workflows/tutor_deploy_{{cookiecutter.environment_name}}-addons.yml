@@ -222,15 +222,16 @@ jobs:
                             --set S3_CUSTOM_DOMAIN="$S3_CUSTOM_DOMAIN" \
                             --set S3_REGION="$S3_REGION"
 
+      # IMPORTANT: you must run tutor_build_hastexo_backup first.
       - name: Enable the hastexo Backup & Restore plugin
         run: |-
           pip install git+https://github.com/hastexo/tutor-contrib-backup@v0.0.6
           tutor plugins enable backup
 
-          tutor config save --set BACKUP_DOCKER_IMAGE=${DOCKER_IMAGE_BACKUP} \        # IMPORTANT: you must run tutor_build_hastexo_backup first.
-                            --set BACKUP_K8S_CRONJOB_HISTORYLIMIT_FAILURE=1 \         # this is the plugin default value
-                            --set BACKUP_K8S_CRONJOB_HISTORYLIMIT_SUCCESS=3 \         # this is the plugin default value
-                            --set BACKUP_K8S_CRONJOB_BACKUP_SCHEDULE="0 0 * * *"      # (default "0 0 * * *", once a day at midnight)
+          tutor config save --set BACKUP_DOCKER_IMAGE=${DOCKER_IMAGE_BACKUP} \
+                            --set BACKUP_K8S_CRONJOB_HISTORYLIMIT_FAILURE=1 \
+                            --set BACKUP_K8S_CRONJOB_HISTORYLIMIT_SUCCESS=3 \
+                            --set BACKUP_K8S_CRONJOB_BACKUP_SCHEDULE="0 0 * * *"
 
           # See the github README for additional AWS S3 configuration
           # options in the event that you are not also installing
