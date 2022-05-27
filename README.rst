@@ -448,8 +448,9 @@ Special thanks go out to several folks in the open source community who've alrea
 - to the guys at `U.S. General Services Administration <https://open.gsa.gov>`_ for open-sourcing their `ALB Ingress Controller installer <https://github.com/GSA/terraform-kubernetes-aws-load-balancer-controller>`_.
 - to the guys at `Cookiecutter Django <https://github.com/cookiecutter/cookiecutter-django>`_ on which I relied heavily for coding examples for this project.
 - to `Querium Corp <https://querium.com/>`_, who generously allowed me to open-source this repository.
-- to **UK Cabinet Office**, who created and still use the original version of this code base to manage their production Open edX environment.
+- to `UK Cabinet Office <https://www.gov.uk/government/organisations/cabinet-office>`_, who created and still use the original version of this code base to manage their production Open edX environment.
 - to `Turn The Bus <https://turnthebus.org/>`_, for helping me with the requisite code refactoring that preceded publication of this Cookiecutter template.
+- to `University of South Florida MUMA College of Business <https://www.usf.edu/business//>`_, for supporting the continued development of this project.
 
 Early Adopters
 ~~~~~~~~~~~~~~
