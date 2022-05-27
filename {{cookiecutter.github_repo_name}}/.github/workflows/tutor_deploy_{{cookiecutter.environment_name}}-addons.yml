@@ -21,14 +21,15 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
+      COMMON_LOGO_URL: {{ cookiecutter.global_platform_logo_url }}
+      DOCKER_IMAGE_ANDROID: {{ cookiecutter.global_account_id }}.dkr.ecr.{{ cookiecutter.global_aws_region }}.amazonaws.com/openedx_android:latest
+      DOCKER_IMAGE_BACKUP: {{ cookiecutter.global_account_id }}.dkr.ecr.{{ cookiecutter.global_aws_region }}.amazonaws.com/openedx_backup:latest
+      DOCKER_IMAGE_CREDENTIALS: {{ cookiecutter.global_account_id }}.dkr.ecr.{{ cookiecutter.global_aws_region }}.amazonaws.com/openedx_credentials:latest
+      DOCKER_IMAGE_MFE: {{ cookiecutter.global_account_id }}.dkr.ecr.{{ cookiecutter.global_aws_region }}.amazonaws.com/openedx_mfe:latest
+      DOCKER_IMAGE_OPENEDX: {{ cookiecutter.global_account_id }}.dkr.ecr.{{ cookiecutter.global_aws_region }}.amazonaws.com/openedx:latest
       ENVIRONMENT_ID: {{ cookiecutter.environment_name }}
       NAMESPACE: openedx-{{ cookiecutter.environment_name }}
       OPENEDX_COMMON_VERSION: {{ cookiecutter.ci_deploy_OPENEDX_COMMON_VERSION }}
-      COMMON_LOGO_URL: {{ cookiecutter.global_platform_logo_url }}
-      DOCKER_IMAGE_OPENEDX: {{ cookiecutter.global_account_id }}.dkr.ecr.{{ cookiecutter.global_aws_region }}.amazonaws.com/openedx:latest
-      DOCKER_IMAGE_MFE: {{ cookiecutter.global_account_id }}.dkr.ecr.{{ cookiecutter.global_aws_region }}.amazonaws.com/openedx_mfe:latest
-      DOCKER_IMAGE_CREDENTIALS: {{ cookiecutter.global_account_id }}.dkr.ecr.{{ cookiecutter.global_aws_region }}.amazonaws.com/openedx_credentials:latest
-      DOCKER_IMAGE_BACKUP: {{ cookiecutter.global_account_id }}.dkr.ecr.{{ cookiecutter.global_aws_region }}.amazonaws.com/openedx_backup:latest
 
     steps:
       - name: Checkout
@@ -310,7 +311,11 @@ jobs:
         run:  |-
           pip install tutor-android
           tutor plugins enable android
-          tutor config save
+          tutor config save --set ANDROID_DOCKER_IMAGE=${DOCKER_IMAGE_BACKUP}
+        #                  --set ANDROID_RELEASE_STORE_PASSWORD=yourstorepassword \
+        #                  --set ANDROID_RELEASE_KEY_PASSWORD=yourreleasekeypassword \
+        #                  --set ANDROID_RELEASE_KEY_ALIAS=yourreleasekeyalias \
+        #                  --set ANDROID_ENABLE_RELEASE_MODE=true
 
       - name: Generate Tutor Config
         run:  |-
