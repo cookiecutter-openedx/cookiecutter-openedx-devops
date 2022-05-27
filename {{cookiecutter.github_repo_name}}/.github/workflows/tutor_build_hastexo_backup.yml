@@ -53,7 +53,6 @@ jobs:
           pip install git+https://github.com/hastexo/tutor-contrib-backup@v0.0.6
           tutor plugins enable backup
           tutor config save --set BACKUP_DOCKER_IMAGE=${ECR_REGISTRY}/${ECR_REPOSITORY}:${REPOSITORY_TAG}
-          cp ci/tutor-build/plugins/backup/build/production "$(tutor config printroot)/env/plugins/backup/build/backup/env/"
 
       - name: Test Tutor and Environment
         run: |
