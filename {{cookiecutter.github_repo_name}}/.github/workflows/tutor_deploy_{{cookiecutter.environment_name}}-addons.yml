@@ -183,6 +183,7 @@ jobs:
       #          OPENEDX_AWS_ACCESS_KEY: ABDCE123456789OHBBGQ
       #          OPENEDX_AWS_SECRET_ACCESS_KEY: A123456789srJ8lgel+ABCDEFGHIJKabcdefghijk
       #          S3_STORAGE_BUCKET: {{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.environment_name }}-storage
+      #          S3_BACKUP_BUCKET: {{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.environment_name }}-backup
       #          S3_CUSTOM_DOMAIN: cdn.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
       #          S3_REGION: {{ cookiecutter.global_aws_region }}
       #
@@ -235,7 +236,8 @@ jobs:
           tutor config save --set BACKUP_DOCKER_IMAGE=${DOCKER_IMAGE_BACKUP} \
                             --set BACKUP_K8S_CRONJOB_HISTORYLIMIT_FAILURE=1 \
                             --set BACKUP_K8S_CRONJOB_HISTORYLIMIT_SUCCESS=3 \
-                            --set BACKUP_K8S_CRONJOB_BACKUP_SCHEDULE="0 0 * * *"
+                            --set BACKUP_K8S_CRONJOB_BACKUP_SCHEDULE="0 0 * * *" \
+                            --set BACKUP_S3_BUCKET_NAME="$S3_BACKUP_BUCKET"
 
       - name: Enable the Discovery plugin
         run: |-

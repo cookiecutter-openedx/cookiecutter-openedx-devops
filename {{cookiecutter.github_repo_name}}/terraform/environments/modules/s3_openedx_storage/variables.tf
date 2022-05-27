@@ -32,11 +32,15 @@ variable "aws_region" {
 }
 
 
-variable "resource_name" {
+variable "resource_name_storage" {
   description = "the full environment-qualified name of this resource."
   type        = string
 }
 
+variable "resource_name_backup" {
+  description = "the full environment-qualified name of this resource."
+  type        = string
+}
 
 variable "tags" {
   description = "collection of all tags to add to this resource. execting the combination of global + environment + resouce tags."
