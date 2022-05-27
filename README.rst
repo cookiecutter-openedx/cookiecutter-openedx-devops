@@ -349,17 +349,17 @@ Continuous Integration (CI)
 Both the Build as well as the Deploy workflows will be pre-configured based on your responses to the Cookiecutter questionnaire.
 
 
-I. Build your Tutor Docker Image
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+I. Build your Tutor Docker Image(s)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The automated Github Actions workflow "Tutor Build Image" in your new repository will build a customized Open edX Docker container based on the latest stable version of Open edX (currently {{ cookiecutter.ci_build_open_edx_version }}) and
+The automated Github Actions workflow "Build openedx Image" in your new repository will build a customized Open edX Docker container based on the latest stable version of Open edX and
 your Open edX custom theme repository and Open edX plugin repository. Your new Docker image will be automatically uploaded to AWS Amazon Elastic Container Registry.
 
 
-II. Deploy your Docker Image to a Kubernetes Cluster
+II. Deploy your Docker Image to your Kubernetes Cluster
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The automated Github Actions workflow "Tutor Deploy Prod" in your new repository will deploy your customized Docker container to a Kubernetes Cluster.
+The automated Github Actions workflow "prod Deploy to Kubernetes" in your new repository will deploy your customized Docker container to a Kubernetes Cluster. You can optionall run the Github Actions workflow "prod Deploy optional Open edX modules to Kubernetes" to install all optional modules and plugins as well as the base Open edX platform software.
 
 About The Open edX Platform Back End
 ------------------------------------
