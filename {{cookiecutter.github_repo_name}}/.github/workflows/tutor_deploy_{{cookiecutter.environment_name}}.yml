@@ -52,7 +52,7 @@ jobs:
       #   - Certificate authority (ie the private ssh key)
       - name: Get Kube config
         run: |-
-          sudo snap install kubectl --channel={{ cookiecutter.kubectl_version }} --classic
+          sudo snap install kubectl --channel={{ cookiecutter.ci_build_kubectl_version }} --classic
           aws eks --region {{ cookiecutter.global_aws_region }} update-kubeconfig --name {{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.global_platform_shared_resource_identifier }} --alias eks-{{ cookiecutter.environment_name }}
 
       # dump version information for aws cli and kubectl to the console
@@ -201,7 +201,7 @@ jobs:
 
       - name: Enable plugin for S3
         run: |-
-          pip install git+https://github.com/hastexo/tutor-contrib-s3@v0.2.2
+          pip install git+https://github.com/hastexo/tutor-contrib-s3@{{ cookiecutter.ci_deploy_tutor_plugin_s3_version }}
           tutor plugins enable s3
 
           tutor config save --set OPENEDX_AWS_ACCESS_KEY="$OPENEDX_AWS_ACCESS_KEY" \

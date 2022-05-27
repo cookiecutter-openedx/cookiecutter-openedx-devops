@@ -57,7 +57,7 @@ jobs:
       #   - Certificate authority (ie the private ssh key)
       - name: Get Kube config
         run: |-
-          sudo snap install kubectl --channel={{ cookiecutter.kubectl_version }} --classic
+          sudo snap install kubectl --channel={{ cookiecutter.ci_build_kubectl_version }} --classic
           aws eks --region {{ cookiecutter.global_aws_region }} update-kubeconfig --name {{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.global_platform_shared_resource_identifier }} --alias eks-{{ cookiecutter.environment_name }}
 
       # dump version information for aws cli and kubectl to the console
@@ -212,7 +212,7 @@ jobs:
 
       - name: Enable plugin for S3
         run: |-
-          pip install git+https://github.com/hastexo/tutor-contrib-s3@v0.2.2
+          pip install git+https://github.com/hastexo/tutor-contrib-s3@{{ cookiecutter.ci_deploy_tutor_plugin_s3_version }}
           tutor plugins enable s3
 
           tutor config save --set OPENEDX_AWS_ACCESS_KEY="$OPENEDX_AWS_ACCESS_KEY" \
@@ -230,7 +230,7 @@ jobs:
       # hastexo/tutor-contrib-s3 (included above)
       - name: Enable the hastexo Backup & Restore plugin
         run: |-
-          pip install git+https://github.com/hastexo/tutor-contrib-backup@v0.0.6
+          pip install git+https://github.com/hastexo/tutor-contrib-backup@{{ cookiecutter.ci_deploy_tutor_plugin_backup_version }}
           tutor plugins enable backup
 
           tutor config save --set BACKUP_DOCKER_IMAGE=${DOCKER_IMAGE_BACKUP} \
@@ -256,7 +256,7 @@ jobs:
       # IMPORTANT: you must run tutor_build_credentials first.
       - name: Enable and configure credentials plugin
         run: |-
-          pip install git+https://github.com/lpm0073/tutor-contrib-credentials@v13.0.1
+          pip install git+https://github.com/lpm0073/tutor-contrib-credentials@{{ cookiecutter.ci_deploy_tutor_plugin_credentials_version }}
           tutor plugins enable credentials
           tutor config save --set CREDENTIALS_DOCKER_IMAGE=${DOCKER_IMAGE_CREDENTIALS} \
                             --set CREDENTIALS_HOST="credentials.${LMS_HOSTNAME}" \
