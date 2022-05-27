@@ -29,7 +29,7 @@ module "openedx_backup" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "{{ cookiecutter.terraform_aws_modules_s3 }}"
 
-  bucket = var.resource_name_backups
+  bucket = var.resource_name_backup
   acl    = "private"
 
 }
