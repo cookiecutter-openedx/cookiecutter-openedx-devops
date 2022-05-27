@@ -218,19 +218,6 @@ jobs:
                             --set S3_CUSTOM_DOMAIN="$S3_CUSTOM_DOMAIN" \
                             --set S3_REGION="$S3_REGION"
 
-      - name: Enable the Discovery plugin
-        run: |-
-          pip install tutor-discovery
-          tutor plugins enable discovery
-          tutor config save
-
-      - name: Enable the MFE plugin
-        run: |-
-          pip install tutor-mfe
-          tutor plugins enable mfe
-          tutor config save --set MFE_DOCKER_IMAGE=${DOCKER_IMAGE_MFE} \              # IMPORTANT: you must run tutor_build_mfe first.
-                            --set MFE_ENABLE_HTTPS=true
-
       - name: Enable the hastexo Backup & Restore plugin
         run: |-
           pip install git+https://github.com/hastexo/tutor-contrib-backup@v0.0.6
@@ -244,6 +231,19 @@ jobs:
           # See the github README for additional AWS S3 configuration
           # options in the event that you are not also installing
           # hastexo/tutor-contrib-s3 (included above )
+
+      - name: Enable the Discovery plugin
+        run: |-
+          pip install tutor-discovery
+          tutor plugins enable discovery
+          tutor config save
+
+      - name: Enable the MFE plugin
+        run: |-
+          pip install tutor-mfe
+          tutor plugins enable mfe
+          tutor config save --set MFE_DOCKER_IMAGE=${DOCKER_IMAGE_MFE} \              # IMPORTANT: you must run tutor_build_mfe first.
+                            --set MFE_ENABLE_HTTPS=true
 
       - name: Enable and configure credentials plugin
         run: |-
