@@ -4,7 +4,7 @@
 #
 # date: May-2022
 #
-# usage: Creates a Tutor Docker image for MFE using the latest stable version of
+# usage: Creates a Tutor Docker image for hastexo Backup using the latest stable version of
 #        the repo. Registers the new container in AWS ECR.
 #------------------------------------------------------------------------------
 name: Prod Build hastexo Backup Image
@@ -48,16 +48,12 @@ jobs:
           echo "REPOSITORY_TAG=$TUTOR_VERSION-$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
           echo "TUTOR_ROOT=$GITHUB_WORKSPACE/tutor" >> $GITHUB_ENV
 
-      # see: https://edx.readthedocs.io/projects/edx-developer-docs/en/latest/micro_frontends/index.html#required-environment-variables
-      #      https://github.com/overhangio/tutor-mfe
-      #      https://github.com/overhangio/tutor-mfe/blob/master/tutormfe/templates/mfe/build/mfe/env/production
-      #
-      - name: Install Tutor MFE plugin
+      - name: Install hastexo Backup plugin
         run: |-
-          pip install tutor-mfe
-          tutor plugins enable mfe
-          tutor config save --set MFE_DOCKER_IMAGE=${ECR_REGISTRY}/${ECR_REPOSITORY}:${REPOSITORY_TAG}
-          cp ci/tutor-build/plugins/mfe/build/production "$(tutor config printroot)/env/plugins/mfe/build/mfe/env/"
+          pip install git+https://github.com/hastexo/tutor-contrib-backup@v0.0.6
+          tutor plugins enable backup
+          tutor config save --set BACKUP_DOCKER_IMAGE=${ECR_REGISTRY}/${ECR_REPOSITORY}:${REPOSITORY_TAG}
+          cp ci/tutor-build/plugins/backup/build/production "$(tutor config printroot)/env/plugins/backup/build/backup/env/"
 
       - name: Test Tutor and Environment
         run: |
@@ -66,11 +62,11 @@ jobs:
           echo "TUTOR_ROOT=$TUTOR_ROOT"
 
       - name: Build the image
-        run: tutor images build mfe
+        run: tutor images build backup
 
       - name: Push the image
         run: |
-          tutor images push mfe
+          tutor images push backup
           docker tag ${ECR_REGISTRY}/${ECR_REPOSITORY}:${REPOSITORY_TAG} ${ECR_REGISTRY}/${ECR_REPOSITORY}:latest
           docker push ${ECR_REGISTRY}/${ECR_REPOSITORY}:latest
 
