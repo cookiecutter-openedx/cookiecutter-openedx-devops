@@ -13,7 +13,7 @@
 #        IV.  Merge all of the configuration data into Tutor's Open edX configuration files
 #        V.   Deploy Open edX into the Kubernetes cluster
 #------------------------------------------------------------------------------
-name: {{ cookiecutter.environment_name }} Deploy to Kubernetes
+name: {{ cookiecutter.environment_name }} Deploy optional Open edX modules to Kubernetes
 
 on: [workflow_dispatch]
 
@@ -284,12 +284,12 @@ jobs:
           tutor plugins enable forum
           tutor config save
 
-      # see: https://github.com/overhangio/tutor-android
-      #- name: Configure Android plugin
-      #  run:  |-
-      #    pip install tutor-android
-      #    tutor plugins enable android
-      #    tutor config save
+       see: https://github.com/overhangio/tutor-android
+      - name: Configure Android plugin
+        run:  |-
+          pip install tutor-android
+          tutor plugins enable android
+          tutor config save
 
       - name: Generate Tutor Config
         run:  |-
