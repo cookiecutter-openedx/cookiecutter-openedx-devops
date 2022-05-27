@@ -450,12 +450,14 @@ Special thanks go out to several folks in the open source community who've alrea
 - to `Querium Corp <https://querium.com/>`_, who generously allowed me to open-source this repository.
 - to `UK Cabinet Office <https://www.gov.uk/government/organisations/cabinet-office>`_, who created and still use the original version of this code base to manage their production Open edX environment.
 - to `Turn The Bus <https://turnthebus.org/>`_, for helping me with the requisite code refactoring that preceded publication of this Cookiecutter template.
-- to `University of South Florida MUMA College of Business <https://www.usf.edu/business//>`_, for supporting the continued development of this project.
+- to `University of South Florida MUMA College of Business <https://www.usf.edu/business/>`_, for supporting the continued development of this project.
 
 Early Adopters
 ~~~~~~~~~~~~~~
 Several large-scale Open edX installations already use this code base to manage their platforms, including:
 
+- `UK Cabinet Office <https://www.gov.uk/government/organisations/cabinet-office>`_
 - `Stepwise Math <https://stepwisemath.ai/>`_
-- `UK Government <https://platform.staging.global-communications-academy.com/>`_
 - `Turn The Bus <https://app.turnthebus.org/>`_
+- `University of South Florida MUMA College of Business <https://www.usf.edu/business//>`_
+- `MRI Online <https://mrionline.com/>`_
