@@ -52,8 +52,7 @@ jobs:
         run: |-
           pip install tutor-android
           tutor plugins enable android
-          tutor config save --set ANDROID_DOCKER_IMAGE=${ECR_REGISTRY}/${ECR_REPOSITORY}:${REPOSITORY_TAG} \
-                            --set ANDROID_APP_VERSION=master
+          tutor config save --set ANDROID_DOCKER_IMAGE=${ECR_REGISTRY}/${ECR_REPOSITORY}:${REPOSITORY_TAG}
 
       - name: Test Tutor and Environment
         run: |
