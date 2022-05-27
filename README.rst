@@ -56,21 +56,21 @@ Github Workflows for Build and Deploy
 
 - CI workflows for building your customized Docker images for the Open edX platform and its optional modules.
 - Deployment workflows for deploying your Open edX platform to your new AWS EKS Kubernetes cluster. The deployment workflow installs the latest stable versions of the following:
-  - preconfigured Github secrets parameters for your AWS IAM keypair, SMTP email host credentials, and oAuth provider credentials.
-  - Open edX LMS and CMS
-  - pre-scaffolded Open edX custom theme
-  - pre-scaffolded example Open edX plugin
-  - sample optional Xblock
-  - Tutor plugin to offload user files to AWS S3 storage bucket
-  - Tutor plugin to manage automated nightly MySQL and MongoDB backups
-  - Tutor plugin for Discovery service
-  - Tutor plugin for Micro Front-end service
-  - Tutor plugin for Credentials service
-  - Tutor plugin for Xqueue service
-  - Tutor plugin for Ecommerce service
-  - Tutor plugin for Discussion Forums
-  - Tutor plugin for Notes service
-  - add configuration hooks for enabling SMTP email
+    - preconfigured Github secrets parameters for your AWS IAM keypair, SMTP email host credentials, and oAuth provider credentials.
+    - Open edX LMS and CMS
+    - pre-scaffolded Open edX custom theme
+    - pre-scaffolded example Open edX plugin
+    - sample optional Xblock
+    - Tutor plugin to offload user files to AWS S3 storage bucket
+    - Tutor plugin to manage automated nightly MySQL and MongoDB backups
+    - Tutor plugin for Discovery service
+    - Tutor plugin for Micro Front-end service
+    - Tutor plugin for Credentials service
+    - Tutor plugin for Xqueue service
+    - Tutor plugin for Ecommerce service
+    - Tutor plugin for Discussion Forums
+    - Tutor plugin for Notes service
+    - add configuration hooks for enabling SMTP email
 
 
 The Terraform scripts in your new repo will provide a 1-click means of creating / updating / destroying the following for each environment:
