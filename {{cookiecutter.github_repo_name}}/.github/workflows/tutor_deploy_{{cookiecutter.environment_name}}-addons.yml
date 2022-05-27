@@ -311,7 +311,7 @@ jobs:
         run:  |-
           pip install tutor-android
           tutor plugins enable android
-          tutor config save --set ANDROID_DOCKER_IMAGE=${DOCKER_IMAGE_BACKUP}
+          tutor config save --set ANDROID_DOCKER_IMAGE=${DOCKER_IMAGE_ANDROID}
         #                  --set ANDROID_RELEASE_STORE_PASSWORD=yourstorepassword \
         #                  --set ANDROID_RELEASE_KEY_PASSWORD=yourreleasekeypassword \
         #                  --set ANDROID_RELEASE_KEY_ALIAS=yourreleasekeyalias \
