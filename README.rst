@@ -49,7 +49,9 @@ This repository contains a `Cookiecutter <https://github.com/cookiecutter/cookie
 Terraform-based AWS infrastructure management
 ---------------------------------------------
 
-Your new repository will deploy a `Tutor <https://docs.tutor.overhang.io/>`_ Kubernetes-managed production installation of Open edX that will scale automatically, reliably supporting anywhere from a few hundred to as many as several hundred thousand learners.
+Your new repository includes Terraform modules that have been optimized for running Open edX at scale on AWS EKS and RDS. The modules are organized to ease your implementation of additional environments for `dev`, `test` and `qa`.
+These modules will additionally configure all Open edX credentials (Django secret key, JWT, admin user, IAM keypairs, MySQL users and passwords, etcetera) on a per-environment basis, and will store these in Kubernetes Secrets.
+This configuration scales automatically, reliably supporting anywhere from a few hundred to as many as several hundred thousand learners. This Terraform configuration is also designed to support your additional external systems. Your custom legacy systems and microservices can safely deploy to this same Kubernetes cluster and RDS MySQL cluster.
 
 Github Workflows for Build and Deploy
 -------------------------------------
