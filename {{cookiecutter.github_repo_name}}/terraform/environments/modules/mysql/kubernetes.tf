@@ -182,7 +182,7 @@ resource "kubernetes_secret" "credentials" {
   data = {
     CREDENTIALS_MYSQL_USERNAME = "${var.environment}-credentials"
     CREDENTIALS_MYSQL_PASSWORD = random_password.mysql_credentials.result
-    MYSQL_HOST            = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
-    MYSQL_PORT            = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
+    MYSQL_HOST                 = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
+    MYSQL_PORT                 = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
   }
 }
