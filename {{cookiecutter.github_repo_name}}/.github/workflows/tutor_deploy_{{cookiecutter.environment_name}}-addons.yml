@@ -243,18 +243,20 @@ jobs:
           tutor plugins enable discovery
           tutor config save
 
+      # IMPORTANT: you must run tutor_build_mfe first.
       - name: Enable the MFE plugin
         run: |-
           pip install tutor-mfe
           tutor plugins enable mfe
-          tutor config save --set MFE_DOCKER_IMAGE=${DOCKER_IMAGE_MFE} \              # IMPORTANT: you must run tutor_build_mfe first.
+          tutor config save --set MFE_DOCKER_IMAGE=${DOCKER_IMAGE_MFE} \
                             --set MFE_ENABLE_HTTPS=true
 
+      # IMPORTANT: you must run tutor_build_credentials first.
       - name: Enable and configure credentials plugin
         run: |-
           pip install git+https://github.com/lpm0073/tutor-contrib-credentials@v13.0.1
           tutor plugins enable credentials
-          tutor config save --set CREDENTIALS_DOCKER_IMAGE=${DOCKER_IMAGE_CREDENTIALS} \    # IMPORTANT: you must run tutor_build_credentials first.
+          tutor config save --set CREDENTIALS_DOCKER_IMAGE=${DOCKER_IMAGE_CREDENTIALS} \
                             --set CREDENTIALS_HOST="credentials.${LMS_HOSTNAME}" \
                             --set CREDENTIALS_LMS_HOST=${LMS_HOSTNAME} \
                             --set CREDENTIALS_LMS_URL_ROOT=${LMS_HOSTNAME} \
