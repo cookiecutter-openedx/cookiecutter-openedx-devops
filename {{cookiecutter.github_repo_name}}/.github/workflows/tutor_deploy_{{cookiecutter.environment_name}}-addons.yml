@@ -26,9 +26,9 @@ jobs:
       OPENEDX_COMMON_VERSION: {{ cookiecutter.ci_deploy_OPENEDX_COMMON_VERSION }}
       COMMON_LOGO_URL: {{ cookiecutter.global_platform_logo_url }}
       DOCKER_IMAGE_OPENEDX: {{ cookiecutter.global_account_id }}.dkr.ecr.{{ cookiecutter.global_aws_region }}.amazonaws.com/openedx:latest
-      DOCKER_IMAGE_MFE: {{ cookiecutter.global_account_id }}.dkr.ecr.{{ cookiecutter.global_aws_region }}.amazonaws.com/mfe:latest
-      DOCKER_IMAGE_CREDENTIALS: {{ cookiecutter.global_account_id }}.dkr.ecr.{{ cookiecutter.global_aws_region }}.amazonaws.com/credentials:latest
-      DOCKER_IMAGE_BACKUP: {{ cookiecutter.global_account_id }}.dkr.ecr.{{ cookiecutter.global_aws_region }}.amazonaws.com/hastexo_backup:latest
+      DOCKER_IMAGE_MFE: {{ cookiecutter.global_account_id }}.dkr.ecr.{{ cookiecutter.global_aws_region }}.amazonaws.com/openedx_mfe:latest
+      DOCKER_IMAGE_CREDENTIALS: {{ cookiecutter.global_account_id }}.dkr.ecr.{{ cookiecutter.global_aws_region }}.amazonaws.com/openedx_credentials:latest
+      DOCKER_IMAGE_BACKUP: {{ cookiecutter.global_account_id }}.dkr.ecr.{{ cookiecutter.global_aws_region }}.amazonaws.com/openedx_backup:latest
 
     steps:
       - name: Checkout

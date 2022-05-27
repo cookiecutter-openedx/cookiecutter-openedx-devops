@@ -15,7 +15,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      ECR_REPOSITORY: hastexo_backup
+      ECR_REPOSITORY: openedx_backup
       ECR_REGISTRY: {{ cookiecutter.global_account_id }}.dkr.ecr.{{ cookiecutter.global_aws_region }}.amazonaws.com
 
     steps:
