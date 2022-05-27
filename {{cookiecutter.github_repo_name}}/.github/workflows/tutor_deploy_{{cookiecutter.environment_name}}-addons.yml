@@ -305,7 +305,7 @@ jobs:
           tutor plugins enable forum
           tutor config save
 
-       see: https://github.com/overhangio/tutor-android
+      # see: https://github.com/overhangio/tutor-android
       - name: Configure Android plugin
         run:  |-
           pip install tutor-android
