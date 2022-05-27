@@ -7,7 +7,7 @@
 # usage: Creates a Tutor Docker image for MFE using the latest stable version of
 #        the repo. Registers the new container in AWS ECR.
 #------------------------------------------------------------------------------
-name: Prod Build mfe Image
+name: Build mfe Image
 
 on: workflow_dispatch
 

@@ -7,7 +7,7 @@
 # usage: Creates a Tutor Docker image for Android using the latest stable version of
 #        the repo. Registers the new container in AWS ECR.
 #------------------------------------------------------------------------------
-name: Prod Build Android Image
+name: Build Android Image
 
 on: workflow_dispatch
 

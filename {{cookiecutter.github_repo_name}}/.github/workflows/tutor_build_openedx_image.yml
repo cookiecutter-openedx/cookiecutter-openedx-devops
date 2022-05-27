@@ -11,7 +11,7 @@
 #        - various Xblocks
 #        Registers the new container in AWS ECR.
 #------------------------------------------------------------------------------
-name: Prod Build openedx Image
+name: Build openedx Image
 
 on: workflow_dispatch
 

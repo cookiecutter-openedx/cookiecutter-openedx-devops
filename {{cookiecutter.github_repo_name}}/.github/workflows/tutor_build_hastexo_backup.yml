@@ -7,7 +7,7 @@
 # usage: Creates a Tutor Docker image for hastexo Backup using the latest stable version of
 #        the repo. Registers the new container in AWS ECR.
 #------------------------------------------------------------------------------
-name: Prod Build hastexo Backup Image
+name: Build hastexo Backup Image
 
 on: workflow_dispatch
 
