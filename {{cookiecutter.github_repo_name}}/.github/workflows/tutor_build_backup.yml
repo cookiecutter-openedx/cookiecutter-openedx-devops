@@ -33,4 +33,4 @@ jobs:
           aws-region: {{ cookiecutter.global_aws_region }}
 
       - name: Build the image and upload to AWS ECR
-        uses: openedx-actions/tutor-plugin-build-backup@v0.1.0
+        uses: openedx-actions/tutor-plugin-build-backup@v0.1.2
