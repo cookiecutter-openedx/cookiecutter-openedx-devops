@@ -41,7 +41,7 @@ jobs:
       # grab the AWS IAM key and scret for the IAM user named 'ci'
       # These are manually stored in https://github.com/{{ cookiecutter.github_account_name }}/{{ cookiecutter.github_repo_name }}/settings
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v1.6.1
         with:
           aws-access-key-id: {% raw %}${{ secrets.AWS_ACCESS_KEY_ID }}{% endraw %}
           aws-secret-access-key: {% raw %}${{ secrets.AWS_SECRET_ACCESS_KEY }}{% endraw %}
