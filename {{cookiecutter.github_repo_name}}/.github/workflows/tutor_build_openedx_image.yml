@@ -35,7 +35,7 @@ jobs:
           aws-region: {{ cookiecutter.global_aws_region }}
 
 - name: Build the image and upload to AWS ECR
-        uses: openedx-actions/tutor-plugin-build-openedx
+        uses: openedx-actions/tutor-plugin-build-openedx@0.1.0
         with:
           custom-theme-repository: '{{ cookiecutter.ci_build_theme_repository }}'
           custom-theme-repository-ref: '{{ cookiecutter.ci_build_theme_ref }}'
