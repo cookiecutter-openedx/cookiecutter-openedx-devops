@@ -19,60 +19,21 @@ jobs:
       ECR_REGISTRY: {{ cookiecutter.global_account_id }}.dkr.ecr.{{ cookiecutter.global_aws_region }}.amazonaws.com
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3.0.2
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v1.6.1
         with:
           aws-access-key-id: {% raw %}${{ secrets.AWS_ACCESS_KEY_ID }}{% endraw %}
           aws-secret-access-key: {% raw %}${{ secrets.AWS_SECRET_ACCESS_KEY }}{% endraw %}
           aws-region: {{ cookiecutter.global_aws_region }}
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-
-      - name: Install Tutor
-        run: |-
-          pip install --upgrade pyyaml
-          echo "TUTOR_ROOT=$GITHUB_WORKSPACE/tutor" >> $GITHUB_ENV
-          pip install tutor
-          echo "TUTOR_VERSION=$(tutor --version | cut -f3 -d' ')" >> $GITHUB_ENV
-          echo "TUTOR_ENABLE_HTTPS=true" >> $GITHUB_ENV
-
-      - name: Set repository tag
-        run: |
-          echo "REPOSITORY_TAG=$TUTOR_VERSION-$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
-
-      # see: https://edx.readthedocs.io/projects/edx-developer-docs/en/latest/micro_frontends/index.html#required-environment-variables
-      #      https://github.com/overhangio/tutor-mfe
-      #      https://github.com/overhangio/tutor-mfe/blob/master/tutormfe/templates/mfe/build/mfe/env/production
-      #
-      - name: Install Tutor MFE plugin
-        run: |-
-          pip install tutor-mfe
-          tutor plugins enable mfe
-          tutor config save --set MFE_DOCKER_IMAGE=${ECR_REGISTRY}/${ECR_REPOSITORY}:${REPOSITORY_TAG}
-          cp ci/tutor-build/plugins/mfe/build/production "$(tutor config printroot)/env/plugins/mfe/build/mfe/env/"
-
-      - name: Test Tutor and Environment
-        run: |
-          tutor --version
-          echo "REPOSITORY_TAG=$REPOSITORY_TAG"
-          echo "TUTOR_ROOT=$TUTOR_ROOT"
-
-      - name: Build the image
-        run: tutor images build mfe
-
-      - name: Push the image
-        run: |
-          tutor images push mfe
-          docker tag ${ECR_REGISTRY}/${ECR_REPOSITORY}:${REPOSITORY_TAG} ${ECR_REGISTRY}/${ECR_REPOSITORY}:latest
-          docker push ${ECR_REGISTRY}/${ECR_REPOSITORY}:latest
-
-      - name: Docker image:tag
-        run: |
-          echo "Docker image: ${ECR_REGISTRY}/${ECR_REPOSITORY}:${REPOSITORY_TAG}"
+      - name: Build the image and upload to AWS ECR
+        uses: openedx-actions/tutor-plugin-build-mfe@v0.1.1
+        with:
+          subdomain: '{{ cookiecutter.environment_subdomain }}'
+          domain-name: '{{ cookiecutter.global_root_domain }}'
+          site-name: '{{ cookiecutter.global_platform_description }}'
