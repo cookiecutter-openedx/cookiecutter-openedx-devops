@@ -49,22 +49,22 @@ jobs:
 
       - name: Build Backup
         if: {% raw %}${{ env.ENABLE_BACKUP == 'true' }}{% endraw %}
-        uses: openedx-actions/tutor-plugin-build-backup@v0.1.2
+        uses: openedx-actions/tutor-plugin-build-backup@v0.1.3
 
       - name: Build Credentials
         if: {% raw %}${{ env.ENABLE_CREDENTIALS == 'true' }}{% endraw %}
-        uses: openedx-actions/tutor-plugin-build-credentials@v0.1.1
+        uses: openedx-actions/tutor-plugin-build-credentials@v0.1.2
 
       - name: Build MFE
         if: {% raw %}${{ env.ENABLE_MFE == 'true' }}{% endraw %}
-        uses: openedx-actions/tutor-plugin-build-mfe@v0.1.1
+        uses: openedx-actions/tutor-plugin-build-mfe@v0.1.2
         with:
           subdomain: ${SUBDOMAIN}
           domain-name: ${DOMAIN_NAME}
           site-name: ${SITE_NAME}
 
       - name: Build openedx
-        uses: openedx-actions/tutor-plugin-build-openedx@v0.1.8
+        uses: openedx-actions/tutor-plugin-build-openedx@v0.1.9
         with:
           custom-theme-repository: {% raw %}${{ inputs.custom-theme-repository }}{% endraw %}
           custom-theme-repository-ref: {% raw %}${{ inputs.custom-theme-repository-ref }}{% endraw %}
