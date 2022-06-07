@@ -79,7 +79,7 @@ jobs:
           echo "TUTOR_LMS_HOST=$LMS_HOSTNAME" >> $GITHUB_ENV
           echo "TUTOR_CMS_HOST=$CMS_HOSTNAME" >> $GITHUB_ENV
           echo "TUTOR_DOCKER_IMAGE_OPENEDX=${AWS_ECR_REPOSITORY_OPENEDX}" >> $GITHUB_ENV
-          echo "OPENEDX_COMMON_VERSION=open-release/maple.3" >> $GITHUB_ENV
+          echo "OPENEDX_COMMON_VERSION=open-release/{{ cookiecutter.ci_build_open_edx_version }}" >> $GITHUB_ENV
 
       - name: Load environment specific settings (direct)
         shell: bash
@@ -165,9 +165,6 @@ jobs:
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
-      - name: Dump tutor config
-        uses: openedx-actions/tutor-print-dump@v0.0.1
-
       # ---------------------------------------------------------------------------------
       # Add your custom configuration tasks here ....
       # ---------------------------------------------------------------------------------
@@ -183,10 +180,13 @@ jobs:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
 
-      # see: https://github.com/Medality-Health/openedx_devops/blob/main/terraform/modules/kubernetes_secrets/main.tf
+      # see: https://github.com/{{ cookiecutter.github_account_name }}/openedx_devops/blob/main/terraform/modules/kubernetes_secrets/main.tf
       - name: Configure edx secret
         uses: openedx-actions/tutor-k8s-configure-edx-secret@v0.0.3
 
+
+      - name: Dump tutor config
+        uses: openedx-actions/tutor-print-dump@v0.0.1
 
       # ---------------------------------------------------------------------------------
       # Deploy
