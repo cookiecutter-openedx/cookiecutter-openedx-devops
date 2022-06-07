@@ -66,13 +66,13 @@ jobs:
       - name: Build openedx
         uses: openedx-actions/tutor-plugin-build-openedx@v0.1.9
         with:
-          custom-theme-repository: {% raw %}${{ inputs.custom-theme-repository }}{% endraw %}
-          custom-theme-repository-ref: {% raw %}${{ inputs.custom-theme-repository-ref }}{% endraw %}
+          custom-theme-repository: {% raw %}${{ env.CUSTOM_THEME_REPOSITORY }}{% endraw %}
+          custom-theme-repository-ref: {% raw %}${{ env.CUSTOM_THEME_REPOSITORY_REF }}{% endraw %}
 
-          custom-plugin-repository: {% raw %}${{ inputs.custom-plugin-repository }}{% endraw %}
-          custom-plugin-repository-organization: {% raw %}${{ inputs.custom-plugin-repository-organization }}{% endraw %}
-          custom-plugin-repository-ref: {% raw %}${{ inputs.custom-plugin-repository-ref }}{% endraw %}
+          custom-plugin-repository: {% raw %}${{ env.CUSTOM_PLUGIN_REPOSITORY }}{% endraw %}
+          custom-plugin-repository-organization: {% raw %}${{ env.CUSTOM_PLUGIN_REPOSITORY_ORGANIZATION }}{% endraw %}
+          custom-plugin-repository-ref: {% raw %}${{ env.CUSTOM_PLUGIN_REPOSITORY_REF }}{% endraw %}
 
-          custom-xblock-repository: {% raw %}${{ inputs.custom-xblock-repository }}{% endraw %}
-          custom-xblock-repository-organization: {% raw %}${{ inputs.custom-xblock-repository-organization }}{% endraw %}
-          custom-xblock-repository-ref: {% raw %}${{ inputs.custom-xblock-repository-ref }}{% endraw %}
+          custom-xblock-repository: {% raw %}${{ env.CUSTOM_XBLOCK_REPOSITORY }}{% endraw %}
+          custom-xblock-repository-organization: {% raw %}${{ env.CUSTOM_XBLOCK_REPOSITORY_ORGANIZATION }}{% endraw %}
+          custom-xblock-repository-ref: {% raw %}${{ env.CUSTOM_XBLOCK_REPOSITORY_REF }}{% endraw %}
