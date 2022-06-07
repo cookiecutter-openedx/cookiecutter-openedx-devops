@@ -50,7 +50,7 @@ jobs:
           aws-region: {% raw %}${{ env.AWS_REGION }}{% endraw %}
 
       - name: Initialize environment
-        uses: openedx-actions/tutor-k8s-init@v0.0.2
+        uses: openedx-actions/tutor-k8s-init@v0.0.6
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
@@ -205,4 +205,4 @@ jobs:
           tutor k8s settheme edx-theme
 
       - name: Create admin user
-        uses: openedx-actions/tutor-k8s-configure-edx-admin@v0.0.2
+        uses: openedx-actions/tutor-k8s-configure-edx-admin@v0.0.3

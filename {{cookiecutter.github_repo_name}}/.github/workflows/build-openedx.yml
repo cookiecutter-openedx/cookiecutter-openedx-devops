@@ -43,8 +43,11 @@ jobs:
           aws-secret-access-key: {% raw %}${{ secrets.AWS_SECRET_ACCESS_KEY }}{% endraw %}
           aws-region: {% raw %}${{ env.AWS_REGION }}{% endraw %}
 
+      - name: Initialize environment
+        uses: openedx-actions/tutor-k8s-init@v0.0.6
+
       - name: Build openedx
-        uses: openedx-actions/tutor-plugin-build-openedx@v0.1.9
+        uses: openedx-actions/tutor-plugin-build-openedx@v0.1.12
         with:
           custom-theme-repository: {% raw %}${{ env.CUSTOM_THEME_REPOSITORY }}{% endraw %}
           custom-theme-repository-ref: {% raw %}${{ env.CUSTOM_THEME_REPOSITORY_REF }}{% endraw %}

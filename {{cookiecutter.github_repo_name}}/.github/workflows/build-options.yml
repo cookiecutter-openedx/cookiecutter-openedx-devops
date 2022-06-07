@@ -36,17 +36,20 @@ jobs:
           aws-secret-access-key: {% raw %}${{ secrets.AWS_SECRET_ACCESS_KEY }}{% endraw %}
           aws-region: {% raw %}${{ env.AWS_REGION }}{% endraw %}
 
+      - name: Initialize environment
+        uses: openedx-actions/tutor-k8s-init@v0.0.6
+
       - name: Build Backup
         if: {% raw %}${{ env.ENABLE_BACKUP == 'true' }}{% endraw %}
-        uses: openedx-actions/tutor-plugin-build-backup@v0.1.3
+        uses: openedx-actions/tutor-plugin-build-backup@v0.1.7
 
       - name: Build Credentials
         if: {% raw %}${{ env.ENABLE_CREDENTIALS == 'true' }}{% endraw %}
-        uses: openedx-actions/tutor-plugin-build-credentials@v0.1.2
+        uses: openedx-actions/tutor-plugin-build-credentials@v0.1.5
 
       - name: Build MFE
         if: {% raw %}${{ env.ENABLE_MFE == 'true' }}{% endraw %}
-        uses: openedx-actions/tutor-plugin-build-mfe@v0.1.2
+        uses: openedx-actions/tutor-plugin-build-mfe@v0.1.5
         with:
           subdomain: ${SUBDOMAIN}
           domain-name: ${DOMAIN_NAME}
