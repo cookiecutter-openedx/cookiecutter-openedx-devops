@@ -1,0 +1,78 @@
+#------------------------------------------------------------------------------
+# written by: mcdaniel
+# date: june-2022
+#
+# usage: top-level workflow. Initiated manually from Github Actions console page
+#        Builds all Docker containers.
+#------------------------------------------------------------------------------
+name: Build Containers
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      ENABLE_BACKUP: true
+      ENABLE_CREDENTIALS: true
+      ENABLE_MFE: true
+
+      SUBDOMAIN: {{ cookiecutter.environment_subdomain }}
+      DOMAIN_NAME: {{ cookiecutter.global_root_domain }}
+      SITE_NAME: {{ cookiecutter.global_platform_name }}
+      AWS_REGION: {{ cookiecutter.global_aws_region }}
+
+      CUSTOM_THEME_REPOSITORY: {{ cookiecutter.ci_build_theme_repository }}
+      CUSTOM_THEME_REPOSITORY_REF: {{ cookiecutter.ci_build_theme_ref }}
+
+      CUSTOM_PLUGIN_REPOSITORY: {{ cookiecutter.ci_build_plugin_repository }}
+      CUSTOM_PLUGIN_REPOSITORY_ORGANIZATION: {{ cookiecutter.ci_build_plugin_org }}
+      CUSTOM_PLUGIN_REPOSITORY_REF: {{ cookiecutter.ci_build_plugin_ref }}
+
+      CUSTOM_XBLOCK_REPOSITORY: {{ cookiecutter.ci_build_xblock_repository }}
+      CUSTOM_XBLOCK_REPOSITORY_ORGANIZATION: {{ cookiecutter.ci_build_xblock_org }}
+      CUSTOM_XBLOCK_REPOSITORY_REF: {{ cookiecutter.ci_build_xblock_ref }}
+
+    steps:
+      - uses: actions/checkout@v3.0.2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1.6.1
+        with:
+          aws-access-key-id: {% raw %}${{ secrets.AWS_ACCESS_KEY_ID }}{% endraw %}
+          aws-secret-access-key: {% raw %}${{ secrets.AWS_SECRET_ACCESS_KEY }}{% endraw %}
+          aws-region: ${AWS_REGION}
+
+      - name: Build Backup
+        if: {% raw %}${{ env.ENABLE_BACKUP == 'true' }}{% endraw %}
+        uses: openedx-actions/tutor-plugin-build-backup@v0.1.3
+
+      - name: Build Credentials
+        if: {% raw %}${{ env.ENABLE_CREDENTIALS == 'true' }}{% endraw %}
+        uses: openedx-actions/tutor-plugin-build-credentials@v0.1.2
+
+      - name: Build MFE
+        if: {% raw %}${{ env.ENABLE_MFE == 'true' }}{% endraw %}
+        uses: openedx-actions/tutor-plugin-build-mfe@v0.1.2
+        with:
+          subdomain: ${SUBDOMAIN}
+          domain-name: ${DOMAIN_NAME}
+          site-name: ${SITE_NAME}
+
+      - name: Build openedx
+        uses: openedx-actions/tutor-plugin-build-openedx@v0.1.9
+        with:
+          custom-theme-repository: {% raw %}${{ inputs.custom-theme-repository }}{% endraw %}
+          custom-theme-repository-ref: {% raw %}${{ inputs.custom-theme-repository-ref }}{% endraw %}
+
+          custom-plugin-repository: {% raw %}${{ inputs.custom-plugin-repository }}{% endraw %}
+          custom-plugin-repository-organization: {% raw %}${{ inputs.custom-plugin-repository-organization }}{% endraw %}
+          custom-plugin-repository-ref: {% raw %}${{ inputs.custom-plugin-repository-ref }}{% endraw %}
+
+          custom-xblock-repository: {% raw %}${{ inputs.custom-xblock-repository }}{% endraw %}
+          custom-xblock-repository-organization: {% raw %}${{ inputs.custom-xblock-repository-organization }}{% endraw %}
+          custom-xblock-repository-ref: {% raw %}${{ inputs.custom-xblock-repository-ref }}{% endraw %}
