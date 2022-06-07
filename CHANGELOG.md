@@ -5,7 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.1.0]
+## [0.1.4] (2022-06-06)
+
+- Refactor Github workflows to use [openedx-actions](https://github.com/openedx-actions)
+
+## [0.1.3] (2022-05-30)
+
+- bump all Terraform versions
+
+## [0.1.1] (2022-05-26)
+
+- Adds the plugin installation
+- adds Terraform code to create a dedicated private S3 bucket for backups
+
+## [0.1.0] (2022-05-24)
+
 - Terraform
   - bumped all version
 - Deployment workflow
