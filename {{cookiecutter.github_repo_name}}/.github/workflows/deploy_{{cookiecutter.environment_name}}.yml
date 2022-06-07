@@ -1,0 +1,206 @@
+#------------------------------------------------------------------------------
+# written by: mcdaniel
+# date: june-2022
+#
+# usage: top-level workflow. Initiated manually from Github Actions console page
+#        Deploys a Tutor-created openedx Docker image to the Kubernetes cluster.
+#------------------------------------------------------------------------------
+name: Deploy {{ cookiecutter.environment_name }}
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      # common settings
+      # --------------------------------------------
+      AWS_ACCOUNT_NUMBER: '{{ cookiecutter.global_account_id }}'
+      AWS_ECR_HOST: 'dkr.ecr.{{ cookiecutter.global_aws_region }}.amazonaws.com'
+      AWS_REGION: {{ cookiecutter.global_aws_region }}
+
+      # environment settings
+      # --------------------------------------------
+      ENVIRONMENT_ID: {{ cookiecutter.environment_name }}
+      NAMESPACE: openedx-{{ cookiecutter.environment_name }}
+
+      # feature flags for optional tutor modules
+      # --------------------------------------------
+      DEBUG_MODE: false
+      ENABLE_BACKUP: true
+      ENABLE_CREDENTIALS: false
+      ENABLE_DISCOVERY: true
+      ENABLE_ECOMMERCE: false
+      ENABLE_FORUM: true
+      ENABLE_MFE: true
+      ENABLE_NOTES: true
+      ENABLE_S3: true
+      ENABLE_XQUEUE: false
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.0.2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1.6.1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Initialize environment
+        uses: openedx-actions/tutor-k8s-init@v0.0.2
+        with:
+          namespace: ${{ env.NAMESPACE }}
+
+      # ---------------------------------------------------------------------------------
+      # initialize workflow environment variables
+      # ---------------------------------------------------------------------------------
+      - name: Intialize AWS_ECR_URI
+        shell: bash
+        run: |-
+          echo "AWS_ECR_URI=${{ env.AWS_ACCOUNT_NUMBER }}.${{ env.AWS_ECR_HOST }}" >> $GITHUB_ENV
+
+      - name: Intialize AWS ECR repo URIs
+        shell: bash
+        run: |-
+          echo "AWS_ECR_REPOSITORY_BACKUP=${AWS_ECR_URI}/openedx_backup:latest" >> $GITHUB_ENV
+          echo "AWS_ECR_REPOSITORY_CREDENTIALS=${AWS_ECR_URI}/openedx_credentials:latest" >> $GITHUB_ENV
+          echo "AWS_ECR_REPOSITORY_MFE=${AWS_ECR_URI}/openedx_mfe:latest" >> $GITHUB_ENV
+          echo "AWS_ECR_REPOSITORY_OPENEDX=${AWS_ECR_URI}/openedx:latest" >> $GITHUB_ENV
+
+
+      # note that values like $LMS_HOSTNAME come from this repo
+      # in /ci/tutor-deploy/environments/{{ cookiecutter.environment_name }}/config.yml
+      - name: Load additional environment specific settings
+        shell: bash
+        run: |-
+          echo "TUTOR_LMS_HOST=$LMS_HOSTNAME" >> $GITHUB_ENV
+          echo "TUTOR_CMS_HOST=$CMS_HOSTNAME" >> $GITHUB_ENV
+          echo "TUTOR_DOCKER_IMAGE_OPENEDX=${AWS_ECR_REPOSITORY_OPENEDX}" >> $GITHUB_ENV
+          echo "OPENEDX_COMMON_VERSION=open-release/maple.3" >> $GITHUB_ENV
+
+      - name: Load environment specific settings (direct)
+        shell: bash
+        run: |-
+          # Pin the instalation ID with the Kubernetes namespace. It needs to be unique and static per instalation.
+          cat ci/tutor-deploy/environments/${ENVIRONMENT_ID}/config.yml >> $GITHUB_ENV
+
+      # ---------------------------------------------------------------------------------
+      # Configure optional tutor plugins
+      # ---------------------------------------------------------------------------------
+      - name: Enable tutor plugin - S3
+        uses: openedx-actions/tutor-plugin-enable-s3@v0.0.3
+        if: ${{ env.ENABLE_S3 == 'true' }}
+        with:
+          namespace: ${{ env.NAMESPACE }}
+
+      - name: Enable tutor plugin - Backup
+        uses: openedx-actions/tutor-plugin-enable-backup@v0.0.8
+        if: ${{ env.ENABLE_BACKUP == 'true' }}
+        with:
+          aws-ecr-uri: ${AWS_ECR_REPOSITORY_BACKUPS}
+          namespace: ${{ env.NAMESPACE }}
+
+      - name: Enable tutor plugin - Discovery
+        uses: openedx-actions/tutor-plugin-enable-discovery@v0.0.2
+        if: ${{ env.ENABLE_DISCOVERY == 'true' }}
+        with:
+          namespace: ${{ env.NAMESPACE }}
+
+      - name: Enable tutor plugin - MFE
+        uses: openedx-actions/tutor-plugin-enable-mfe@v0.0.1
+        if: ${{ env.ENABLE_MFE == 'true' }}
+        with:
+          aws-ecr-uri: ${AWS_ECR_REPOSITORY_MFE}
+
+      - name: Enable tutor plugin - Credentials
+        uses: openedx-actions/tutor-plugin-enable-credentials@v0.0.3
+        if: ${{ env.ENABLE_CREDENTIALS == 'true' }}
+        with:
+          namespace: ${{ env.NAMESPACE }}
+          aws-ecr-uri: ${AWS_ECR_REPOSITORY_CREDENTIALS}
+          common-logo-url: {{ cookiecutter.global_platform_logo_url }}
+
+      - name: Enable tutor plugin - Xqueue
+        uses: openedx-actions/tutor-plugin-enable-xqueue@v0.0.1
+        if: ${{ env.ENABLE_XQUEUE == 'true' }}
+        with:
+          namespace: ${{ env.NAMESPACE }}
+
+      - name: Enable tutor plugin - Notes
+        uses: openedx-actions/tutor-plugin-enable-notes@v0.0.1
+        if: ${{ env.ENABLE_NOTES == 'true' }}
+        with:
+          namespace: ${{ env.NAMESPACE }}
+
+      - name: Enable tutor plugin - Ecommerce
+        uses: openedx-actions/tutor-plugin-enable-ecommerce@v0.0.2
+        if: ${{ env.ENABLE_ECOMMERCE == 'true' }}
+        with:
+          namespace: ${{ env.NAMESPACE }}
+
+      - name: Enable tutor plugin - Forum
+        uses: openedx-actions/tutor-plugin-enable-forum@v0.0.2
+        if: ${{ env.ENABLE_FORUM == 'true' }}
+
+      # ---------------------------------------------------------------------------------
+      # Configure backend services
+      # ---------------------------------------------------------------------------------
+      - name: Configure SMTP
+        uses: openedx-actions/tutor-k8s-configure-smtp@v0.0.3
+        with:
+          aws-ses-iam-key: ${{ secrets.aws-ses-iam-key }}
+          aws-ses-iam-secret: ${{ secrets.aws-ses-iam-secret }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Configure Redis
+        uses: openedx-actions/tutor-k8s-configure-redis@v0.0.3
+        with:
+          namespace: ${{ env.NAMESPACE }}
+
+      - name: Configure MySQL
+        uses: openedx-actions/tutor-k8s-configure-mysql@v0.0.4
+        with:
+          namespace: ${{ env.NAMESPACE }}
+
+      - name: Dump tutor config
+        uses: openedx-actions/tutor-print-dump@v0.0.1
+
+      # ---------------------------------------------------------------------------------
+      # Add your custom configuration tasks here ....
+      # ---------------------------------------------------------------------------------
+      - name: Configure 3rd Party Authentication
+        shell: bash
+        run:  |-
+          tutor config save --set OPENEDX_FACEBOOK_APP_ID="${{ inputs.facebook-app-id }}" \
+                            --set OPENEDX_FACEBOOK_APP_SECRET="${{ inputs.facebook-app-secret }}"
+
+      - name: Fetch JWT token
+        uses: openedx-actions/tutor-k8s-configure-jwt@v0.0.2
+        with:
+          namespace: ${{ env.NAMESPACE }}
+
+
+      # see: https://github.com/Medality-Health/openedx_devops/blob/main/terraform/modules/kubernetes_secrets/main.tf
+      - name: Configure edx secret
+        uses: openedx-actions/tutor-k8s-configure-edx-secret@v0.0.3
+
+
+      # ---------------------------------------------------------------------------------
+      # Deploy
+      # ---------------------------------------------------------------------------------
+      - name: Deploy to Kubernetes
+        uses: ./.github/actions/tutor/k8s/deploy
+        with:
+          environment-id: {{ cookiecutter.environment_name }}
+          namespace: ${{ env.NAMESPACE }}
+
+      - name: Set theme
+        shell: bash
+        run:  |-
+          tutor k8s settheme edx-theme
+
+      - name: Create admin user
+        uses: openedx-actions/tutor-k8s-configure-edx-admin@v0.0.2
