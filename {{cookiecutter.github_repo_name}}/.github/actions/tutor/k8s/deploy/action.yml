@@ -31,7 +31,7 @@ runs:
       shell: bash
       run:  |-
         # Create kubernetes ingress and other environment resources
-        kubectl apply -f "ci/tutor-deploy/environments/${{ inputs.environment-id }}/k8s"
+        kubectl apply -f "ci/tutor-deploy/environments/{% raw %}${{ inputs.environment-id }}{% endraw %}/k8s"
 
     #------------------------------------------------------------------------
     # IV. Merge all of the configuration data into Tutor's Open edX
@@ -53,7 +53,7 @@ runs:
         cd $(tutor config printroot)/env/apps/openedx/config/
 
         mv lms.env.json lms.env.json.orig
-        jq -s '.[0] * .[1]'  lms.env.json.orig  "$GITHUB_WORKSPACE/ci/tutor-deploy/environments/${{ inputs.environment-id }}/settings_merge.json" >  lms.env.json
+        jq -s '.[0] * .[1]'  lms.env.json.orig  "$GITHUB_WORKSPACE/ci/tutor-deploy/environments/{% raw %}${{ inputs.environment-id }}{% endraw %}/settings_merge.json" >  lms.env.json
 
         echo 'Tutor lms.env.json contents:'
         cat lms.env.json
@@ -61,7 +61,7 @@ runs:
         echo ""
 
         mv cms.env.json cms.env.json.orig
-        jq -s '.[0] * .[1]'  cms.env.json.orig  "$GITHUB_WORKSPACE/ci/tutor-deploy/environments/${{ inputs.environment-id }}/settings_merge.json" >  cms.env.json
+        jq -s '.[0] * .[1]'  cms.env.json.orig  "$GITHUB_WORKSPACE/ci/tutor-deploy/environments/{% raw %}${{ inputs.environment-id }}{% endraw %}/settings_merge.json" >  cms.env.json
         rm *orig
 
         echo 'Tutor cms.env.json contents:'
