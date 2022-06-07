@@ -194,7 +194,7 @@ jobs:
       - name: Deploy to Kubernetes
         uses: ./.github/actions/tutor/k8s/deploy
         with:
-          environment-id: {{ cookiecutter.environment_name }}
+          environment-id: {% raw %}${{ env.ENVIRONMENT_ID }}{% endraw %}
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
       - name: Set theme
