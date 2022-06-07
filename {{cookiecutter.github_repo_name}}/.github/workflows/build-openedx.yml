@@ -39,20 +39,20 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1.6.1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+          aws-access-key-id: {% raw %}${{ secrets.AWS_ACCESS_KEY_ID }}{% endraw %}
+          aws-secret-access-key: {% raw %}${{ secrets.AWS_SECRET_ACCESS_KEY }}{% endraw %}
+          aws-region: {% raw %}${{ env.AWS_REGION }}{% endraw %}
 
       - name: Build openedx
         uses: openedx-actions/tutor-plugin-build-openedx@v0.1.9
         with:
-          custom-theme-repository: ${{ env.CUSTOM_THEME_REPOSITORY }}
-          custom-theme-repository-ref: ${{ env.CUSTOM_THEME_REPOSITORY_REF }}
+          custom-theme-repository: {% raw %}${{ env.CUSTOM_THEME_REPOSITORY }}{% endraw %}
+          custom-theme-repository-ref: {% raw %}${{ env.CUSTOM_THEME_REPOSITORY_REF }}{% endraw %}
 
-          custom-plugin-repository: ${{ env.CUSTOM_PLUGIN_REPOSITORY }}
-          custom-plugin-repository-organization: ${{ env.CUSTOM_PLUGIN_REPOSITORY_ORGANIZATION }}
-          custom-plugin-repository-ref: ${{ env.CUSTOM_PLUGIN_REPOSITORY_REF }}
+          custom-plugin-repository: {% raw %}${{ env.CUSTOM_PLUGIN_REPOSITORY }}{% endraw %}
+          custom-plugin-repository-organization: {% raw %}${{ env.CUSTOM_PLUGIN_REPOSITORY_ORGANIZATION }}{% endraw %}
+          custom-plugin-repository-ref: {% raw %}${{ env.CUSTOM_PLUGIN_REPOSITORY_REF }}{% endraw %}
 
-          custom-xblock-repository: ${{ env.CUSTOM_XBLOCK_REPOSITORY }}
-          custom-xblock-repository-organization: ${{ env.CUSTOM_XBLOCK_REPOSITORY_ORGANIZATION }}
-          custom-xblock-repository-ref: ${{ env.CUSTOM_XBLOCK_REPOSITORY_REF }}
+          custom-xblock-repository: {% raw %}${{ env.CUSTOM_XBLOCK_REPOSITORY }}{% endraw %}
+          custom-xblock-repository-organization: {% raw %}${{ env.CUSTOM_XBLOCK_REPOSITORY_ORGANIZATION }}{% endraw %}
+          custom-xblock-repository-ref: {% raw %}${{ env.CUSTOM_XBLOCK_REPOSITORY_REF }}{% endraw %}
