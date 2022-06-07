@@ -174,8 +174,8 @@ jobs:
       - name: Configure 3rd Party Authentication
         shell: bash
         run:  |-
-          tutor config save --set OPENEDX_FACEBOOK_APP_ID="${{ inputs.facebook-app-id }}" \
-                            --set OPENEDX_FACEBOOK_APP_SECRET="${{ inputs.facebook-app-secret }}"
+          tutor config save --set OPENEDX_FACEBOOK_APP_ID="{% raw %}${{ inputs.facebook-app-id }}{% endraw %}" \
+                            --set OPENEDX_FACEBOOK_APP_SECRET="{% raw %}${{ inputs.facebook-app-secret }}{% endraw %}"
 
       - name: Fetch JWT token
         uses: openedx-actions/tutor-k8s-configure-jwt@v0.0.2
