@@ -37,19 +37,19 @@ jobs:
           aws-region: {% raw %}${{ env.AWS_REGION }}{% endraw %}
 
       - name: Initialize environment
-        uses: openedx-actions/tutor-k8s-init@v0.0.6
+        uses: openedx-actions/tutor-k8s-init@{{ cookiecutter.ci_openedx_actions_tutor_k8s_init_version }}
 
       - name: Build Backup
         if: {% raw %}${{ env.ENABLE_BACKUP == 'true' }}{% endraw %}
-        uses: openedx-actions/tutor-plugin-build-backup@v0.1.7
+        uses: openedx-actions/tutor-plugin-build-backup@{{ cookiecutter.ci_openedx_actions_tutor_plugin_build_backup_version }}
 
       - name: Build Credentials
         if: {% raw %}${{ env.ENABLE_CREDENTIALS == 'true' }}{% endraw %}
-        uses: openedx-actions/tutor-plugin-build-credentials@v0.1.5
+        uses: openedx-actions/tutor-plugin-build-credentials@{{ cookiecutter.ci_openedx_actions_tutor_plugin_build_credentials_version }}
 
       - name: Build MFE
         if: {% raw %}${{ env.ENABLE_MFE == 'true' }}{% endraw %}
-        uses: openedx-actions/tutor-plugin-build-mfe@v0.1.5
+        uses: openedx-actions/tutor-plugin-build-mfe@{{ cookiecutter.ci_openedx_actions_tutor_plugin_build_mfe_version }}
         with:
           subdomain: ${SUBDOMAIN}
           domain-name: ${DOMAIN_NAME}

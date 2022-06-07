@@ -51,7 +51,7 @@ jobs:
           aws-region: {% raw %}${{ env.AWS_REGION }}{% endraw %}
 
       - name: Initialize environment
-        uses: openedx-actions/tutor-k8s-init@v0.0.9
+        uses: openedx-actions/tutor-k8s-init@{{ cookiecutter.ci_openedx_actions_tutor_k8s_init_version }}
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
           eks-cluster-name: {% raw %}${{ env.EKS_CLUSTER_NAME }}{% endraw %}
@@ -94,32 +94,32 @@ jobs:
       # Configure optional tutor plugins
       # ---------------------------------------------------------------------------------
       - name: Enable tutor plugin - S3
-        uses: openedx-actions/tutor-plugin-enable-s3@v0.0.3
+        uses: openedx-actions/tutor-plugin-enable-s3@{{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_s3_version }}
         if: {% raw %}${{ env.ENABLE_S3 == 'true' }}{% endraw %}
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
       - name: Enable tutor plugin - Backup
-        uses: openedx-actions/tutor-plugin-enable-backup@v0.0.8
+        uses: openedx-actions/tutor-plugin-enable-backup@{{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_backup_version }}
         if: {% raw %}${{ env.ENABLE_BACKUP == 'true' }}{% endraw %}
         with:
           aws-ecr-uri: ${AWS_ECR_REPOSITORY_BACKUPS}
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
       - name: Enable tutor plugin - Discovery
-        uses: openedx-actions/tutor-plugin-enable-discovery@v0.0.2
+        uses: openedx-actions/tutor-plugin-enable-discovery@{{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_discovery_version }}
         if: {% raw %}${{ env.ENABLE_DISCOVERY == 'true' }}{% endraw %}
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
       - name: Enable tutor plugin - MFE
-        uses: openedx-actions/tutor-plugin-enable-mfe@v0.0.1
+        uses: openedx-actions/tutor-plugin-enable-mfe@{{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_mfe_version }}
         if: {% raw %}${{ env.ENABLE_MFE == 'true' }}{% endraw %}
         with:
           aws-ecr-uri: ${AWS_ECR_REPOSITORY_MFE}
 
       - name: Enable tutor plugin - Credentials
-        uses: openedx-actions/tutor-plugin-enable-credentials@v0.0.3
+        uses: openedx-actions/tutor-plugin-enable-credentials@{{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_credentials_version }}
         if: {% raw %}${{ env.ENABLE_CREDENTIALS == 'true' }}{% endraw %}
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
@@ -127,44 +127,44 @@ jobs:
           common-logo-url: {{ cookiecutter.global_platform_logo_url }}
 
       - name: Enable tutor plugin - Xqueue
-        uses: openedx-actions/tutor-plugin-enable-xqueue@v0.0.1
+        uses: openedx-actions/tutor-plugin-enable-xqueue@{{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_xqueue_version }}
         if: {% raw %}${{ env.ENABLE_XQUEUE == 'true' }}{% endraw %}
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
       - name: Enable tutor plugin - Notes
-        uses: openedx-actions/tutor-plugin-enable-notes@v0.0.1
+        uses: openedx-actions/tutor-plugin-enable-notes@{{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_notes_version }}
         if: {% raw %}${{ env.ENABLE_NOTES == 'true' }}{% endraw %}
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
       - name: Enable tutor plugin - Ecommerce
-        uses: openedx-actions/tutor-plugin-enable-ecommerce@v0.0.2
+        uses: openedx-actions/tutor-plugin-enable-ecommerce@{{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_ecommerce_version }}
         if: {% raw %}${{ env.ENABLE_ECOMMERCE == 'true' }}{% endraw %}
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
       - name: Enable tutor plugin - Forum
-        uses: openedx-actions/tutor-plugin-enable-forum@v0.0.2
+        uses: openedx-actions/tutor-plugin-enable-forum@{{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_forum_version }}
         if: {% raw %}${{ env.ENABLE_FORUM == 'true' }}{% endraw %}
 
       # ---------------------------------------------------------------------------------
       # Configure backend services
       # ---------------------------------------------------------------------------------
       - name: Configure SMTP
-        uses: openedx-actions/tutor-k8s-configure-smtp@v0.0.3
+        uses: openedx-actions/tutor-k8s-configure-smtp@{{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_smtp_version }}
         with:
           aws-ses-iam-key: {% raw %}${{ secrets.aws-ses-iam-key }}{% endraw %}
           aws-ses-iam-secret: {% raw %}${{ secrets.aws-ses-iam-secret }}{% endraw %}
           aws-region: {% raw %}${{ env.AWS_REGION }}{% endraw %}
 
       - name: Configure Redis
-        uses: openedx-actions/tutor-k8s-configure-redis@v0.0.3
+        uses: openedx-actions/tutor-k8s-configure-redis@{{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_redis_version }}
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
       - name: Configure MySQL
-        uses: openedx-actions/tutor-k8s-configure-mysql@v0.0.4
+        uses: openedx-actions/tutor-k8s-configure-mysql@{{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_mysql_version }}
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
@@ -178,20 +178,20 @@ jobs:
                             --set OPENEDX_FACEBOOK_APP_SECRET="{% raw %}${{ inputs.facebook-app-secret }}{% endraw %}"
 
       - name: Fetch JWT token
-        uses: openedx-actions/tutor-k8s-configure-jwt@v0.0.2
+        uses: openedx-actions/tutor-k8s-configure-jwt@{{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_jwt_version }}
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
 
       # see: https://github.com/{{ cookiecutter.github_account_name }}/openedx_devops/blob/main/terraform/modules/kubernetes_secrets/main.tf
       - name: Configure edx secret
-        uses: openedx-actions/tutor-k8s-configure-edx-secret@v0.0.2
+        uses: openedx-actions/tutor-k8s-configure-edx-secret@{{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_edx_secret_version }}
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
 
       - name: Dump tutor config
-        uses: openedx-actions/tutor-print-dump@v0.0.1
+        uses: openedx-actions/tutor-print-dump@{{ cookiecutter.ci_openedx_actions_tutor_print_dump }}
 
       # ---------------------------------------------------------------------------------
       # Deploy
@@ -208,4 +208,4 @@ jobs:
           tutor k8s settheme edx-theme
 
       - name: Create admin user
-        uses: openedx-actions/tutor-k8s-configure-edx-admin@v0.0.3
+        uses: openedx-actions/tutor-k8s-configure-edx-admin@{{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_edx_admin }}

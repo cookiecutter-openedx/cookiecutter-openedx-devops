@@ -44,10 +44,10 @@ jobs:
           aws-region: {% raw %}${{ env.AWS_REGION }}{% endraw %}
 
       - name: Initialize environment
-        uses: openedx-actions/tutor-k8s-init@v0.0.6
+        uses: openedx-actions/tutor-k8s-init@{{ cookiecutter.ci_openedx_actions_tutor_k8s_init_version }}
 
       - name: Build openedx
-        uses: openedx-actions/tutor-plugin-build-openedx@v0.1.12
+        uses: openedx-actions/tutor-plugin-build-openedx@{{ cookiecutter.ci_openedx_actions_tutor_plugin_build_openedx_version }}
         with:
           custom-theme-repository: {% raw %}${{ env.CUSTOM_THEME_REPOSITORY }}{% endraw %}
           custom-theme-repository-ref: {% raw %}${{ env.CUSTOM_THEME_REPOSITORY_REF }}{% endraw %}
