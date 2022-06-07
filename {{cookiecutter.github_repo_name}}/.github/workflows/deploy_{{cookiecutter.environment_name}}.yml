@@ -45,14 +45,14 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1.6.1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+          aws-access-key-id: {% raw %}${{ secrets.AWS_ACCESS_KEY_ID }}{% endraw %}
+          aws-secret-access-key: {% raw %}${{ secrets.AWS_SECRET_ACCESS_KEY }}{% endraw %}
+          aws-region: {% raw %}${{ env.AWS_REGION }}{% endraw %}
 
       - name: Initialize environment
         uses: openedx-actions/tutor-k8s-init@v0.0.2
         with:
-          namespace: ${{ env.NAMESPACE }}
+          namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
       # ---------------------------------------------------------------------------------
       # initialize workflow environment variables
@@ -60,7 +60,7 @@ jobs:
       - name: Intialize AWS_ECR_URI
         shell: bash
         run: |-
-          echo "AWS_ECR_URI=${{ env.AWS_ACCOUNT_NUMBER }}.${{ env.AWS_ECR_HOST }}" >> $GITHUB_ENV
+          echo "AWS_ECR_URI={% raw %}${{ env.AWS_ACCOUNT_NUMBER }}{% endraw %}.{% raw %}${{ env.AWS_ECR_HOST }}{% endraw %}" >> $GITHUB_ENV
 
       - name: Intialize AWS ECR repo URIs
         shell: bash
@@ -92,58 +92,58 @@ jobs:
       # ---------------------------------------------------------------------------------
       - name: Enable tutor plugin - S3
         uses: openedx-actions/tutor-plugin-enable-s3@v0.0.3
-        if: ${{ env.ENABLE_S3 == 'true' }}
+        if: {% raw %}${{ env.ENABLE_S3 == 'true' }}{% endraw %}
         with:
-          namespace: ${{ env.NAMESPACE }}
+          namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
       - name: Enable tutor plugin - Backup
         uses: openedx-actions/tutor-plugin-enable-backup@v0.0.8
-        if: ${{ env.ENABLE_BACKUP == 'true' }}
+        if: {% raw %}${{ env.ENABLE_BACKUP == 'true' }}{% endraw %}
         with:
           aws-ecr-uri: ${AWS_ECR_REPOSITORY_BACKUPS}
-          namespace: ${{ env.NAMESPACE }}
+          namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
       - name: Enable tutor plugin - Discovery
         uses: openedx-actions/tutor-plugin-enable-discovery@v0.0.2
-        if: ${{ env.ENABLE_DISCOVERY == 'true' }}
+        if: {% raw %}${{ env.ENABLE_DISCOVERY == 'true' }}{% endraw %}
         with:
-          namespace: ${{ env.NAMESPACE }}
+          namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
       - name: Enable tutor plugin - MFE
         uses: openedx-actions/tutor-plugin-enable-mfe@v0.0.1
-        if: ${{ env.ENABLE_MFE == 'true' }}
+        if: {% raw %}${{ env.ENABLE_MFE == 'true' }}{% endraw %}
         with:
           aws-ecr-uri: ${AWS_ECR_REPOSITORY_MFE}
 
       - name: Enable tutor plugin - Credentials
         uses: openedx-actions/tutor-plugin-enable-credentials@v0.0.3
-        if: ${{ env.ENABLE_CREDENTIALS == 'true' }}
+        if: {% raw %}${{ env.ENABLE_CREDENTIALS == 'true' }}{% endraw %}
         with:
-          namespace: ${{ env.NAMESPACE }}
+          namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
           aws-ecr-uri: ${AWS_ECR_REPOSITORY_CREDENTIALS}
           common-logo-url: {{ cookiecutter.global_platform_logo_url }}
 
       - name: Enable tutor plugin - Xqueue
         uses: openedx-actions/tutor-plugin-enable-xqueue@v0.0.1
-        if: ${{ env.ENABLE_XQUEUE == 'true' }}
+        if: {% raw %}${{ env.ENABLE_XQUEUE == 'true' }}{% endraw %}
         with:
-          namespace: ${{ env.NAMESPACE }}
+          namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
       - name: Enable tutor plugin - Notes
         uses: openedx-actions/tutor-plugin-enable-notes@v0.0.1
-        if: ${{ env.ENABLE_NOTES == 'true' }}
+        if: {% raw %}${{ env.ENABLE_NOTES == 'true' }}{% endraw %}
         with:
-          namespace: ${{ env.NAMESPACE }}
+          namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
       - name: Enable tutor plugin - Ecommerce
         uses: openedx-actions/tutor-plugin-enable-ecommerce@v0.0.2
-        if: ${{ env.ENABLE_ECOMMERCE == 'true' }}
+        if: {% raw %}${{ env.ENABLE_ECOMMERCE == 'true' }}{% endraw %}
         with:
-          namespace: ${{ env.NAMESPACE }}
+          namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
       - name: Enable tutor plugin - Forum
         uses: openedx-actions/tutor-plugin-enable-forum@v0.0.2
-        if: ${{ env.ENABLE_FORUM == 'true' }}
+        if: {% raw %}${{ env.ENABLE_FORUM == 'true' }}{% endraw %}
 
       # ---------------------------------------------------------------------------------
       # Configure backend services
@@ -151,19 +151,19 @@ jobs:
       - name: Configure SMTP
         uses: openedx-actions/tutor-k8s-configure-smtp@v0.0.3
         with:
-          aws-ses-iam-key: ${{ secrets.aws-ses-iam-key }}
-          aws-ses-iam-secret: ${{ secrets.aws-ses-iam-secret }}
-          aws-region: ${{ env.AWS_REGION }}
+          aws-ses-iam-key: {% raw %}${{ secrets.aws-ses-iam-key }}{% endraw %}
+          aws-ses-iam-secret: {% raw %}${{ secrets.aws-ses-iam-secret }}{% endraw %}
+          aws-region: {% raw %}${{ env.AWS_REGION }}{% endraw %}
 
       - name: Configure Redis
         uses: openedx-actions/tutor-k8s-configure-redis@v0.0.3
         with:
-          namespace: ${{ env.NAMESPACE }}
+          namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
       - name: Configure MySQL
         uses: openedx-actions/tutor-k8s-configure-mysql@v0.0.4
         with:
-          namespace: ${{ env.NAMESPACE }}
+          namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
       - name: Dump tutor config
         uses: openedx-actions/tutor-print-dump@v0.0.1
@@ -180,7 +180,7 @@ jobs:
       - name: Fetch JWT token
         uses: openedx-actions/tutor-k8s-configure-jwt@v0.0.2
         with:
-          namespace: ${{ env.NAMESPACE }}
+          namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
 
       # see: https://github.com/Medality-Health/openedx_devops/blob/main/terraform/modules/kubernetes_secrets/main.tf
@@ -195,7 +195,7 @@ jobs:
         uses: ./.github/actions/tutor/k8s/deploy
         with:
           environment-id: {{ cookiecutter.environment_name }}
-          namespace: ${{ env.NAMESPACE }}
+          namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
       - name: Set theme
         shell: bash
