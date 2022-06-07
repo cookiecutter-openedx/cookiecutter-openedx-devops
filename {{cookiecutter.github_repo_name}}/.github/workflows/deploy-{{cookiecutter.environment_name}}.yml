@@ -24,6 +24,7 @@ jobs:
       # --------------------------------------------
       ENVIRONMENT_ID: {{ cookiecutter.environment_name }}
       NAMESPACE: openedx-{{ cookiecutter.environment_name }}
+      EKS_CLUSTER_NAME: {{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.global_platform_shared_resource_identifier }}
 
       # feature flags for optional tutor modules
       # --------------------------------------------
@@ -53,6 +54,7 @@ jobs:
         uses: openedx-actions/tutor-k8s-init@v0.0.6
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
+          k8s-cluster-name: {% raw %}${{ env.EKS_CLUSTER_NAME }}{% endraw %}
 
       # ---------------------------------------------------------------------------------
       # initialize workflow environment variables
