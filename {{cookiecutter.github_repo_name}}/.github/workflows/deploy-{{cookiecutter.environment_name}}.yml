@@ -182,7 +182,7 @@ jobs:
 
       # see: https://github.com/{{ cookiecutter.github_account_name }}/openedx_devops/blob/main/terraform/modules/kubernetes_secrets/main.tf
       - name: Configure edx secret
-        uses: openedx-actions/tutor-k8s-configure-edx-secret@v0.0.3
+        uses: openedx-actions/tutor-k8s-configure-edx-secret@v0.0.2
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
