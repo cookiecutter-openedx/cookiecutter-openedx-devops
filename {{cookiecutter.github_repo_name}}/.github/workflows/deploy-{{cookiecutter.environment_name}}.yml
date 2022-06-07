@@ -16,8 +16,6 @@ jobs:
     env:
       # common settings
       # --------------------------------------------
-      AWS_ACCOUNT_NUMBER: '{{ cookiecutter.global_account_id }}'
-      AWS_ECR_HOST: 'dkr.ecr.{{ cookiecutter.global_aws_region }}.amazonaws.com'
       AWS_REGION: {{ cookiecutter.global_aws_region }}
 
       # environment settings
@@ -29,13 +27,13 @@ jobs:
       # feature flags for optional tutor modules
       # --------------------------------------------
       DEBUG_MODE: false
-      ENABLE_BACKUP: true
+      ENABLE_BACKUP: false
       ENABLE_CREDENTIALS: false
-      ENABLE_DISCOVERY: true
+      ENABLE_DISCOVERY: false
       ENABLE_ECOMMERCE: false
-      ENABLE_FORUM: true
-      ENABLE_MFE: true
-      ENABLE_NOTES: true
+      ENABLE_FORUM: false
+      ENABLE_MFE: false
+      ENABLE_NOTES: false
       ENABLE_S3: true
       ENABLE_XQUEUE: false
 
@@ -57,13 +55,17 @@ jobs:
           eks-cluster-name: {% raw %}${{ env.EKS_CLUSTER_NAME }}{% endraw %}
           aws-region: {% raw %}${{ env.AWS_REGION }}{% endraw %}
 
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1.4.0
+
       # ---------------------------------------------------------------------------------
       # initialize workflow environment variables
       # ---------------------------------------------------------------------------------
       - name: Intialize AWS_ECR_URI
         shell: bash
         run: |-
-          echo "AWS_ECR_URI={% raw %}${{ env.AWS_ACCOUNT_NUMBER }}{% endraw %}.{% raw %}${{ env.AWS_ECR_HOST }}{% endraw %}" >> $GITHUB_ENV
+          echo "AWS_ECR_URI=${{ steps.login-ecr.outputs.registry }}" >> $GITHUB_ENV
 
       - name: Intialize AWS ECR repo URIs
         shell: bash
