@@ -55,6 +55,7 @@ jobs:
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
           k8s-cluster-name: {% raw %}${{ env.EKS_CLUSTER_NAME }}{% endraw %}
+          aws-region: {% raw %}${{ env.AWS_REGION }}{% endraw %}
 
       # ---------------------------------------------------------------------------------
       # initialize workflow environment variables
