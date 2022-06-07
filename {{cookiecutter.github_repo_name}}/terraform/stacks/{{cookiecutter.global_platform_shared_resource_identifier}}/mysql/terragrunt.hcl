@@ -108,7 +108,7 @@ inputs = {
   # db server size
   instance_class        = local.mysql_instance_class
   allocated_storage     = local.mysql_allocated_storage
-  max_allocated_storage = 10
+  max_allocated_storage = 1000
   storage_encrypted     = false
   multi_az              = false
   enabled_cloudwatch_logs_exports = []
