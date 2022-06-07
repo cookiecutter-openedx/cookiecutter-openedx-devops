@@ -51,10 +51,10 @@ jobs:
           aws-region: {% raw %}${{ env.AWS_REGION }}{% endraw %}
 
       - name: Initialize environment
-        uses: openedx-actions/tutor-k8s-init@v0.0.6
+        uses: openedx-actions/tutor-k8s-init@v0.0.9
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
-          k8s-cluster-name: {% raw %}${{ env.EKS_CLUSTER_NAME }}{% endraw %}
+          eks-cluster-name: {% raw %}${{ env.EKS_CLUSTER_NAME }}{% endraw %}
           aws-region: {% raw %}${{ env.AWS_REGION }}{% endraw %}
 
       # ---------------------------------------------------------------------------------
