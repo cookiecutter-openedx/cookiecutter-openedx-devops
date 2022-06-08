@@ -75,6 +75,11 @@ jobs:
           echo "AWS_ECR_REPOSITORY_MFE=${AWS_ECR_URI}/openedx_mfe:latest" >> $GITHUB_ENV
           echo "AWS_ECR_REPOSITORY_OPENEDX=${AWS_ECR_URI}/openedx:latest" >> $GITHUB_ENV
 
+      - name: Load environment specific settings (direct)
+        shell: bash
+        run: |-
+          # Pin the instalation ID with the Kubernetes namespace. It needs to be unique and static per instalation.
+          cat ci/tutor-deploy/environments/${{ env.ENVIRONMENT_ID }}/config.yml >> $GITHUB_ENV
 
       # note that values like $LMS_HOSTNAME come from this repo
       # in /ci/tutor-deploy/environments/{{ cookiecutter.environment_name }}/config.yml
@@ -85,12 +90,6 @@ jobs:
           echo "TUTOR_CMS_HOST=$CMS_HOSTNAME" >> $GITHUB_ENV
           echo "TUTOR_DOCKER_IMAGE_OPENEDX=${AWS_ECR_REPOSITORY_OPENEDX}" >> $GITHUB_ENV
           echo "OPENEDX_COMMON_VERSION=open-release/{{ cookiecutter.ci_build_open_edx_version }}" >> $GITHUB_ENV
-
-      - name: Load environment specific settings (direct)
-        shell: bash
-        run: |-
-          # Pin the instalation ID with the Kubernetes namespace. It needs to be unique and static per instalation.
-          cat ci/tutor-deploy/environments/${ENVIRONMENT_ID}/config.yml >> $GITHUB_ENV
 
       # ---------------------------------------------------------------------------------
       # Configure optional tutor plugins
