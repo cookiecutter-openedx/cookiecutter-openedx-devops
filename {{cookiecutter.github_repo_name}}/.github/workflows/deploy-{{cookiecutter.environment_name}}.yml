@@ -79,7 +79,7 @@ jobs:
         shell: bash
         run: |-
           # Pin the instalation ID with the Kubernetes namespace. It needs to be unique and static per instalation.
-          cat ci/tutor-deploy/environments/${{ env.ENVIRONMENT_ID }}/config.yml >> $GITHUB_ENV
+          cat ci/tutor-deploy/environments/{% raw %}${{ env.ENVIRONMENT_ID }}{% endraw %}/config.yml >> $GITHUB_ENV
 
       # note that values like $LMS_HOSTNAME come from this repo
       # in /ci/tutor-deploy/environments/{{ cookiecutter.environment_name }}/config.yml
