@@ -19,6 +19,7 @@
     "DEFAULT_EMAIL_LOGO_URL": "https://cdn.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}",
     "ENTERPRISE_SUPPORT_URL": "https://{{ cookiecutter.global_root_domain }}/support/",
     "ENTERPRISE_TAGLINE": "{{ cookiecutter.global_platform_name }}",
+    "ENABLE_CHANGE_USER_PASSWORD_ADMIN": true,
     "FACEBOOK_API_VERSION": "v12.0",
     "FEATURES": {
       "CERTIFICATES_HTML_VIEW": true,
