@@ -65,7 +65,7 @@ jobs:
       - name: Intialize AWS_ECR_URI
         shell: bash
         run: |-
-          echo "AWS_ECR_URI=${{ steps.login-ecr.outputs.registry }}" >> $GITHUB_ENV
+          echo "AWS_ECR_URI={% raw %}${{ steps.login-ecr.outputs.registry }}{% endraw %}" >> $GITHUB_ENV
 
       - name: Intialize AWS ECR repo URIs
         shell: bash
