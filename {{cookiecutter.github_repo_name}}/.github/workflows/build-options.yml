@@ -24,13 +24,13 @@ jobs:
       AWS_REGION: {{ cookiecutter.global_aws_region }}
 
     steps:
-      - uses: actions/checkout@v3.0.2
+      - uses: actions/checkout@{{ cookiecutter.ci_actions_checkout_version }}
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@{{ cookiecutter.ci_actions_setup_buildx_action_version }}
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1.6.1
+        uses: aws-actions/configure-aws-credentials@{{ cookiecutter.ci_actions_configure_aws_credentials_version }}
         with:
           aws-access-key-id: {% raw %}${{ secrets.AWS_ACCESS_KEY_ID }}{% endraw %}
           aws-secret-access-key: {% raw %}${{ secrets.AWS_SECRET_ACCESS_KEY }}{% endraw %}
