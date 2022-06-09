@@ -48,7 +48,7 @@ jobs:
       # private repositories
       #------------------------------------------------------------------------
       - name: Add an edx plugin
-        uses: openedx-actions/tutor-plugin-build-openedx-add-requirement@v0.0.5
+        uses: openedx-actions/tutor-plugin-build-openedx-add-requirement@{{ cookiecutter.ci_openedx_actions_tutor_plugin_build_openedx_add_requirement_version }}
         with:
           repository: openedx-plugin-example
           repository-organization: lpm0073
