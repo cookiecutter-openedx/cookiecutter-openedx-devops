@@ -5,7 +5,7 @@
 # usage: top-level workflow. Initiated manually from Github Actions console page
 #        Builds all Docker containers.
 #------------------------------------------------------------------------------
-name: Build Containers
+name: Build openedx container
 
 on:
   workflow_dispatch:
