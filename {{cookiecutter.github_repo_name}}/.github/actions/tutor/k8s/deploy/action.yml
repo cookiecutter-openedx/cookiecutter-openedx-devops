@@ -37,7 +37,7 @@ runs:
       shell: bash
       run:  |-
         # Create kubernetes ingress and other environment resources
-        kubectl apply -f "ci/tutor-deploy/environments/${{ inputs.environment-id }}/k8s"
+        kubectl apply -f "ci/tutor-deploy/environments/{% raw %}${{ inputs.environment-id }}{% endraw %}/k8s"
 
     #------------------------------------------------------------------------
     # IV. Merge all of the configuration data into Tutor's Open edX
@@ -50,21 +50,21 @@ runs:
     #------------------------------------------------------------------------
     - name: cat settings_merge.yml
       shell: bash
-      run:  cat -n $GITHUB_WORKSPACE/ci/tutor-deploy/environments/${{ inputs.environment-id }}/settings_merge.yml
+      run:  cat -n $GITHUB_WORKSPACE/ci/tutor-deploy/environments/{% raw %}${{ inputs.environment-id }}{% endraw %}/settings_merge.yml
 
     - name: Patch lms.env.yml
       shell: bash
       run:  |-
         cd ${CONFIG_PATH}
         mv lms.env.yml lms.env.yml.orig
-        yq ea '. as $item ireduce ({}; . * $item )' lms.env.yml.orig  "$GITHUB_WORKSPACE/ci/tutor-deploy/environments/${{ inputs.environment-id }}/settings_merge.yml" >  lms.env.yml
+        yq ea '. as $item ireduce ({}; . * $item )' lms.env.yml.orig  "$GITHUB_WORKSPACE/ci/tutor-deploy/environments/{% raw %}${{ inputs.environment-id }}{% endraw %}/settings_merge.yml" >  lms.env.yml
 
     - name: Patch cms.env.yml
       shell: bash
       run:  |-
         cd ${CONFIG_PATH}
         mv cms.env.yml cms.env.yml.orig
-        yq ea '. as $item ireduce ({}; . * $item )' cms.env.yml.orig  "$GITHUB_WORKSPACE/ci/tutor-deploy/environments/${{ inputs.environment-id }}/settings_merge.yml" >  cms.env.yml
+        yq ea '. as $item ireduce ({}; . * $item )' cms.env.yml.orig  "$GITHUB_WORKSPACE/ci/tutor-deploy/environments/{% raw %}${{ inputs.environment-id }}{% endraw %}/settings_merge.yml" >  cms.env.yml
 
     - name: cleanup config folder
       shell: bash
