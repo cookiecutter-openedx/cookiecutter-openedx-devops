@@ -62,7 +62,7 @@ FEATURES:
 ID_VERIFICATION_SUPPORT_LINK: https://{{ cookiecutter.global_root_domain }}/support/
 LANGUAGE_CODE: en
 LANGUAGE_COOKIE: openedx-language-preference
-LOGO_URL_PNG: https://cdn.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter. }}
+LOGO_URL_PNG: "https://cdn.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}"
 PLATFORM_DESCRIPTION: "{{ cookiecutter.global_platform_description }}"
 PLATFORM_FACEBOOK_ACCOUNT: http://www.facebook.com/
 PLATFORM_NAME: "{{ cookiecutter.global_platform_name }}"
