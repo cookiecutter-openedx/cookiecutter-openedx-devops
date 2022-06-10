@@ -42,7 +42,7 @@
     "ci_openedx_actions_tutor_k8s_configure_mysql_version": "v0.0.4",
     "ci_openedx_actions_tutor_k8s_configure_redis_version": "v0.0.3",
     "ci_openedx_actions_tutor_k8s_configure_smtp_version": "v0.0.3",
-    "ci_openedx_actions_tutor_print_dump": "v0.0.1",
+    "ci_openedx_actions_tutor_print_dump": "v0.0.2",
     "ci_openedx_actions_tutor_plugin_build_backup_version": "v0.1.7",
     "ci_openedx_actions_tutor_plugin_build_credentials_version": "v0.1.5",
     "ci_openedx_actions_tutor_plugin_build_mfe_version": "v0.1.5",
