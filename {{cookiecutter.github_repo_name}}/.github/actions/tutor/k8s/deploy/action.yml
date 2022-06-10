@@ -35,12 +35,12 @@ runs:
 
     #------------------------------------------------------------------------
     # IV. Merge all of the configuration data into Tutor's Open edX
-    #     configuration files: config.yml, lms.env.json, cms.env.json
+    #     configuration files: config.yml, lms.env.yml, cms.env.yml
     #
     # In this step we're combining three sources of data:
     # 1. sensitive configuration data retrieved from Kubernetes secrets in section II above
     # 2. Open edx application and services configuration data created here in section III
-    # 3. LMS and CMS application configuration data stored in our repo at ci/tutor-deploy/environments/prod/settings_merge.json
+    # 3. LMS and CMS application configuration data stored in our repo at ci/tutor-deploy/environments/prod/settings_merge.yml
     #------------------------------------------------------------------------
     - name: Patch Generated Configuration (Static)
       shell: bash
@@ -52,20 +52,20 @@ runs:
 
         cd $(tutor config printroot)/env/apps/openedx/config/
 
-        mv lms.env.json lms.env.json.orig
-        jq -s '.[0] * .[1]'  lms.env.json.orig  "$GITHUB_WORKSPACE/ci/tutor-deploy/environments/{% raw %}${{ inputs.environment-id }}{% endraw %}/settings_merge.json" >  lms.env.json
+        mv lms.env.yml lms.env.yml.orig
+        jq -s '.[0] * .[1]'  lms.env.yml.orig  "$GITHUB_WORKSPACE/ci/tutor-deploy/environments/{% raw %}${{ inputs.environment-id }}{% endraw %}/settings_merge.yml" >  lms.env.yml
 
-        echo 'Tutor lms.env.json contents:'
-        cat lms.env.json
+        echo 'Tutor lms.env.yml contents:'
+        cat lms.env.yml
         echo ""
         echo ""
 
-        mv cms.env.json cms.env.json.orig
-        jq -s '.[0] * .[1]'  cms.env.json.orig  "$GITHUB_WORKSPACE/ci/tutor-deploy/environments/{% raw %}${{ inputs.environment-id }}{% endraw %}/settings_merge.json" >  cms.env.json
+        mv cms.env.yml cms.env.yml.orig
+        jq -s '.[0] * .[1]'  cms.env.yml.orig  "$GITHUB_WORKSPACE/ci/tutor-deploy/environments/{% raw %}${{ inputs.environment-id }}{% endraw %}/settings_merge.yml" >  cms.env.yml
         rm *orig
 
-        echo 'Tutor cms.env.json contents:'
-        cat cms.env.json
+        echo 'Tutor cms.env.yml contents:'
+        cat cms.env.yml
         echo ""
         echo ""
 
