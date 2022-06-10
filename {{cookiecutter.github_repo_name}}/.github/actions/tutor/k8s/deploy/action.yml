@@ -27,11 +27,17 @@ runs:
     # stored in ci/tutor-deploy/environments/prod/k8s/
     # in Kubernetes manifest yaml format
     # ---------------------------------------------------------------------------------
+    - name: set environment variables
+      shell: bash
+      run: |-
+        echo "CONFIG_PATH=$(tutor config printroot)/env/apps/openedx/config" >> $GITHUB_ENV
+
+
     - name: Create Kubernetes add-on resources
       shell: bash
       run:  |-
         # Create kubernetes ingress and other environment resources
-        kubectl apply -f "ci/tutor-deploy/environments/{% raw %}${{ inputs.environment-id }}{% endraw %}/k8s"
+        kubectl apply -f "ci/tutor-deploy/environments/${{ inputs.environment-id }}/k8s"
 
     #------------------------------------------------------------------------
     # IV. Merge all of the configuration data into Tutor's Open edX
@@ -42,32 +48,32 @@ runs:
     # 2. Open edx application and services configuration data created here in section III
     # 3. LMS and CMS application configuration data stored in our repo at ci/tutor-deploy/environments/prod/settings_merge.yml
     #------------------------------------------------------------------------
-    - name: Patch Generated Configuration (Static)
+    - name: cat settings_merge.yml
+      shell: bash
+      run:  cat -n $GITHUB_WORKSPACE/ci/tutor-deploy/environments/${{ inputs.environment-id }}/settings_merge.yml
+
+    - name: Patch lms.env.yml
       shell: bash
       run:  |-
-        echo "config.yml full path: $(tutor config printroot)/config.yml"
-        cat "$(tutor config printroot)/config.yml"
-        echo ""
-        echo ""
-
-        cd $(tutor config printroot)/env/apps/openedx/config/
-
+        cd ${CONFIG_PATH}
         mv lms.env.yml lms.env.yml.orig
-        jq -s '.[0] * .[1]'  lms.env.yml.orig  "$GITHUB_WORKSPACE/ci/tutor-deploy/environments/{% raw %}${{ inputs.environment-id }}{% endraw %}/settings_merge.yml" >  lms.env.yml
+        yq ea '. as $item ireduce ({}; . * $item )' lms.env.yml.orig  "$GITHUB_WORKSPACE/ci/tutor-deploy/environments/${{ inputs.environment-id }}/settings_merge.yml" >  lms.env.yml
 
-        echo 'Tutor lms.env.yml contents:'
-        cat lms.env.yml
-        echo ""
-        echo ""
-
+    - name: Patch cms.env.yml
+      shell: bash
+      run:  |-
+        cd ${CONFIG_PATH}
         mv cms.env.yml cms.env.yml.orig
-        jq -s '.[0] * .[1]'  cms.env.yml.orig  "$GITHUB_WORKSPACE/ci/tutor-deploy/environments/{% raw %}${{ inputs.environment-id }}{% endraw %}/settings_merge.yml" >  cms.env.yml
+        yq ea '. as $item ireduce ({}; . * $item )' cms.env.yml.orig  "$GITHUB_WORKSPACE/ci/tutor-deploy/environments/${{ inputs.environment-id }}/settings_merge.yml" >  cms.env.yml
+
+    - name: cleanup config folder
+      shell: bash
+      run: |-
+        cd ${CONFIG_PATH}
         rm *orig
 
-        echo 'Tutor cms.env.yml contents:'
-        cat cms.env.yml
-        echo ""
-        echo ""
+    - name: Dump tutor config
+      uses: openedx-actions/tutor-print-dump@v0.0.3
 
     #------------------------------------------------------------------------
     # V. Deploy Open edX
