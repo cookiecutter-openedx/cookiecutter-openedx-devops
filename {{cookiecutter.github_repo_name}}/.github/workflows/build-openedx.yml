@@ -37,6 +37,20 @@ jobs:
         uses: openedx-actions/tutor-k8s-init@{{ cookiecutter.ci_openedx_actions_tutor_k8s_init_version }}
 
       #------------------------------------------------------------------------
+      # Add a custom theme here.
+      #------------------------------------------------------------------------
+      - name: Add a custom theme
+        uses: openedx-actions/tutor-plugin-build-openedx-add-theme@{{ cookiecutter.ci_openedx_actions_tutor_plugin_build_openedx_add_theme_version }}
+        with:
+          repository: {% raw %}${{ env.CUSTOM_THEME_REPOSITORY }}{% endraw %}
+          repository-organization: {% raw %}${{ env.CUSTOM_THEME_REPOSITORY_ORGANIZATION }}{% endraw %}
+          repository-ref: {% raw %}${{ env.CUSTOM_THEME_REPOSITORY_REF }}{% endraw %}
+          # UN-COMMENT THIS IF YOUR REPO IS PRIVATE.
+          #----------------------------------------------
+          #repository-token: ${{ secrets.PAT }}
+          #----------------------------------------------
+
+      #------------------------------------------------------------------------
       # Add any Python requirements here.
       # These include:
       # - generic Python PyPi packages
@@ -53,6 +67,10 @@ jobs:
           repository: openedx-plugin-example
           repository-organization: lpm0073
           repository-ref: main
+          # UN-COMMENT THIS IF YOUR REPO IS PRIVATE.
+          #----------------------------------------------
+          #repository-token: ${{ secrets.PAT }}
+          #----------------------------------------------
 
       - name: Add an Xblock
         uses: openedx-actions/tutor-plugin-build-openedx-add-requirement@{{ cookiecutter.ci_openedx_actions_tutor_plugin_build_openedx_add_requirement_version }}
@@ -60,16 +78,10 @@ jobs:
           repository: edx-ora2
           repository-organization: openedx
           repository-ref: master
-
-      #------------------------------------------------------------------------
-      # Add a custom theme here.
-      #------------------------------------------------------------------------
-      - name: Add a custom theme
-        uses: openedx-actions/tutor-plugin-build-openedx-add-theme@{{ cookiecutter.ci_openedx_actions_tutor_plugin_build_openedx_add_theme_version }}
-        with:
-          repository: {% raw %}${{ env.CUSTOM_THEME_REPOSITORY }}{% endraw %}
-          repository-organization: {% raw %}${{ env.CUSTOM_THEME_REPOSITORY_ORGANIZATION }}{% endraw %}
-          repository-ref: {% raw %}${{ env.CUSTOM_THEME_REPOSITORY_REF }}{% endraw %}
+          # UN-COMMENT THIS IF YOUR REPO IS PRIVATE.
+          #----------------------------------------------
+          #repository-token: ${{ secrets.PAT }}
+          #----------------------------------------------
 
       #------------------------------------------------------------------------
       # Build and upload the Docker container
