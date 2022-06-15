@@ -31,7 +31,7 @@
     "ci_deploy_tutor_plugin_credentials_version": "v13.0.2",
     "ci_deploy_tutor_plugin_s3_version": "v0.2.2",
     "ci_deploy_tutor_plugin_backup_version": "v0.0.6",
-    "ci_actions_checkout_version": "3.0.2",
+    "ci_actions_checkout_version": "v3.0.2",
     "ci_actions_setup_buildx_action_version": "v2",
     "ci_actions_configure_aws_credentials_version": "v1.6.1",
     "ci_actions_amazon_ecr_login_version": "v1",
