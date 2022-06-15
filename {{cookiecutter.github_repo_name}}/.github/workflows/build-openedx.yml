@@ -47,7 +47,7 @@ jobs:
           repository-ref: {% raw %}${{ env.CUSTOM_THEME_REPOSITORY_REF }}{% endraw %}
           # UN-COMMENT THIS IF YOUR REPO IS PRIVATE.
           #----------------------------------------------
-          #repository-token: ${{ secrets.PAT }}
+          #repository-token: {% raw %}${{ secrets.PAT }}{% endraw %}
           #----------------------------------------------
 
       #------------------------------------------------------------------------
@@ -69,7 +69,7 @@ jobs:
           repository-ref: main
           # UN-COMMENT THIS IF YOUR REPO IS PRIVATE.
           #----------------------------------------------
-          #repository-token: ${{ secrets.PAT }}
+          #repository-token: {% raw %}${{ secrets.PAT }}{% endraw %}
           #----------------------------------------------
 
       - name: Add an Xblock
@@ -80,7 +80,7 @@ jobs:
           repository-ref: master
           # UN-COMMENT THIS IF YOUR REPO IS PRIVATE.
           #----------------------------------------------
-          #repository-token: ${{ secrets.PAT }}
+          #repository-token: {% raw %}${{ secrets.PAT }}{% endraw %}
           #----------------------------------------------
 
       #------------------------------------------------------------------------
