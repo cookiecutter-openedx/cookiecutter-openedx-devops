@@ -55,19 +55,24 @@ jobs:
           repository-ref: main
 
       - name: Add an Xblock
-        uses: openedx-actions/tutor-plugin-build-openedx-add-requirement@v0.0.5
+        uses: openedx-actions/tutor-plugin-build-openedx-add-requirement@{{ cookiecutter.ci_openedx_actions_tutor_plugin_build_openedx_add_requirement_version }}
         with:
           repository: edx-ora2
           repository-organization: openedx
           repository-ref: master
 
+      #------------------------------------------------------------------------
+      # Add a custom theme here.
+      #------------------------------------------------------------------------
+      - name: Add a custom theme
+        uses: openedx-actions/tutor-plugin-build-openedx-add-theme@{{ cookiecutter.ci_openedx_actions_tutor_plugin_build_openedx_add_theme_version }}
+        with:
+          repository: {% raw %}${{ env.CUSTOM_THEME_REPOSITORY }}{% endraw %}
+          repository-organization: {% raw %}${{ env.CUSTOM_THEME_REPOSITORY_ORGANIZATION }}{% endraw %}
+          repository-ref: {% raw %}${{ env.CUSTOM_THEME_REPOSITORY_REF }}{% endraw %}
 
       #------------------------------------------------------------------------
       # Build and upload the Docker container
       #------------------------------------------------------------------------
       - name: Build openedx
         uses: openedx-actions/tutor-plugin-build-openedx@{{ cookiecutter.ci_openedx_actions_tutor_plugin_build_openedx_version }}
-        with:
-          custom-theme-repository: {% raw %}${{ env.CUSTOM_THEME_REPOSITORY }}{% endraw %}
-          custom-theme-repository: {% raw %}${{ env.CUSTOM_THEME_REPOSITORY_ORGANIZATION }}{% endraw %}
-          custom-theme-repository-ref: {% raw %}${{ env.CUSTOM_THEME_REPOSITORY_REF }}{% endraw %}
