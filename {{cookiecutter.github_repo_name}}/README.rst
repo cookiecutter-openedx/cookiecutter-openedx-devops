@@ -260,7 +260,7 @@ If you're new to Kubernetes then you'll find detailed technical how-to instructi
 You'll need kubectl in order to modify the aws-auth pod in your Kubernets cluster.
 
 **Note that since June-2022 the AWS EKS Kubernetes cluster configuration excludes public api access. This means that kubectl is only accessible via the bastion, from inside of the AWS VPC on the private subnets.
-The convenience script `/scripts/bastion-config.sh <./scripts/bastion-config.sh>`_ installs all of the Ubuntu packages and additional software that you'll need to connect to the k8s cluster using kubectl and k9s. You'll also need to
+The convenience script /scripts/bastion-config.sh installs all of the Ubuntu packages and additional software that you'll need to connect to the k8s cluster using kubectl and k9s. You'll also need to
 configure aws cli with an IAM key and secret with the requisite admin permissions.**
 
 .. code-block:: bash
