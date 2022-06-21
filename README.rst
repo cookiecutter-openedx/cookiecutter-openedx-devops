@@ -59,7 +59,7 @@ Github Workflows for Build and Deploy
 Your new repository will be preconfigured to accept a collection of Github secrets parameters for your AWS IAM keypair, SMTP email host credentials, and oAuth provider credentials.
 
 - CI workflows for building your customized Docker images for the Open edX platform and its optional modules.
-- Built entirely from reusable `Open edX Github Actions <https://github.com/openedx-actions>`_ components that are purpose designed to support Open edX software running on Kubernetes.
+- Built entirely from reusable `Open edX Github Actions <https://github.com/openedx-actions>`_ community-supported components that are purpose designed to support Open edX software running on Kubernetes.
 - Deployment workflows for deploying your Open edX platform to your new AWS EKS Kubernetes cluster. The deployment workflow installs the latest stable versions of the following:
     - Open edX LMS and CMS
     - pre-scaffolded Open edX custom theme
