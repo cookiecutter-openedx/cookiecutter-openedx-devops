@@ -9,6 +9,7 @@
 #        to install software packages that are required for use
 #        of k8s, kubectl, aws cli, and mysql
 #--------------------------------------------------------
+
 sudo apt update
 sudo apt upgrade -y
 sudo apt install awscli jq mysql-client-8.0
@@ -19,3 +20,7 @@ sudo snap install yq
 
 pip install --upgrade pyyaml
 pip install tutor
+
+# install k9s
+sudo wget -qO- https://github.com/derailed/k9s/releases/download/v0.24.1/k9s_Linux_x86_64.tar.gz | tar zxvf -  -C /tmp/
+sudo mv /tmp/k9s /usr/local/bin
