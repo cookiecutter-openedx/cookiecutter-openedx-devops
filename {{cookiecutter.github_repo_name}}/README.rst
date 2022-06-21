@@ -278,12 +278,20 @@ Following is an example aws-auth configMap with additional IAM user accounts add
           - system:bootstrappers
           - system:nodes
           rolearn: arn:aws:iam::012345678942:role/default-eks-node-group-20220518182244174100000002
-          username: system:node:{% raw %}{{EC2PrivateDNSName}}{% endraw %}
+          username: system:node:{{EC2PrivateDNSName}}
       mapUsers: |
         - groups:
           - system:masters
           userarn: arn:aws:iam::012345678942:user/lawrence.mcdaniel
           username: lawrence.mcdaniel
+        - groups:
+          - system:masters
+          userarn: arn:aws:iam::012345678942:user/ci
+          username: ci
+        - groups:
+          - system:masters
+          userarn: arn:aws:iam::012345678942:user/user
+          username: user
     kind: ConfigMap
     metadata:
       creationTimestamp: "2022-05-18T18:38:29Z"
