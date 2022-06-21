@@ -40,6 +40,13 @@ resource "aws_key_pair" "bastion" {
   public_key = tls_private_key.bastion.public_key_openssh
 }
 
+data "aws_security_group" "default-eks-node-group" {
+
+  tags = {
+    Name = "default-eks-node-group"
+  }
+
+}
 resource "aws_security_group" "sg_bastion" {
   name_prefix = "${var.resource_name}-bastion"
   description = "openedx_devops: Public ssh access"
@@ -74,9 +81,12 @@ module "bastion" {
   availability_zone = var.availability_zone
   key_name          = aws_key_pair.bastion.key_name
 
-  vpc_security_group_ids = [resource.aws_security_group.sg_bastion.id]
-  root_block_device      = [{ volume_size = 100 }]
-  subnet_id              = var.subnet_id
+  vpc_security_group_ids = [
+    resource.aws_security_group.sg_bastion.id,
+    data.aws_security_group.default-eks-node-group.id
+  ]
+  root_block_device = [{ volume_size = 100 }]
+  subnet_id         = var.subnet_id
 
   tags = var.tags
 }
