@@ -11,9 +11,11 @@
 #--------------------------------------------------------
 sudo apt update
 sudo apt upgrade -y
-sudo apt install awscli jq
+sudo apt install awscli jq mysql-client-8.0
+sudo apt autoremove
+
 sudo snap install kubectl --channel=1.23/stable --classic
 sudo snap install yq
+
 pip install --upgrade pyyaml
 pip install tutor
-sudo apt autoremove
