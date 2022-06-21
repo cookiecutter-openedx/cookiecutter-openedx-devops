@@ -7,7 +7,12 @@
 #
 # usage: run this on your EC2 Ubuntu bastion instance
 #        to install software packages that are required for use
-#        of k8s, kubectl, aws cli, and mysql
+#        of k8s, kubectl, aws cli, and mysql.
+#
+#        After running this script you also need to configure
+#        the aws cli with the following command:
+#
+#        $ aws configure
 #--------------------------------------------------------
 
 sudo apt update
