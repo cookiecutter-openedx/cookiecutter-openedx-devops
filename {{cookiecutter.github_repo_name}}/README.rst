@@ -6,7 +6,7 @@ Tutor Open edX Production Devops Tools
 
 .. image:: https://img.shields.io/static/v1?logo=discourse&label=Forums&style=flat-square&color=ff0080&message=discuss.overhang.io
   :alt: Forums
-  :target: https://discuss.overhang.io
+  :target: https://discuss.openedx.org/
 
 .. image:: https://img.shields.io/static/v1?logo=readthedocs&label=Documentation&style=flat-square&color=blue&message=docs.tutor.overhang.io
   :alt: Documentation
