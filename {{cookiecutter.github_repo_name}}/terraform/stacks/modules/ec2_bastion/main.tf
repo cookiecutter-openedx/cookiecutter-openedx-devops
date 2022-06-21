@@ -47,6 +47,15 @@ data "aws_security_group" "default-eks-node-group" {
   }
 
 }
+
+data "aws_security_group" "stack-namespace-node" {
+
+  tags = {
+    Name = "${var.stack_namespace}-node"
+  }
+
+}
+
 resource "aws_security_group" "sg_bastion" {
   name_prefix = "${var.resource_name}-bastion"
   description = "openedx_devops: Public ssh access"
@@ -83,6 +92,7 @@ module "bastion" {
 
   vpc_security_group_ids = [
     resource.aws_security_group.sg_bastion.id,
+    data.aws_security_group.stack-namespace-node.id,
     data.aws_security_group.default-eks-node-group.id
   ]
   root_block_device = [{ volume_size = 100 }]
