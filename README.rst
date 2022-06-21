@@ -334,6 +334,14 @@ Following is an example aws-auth configMap with additional IAM user accounts add
           - system:masters
           userarn: arn:aws:iam::012345678942:user/lawrence.mcdaniel
           username: lawrence.mcdaniel
+        - groups:
+          - system:masters
+          userarn: arn:aws:iam::012345678942:user/ci
+          username: ci
+        - groups:
+          - system:masters
+          userarn: arn:aws:iam::012345678942:user/user
+          username: user
     kind: ConfigMap
     metadata:
       creationTimestamp: "2022-05-18T18:38:29Z"
