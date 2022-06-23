@@ -11,24 +11,25 @@ locals {
   environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
-  resource_name         = local.environment_vars.locals.shared_resource_namespace
-  environment_domain    = local.environment_vars.locals.environment_domain
-  environment_namespace = local.environment_vars.locals.environment_namespace
+  resource_name             = local.environment_vars.locals.shared_resource_namespace
+  environment_domain        = local.environment_vars.locals.environment_domain
+  environment_namespace     = local.environment_vars.locals.environment_namespace
   shared_resource_namespace = local.environment_vars.locals.shared_resource_namespace
-  environment           = local.environment_vars.locals.environment
+  environment               = local.environment_vars.locals.environment
+  db_prefix                 = local.environment_vars.locals.db_prefix
 }
 
 dependencies {
   paths = [
-    "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/vpc",
-    "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/kubernetes",
-    "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/mysql",
+    "../../../stacks/live/vpc",
+    "../../../stacks/live/kubernetes",
+    "../../../stacks/live/mysql",
     "../kubernetes_secrets"
-    ]
+  ]
 }
 
 dependency "vpc" {
-  config_path = "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/vpc"
+  config_path = "../../../stacks/live/vpc"
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
@@ -43,13 +44,13 @@ dependency "vpc" {
 }
 
 dependency "mysql" {
-  config_path = "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/mysql"
+  config_path = "../../../stacks/live/mysql"
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
   mock_outputs_allowed_terraform_commands = ["init", "validate"]
   mock_outputs = {
-    db_instance_id   = "fake-rds-instance-id"
+    db_instance_id = "fake-rds-instance-id"
   }
 
 }
@@ -68,11 +69,12 @@ include {
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
   # AWS RDS instance identifying information
-  db_instance_id        = dependency.mysql.outputs.db_instance_id
-  resource_name         = local.resource_name
-  environment_domain    = local.environment_domain
-  environment_namespace = local.environment_namespace
+  db_prefix                 = local.db_prefix
+  db_instance_id            = dependency.mysql.outputs.db_instance_id
+  resource_name             = local.resource_name
+  environment_domain        = local.environment_domain
+  environment_namespace     = local.environment_namespace
   shared_resource_namespace = local.shared_resource_namespace
-  environment           = local.environment
-  namespace             = "openedx-${local.environment}"
+  environment               = local.environment
+  namespace                 = "openedx-${local.environment}"
 }
