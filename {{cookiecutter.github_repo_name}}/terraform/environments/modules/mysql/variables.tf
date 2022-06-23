@@ -35,3 +35,7 @@ variable "environment" {
 variable "db_instance_id" {
   type = string
 }
+
+variable "db_prefix" {
+  type = string
+}
