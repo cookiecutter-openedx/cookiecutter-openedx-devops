@@ -63,8 +63,8 @@ resource "kubernetes_secret" "openedx" {
   }
 
   data = {
-    OPENEDX_MYSQL_DATABASE = substr("${var.db_prefix}_openedx", -64, -1)
-    OPENEDX_MYSQL_USERNAME = substr("${var.db_prefix}_openedx", -32, -1)
+    OPENEDX_MYSQL_DATABASE = substr("${var.db_prefix}_edx", -64, -1)
+    OPENEDX_MYSQL_USERNAME = substr("${var.db_prefix}_edx", -32, -1)
     OPENEDX_MYSQL_PASSWORD = random_password.mysql_openedx.result
     MYSQL_HOST             = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
     MYSQL_PORT             = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
@@ -87,8 +87,8 @@ resource "kubernetes_secret" "discovery" {
   }
 
   data = {
-    DISCOVERY_MYSQL_DATABASE = substr("${var.db_prefix}_discovery", -64, -1)
-    DISCOVERY_MYSQL_USERNAME = substr("${var.db_prefix}_discovery", -32, -1)
+    DISCOVERY_MYSQL_DATABASE = substr("${var.db_prefix}_disc", -64, -1)
+    DISCOVERY_MYSQL_USERNAME = substr("${var.db_prefix}_disc", -32, -1)
     DISCOVERY_MYSQL_PASSWORD = random_password.mysql_discovery.result
     MYSQL_HOST               = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
     MYSQL_PORT               = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
@@ -112,8 +112,8 @@ resource "kubernetes_secret" "ecommerce" {
   }
 
   data = {
-    ECOMMERCE_MYSQL_DATABASE = substr("${var.db_prefix}_ecommerce", -64, -1)
-    ECOMMERCE_MYSQL_USERNAME = substr("${var.db_prefix}_ecommerce", -32, -1)
+    ECOMMERCE_MYSQL_DATABASE = substr("${var.db_prefix}_ecom", -64, -1)
+    ECOMMERCE_MYSQL_USERNAME = substr("${var.db_prefix}_ecom", -32, -1)
     ECOMMERCE_MYSQL_PASSWORD = random_password.mysql_ecommerce.result
     MYSQL_HOST               = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
     MYSQL_PORT               = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
@@ -161,8 +161,8 @@ resource "kubernetes_secret" "xqueue" {
   }
 
   data = {
-    XQUEUE_MYSQL_DATABASE = substr("${var.db_prefix}_xqueue", -64, -1)
-    XQUEUE_MYSQL_USERNAME = substr("${var.db_prefix}_xqueue", -32, -1)
+    XQUEUE_MYSQL_DATABASE = substr("${var.db_prefix}_xq", -64, -1)
+    XQUEUE_MYSQL_USERNAME = substr("${var.db_prefix}_xq", -32, -1)
     XQUEUE_MYSQL_PASSWORD = random_password.mysql_xqueue.result
     MYSQL_HOST            = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
     MYSQL_PORT            = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
@@ -185,8 +185,8 @@ resource "kubernetes_secret" "credentials" {
   }
 
   data = {
-    CREDENTIALS_MYSQL_DATABASE = substr("${var.db_prefix}_credentials", -64, -1)
-    CREDENTIALS_MYSQL_USERNAME = substr("${var.db_prefix}_credentials", -32, -1)
+    CREDENTIALS_MYSQL_DATABASE = substr("${var.db_prefix}_cred", -64, -1)
+    CREDENTIALS_MYSQL_USERNAME = substr("${var.db_prefix}_cred", -32, -1)
     CREDENTIALS_MYSQL_PASSWORD = random_password.mysql_credentials.result
     MYSQL_HOST                 = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
     MYSQL_PORT                 = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
