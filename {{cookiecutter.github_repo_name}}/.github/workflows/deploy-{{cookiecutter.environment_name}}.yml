@@ -204,6 +204,9 @@ jobs:
       # ---------------------------------------------------------------------------------
       # Deploy
       # ---------------------------------------------------------------------------------
+      - name: Add tutor k8s-specific deployment tasks
+        uses: openedx-actions/tutor-plugin-enable-k8s-deploy-tasks@{{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_k8s_deploy_tasks_version }}
+
       - name: Deploy to Kubernetes
         uses: ./.github/actions/tutor/k8s/deploy
         with:
