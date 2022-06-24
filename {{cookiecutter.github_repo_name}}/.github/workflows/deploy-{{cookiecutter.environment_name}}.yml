@@ -188,7 +188,7 @@ jobs:
       # Add your custom configuration tasks here ....
       # ---------------------------------------------------------------------------------
       - name: Disable LMS courseware micro front-end app
-        uses: openedx-actions/tutor-plugin-configure-courseware-mfe@@{{ cookiecutter.ci_openedx_actions_tutor_plugin_configure_courseware_mfe_version }}
+        uses: openedx-actions/tutor-plugin-configure-courseware-mfe@{{ cookiecutter.ci_openedx_actions_tutor_plugin_configure_courseware_mfe_version }}
         with:
           enabled: 'false'
 
