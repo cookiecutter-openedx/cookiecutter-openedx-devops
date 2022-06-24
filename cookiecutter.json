@@ -49,6 +49,7 @@
     "ci_openedx_actions_tutor_plugin_build_openedx_version": "v1.0.0",
     "ci_openedx_actions_tutor_plugin_build_openedx_add_requirement_version": "v1.0.0",
     "ci_openedx_actions_tutor_plugin_build_openedx_add_theme_version": "v1.0.0",
+    "ci_openedx_actions_tutor_plugin_configure_courseware_mfe_version": "v0.0.1",
     "ci_openedx_actions_tutor_plugin_enable_backup_version": "v0.0.10",
     "ci_openedx_actions_tutor_plugin_enable_credentials_version": "v0.0.6",
     "ci_openedx_actions_tutor_plugin_enable_discovery_version": "v1.0.0",
