@@ -187,6 +187,9 @@ jobs:
       # ---------------------------------------------------------------------------------
       # Add your custom configuration tasks here ....
       # ---------------------------------------------------------------------------------
+      - name: Disable LMS courseware micro front-end app
+        uses: openedx-actions/tutor-plugin-disable-courseware-mfe@v0.0.1
+
       - name: Configure 3rd Party Authentication
         shell: bash
         run:  |-
