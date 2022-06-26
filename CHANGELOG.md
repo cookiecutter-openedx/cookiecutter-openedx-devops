@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.1] (2022-06-26)
+
+- add per-environment mysql db names
+- add openedx-actions/tutor-plugin-configure-courseware-mfe
+- add openedx-actions/tutor-plugin-enable-k8s-deploy-tasks
+- misc security patches
+- add a bastion setup script to install tutor, kubectl, terraform, terragrunt
+- bump most openedx-actions to production
+- enhanced k8s administration documentation
+
+## [1.0.0] (2022-06-16)
+
+General production release
 ## [0.2.0] (2022-06-10)
 
 - refactor for tutor 14.x
