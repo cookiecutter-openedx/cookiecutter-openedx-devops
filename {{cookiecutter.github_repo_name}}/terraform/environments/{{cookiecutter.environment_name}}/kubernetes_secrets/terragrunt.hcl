@@ -13,6 +13,7 @@ locals {
 
   environment           = local.environment_vars.locals.environment
   resource_name         = local.environment_vars.locals.shared_resource_namespace
+  root_domain           = local.global_vars.locals.root_domain
 }
 
 
@@ -54,5 +55,6 @@ include {
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
   resource_name = local.resource_name
-  namespace = "openedx-${local.environment}"
+  namespace     = "openedx-${local.environment}"
+  root_domain   = local.root_domain
 }

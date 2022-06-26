@@ -24,5 +24,6 @@ resource "kubernetes_secret" "admin_edx" {
   data = {
     ADMIN_USER     = "admin"
     ADMIN_PASSWORD = random_password.admin_edx.result
+    ADMIN_EMAIL    = "admin@${var.root_domain}"
   }
 }

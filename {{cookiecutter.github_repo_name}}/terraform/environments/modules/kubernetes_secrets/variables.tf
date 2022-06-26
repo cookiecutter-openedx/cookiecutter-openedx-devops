@@ -13,3 +13,7 @@ variable "resource_name" {
   description = "the full environment-qualified name of the EKS cluster"
   type        = string
 }
+
+variable "root_domain" {
+  type = string
+}
