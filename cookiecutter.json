@@ -37,7 +37,7 @@
     "ci_actions_amazon_ecr_login_version": "v1",
     "ci_openedx_actions_tutor_k8s_init_version": "v1.0.2",
     "ci_openedx_actions_tutor_k8s_configure_edx_secret_version": "v1.0.0",
-    "ci_openedx_actions_tutor_k8s_configure_edx_admin": "v0.0.5",
+    "ci_openedx_actions_tutor_k8s_configure_edx_admin": "v0.0.6",
     "ci_openedx_actions_tutor_k8s_configure_jwt_version": "v1.0.0",
     "ci_openedx_actions_tutor_k8s_configure_mysql_version": "v1.0.2",
     "ci_openedx_actions_tutor_k8s_configure_redis_version": "v1.0.0",
