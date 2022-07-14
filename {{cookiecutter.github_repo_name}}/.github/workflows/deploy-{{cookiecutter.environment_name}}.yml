@@ -222,3 +222,68 @@ jobs:
         uses: openedx-actions/tutor-k8s-configure-edx-admin@{{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_edx_admin }}
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
+
+      # ---------------------------------------------------------------------------------
+      # Set HorizontalPodAutoscaler policies
+      # ---------------------------------------------------------------------------------
+      - name: Set namespace
+        shell: bash
+        run: kubectl config set-context --current --namespace=${{ env.NAMESPACE }}
+
+      - name: Set LMS HorizontalPodAutoscaler policies
+        uses: ./.github/actions/tutor/k8s/set-autoscaling-policy
+        with:
+          pod-name: lms
+          cpu-threshold: 30
+          minimum-pods: 2
+
+      - name: Set LMS Worker HorizontalPodAutoscaler policies
+        uses: ./.github/actions/tutor/k8s/set-autoscaling-policy
+        with:
+          pod-name: lms-worker
+          cpu-threshold: 30
+          minimum-pods: 2
+
+      - name: Set CMS HorizontalPodAutoscaler policies
+        uses: ./.github/actions/tutor/k8s/set-autoscaling-policy
+        with:
+          pod-name: cms
+
+      - name: Set CMS Worker HorizontalPodAutoscaler policies
+        uses: ./.github/actions/tutor/k8s/set-autoscaling-policy
+        with:
+          pod-name: cms-worker
+
+      - name: Set Ecommerce HorizontalPodAutoscaler policies
+        uses: ./.github/actions/tutor/k8s/set-autoscaling-policy
+        with:
+          pod-name: ecommerce
+
+      - name: Set Ecommerce Worker HorizontalPodAutoscaler policies
+        uses: ./.github/actions/tutor/k8s/set-autoscaling-policy
+        with:
+          pod-name: ecommerce-worker
+
+      - name: Set Discovery HorizontalPodAutoscaler policies
+        uses: ./.github/actions/tutor/k8s/set-autoscaling-policy
+        with:
+          pod-name: discovery
+
+      - name: Set Discovery HorizontalPodAutoscaler policies
+        uses: ./.github/actions/tutor/k8s/set-autoscaling-policy
+        with:
+          pod-name: forum
+
+      - name: Set Discovery HorizontalPodAutoscaler policies
+        uses: ./.github/actions/tutor/k8s/set-autoscaling-policy
+        with:
+          pod-name: mfe
+
+      - name: Set Discovery HorizontalPodAutoscaler policies
+        uses: ./.github/actions/tutor/k8s/set-autoscaling-policy
+        with:
+          pod-name: notes
+
+      - name: Summary
+        shell: bash
+        run: kubectl get hpa
