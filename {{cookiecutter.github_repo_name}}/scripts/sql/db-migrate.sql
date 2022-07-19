@@ -35,7 +35,7 @@
 SELECT count(*) FROM edxapp.badges_coursecompleteimageconfiguration;
 SELECT count(*) FROM edxapp.verify_student_manualverification;
 
-# ---------------------------------------------------------------------------------------
+/* ---------------------------------------------------------------------------------------
 # Note: ignores the following fields that are new in Maple, relative to what's in Koa:
 # 	has_any_active_web_certificates
 # 	catalogue_visibility
@@ -44,7 +44,7 @@ SELECT count(*) FROM edxapp.verify_student_manualverification;
 # 	allow_proctoring_opt_out
 # 	enable_proctored_exams
 # 	proctoring_escalation_email, i.proctoring_provider
-# ---------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------*/
 INSERT INTO openedx.course_overviews_courseoverview (created, modified, version, id, _location, display_name, display_number_with_default, display_org_with_default, start, end, advertised_start, course_image_url, social_sharing_url, end_of_course_survey_url, certificates_display_behavior, certificates_show_before_end, cert_html_view_enabled, cert_name_short, cert_name_long, lowest_passing_grade, days_early_for_beta, mobile_available, visible_to_staff_only, _pre_requisite_courses_json, enrollment_start, enrollment_end, enrollment_domain, invitation_only, max_student_enrollments_allowed, announcement, course_video_url, effort, short_description, org, self_paced, marketing_url, eligible_for_financial_aid, language, end_date, start_date, banner_image_url)
 	SELECT	i.created, i.modified, i.version, i.id, i._location, i.display_name, i.display_number_with_default, i.display_org_with_default, i.start, i.end, i.advertised_start, i.course_image_url, i.social_sharing_url, i.end_of_course_survey_url, i.certificates_display_behavior, i.certificates_show_before_end, i.cert_html_view_enabled, i.cert_name_short, i.cert_name_long, i.lowest_passing_grade, i.days_early_for_beta, i.mobile_available, i.visible_to_staff_only, i._pre_requisite_courses_json, i.enrollment_start, i.enrollment_end, i.enrollment_domain, i.invitation_only, i.max_student_enrollments_allowed, i.announcement, i.course_video_url, i.effort, i.short_description, i.org, i.self_paced, i.marketing_url, i.eligible_for_financial_aid, i.language, i.end_date, i.start_date, i.course_image_url as banner_image_url
 	FROM	edxapp.course_overviews_courseoverview i
@@ -158,11 +158,11 @@ INSERT INTO openedx.certificates_historicalgeneratedcertificate (id, course_id, 
             LEFT JOIN openedx.certificates_historicalgeneratedcertificate d ON (i.id = d.id)
 	WHERE	(d.id IS NULL);
 
-# -------------------------------------------------------------------
+/* -------------------------------------------------------------------
 # NOTE: if you have more than 500,000 records in
 # courseware_studentmodule then you might consider using
-# the stored procedure LOAD_GRADES, also in the Cookiecutter repo.
-# -------------------------------------------------------------------
+# the stored procedure LOAD_GRADES, located in this same folder.
+# ------------------------------------------------------------------- */
 INSERT INTO openedx.courseware_studentmodule
 	SELECT	i.id, i.module_type, i.module_id, i.course_id, i.state, i.grade, i.max_grade, i.done, i.created, i.modified, maple_user.id as student_id
 	FROM	edxapp.courseware_studentmodule i
