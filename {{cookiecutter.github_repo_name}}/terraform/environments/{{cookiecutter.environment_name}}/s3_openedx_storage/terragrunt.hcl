@@ -16,6 +16,7 @@ locals {
   aws_region            = local.global_vars.locals.aws_region
   resource_name_storage = "${local.environment_vars.locals.environment_namespace}-storage"
   resource_name_backup = "${local.environment_vars.locals.environment_namespace}-backup"
+  resource_name_secrets = "${local.environment_vars.locals.environment_namespace}-secrets"
   environment         = local.environment_vars.locals.environment
 
   tags = merge(
@@ -92,6 +93,7 @@ inputs = {
   aws_region            = "${local.aws_region}"
   resource_name_storage = local.resource_name_storage
   resource_name_backup  = local.resource_name_backup
+  resource_name_secrets = local.resource_name_secrets
   kubernetes_name       = local.kubernetes_name
   tags                  = local.tags
 

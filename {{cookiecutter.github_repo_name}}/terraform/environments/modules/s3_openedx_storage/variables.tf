@@ -42,6 +42,11 @@ variable "resource_name_backup" {
   type        = string
 }
 
+variable "resource_name_secrets" {
+  description = "the full environment-qualified name of this resource."
+  type        = string
+}
+
 variable "tags" {
   description = "collection of all tags to add to this resource. execting the combination of global + environment + resouce tags."
   type        = map(string)

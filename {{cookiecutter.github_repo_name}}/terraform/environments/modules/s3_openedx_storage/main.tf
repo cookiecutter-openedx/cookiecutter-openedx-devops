@@ -34,6 +34,18 @@ module "openedx_backup" {
 
 }
 
+module "openedx_secrets" {
+  source  = "terraform-aws-modules/s3-bucket/aws"
+  version = "{{ cookiecutter.terraform_aws_modules_s3 }}"
+
+  bucket = var.resource_name_secrets
+  acl    = "private"
+
+  block_public_acls   = true
+  block_public_policy = true
+
+}
+
 data "aws_iam_policy_document" "bucket_policy" {
   statement {
     actions = [
