@@ -228,7 +228,7 @@ jobs:
       # ---------------------------------------------------------------------------------
       - name: Set namespace
         shell: bash
-        run: kubectl config set-context --current --namespace=${{ env.NAMESPACE }}
+        run: kubectl config set-context --current --namespace={% raw %}${{ env.NAMESPACE }}{% endraw %}
 
       - name: Set LMS HorizontalPodAutoscaler policies
         uses: openedx-actions/tutor-k8s-configure-autoscaling-policy@{{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_autoscaling_version }}
