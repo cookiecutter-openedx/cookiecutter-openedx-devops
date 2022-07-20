@@ -15,12 +15,11 @@ resource "kubernetes_secret" "ecommerce_config" {
   }
 
   data = {
-    ECOMMERCE_ENABLE_IDENTITY_VERIFICATION           = true
+    ECOMMERCE_ENABLE_IDENTITY_VERIFICATION           = false
     ECOMMERCE_ENABLED_PAYMENT_PROCESSORS             = "stripe, paypal"
     ECOMMERCE_ENABLED_CLIENT_SIDE_PAYMENT_PROCESSORS = ""
     ECOMMERCE_EXTRA_PAYMENT_PROCESSOR_CLASSES        = ""
     ECOMMERCE_CURRENCY                               = "USD"
     ECOMMERCE_EXTRA_PIP_REQUIREMENTS                 = ""
-    ECOMMERCE_PAYMENT_PROCESSORS                     = file("${path.module}/ecommerce-config.yml")
   }
 }
