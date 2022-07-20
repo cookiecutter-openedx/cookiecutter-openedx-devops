@@ -23,6 +23,7 @@ jobs:
       ENVIRONMENT_ID: {{ cookiecutter.environment_name }}
       NAMESPACE: openedx-{{ cookiecutter.environment_name }}
       EKS_CLUSTER_NAME: {{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.global_platform_shared_resource_identifier }}
+      S3_BUCKET_PREFIX: {{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.environment_name }}
 
       # feature flags for optional tutor modules
       # --------------------------------------------
@@ -145,6 +146,9 @@ jobs:
         if: {% raw %}${{ env.ENABLE_ECOMMERCE == 'true' }}{% endraw %}
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
+          secrets-s3-bucket-name: {% raw %}${{ env.S3_BUCKET_PREFIX }}{% endraw %}-secrets
+          currency: USD
+          enabled-payment-processors: '["stripe", "paypal"]'
 
       - name: Enable tutor plugin - Forum
         uses: openedx-actions/tutor-plugin-enable-forum@{{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_forum_version }}
