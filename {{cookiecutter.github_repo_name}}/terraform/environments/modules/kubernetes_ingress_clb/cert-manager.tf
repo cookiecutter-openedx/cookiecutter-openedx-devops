@@ -25,6 +25,15 @@ data "template_file" "cert-manager-values" {
   }
 }
 
+#-----------------------------------------------------------
+# NOTE: you must initialize a local helm repo in order to run
+# this script.
+#
+#   brew install helm
+#   helm repo add cert-manager https://charts.jetstack.io/
+#   helm repo update
+#
+#-----------------------------------------------------------
 resource "helm_release" "cert-manager" {
   name             = "cert-manager"
   namespace        = var.environment_namespace
