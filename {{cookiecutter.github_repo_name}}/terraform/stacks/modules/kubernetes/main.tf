@@ -83,7 +83,13 @@ module "eks" {
   enable_irsa                     = true
   vpc_id                          = var.vpc_id
   subnet_ids                      = var.private_subnet_ids
-  tags                            = var.tags
+  tags = merge(
+    var.tags,
+    # Tag node group resources for Karpenter auto-discovery
+    # NOTE - if creating multiple security groups with this module, only tag the
+    # security group that Karpenter should utilize with the following tag
+    { "karpenter.sh/discovery" = var.namespace }
+  )
 
   node_security_group_additional_rules = {
     ingress_self_all = {
@@ -92,7 +98,10 @@ module "eks" {
       from_port   = 0
       to_port     = 0
       type        = "ingress"
-      self        = true
+      cidr_blocks = [
+        "172.16.0.0/12",
+        "192.168.0.0/16",
+      ]
     }
     port_8443 = {
       description      = "openedx_devops: open port 8443 to vpc"

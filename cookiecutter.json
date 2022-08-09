@@ -99,8 +99,12 @@
     "terraform_helm_ingress_nginx": "~> 4.1",
     "terraform_helm_cert_manager": "~> 1.8",
     "terraform_helm_cert_manager_image_tag": "v1.8.0",
+    "terraform_helm_karpenter": "v0.13.2",
+    "terraform_helm_metrics_server": "~> 3.8",
     "terraform_provider_kubernetes_version": "~> 2.11",
     "terraform_provider_hashicorp_aws_version": "~> 4.15",
     "terraform_provider_hashicorp_local_version": "~> 2.2",
-    "terraform_provider_hashicorp_random_version": "~> 3.2"
+    "terraform_provider_hashicorp_random_version": "~> 3.2",
+    "terraform_provider_hashicorp_kubectl_version": "~> 1.14",
+    "terraform_provider_hashicorp_helm_version": "~> 2.5.1"
 }
