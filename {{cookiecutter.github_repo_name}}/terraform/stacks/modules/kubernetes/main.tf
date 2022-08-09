@@ -111,6 +111,12 @@ module "eks" {
     }
   }
 
+  eks_managed_node_group_defaults = {
+    iam_role_additional_policies = [
+      "arn:${local.partition}:iam::aws:policy/AmazonSSMManagedInstanceCore"
+    ]
+  }
+
   eks_managed_node_groups = {
     # -------------------------------------------------------------------------
     # 1.) Static node group, configured for extended platform idle states.
