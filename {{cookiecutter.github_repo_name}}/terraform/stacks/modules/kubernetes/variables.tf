@@ -6,6 +6,10 @@
 #
 # usage: create an EKS cluster
 #------------------------------------------------------------------------------
+variable "shared_resource_identifier" {
+  type = string
+}
+
 variable "root_domain" {
   type = string
 }

@@ -19,7 +19,7 @@ locals {
   platform_region                 = local.global_vars.locals.platform_region
   account_id                      = local.global_vars.locals.account_id
   aws_region                      = local.global_vars.locals.aws_region
-
+  shared_resource_identifier      = local.global_vars.locals.shared_resource_identifier
   kubernetes_version              = local.stack_vars.locals.kubernetes_version
   eks_worker_group_instance_type  = local.stack_vars.locals.eks_worker_group_instance_type
   eks_worker_group_min_size       = local.stack_vars.locals.eks_worker_group_min_size
@@ -61,6 +61,7 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
+  shared_resource_identifier = local.shared_resource_identifier
   aws_region = local.aws_region
   root_domain = local.root_domain
   namespace = local.namespace
