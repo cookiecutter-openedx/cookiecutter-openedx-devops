@@ -6,9 +6,6 @@
 #
 # usage: create an ElastiCache Redis cache
 #------------------------------------------------------------------------------
-variable "environment" {
-  type = string
-}
 variable "environment_domain" {
   type = string
 }
