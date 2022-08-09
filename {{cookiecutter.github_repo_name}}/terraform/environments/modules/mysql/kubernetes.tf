@@ -35,7 +35,7 @@ data "kubernetes_secret" "mysql_root" {
 resource "kubernetes_secret" "mysql_root" {
   metadata {
     name      = "mysql-root"
-    namespace = var.namespace
+    namespace = var.environment_namespace
   }
 
   data = {
