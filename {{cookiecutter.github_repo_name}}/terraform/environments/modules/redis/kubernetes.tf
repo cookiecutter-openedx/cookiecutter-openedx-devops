@@ -24,7 +24,7 @@ provider "kubernetes" {
 resource "kubernetes_secret" "secret" {
   metadata {
     name      = "redis"
-    namespace = "openedx-${var.environment}"
+    namespace = var.environment_namespace
   }
 
   data = {

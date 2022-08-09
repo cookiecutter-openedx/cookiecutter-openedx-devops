@@ -11,7 +11,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: openedx-{{ cookiecutter.environment_name }}
-  namespace: openedx-{{ cookiecutter.environment_name }}
+  namespace: {{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.environment_name }}
   annotations:
     # mcdaniel
     # https://www.cyberciti.biz/faq/nginx-upstream-sent-too-big-header-while-reading-response-header-from-upstream/
@@ -70,7 +70,7 @@ spec:
           service:
             name: notes
             port:
-              number: 8000
+              number: 8120
   - host: apps.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
     http:
       paths:

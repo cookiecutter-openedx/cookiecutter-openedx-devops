@@ -21,9 +21,8 @@ variable "environment_domain" {
   type        = string
 }
 
-variable "environment" {
-  description = "environment name"
-  type        = string
+variable "environment_namespace" {
+  type = string
 }
 
 variable "aws_region" {

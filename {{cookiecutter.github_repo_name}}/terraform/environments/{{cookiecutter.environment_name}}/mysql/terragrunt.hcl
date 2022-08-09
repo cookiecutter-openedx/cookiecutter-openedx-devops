@@ -75,6 +75,4 @@ inputs = {
   environment_domain        = local.environment_domain
   environment_namespace     = local.environment_namespace
   shared_resource_namespace = local.shared_resource_namespace
-  environment               = local.environment
-  namespace                 = "openedx-${local.environment}"
 }

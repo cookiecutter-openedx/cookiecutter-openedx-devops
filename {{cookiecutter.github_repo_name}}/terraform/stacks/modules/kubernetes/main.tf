@@ -12,23 +12,10 @@
 # - https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/
 #
 #------------------------------------------------------------------------------
-locals {
 
-  # see: https://github.com/terraform-aws-modules/terraform-aws-eks/issues/1744
-  # sepehrmavedati commented on Jan 9
-  kubeconfig             = "~/.kube/config"
-  current_auth_configmap = yamldecode(module.eks.aws_auth_configmap_yaml)
-  map_users              = var.map_users
-  map_roles              = var.map_roles
-  updated_auth_configmap_data = {
-    data = {
-      mapRoles = yamlencode(
-        distinct(concat(
-          yamldecode(local.current_auth_configmap.data.mapRoles), local.map_roles, )
-      ))
-      mapUsers = yamlencode(local.map_users)
-    }
-  }
+locals {
+  # Used by Karpenter config to determine correct partition (i.e. - `aws`, `aws-gov`, `aws-cn`, etc.)
+  partition = data.aws_partition.current.partition
 }
 
 resource "aws_security_group" "worker_group_mgmt" {
@@ -73,6 +60,7 @@ resource "aws_security_group" "all_worker_mgmt" {
 
 }
 
+
 module "eks" {
   source                          = "terraform-aws-modules/eks/aws"
   version                         = "{{ cookiecutter.terraform_aws_modules_eks }}"
@@ -83,7 +71,13 @@ module "eks" {
   enable_irsa                     = true
   vpc_id                          = var.vpc_id
   subnet_ids                      = var.private_subnet_ids
-  tags                            = var.tags
+  tags = merge(
+    var.tags,
+    # Tag node group resources for Karpenter auto-discovery
+    # NOTE - if creating multiple security groups with this module, only tag the
+    # security group that Karpenter should utilize with the following tag
+    { "karpenter.sh/discovery" = var.namespace }
+  )
 
   node_security_group_additional_rules = {
     ingress_self_all = {
@@ -92,7 +86,10 @@ module "eks" {
       from_port   = 0
       to_port     = 0
       type        = "ingress"
-      self        = true
+      cidr_blocks = [
+        "172.16.0.0/12",
+        "192.168.0.0/16",
+      ]
     }
     port_8443 = {
       description      = "openedx_devops: open port 8443 to vpc"
@@ -114,14 +111,61 @@ module "eks" {
     }
   }
 
+  eks_managed_node_group_defaults = {
+    iam_role_additional_policies = [
+      "arn:${local.partition}:iam::aws:policy/AmazonSSMManagedInstanceCore"
+    ]
+  }
+
   eks_managed_node_groups = {
-    default = {
+    # -------------------------------------------------------------------------
+    # 1.) Static node group, configured for extended platform idle states.
+    # -------------------------------------------------------------------------
+    # This group ensures that one node exists in every
+    # aws availability zone at all times, which is important for ensuring that
+    # there is a matching node for all existing k8s Persistent Volume Claims.
+    # The EC2 instance type for this group should be small. the Cookiecutter
+    # EC2 default instance type is t3.medium.
+    #
+    # Cost optimizing the EC2 instance type for this group is a great idea.
+    # For example, you might consider purchasing EC2 Reserved instances
+    # for these nodes as this will reduce your EC2 costs by around 40%.
+    # https://aws.amazon.com/ec2/pricing/reserved-instances/
+
+    k8s_nodes_idle = {
       min_size       = var.eks_worker_group_min_size
       max_size       = var.eks_worker_group_max_size
       desired_size   = var.eks_worker_group_desired_size
       instance_types = [var.eks_worker_group_instance_type]
-      tags           = var.tags
+      tags = merge(
+        var.tags,
+        { Name = "eks-${var.shared_resource_identifier}-node-idle" }
+      )
     }
+
+    # -------------------------------------------------------------------------
+    # 2.) Dynamic node group, for scaling.
+    # -------------------------------------------------------------------------
+    # This node group is managed by Karpenter. There must be at least
+    # node in this group at all times in order for Karpenter to monitor
+    # load and act on metrics data. Karpenter's bin packing algorithms
+    # perform more effectively with larger instance types. The Cookiecutter
+    # default instance type is t3.xlarge (4 vCPU / 16 GiB). These instances,
+    # beyond the 1 permanent instance, are assumed to be short-lived
+    # (a few hours or less) as these are usually only instantiated during
+    # bursts of user activity such as at the start of a scheduled lecture or
+    # exam on a large mooc.
+    karpenter = {
+      desired_size   = var.eks_karpenter_group_desired_size
+      min_size       = var.eks_karpenter_group_min_size
+      max_size       = var.eks_karpenter_group_max_size
+      instance_types = ["${var.eks_karpenter_group_instance_type}"]
+      tags = merge(
+        var.tags,
+        { Name = "eks-${var.shared_resource_identifier}-karpenter" }
+      )
+    }
+
   }
 
 }

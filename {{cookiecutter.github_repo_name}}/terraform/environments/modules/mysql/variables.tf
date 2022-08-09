@@ -24,10 +24,6 @@ variable "environment_namespace" {
   type = string
 }
 
-variable "namespace" {
-  type = string
-}
-
 variable "environment" {
   type = string
 }

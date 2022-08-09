@@ -6,6 +6,10 @@
 #
 # usage: create an EKS cluster
 #------------------------------------------------------------------------------
+variable "shared_resource_identifier" {
+  type = string
+}
+
 variable "root_domain" {
   type = string
 }
@@ -46,6 +50,22 @@ variable "eks_worker_group_min_size" {
 }
 
 variable "eks_worker_group_max_size" {
+  type = number
+}
+
+variable "eks_karpenter_group_instance_type" {
+  type = string
+}
+
+variable "eks_karpenter_group_min_size" {
+  type = number
+}
+
+variable "eks_karpenter_group_max_size" {
+  type = number
+}
+
+variable "eks_karpenter_group_desired_size" {
   type = number
 }
 

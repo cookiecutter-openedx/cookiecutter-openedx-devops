@@ -11,7 +11,7 @@
 resource "kubernetes_secret" "ecommerce_config" {
   metadata {
     name      = "ecommerce-config"
-    namespace = var.namespace
+    namespace = var.environment_namespace
   }
 
   data = {

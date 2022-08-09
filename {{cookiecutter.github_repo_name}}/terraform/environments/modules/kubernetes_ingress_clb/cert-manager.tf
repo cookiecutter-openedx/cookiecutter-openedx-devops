@@ -14,25 +14,36 @@ module "cert_manager_irsa" {
   role_name                     = "${var.namespace}-cert_manager-irsa"
   provider_url                  = replace(data.aws_eks_cluster.eks.identity[0].oidc[0].issuer, "https://", "")
   role_policy_arns              = [aws_iam_policy.cert_manager_policy.arn]
-  oidc_fully_qualified_subjects = ["system:serviceaccount:cert-manager:cert-manager"]
+  oidc_fully_qualified_subjects = ["system:serviceaccount:${var.environment_namespace}:cert-manager"]
 }
 
 data "template_file" "cert-manager-values" {
   template = file("${path.module}/cert-manager-values.yaml.tpl")
   vars = {
-    role_arn = module.cert_manager_irsa.iam_role_arn
+    role_arn              = module.cert_manager_irsa.iam_role_arn
+    environment_namespace = var.environment_namespace
   }
 }
 
+#-----------------------------------------------------------
+# NOTE: you must initialize a local helm repo in order to run
+# this script.
+#
+#   brew install helm
+#   helm repo add cert-manager https://charts.jetstack.io/
+#   helm repo update
+#
+#-----------------------------------------------------------
 resource "helm_release" "cert-manager" {
   name             = "cert-manager"
-  namespace        = "cert-manager"
-  create_namespace = true
+  namespace        = var.environment_namespace
+  create_namespace = false
 
   chart      = "cert-manager"
   repository = "https://charts.jetstack.io"
   version    = "{{ cookiecutter.terraform_helm_cert_manager }}"
-  values = [data.template_file.cert-manager-values.rendered
+  values = [
+    data.template_file.cert-manager-values.rendered
   ]
 }
 
