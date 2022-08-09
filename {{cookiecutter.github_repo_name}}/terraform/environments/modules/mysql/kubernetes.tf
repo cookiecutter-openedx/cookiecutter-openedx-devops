@@ -59,7 +59,7 @@ resource "random_password" "mysql_openedx" {
 resource "kubernetes_secret" "openedx" {
   metadata {
     name      = "mysql-openedx"
-    namespace = var.namespace
+    namespace = var.environment_namespace
   }
 
   data = {
@@ -83,7 +83,7 @@ resource "random_password" "mysql_discovery" {
 resource "kubernetes_secret" "discovery" {
   metadata {
     name      = "mysql-discovery"
-    namespace = var.namespace
+    namespace = var.environment_namespace
   }
 
   data = {
@@ -108,7 +108,7 @@ resource "random_password" "mysql_ecommerce" {
 resource "kubernetes_secret" "ecommerce" {
   metadata {
     name      = "mysql-ecommerce"
-    namespace = var.namespace
+    namespace = var.environment_namespace
   }
 
   data = {
@@ -133,7 +133,7 @@ resource "random_password" "mysql_notes" {
 resource "kubernetes_secret" "notes" {
   metadata {
     name      = "mysql-notes"
-    namespace = var.namespace
+    namespace = var.environment_namespace
   }
 
   data = {
@@ -157,7 +157,7 @@ resource "random_password" "mysql_xqueue" {
 resource "kubernetes_secret" "xqueue" {
   metadata {
     name      = "mysql-xqueue"
-    namespace = var.namespace
+    namespace = var.environment_namespace
   }
 
   data = {
@@ -181,7 +181,7 @@ resource "random_password" "mysql_credentials" {
 resource "kubernetes_secret" "credentials" {
   metadata {
     name      = "mysql-credentials"
-    namespace = var.namespace
+    namespace = var.environment_namespace
   }
 
   data = {
