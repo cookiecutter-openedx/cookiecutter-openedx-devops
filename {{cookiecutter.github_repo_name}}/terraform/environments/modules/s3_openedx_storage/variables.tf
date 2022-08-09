@@ -21,6 +21,10 @@ variable "environment_domain" {
   type        = string
 }
 
+variable "environment_namespace" {
+  type = string
+}
+
 variable "aws_region" {
   description = "the AWS region in which the S3 bucket was created"
   type        = string

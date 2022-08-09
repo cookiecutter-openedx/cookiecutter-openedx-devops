@@ -17,6 +17,7 @@ locals {
   resource_name_storage = "${local.environment_vars.locals.environment_namespace}-storage"
   resource_name_backup = "${local.environment_vars.locals.environment_namespace}-backup"
   resource_name_secrets = "${local.environment_vars.locals.environment_namespace}-secrets"
+  environment_namespace = local.environment_vars.locals.environment_namespace
 
   tags = merge(
     local.environment_vars.locals.tags,
@@ -87,6 +88,7 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
+  environment_namespace = local.environment_namespace
   secret_name           = "s3-openedx-storage"
   aws_region            = "${local.aws_region}"
   resource_name_storage = local.resource_name_storage
