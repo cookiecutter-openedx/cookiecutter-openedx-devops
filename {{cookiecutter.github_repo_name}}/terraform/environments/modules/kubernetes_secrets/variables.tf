@@ -4,7 +4,7 @@
 #
 # date: Aug-2021
 #------------------------------------------------------------------------------
-variable "namespace" {
+variable "environment_namespace" {
   description = "kubernetes namespace where to place resources"
   type        = string
 }

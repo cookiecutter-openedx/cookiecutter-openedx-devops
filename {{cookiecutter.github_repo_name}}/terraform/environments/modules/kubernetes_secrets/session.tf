@@ -18,7 +18,7 @@ resource "random_password" "edx_secret_key" {
 resource "kubernetes_secret" "edx_secret_key" {
   metadata {
     name      = "edx-secret-key"
-    namespace = var.namespace
+    namespace = var.environment_namespace
   }
 
   data = {
