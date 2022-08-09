@@ -150,10 +150,10 @@ module "eks" {
     # bursts of user activity such as at the start of a scheduled lecture or
     # exam on a large mooc.
     karpenter = {
-      desired_size   = 1
-      min_size       = 1
-      max_size       = 100
-      instance_types = ["t3.xlarge"]
+      desired_size   = var.eks_karpenter_group_desired_size
+      min_size       = var.eks_karpenter_group_min_size
+      max_size       = var.eks_karpenter_group_max_size
+      instance_types = ["${var.eks_karpenter_group_instance_type}"]
       tags = merge(
         var.tags,
         { Name = "eks-${var.shared_resource_identifier}-karpenter" }
