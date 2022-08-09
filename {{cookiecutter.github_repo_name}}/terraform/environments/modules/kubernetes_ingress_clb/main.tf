@@ -40,7 +40,7 @@ provider "helm" {
 data "kubernetes_service" "ingress_nginx_controller" {
   metadata {
     name      = "ingress-nginx-controller"
-    namespace = "ingress-nginx"
+    namespace = var.environment_namespace
   }
   depends_on = [helm_release.nginx]
 }
@@ -49,8 +49,8 @@ data "aws_elb_hosted_zone_id" "main" {}
 
 resource "helm_release" "nginx" {
   name             = "ingress-nginx"
-  namespace        = "ingress-nginx"
-  create_namespace = true
+  namespace        = var.environment_namespace
+  create_namespace = false
 
   chart      = "ingress-nginx"
   repository = "https://kubernetes.github.io/ingress-nginx"
