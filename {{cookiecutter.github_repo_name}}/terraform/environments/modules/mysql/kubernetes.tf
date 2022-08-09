@@ -23,7 +23,7 @@ provider "kubernetes" {
 
 
 # Retrieve the mysql_root connection parameters from the shared resource namespace.
-# we'll refer to this data for the HOST and PORT assignments on all of ther MySQL
+# we'll refer to this data for the HOST and PORT assignments on all other MySQL
 # secrets.
 data "kubernetes_secret" "mysql_root" {
   metadata {
