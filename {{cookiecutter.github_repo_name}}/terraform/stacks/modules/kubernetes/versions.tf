@@ -26,7 +26,7 @@ terraform {
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "{{ cookiecutter.terraform_provider_hashicorp_helm_version }}}"
+      version = "{{ cookiecutter.terraform_provider_hashicorp_helm_version }}"
     }
   }
 
