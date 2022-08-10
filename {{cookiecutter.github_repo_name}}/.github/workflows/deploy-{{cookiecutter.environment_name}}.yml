@@ -5,7 +5,7 @@
 # usage: top-level workflow. Initiated manually from Github Actions console page
 #        Deploys a Tutor-created openedx Docker image to the Kubernetes cluster.
 #------------------------------------------------------------------------------
-name: Deploy {{ cookiecutter.environment_name }}
+name: Deploy {{ cookiecutter.global_platform_name }} {{ cookiecutter.environment_name }}
 
 on:
   workflow_dispatch:
