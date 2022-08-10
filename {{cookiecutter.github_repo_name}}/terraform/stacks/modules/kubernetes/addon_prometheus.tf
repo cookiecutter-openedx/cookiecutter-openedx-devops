@@ -12,10 +12,6 @@
 #   helm repo update
 #   helm search repo prometheus-community
 #
-# Configuration: all configurations options are located in ./yml/kube-prometheus-config.yaml
-#   you can update the contents of this yaml file by running the following:
-#
-#   helm show values prometheus-community/kube-prometheus-stack
 #
 # NOTE: run `helm repo update` prior to running this
 #       Terraform module.
@@ -30,9 +26,13 @@ resource "helm_release" "prometheus" {
   chart      = "kube-prometheus-stack"
   version    = "{{ cookiecutter.terraform_helm_kube_prometheus }}"
 
-  values = [
-    "${file("${path.module}/yml/kube-prometheus-config.yaml")}"
-  ]
+  # un-comment to include a yaml manifest with configuration overrides.
+  # To generate a yaml file with all possible configuration options:
+  #     helm show values prometheus-community/kube-prometheus-stack > ./yml/values.yaml
+  #
+  #values = [
+  #  "${file("${path.module}/yml/values.yaml")}"
+  #]
 
 
   depends_on = [
