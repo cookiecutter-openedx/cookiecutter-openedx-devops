@@ -124,8 +124,7 @@ metadata:
 spec:
   tls:
   - hosts:
-    - "{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}"
-    - "*.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}"
+    - "grafana.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}"
     secretName: wild-openedx-{{ cookiecutter.environment_name }}-tls
   rules:
   - host: grafana.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
