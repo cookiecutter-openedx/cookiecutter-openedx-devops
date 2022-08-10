@@ -1,7 +1,8 @@
 #------------------------------------------------------------------------------
 #
-# see: https://prometheus-operator.dev/docs/prologue/quick-start/
-#      https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack
+# see:  https://prometheus.io/
+#       https://grafana.com/
+#       https://prometheus-operator.dev/docs/prologue/quick-start/
 #
 # requirements: you must initialize a local helm repo in order to run
 # this mdoule.
