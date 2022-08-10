@@ -90,7 +90,7 @@
     "redis_node_type": "cache.t2.small",
     "redis_port": 6379,
     "redis_family": "redis6.x",
-    "terraform_required_version": "~> 1.1",
+    "terraform_required_version": "~> 1.2",
     "terraform_aws_modules_acm": "~> 3.4",
     "terraform_aws_modules_cloudfront": "~> 2.9",
     "terraform_aws_modules_eks": "~> 18.27",
