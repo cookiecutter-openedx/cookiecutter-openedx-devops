@@ -29,13 +29,3 @@ resource "helm_release" "prometheus" {
     module.eks,
   ]
 }
-
-resource "kubectl_manifest" "ingress-prometheus" {
-
-  yaml_body = file("${path.module}/yml/ingress-prometheus.yaml")
-
-  depends_on = [
-    module.eks,
-    helm_release.prometheus,
-  ]
-}
