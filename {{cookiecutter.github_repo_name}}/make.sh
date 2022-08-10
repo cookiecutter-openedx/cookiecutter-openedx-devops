@@ -33,7 +33,6 @@ cookiecutter --checkout $GITHUB_BRANCH \
              eks_karpenter_group_min_size={{ cookiecutter.eks_karpenter_group_min_size }} \
              eks_karpenter_group_max_size={{ cookiecutter.eks_karpenter_group_max_size }} \
              eks_karpenter_group_desired_size={{ cookiecutter.eks_karpenter_group_desired_size }} \
-             ci_build_kubectl_version={{ cookiecutter.ci_build_kubectl_version }} \
              mysql_instance_class={{ cookiecutter.mysql_instance_class }} \
              mysql_allocated_storage={{ cookiecutter.mysql_allocated_storage }} \
              redis_node_type={{ cookiecutter.redis_node_type }}
