@@ -29,3 +29,20 @@ resource "helm_release" "prometheus" {
     module.eks,
   ]
 }
+
+resource "kubernetes_manifest" "ingress-prometheus" {
+  manifest = {
+    "apiVersion" = "v1"
+    "kind"       = "ConfigMap"
+    "metadata" = {
+      "name"      = "ingress-prometheus"
+      "namespace" = "monitoring"
+    }
+    "data" = yamldecode(file("${path.module}/yml/ingress-prometheus.yaml"))
+  }
+
+  depends_on = [
+    module.eks,
+    helm_release.prometheus,
+  ]
+}
