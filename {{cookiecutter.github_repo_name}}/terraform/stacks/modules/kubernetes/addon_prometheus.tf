@@ -1,9 +1,7 @@
 #------------------------------------------------------------------------------
 #
-# see: https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack
-#
-# usage:
-#   helm install [RELEASE_NAME] prometheus-community/kube-prometheus-stack
+# see: https://prometheus-operator.dev/docs/prologue/quick-start/
+#      https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack
 #
 # requirements: you must initialize a local helm repo in order to run
 # this mdoule.
