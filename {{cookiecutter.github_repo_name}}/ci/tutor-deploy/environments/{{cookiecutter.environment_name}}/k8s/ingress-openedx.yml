@@ -118,6 +118,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: credentials
+            name: prometheus-grafana
             port:
               number: 3000
