@@ -53,6 +53,9 @@ The Terraform scripts in this repo provide a 1-click means of creating / updatin
 - LMS at https://{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
 - CMS at https://studio.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
 - CDN at https://cdn.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }} linked to a public read-only S3 bucket named {{ cookiecutter.environment_subdomain }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-storage
+- Grafana at https://grafana.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}/login
+  - user: admin
+  - pwd: prom-operator
 - public ssh access via a t2.micro Ubuntu 20.04 LTS bastion EC2 instance at bastion.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
 - daily data backups archived into a private S3 bucket named {{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-mongodb-backup
 
