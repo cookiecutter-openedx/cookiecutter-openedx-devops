@@ -21,7 +21,7 @@ jobs:
       # environment settings
       # --------------------------------------------
       ENVIRONMENT_ID: {{ cookiecutter.environment_name }}
-      NAMESPACE: openedx-{{ cookiecutter.environment_name }}
+      NAMESPACE: {{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.environment_name }}
       EKS_CLUSTER_NAME: {{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.global_platform_shared_resource_identifier }}
       S3_BUCKET_PREFIX: {{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.environment_name }}
 
