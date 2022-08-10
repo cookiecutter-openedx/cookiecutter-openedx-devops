@@ -253,21 +253,25 @@ jobs:
         uses: openedx-actions/tutor-k8s-configure-autoscaling-policy@{{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_autoscaling_version }}
         with:
           pod-name: cms
+          minimum-pods: 2
 
       - name: Set CMS Worker HorizontalPodAutoscaler policies
         uses: openedx-actions/tutor-k8s-configure-autoscaling-policy@{{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_autoscaling_version }}
         with:
           pod-name: cms-worker
+          minimum-pods: 2
 
       - name: Set Ecommerce HorizontalPodAutoscaler policies
         uses: openedx-actions/tutor-k8s-configure-autoscaling-policy@{{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_autoscaling_version }}
         with:
           pod-name: ecommerce
+          minimum-pods: 2
 
       - name: Set Ecommerce Worker HorizontalPodAutoscaler policies
         uses: openedx-actions/tutor-k8s-configure-autoscaling-policy@{{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_autoscaling_version }}
         with:
           pod-name: ecommerce-worker
+          minimum-pods: 2
 
       - name: Set Discovery HorizontalPodAutoscaler policies
         uses: openedx-actions/tutor-k8s-configure-autoscaling-policy@{{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_autoscaling_version }}
