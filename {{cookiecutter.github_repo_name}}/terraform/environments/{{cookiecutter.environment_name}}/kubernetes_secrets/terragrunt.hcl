@@ -11,6 +11,7 @@ locals {
   environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
+  environment_namespace = local.environment_vars.locals.environment_namespace
   environment           = local.environment_vars.locals.environment
   resource_name         = local.environment_vars.locals.shared_resource_namespace
   root_domain           = local.global_vars.locals.root_domain
