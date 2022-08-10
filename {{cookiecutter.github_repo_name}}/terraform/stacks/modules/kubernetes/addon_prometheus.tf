@@ -31,29 +31,8 @@ resource "helm_release" "prometheus" {
 }
 
 resource "kubectl_manifest" "ingress-prometheus" {
-  yaml_body = <<-YAML
-  apiVersion: networking.k8s.io/v1
-  kind: Ingress
-  metadata:
-    name: kube-prometheus
-    namespace: monitoring
-    tls:
-    - hosts:
-      - "{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}"
-      - "*.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}"
-      secretName: wild-openedx-{{ cookiecutter.environment_name }}-tls
-    rules:
-    - host: grafana.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
-      http:
-        paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: prometheus-grafana
-              port:
-                number: 3000
-  YAML
+
+  yaml_body = file("${path.module}/yml/ingress-prometheus.yaml")
 
   depends_on = [
     module.eks,
