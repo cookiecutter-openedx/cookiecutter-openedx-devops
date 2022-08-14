@@ -88,13 +88,14 @@ resource "kubectl_manifest" "karpenter_provisioner" {
   metadata:
     name: default
   spec:
-    requirements:
-      - key: karpenter.sh/capacity-type
-        operator: In
-        values: ["spot"]
+    #requirements:
+    #  - key: karpenter.sh/capacity-type
+    #    operator: In
+    #    values: ["spot", "on-demand"]
     limits:
       resources:
-        cpu: 1000
+        cpu: "400"        # 100 * 4 cpu
+        memory: 1600Gi    # 100 * 16Gi
     provider:
       subnetSelector:
         karpenter.sh/discovery: ${var.namespace}
@@ -102,7 +103,12 @@ resource "kubectl_manifest" "karpenter_provisioner" {
         karpenter.sh/discovery: ${var.namespace}
       tags:
         karpenter.sh/discovery: ${var.namespace}
-    ttlSecondsAfterEmpty: 30
+
+    # If nil, the feature is disabled, nodes will never expire
+    ttlSecondsUntilExpired: 86400        # 1 Day = 60 seconds * 60 minutes * 24 hours;
+
+    # If nil, the feature is disabled, nodes will never scale down due to low utilization
+    ttlSecondsAfterEmpty: 1800          # 30 minutes = 60 seconds * 30 minutes
   YAML
 
   depends_on = [
