@@ -8,6 +8,7 @@
 #
 # see:  https://www.datree.io/helm-chart/vertical-pod-autoscaler-helm
 #       https://www.youtube.com/watch?v=jcHQ5SKKTLM
+#       https://artifacthub.io/packages/helm/fairwinds-stable/goldilocks
 #
 # requirements: you must initialize a local helm repo in order to run
 # this mdoule.
