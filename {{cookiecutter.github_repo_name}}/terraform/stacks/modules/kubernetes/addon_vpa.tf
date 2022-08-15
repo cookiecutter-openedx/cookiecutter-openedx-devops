@@ -7,6 +7,7 @@
 # usage: installs the Kubernetes Vertical Pod Autoscaler.
 #
 # see:  https://www.datree.io/helm-chart/vertical-pod-autoscaler-helm
+#       https://www.youtube.com/watch?v=jcHQ5SKKTLM
 #
 # requirements: you must initialize a local helm repo in order to run
 # this mdoule.
@@ -31,5 +32,77 @@ resource "helm_release" "vpa" {
 
   depends_on = [
     module.eks,
+  ]
+}
+
+resource "kubectl_manifest" "vpa-lms" {
+  yaml_body = file("${path.module}/yml/vpa-lms.yaml")
+
+  depends_on = [
+    module.eks,
+    helm_release.vpa
+  ]
+}
+
+resource "kubectl_manifest" "vpa-lms-worker" {
+  yaml_body = file("${path.module}/yml/vpa-lms-worker.yaml")
+
+  depends_on = [
+    module.eks,
+    helm_release.vpa
+  ]
+}
+
+resource "kubectl_manifest" "vpa-cms" {
+  yaml_body = file("${path.module}/yml/vpa-cms.yaml")
+
+  depends_on = [
+    module.eks,
+    helm_release.vpa
+  ]
+}
+
+resource "kubectl_manifest" "vpa-cms-worker" {
+  yaml_body = file("${path.module}/yml/vpa-cms-worker.yaml")
+
+  depends_on = [
+    module.eks,
+    helm_release.vpa
+  ]
+}
+
+resource "kubectl_manifest" "vpa-mfe" {
+  yaml_body = file("${path.module}/yml/vpa-mfe.yaml")
+
+  depends_on = [
+    module.eks,
+    helm_release.vpa
+  ]
+}
+
+resource "kubectl_manifest" "vpa-elasticsearch" {
+  yaml_body = file("${path.module}/yml/vpa-elasticsearch.yaml")
+
+  depends_on = [
+    module.eks,
+    helm_release.vpa
+  ]
+}
+
+resource "kubectl_manifest" "vpa-discovery" {
+  yaml_body = file("${path.module}/yml/vpa-discovery.yaml")
+
+  depends_on = [
+    module.eks,
+    helm_release.vpa
+  ]
+}
+
+resource "kubectl_manifest" "mongodb" {
+  yaml_body = file("${path.module}/yml/vpa-mongodb.yaml")
+
+  depends_on = [
+    module.eks,
+    helm_release.vpa
   ]
 }

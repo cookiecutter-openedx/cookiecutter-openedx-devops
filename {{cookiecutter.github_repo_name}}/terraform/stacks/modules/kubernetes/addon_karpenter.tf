@@ -1,5 +1,10 @@
 #------------------------------------------------------------------------------
+# written by: Lawrence McDaniel
+#             https://lawrencemcdaniel.com/
 #
+# date: Aug-2022
+#
+# usage: installs Karpenter scaling service.
 # see: https://karpenter.sh/v0.13.2/getting-started/getting-started-with-terraform/
 #
 # requirements: you must initialize a local helm repo in order to run
@@ -8,6 +13,7 @@
 #   brew install helm
 #   helm repo add karpenter https://charts.karpenter.sh/
 #   helm repo update
+#   helm search repo karpenter
 #
 # NOTE: run `helm repo update` prior to running this
 #       Terraform module.
@@ -19,7 +25,7 @@ resource "helm_release" "karpenter" {
   name       = "karpenter"
   repository = "https://charts.karpenter.sh"
   chart      = "karpenter"
-  version    = "{{ cookiecutter.terraform_helm_karpenter }}"
+  version    = "v0.13.2"
 
   set {
     name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
@@ -50,6 +56,8 @@ resource "helm_release" "karpenter" {
   ]
 }
 
+# FIX NOTE: the policy lacks some permissions for creating/terminating instances
+#  as well as pricing:GetProducts
 module "karpenter_irsa" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "~> 4.17"
@@ -140,4 +148,14 @@ resource "aws_iam_role" "ec2_spot_fleet_tagging_role" {
 resource "aws_iam_role_policy_attachment" "ec2_spot_fleet_tagging" {
   role       = aws_iam_role.ec2_spot_fleet_tagging_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2SpotFleetTaggingRole"
+}
+
+resource "kubectl_manifest" "vpa-karpenter" {
+  yaml_body = file("${path.module}/yml/vpa-karpenter.yaml")
+
+  depends_on = [
+    module.eks,
+    helm_release.vpa,
+    helm_release.karpenter
+  ]
 }
