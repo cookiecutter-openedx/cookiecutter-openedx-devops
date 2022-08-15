@@ -1,0 +1,12 @@
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: vpa-recommender-smtp
+  namespace: stepwisemath-global-prod
+spec:
+  targetRef:
+    apiVersion: "apps/v1"
+    kind:       Deployment
+    name:       smtp
+  updatePolicy:
+    updateMode: "Auto"

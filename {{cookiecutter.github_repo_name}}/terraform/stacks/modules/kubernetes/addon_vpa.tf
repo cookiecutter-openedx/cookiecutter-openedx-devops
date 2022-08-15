@@ -36,7 +36,7 @@ resource "helm_release" "vpa" {
 }
 
 resource "kubectl_manifest" "vpa-lms" {
-  yaml_body = file("${path.module}/yml/vpa-lms.yaml")
+  yaml_body = file("${path.module}/yml/vpa-openedx-lms.yaml")
 
   depends_on = [
     module.eks,
@@ -45,7 +45,7 @@ resource "kubectl_manifest" "vpa-lms" {
 }
 
 resource "kubectl_manifest" "vpa-lms-worker" {
-  yaml_body = file("${path.module}/yml/vpa-lms-worker.yaml")
+  yaml_body = file("${path.module}/yml/vpa-openedx-lms-worker.yaml")
 
   depends_on = [
     module.eks,
@@ -54,7 +54,7 @@ resource "kubectl_manifest" "vpa-lms-worker" {
 }
 
 resource "kubectl_manifest" "vpa-cms" {
-  yaml_body = file("${path.module}/yml/vpa-cms.yaml")
+  yaml_body = file("${path.module}/yml/vpa-openedx-cms.yaml")
 
   depends_on = [
     module.eks,
@@ -63,7 +63,7 @@ resource "kubectl_manifest" "vpa-cms" {
 }
 
 resource "kubectl_manifest" "vpa-cms-worker" {
-  yaml_body = file("${path.module}/yml/vpa-cms-worker.yaml")
+  yaml_body = file("${path.module}/yml/vpa-openedx-cms-worker.yaml")
 
   depends_on = [
     module.eks,
@@ -72,7 +72,7 @@ resource "kubectl_manifest" "vpa-cms-worker" {
 }
 
 resource "kubectl_manifest" "vpa-mfe" {
-  yaml_body = file("${path.module}/yml/vpa-mfe.yaml")
+  yaml_body = file("${path.module}/yml/vpa-openedx-mfe.yaml")
 
   depends_on = [
     module.eks,
@@ -81,7 +81,7 @@ resource "kubectl_manifest" "vpa-mfe" {
 }
 
 resource "kubectl_manifest" "vpa-elasticsearch" {
-  yaml_body = file("${path.module}/yml/vpa-elasticsearch.yaml")
+  yaml_body = file("${path.module}/yml/vpa-openedx-elasticsearch.yaml")
 
   depends_on = [
     module.eks,
@@ -90,7 +90,7 @@ resource "kubectl_manifest" "vpa-elasticsearch" {
 }
 
 resource "kubectl_manifest" "vpa-discovery" {
-  yaml_body = file("${path.module}/yml/vpa-discovery.yaml")
+  yaml_body = file("${path.module}/yml/vpa-openedx-discovery.yaml")
 
   depends_on = [
     module.eks,
@@ -99,7 +99,61 @@ resource "kubectl_manifest" "vpa-discovery" {
 }
 
 resource "kubectl_manifest" "mongodb" {
-  yaml_body = file("${path.module}/yml/vpa-mongodb.yaml")
+  yaml_body = file("${path.module}/yml/vpa-openedx-mongodb.yaml")
+
+  depends_on = [
+    module.eks,
+    helm_release.vpa
+  ]
+}
+
+resource "kubectl_manifest" "notes" {
+  yaml_body = file("${path.module}/yml/vpa-openedx-notes.yaml")
+
+  depends_on = [
+    module.eks,
+    helm_release.vpa
+  ]
+}
+
+resource "kubectl_manifest" "smpt" {
+  yaml_body = file("${path.module}/yml/vpa-openedx-smtp.yaml")
+
+  depends_on = [
+    module.eks,
+    helm_release.vpa
+  ]
+}
+
+resource "kubectl_manifest" "nginx" {
+  yaml_body = file("${path.module}/yml/vpa-openedx-nginx.yaml")
+
+  depends_on = [
+    module.eks,
+    helm_release.vpa
+  ]
+}
+
+resource "kubectl_manifest" "cert-manager" {
+  yaml_body = file("${path.module}/yml/vpa-openedx-cert-manager.yaml")
+
+  depends_on = [
+    module.eks,
+    helm_release.vpa
+  ]
+}
+
+resource "kubectl_manifest" "cert-manager-cainjector" {
+  yaml_body = file("${path.module}/yml/vpa-openedx-cert-manager-cainjector.yaml")
+
+  depends_on = [
+    module.eks,
+    helm_release.vpa
+  ]
+}
+
+resource "kubectl_manifest" "cert-manager-webhook" {
+  yaml_body = file("${path.module}/yml/vpa-openedx-cert-manager-webhook.yaml")
 
   depends_on = [
     module.eks,
