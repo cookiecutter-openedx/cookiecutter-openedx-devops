@@ -26,17 +26,3 @@ spec:
           route53:
             region: {{ cookiecutter.global_aws_region }}
             hostedZoneID: {{ cookiecutter.global_aws_route53_hosted_zone_id }}
-
----
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: le-crt
-spec:
-  secretName: wild-openedx-{{ cookiecutter.environment_name }}-tls
-  issuerRef:
-    kind: ClusterIssuer
-    name: letsencrypt
-  commonName: {{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
-  dnsNames:
-    - "*.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}"
