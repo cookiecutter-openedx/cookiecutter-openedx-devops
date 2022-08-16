@@ -133,6 +133,7 @@ module "eks" {
     # https://aws.amazon.com/ec2/pricing/reserved-instances/
 
     k8s_nodes_idle = {
+      capacity_type  = "ON_DEMAND"
       min_size       = var.eks_worker_group_min_size
       max_size       = var.eks_worker_group_max_size
       desired_size   = var.eks_worker_group_desired_size
@@ -156,6 +157,7 @@ module "eks" {
     # bursts of user activity such as at the start of a scheduled lecture or
     # exam on a large mooc.
     karpenter = {
+      capacity_type  = "SPOT"
       desired_size   = var.eks_karpenter_group_desired_size
       min_size       = var.eks_karpenter_group_min_size
       max_size       = var.eks_karpenter_group_max_size
