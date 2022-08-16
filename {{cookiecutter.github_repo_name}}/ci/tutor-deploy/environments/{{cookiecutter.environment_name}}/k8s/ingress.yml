@@ -111,29 +111,3 @@ spec:
             name: credentials
             port:
               number: 8000
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: kube-prometheus
-  namespace: monitoring
-  annotations:
-    nginx.ingress.kubernetes.io/proxy-body-size: "0"
-    kubernetes.io/ingress.class: "nginx"
-    cert-manager.io/cluster-issuer: "letsencrypt"
-spec:
-  tls:
-  - hosts:
-    - "grafana.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}"
-    secretName: wild-openedx-{{ cookiecutter.environment_name }}-tls
-  rules:
-  - host: grafana.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: prometheus-grafana
-            port:
-              number: 3000
