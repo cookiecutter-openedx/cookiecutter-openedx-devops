@@ -29,7 +29,7 @@ resource "helm_release" "karpenter" {
 
   set {
     name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = module.karpenter_irsa.iam_role_arn
+    value = module.karpenter_controller_irsa_role.iam_role_arn
   }
 
   set {
@@ -49,7 +49,7 @@ resource "helm_release" "karpenter" {
 
   depends_on = [
     module.eks,
-    module.karpenter_irsa,
+    module.karpenter_controller_irsa_role,
     aws_iam_instance_profile.karpenter,
     aws_iam_role.ec2_spot_fleet_tagging_role,
     aws_iam_role_policy_attachment.ec2_spot_fleet_tagging,
@@ -57,12 +57,19 @@ resource "helm_release" "karpenter" {
 }
 
 # FIX NOTE: the policy lacks some permissions for creating/terminating instances
-#  as well as pricing:GetProducts
-module "karpenter_irsa" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "~> 4.17"
+#  as well as pricing:GetProducts.
+#
+# FIXED. but see note below about version.
+#
+# see: https://registry.terraform.io/modules/terraform-aws-modules/iam/aws/latest/submodules/iam-role-for-service-accounts-eks
+module "karpenter_controller_irsa_role" {
+  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  # mcdaniel aug-2022: specifying an explicit version causes this module to create
+  # an incomplete IAM policy.
+  #version = "~> 5.3"
 
   role_name                          = "karpenter-controller-${var.namespace}"
+  create_role                        = true
   attach_karpenter_controller_policy = true
 
   karpenter_controller_cluster_id = module.eks.cluster_id
@@ -77,6 +84,9 @@ module "karpenter_irsa" {
       namespace_service_accounts = ["karpenter:karpenter"]
     }
   }
+
+  tags = var.tags
+
 }
 
 resource "random_pet" "this" {
@@ -97,10 +107,10 @@ resource "kubectl_manifest" "karpenter_provisioner" {
   metadata:
     name: default
   spec:
-    #requirements:
-    #  - key: karpenter.sh/capacity-type
-    #    operator: In
-    #    values: ["spot", "on-demand"]
+    requirements:
+      - key: karpenter.sh/capacity-type
+        operator: In
+        values: ["spot", "on-demand"]
     limits:
       resources:
         cpu: "400"        # 100 * 4 cpu
