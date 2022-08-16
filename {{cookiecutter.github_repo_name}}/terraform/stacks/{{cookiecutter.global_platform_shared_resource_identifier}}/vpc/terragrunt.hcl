@@ -15,6 +15,7 @@ locals {
   platform_name         = local.global_vars.locals.platform_name
   platform_region       = local.global_vars.locals.platform_region
   aws_region            = local.global_vars.locals.aws_region
+  stack_namespace       = local.stack_vars.locals.stack_namespace
   stack                 = local.stack_vars.locals.stack
   namespace             = local.stack_vars.locals.stack_namespace
   resource_name         = local.stack_vars.locals.stack_namespace
@@ -75,6 +76,7 @@ inputs = {
   private_subnet_tags = {
     "kubernetes.io/cluster/${local.namespace}" = "shared"
     "kubernetes.io/role/internal-elb"          = "1"
+    "karpenter.sh/discovery" = local.stack_namespace
   }
 
   tags = local.tags
