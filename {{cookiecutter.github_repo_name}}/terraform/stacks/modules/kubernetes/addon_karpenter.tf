@@ -67,7 +67,8 @@ module "karpenter_irsa" {
 
   karpenter_controller_cluster_id = module.eks.cluster_id
   karpenter_controller_node_iam_role_arns = [
-    module.eks.eks_managed_node_groups["karpenter"].iam_role_arn
+    module.eks.eks_managed_node_groups["karpenter"].iam_role_arn,
+    module.eks.eks_managed_node_groups["k8s_nodes_idle"].iam_role_arn
   ]
 
   oidc_providers = {
