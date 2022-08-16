@@ -71,6 +71,7 @@ module "eks" {
   enable_irsa                     = true
   vpc_id                          = var.vpc_id
   subnet_ids                      = var.private_subnet_ids
+  create_cloudwatch_log_group     = false
   tags = merge(
     var.tags,
     # Tag node group resources for Karpenter auto-discovery
@@ -92,13 +93,12 @@ module "eks" {
       ]
     }
     port_8443 = {
-      description      = "openedx_devops: open port 8443 to vpc"
-      protocol         = "-1"
-      from_port        = 8443
-      to_port          = 8443
-      type             = "ingress"
-      cidr_blocks      = ["0.0.0.0/0"]
-      ipv6_cidr_blocks = ["::/0"]
+      description                = "openedx_devops: open port 8443 to vpc"
+      protocol                   = "-1"
+      from_port                  = 8443
+      to_port                    = 8443
+      type                       = "ingress"
+      source_node_security_group = true
     }
     egress_all = {
       description      = "openedx_devops: Node all egress"
