@@ -97,6 +97,10 @@ data "template_file" "vpa-smtp" {
   }
 }
 
+resource "kubectl_manifest" "vpa-lms" {
+  yaml_body = data.template_file.vpa-lms.rendered
+}
+
 resource "kubectl_manifest" "vpa-lms-worker" {
   yaml_body = data.template_file.vpa-lms-worker.rendered
 }
