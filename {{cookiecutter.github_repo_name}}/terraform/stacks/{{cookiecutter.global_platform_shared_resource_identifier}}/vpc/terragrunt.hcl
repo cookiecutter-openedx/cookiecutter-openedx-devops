@@ -76,7 +76,7 @@ inputs = {
   private_subnet_tags = {
     "kubernetes.io/cluster/${local.namespace}" = "shared"
     "kubernetes.io/role/internal-elb"          = "1"
-    "karpenter.sh/discovery" = local.stack_namespace
+    "karpenter.sh/discovery"                   = local.stack_namespace
   }
 
   tags = local.tags
