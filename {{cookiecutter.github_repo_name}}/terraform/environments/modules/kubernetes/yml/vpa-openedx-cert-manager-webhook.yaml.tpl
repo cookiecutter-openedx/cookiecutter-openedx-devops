@@ -1,12 +1,12 @@
 apiVersion: autoscaling.k8s.io/v1
 kind: VerticalPodAutoscaler
 metadata:
-  name: vpa-recommender-smtp
-  namespace: stepwisemath-global-prod
+  name: vpa-recommender-cert-manager-webhook
+  namespace: ${environment_namespace}
 spec:
   targetRef:
     apiVersion: "apps/v1"
     kind:       Deployment
-    name:       smtp
+    name:       cert-manager-webhook
   updatePolicy:
     updateMode: "Auto"

@@ -13,6 +13,7 @@ locals {
 
   resource_name = local.environment_vars.locals.shared_resource_namespace
   environment_name = local.environment_vars.locals.environment
+  environment_namespace = local.environment_vars.locals.environment_namespace
 }
 
 dependencies {
@@ -53,4 +54,5 @@ include {
 inputs = {
   environment_name = local.environment_name
   resource_name = local.resource_name
+  environment_namespace = local.environment_namespace
 }
