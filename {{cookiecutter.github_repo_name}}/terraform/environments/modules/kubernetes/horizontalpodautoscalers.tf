@@ -19,13 +19,6 @@ data "template_file" "hpa-discovery" {
   }
 }
 
-data "template_file" "hpa-elasticsearch" {
-  template = file("${path.module}/yml/horizontalpodautoscalers/hpa-openedx-elasticsearch.yaml.tpl")
-  vars = {
-    environment_namespace = var.environment_namespace
-  }
-}
-
 data "template_file" "hpa-lms-worker" {
   template = file("${path.module}/yml/horizontalpodautoscalers/hpa-openedx-lms-worker.yaml.tpl")
   vars = {
@@ -71,10 +64,6 @@ resource "kubectl_manifest" "hpa-cms" {
 
 resource "kubectl_manifest" "hpa-discovery" {
   yaml_body = data.template_file.hpa-discovery.rendered
-}
-
-resource "kubectl_manifest" "hpa-elasticsearch" {
-  yaml_body = data.template_file.hpa-elasticsearch.rendered
 }
 
 resource "kubectl_manifest" "hpa-lms-worker" {
