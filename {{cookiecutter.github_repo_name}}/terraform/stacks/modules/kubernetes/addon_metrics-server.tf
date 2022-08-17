@@ -38,7 +38,7 @@ resource "helm_release" "metrics_server" {
 }
 
 resource "kubectl_manifest" "vpa-metrics-server" {
-  yaml_body = file("${path.module}/yml/vpa-metrics-server.yaml")
+  yaml_body = file("${path.module}/yml/verticalpodautoscalers/vpa-metrics-server.yaml")
 
   depends_on = [
     module.eks,

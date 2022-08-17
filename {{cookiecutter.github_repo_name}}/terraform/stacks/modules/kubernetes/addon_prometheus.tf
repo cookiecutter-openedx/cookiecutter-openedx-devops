@@ -47,7 +47,7 @@ resource "helm_release" "prometheus" {
 }
 
 resource "kubectl_manifest" "vpa-prometheus-kube-state-metrics" {
-  yaml_body = file("${path.module}/yml/vpa-prometheus-kube-state-metrics.yaml")
+  yaml_body = file("${path.module}/yml/verticalpodautoscalers/vpa-prometheus-kube-state-metrics.yaml")
 
   depends_on = [
     module.eks,
@@ -56,7 +56,7 @@ resource "kubectl_manifest" "vpa-prometheus-kube-state-metrics" {
   ]
 }
 resource "kubectl_manifest" "vpa-prometheus-grafana" {
-  yaml_body = file("${path.module}/yml/vpa-prometheus-grafana.yaml")
+  yaml_body = file("${path.module}/yml/verticalpodautoscalers/vpa-prometheus-grafana.yaml")
 
   depends_on = [
     module.eks,
@@ -66,7 +66,7 @@ resource "kubectl_manifest" "vpa-prometheus-grafana" {
 }
 
 resource "kubectl_manifest" "vpa-prometheus-operator" {
-  yaml_body = file("${path.module}/yml/vpa-prometheus-operator.yaml")
+  yaml_body = file("${path.module}/yml/verticalpodautoscalers/vpa-prometheus-operator.yaml")
 
   depends_on = [
     module.eks,
