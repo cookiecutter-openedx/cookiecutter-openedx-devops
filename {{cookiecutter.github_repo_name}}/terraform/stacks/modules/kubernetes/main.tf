@@ -133,7 +133,7 @@ module "eks" {
     # https://aws.amazon.com/ec2/pricing/reserved-instances/
 
     k8s_nodes_idle = {
-      capacity_type  = "ON_DEMAND"
+      capacity_type  = "SPOT"
       min_size       = var.eks_worker_group_min_size
       max_size       = var.eks_worker_group_max_size
       desired_size   = var.eks_worker_group_desired_size
