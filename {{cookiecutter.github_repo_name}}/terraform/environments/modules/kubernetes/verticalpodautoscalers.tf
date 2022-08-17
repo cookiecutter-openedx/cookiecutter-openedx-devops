@@ -1,97 +1,97 @@
 
 data "template_file" "vpa-cert-manager-cainjector" {
-  template = file("${path.module}/yml/vpa-openedx-cert-manager-cainjector.yaml.tpl")
+  template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-cert-manager-cainjector.yaml.tpl")
   vars = {
     environment_namespace = var.environment_namespace
   }
 }
 
 data "template_file" "vpa-cert-manager-webhook" {
-  template = file("${path.module}/yml/vpa-openedx-cert-manager-webhook.yaml.tpl")
+  template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-cert-manager-webhook.yaml.tpl")
   vars = {
     environment_namespace = var.environment_namespace
   }
 }
 
 data "template_file" "vpa-cert-manager" {
-  template = file("${path.module}/yml/vpa-openedx-cert-manager.yaml.tpl")
+  template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-cert-manager.yaml.tpl")
   vars = {
     environment_namespace = var.environment_namespace
   }
 }
 
 data "template_file" "vpa-cms" {
-  template = file("${path.module}/yml/vpa-openedx-cms.yaml.tpl")
+  template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-cms.yaml.tpl")
   vars = {
     environment_namespace = var.environment_namespace
   }
 }
 
 data "template_file" "vpa-cms-worker" {
-  template = file("${path.module}/yml/vpa-openedx-cms-worker.yaml.tpl")
+  template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-cms-worker.yaml.tpl")
   vars = {
     environment_namespace = var.environment_namespace
   }
 }
 
 data "template_file" "vpa-discovery" {
-  template = file("${path.module}/yml/vpa-openedx-discovery.yaml.tpl")
+  template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-discovery.yaml.tpl")
   vars = {
     environment_namespace = var.environment_namespace
   }
 }
 
 data "template_file" "vpa-elasticsearch" {
-  template = file("${path.module}/yml/vpa-openedx-elasticsearch.yaml.tpl")
+  template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-elasticsearch.yaml.tpl")
   vars = {
     environment_namespace = var.environment_namespace
   }
 }
 
 data "template_file" "vpa-lms" {
-  template = file("${path.module}/yml/vpa-openedx-lms.yaml.tpl")
+  template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-lms.yaml.tpl")
   vars = {
     environment_namespace = var.environment_namespace
   }
 }
 
 data "template_file" "vpa-lms-worker" {
-  template = file("${path.module}/yml/vpa-openedx-lms-worker.yaml.tpl")
+  template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-lms-worker.yaml.tpl")
   vars = {
     environment_namespace = var.environment_namespace
   }
 }
 
 data "template_file" "vpa-mfe" {
-  template = file("${path.module}/yml/vpa-openedx-mfe.yaml.tpl")
+  template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-mfe.yaml.tpl")
   vars = {
     environment_namespace = var.environment_namespace
   }
 }
 
 data "template_file" "vpa-mongodb" {
-  template = file("${path.module}/yml/vpa-openedx-mongodb.yaml.tpl")
+  template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-mongodb.yaml.tpl")
   vars = {
     environment_namespace = var.environment_namespace
   }
 }
 
 data "template_file" "vpa-nginx" {
-  template = file("${path.module}/yml/vpa-openedx-nginx.yaml.tpl")
+  template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-nginx.yaml.tpl")
   vars = {
     environment_namespace = var.environment_namespace
   }
 }
 
 data "template_file" "vpa-notes" {
-  template = file("${path.module}/yml/vpa-openedx-notes.yaml.tpl")
+  template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-notes.yaml.tpl")
   vars = {
     environment_namespace = var.environment_namespace
   }
 }
 
 data "template_file" "vpa-smtp" {
-  template = file("${path.module}/yml/vpa-openedx-smtp.yaml.tpl")
+  template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-smtp.yaml.tpl")
   vars = {
     environment_namespace = var.environment_namespace
   }
