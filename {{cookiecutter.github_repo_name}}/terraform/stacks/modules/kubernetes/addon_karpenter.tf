@@ -99,7 +99,7 @@ resource "aws_iam_instance_profile" "karpenter" {
 }
 
 
-# mcdaniel TO-DO: revisit the cpu resource limit, and perhaps add a memory limit
+# see: https://karpenter.sh/v0.6.1/provisioner/
 resource "kubectl_manifest" "karpenter_provisioner" {
   yaml_body = <<-YAML
   apiVersion: karpenter.sh/v1alpha5
@@ -111,6 +111,9 @@ resource "kubectl_manifest" "karpenter_provisioner" {
       - key: karpenter.sh/capacity-type
         operator: In
         values: ["spot", "on-demand"]
+      - key: node.kubernetes.io/instance-type
+        operator: In
+        values: ["t3.2xlarge", "t3.xlarge", "t2.2xlarge", "t3.large", "t2.xlarge"]
     limits:
       resources:
         cpu: "400"        # 100 * 4 cpu
@@ -123,11 +126,11 @@ resource "kubectl_manifest" "karpenter_provisioner" {
       tags:
         karpenter.sh/discovery: ${var.namespace}
 
-    # If nil, the feature is disabled, nodes will never expire
-    ttlSecondsUntilExpired: 86400        # 1 Day = 60 seconds * 60 minutes * 24 hours;
+    # If nil, the feature is disabled, nodes will never terminate
+    ttlSecondsUntilExpired: 600           # 10 minutes = 60 seconds * 10 minutes
 
     # If nil, the feature is disabled, nodes will never scale down due to low utilization
-    ttlSecondsAfterEmpty: 1800          # 30 minutes = 60 seconds * 30 minutes
+    ttlSecondsAfterEmpty: 600             # 10 minutes = 60 seconds * 10 minutes
   YAML
 
   depends_on = [
