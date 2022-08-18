@@ -56,7 +56,9 @@ Terraform-based AWS infrastructure management
 
 Your new repository includes Terraform modules that have been optimized for running Open edX at scale on AWS EKS and RDS. The modules are organized to ease your implementation of additional environments for `dev`, `test` and `qa`.
 These modules will additionally configure all Open edX credentials (Django secret key, JWT, admin user, IAM keypairs, MySQL users and passwords, etcetera) on a per-environment basis, and will store these in Kubernetes Secrets.
-This configuration scales automatically, reliably supporting anywhere from a few hundred to as many as several hundred thousand learners. This Terraform configuration is also designed to support your additional external systems. Your custom legacy systems and microservices can safely deploy to this same Kubernetes cluster and RDS MySQL cluster.
+This configuration scales automatically, reliably supporting anywhere from a few hundred to as many as several hundred thousand learners. This Terraform configuration is also designed to support your additional external systems. Your custom legacy systems and microservices can safely deploy to this same Kubernetes cluster and RDS MySQL cluster. Your new Kubernetes cluster includes preconfigured, state of the art systems to help you manage things, including `Metrics-Server <https://github.com/kubernetes-sigs/metrics-server>`_, `Promethius <https://prometheus.io/>`_, `Grafana <https://grafana.com/>`_ and `Karpenter <https://karpenter.sh/>`_.
+
+*NEW IN VERSION 1.02: SPOT PRICING FOR EC2 INSTANCES* Save up to 75% off the cost of on-demand EC2 instances by using AWS' flexible `spot-pricing <https://aws.amazon.com/ec2/spot/pricing/>`_ .
 
 Github Workflows for Build and Deploy
 -------------------------------------
@@ -241,10 +243,10 @@ Review your production environment parameters.
   redis_node_type                 = "cache.t2.small"
 
                                     # 2 vCPU 8gb
-  eks_worker_group_instance_type  = "t3.medium"
+  eks_worker_group_instance_type  = "t3.large"
 
-                                      # 4 vCPU 16gb
-  eks_karpenter_group_instance_type = "t3.xlarge"
+                                      # 2 vCPU 8gb
+  eks_karpenter_group_instance_type = "t3.large"
 
   }
 

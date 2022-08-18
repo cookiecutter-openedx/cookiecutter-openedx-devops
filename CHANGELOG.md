@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.2] (2022-08-18)
+
+- reconfigure k8s node groups to use [AWS SPOT Pricing](https://aws.amazon.com/ec2/spot/pricing/) for EC2 instances
+- add k8s [metrics-server](https://github.com/kubernetes-sigs/metrics-server)
+- add [Prometheus](https://prometheus.io/)
+- add [Grafana](https://grafana.com/)
+- add [Karpenter](https://karpenter.sh/)
+- add k8s [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) for all Open edX pods
+- add k8s [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler) for all Open edX pods
+- add AWS S3 encrypted bucket to store e-commerce payment processor api keys and secrets
+
+
 ## [1.0.1] (2022-06-26)
 
 - add per-environment mysql db names
