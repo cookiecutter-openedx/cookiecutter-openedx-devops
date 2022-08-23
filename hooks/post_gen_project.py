@@ -11,12 +11,18 @@ INFO = "\x1b[1;33m [INFO]: "
 HINT = "\x1b[3;33m"
 SUCCESS = "\x1b[1;32m [SUCCESS]: "
 
+
 def remove_bastion():
     module_dir_path = os.path.join("terraform", "modules", "ec2_bastion")
     if os.path.exists(module_dir_path):
         shutil.rmtree(module_dir_path)
 
-    terragrunt_dir_path = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "ec2_bastion")
+    terragrunt_dir_path = os.path.join(
+        "terraform",
+        "environments",
+        "{{ cookiecutter.environment_name }}",
+        "ec2_bastion",
+    )
     if os.path.exists(terragrunt_dir_path):
         shutil.rmtree(terragrunt_dir_path)
 

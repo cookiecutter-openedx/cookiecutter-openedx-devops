@@ -158,6 +158,11 @@ resource "aws_instance" "mongodb" {
 # to be able to programatically retrieve the internal ip address.
 resource "null_resource" "install_script" {
 
+  triggers = {
+    mongodb_instance = aws_instance.mongodb.id
+    install_script   = data.template_file.install_tasks.rendered
+  }
+
   provisioner "file" {
     connection {
       type        = "ssh"

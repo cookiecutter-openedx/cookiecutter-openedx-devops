@@ -1,4 +1,7 @@
 
+Host *
+  IdentitiesOnly yes
+
 Host mongodb
  Hostname      ${host}
  User          ${user}
