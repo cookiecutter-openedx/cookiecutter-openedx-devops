@@ -24,7 +24,7 @@ terraform {
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "~> 2.12"
+      version = "{{ cookiecutter.terraform_provider_kubernetes_version }}"
     }
   }
 }
