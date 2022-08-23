@@ -1,0 +1,21 @@
+#!/bin/sh
+#---------------------------------------------------------
+# written by: Lawrence McDaniel
+#             https://lawrencemcdaniel.com
+#
+# date:       aug-2022
+#
+# usage: print the login banner for openedx_devops
+#        cookiecutter.
+#------------------------------------------------------------------------------
+
+
+printf "\n"
+printf "*******************************************************************************\n"
+printf "*              Welcome to the Bastion Server for stepwisemath                 *\n"
+printf "*            Created with Cookiecutter for Open edX (tm) Devops               *\n"
+printf "*                                                                             *\n"
+printf "*          https://github.com/lpm0073/cookiecutter-openedx-devops             *\n"
+printf "*                                                                             *\n"
+printf "*******************************************************************************\n"
+printf "\n"
