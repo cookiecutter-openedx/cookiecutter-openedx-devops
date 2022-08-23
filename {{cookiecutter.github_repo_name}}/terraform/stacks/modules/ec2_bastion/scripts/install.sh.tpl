@@ -34,7 +34,7 @@ brew install gcc
 
 # install brew packages
 # -------------------------------------------------------------
-brew install terraform terragrunt helm k9s
+brew install awscli terraform terragrunt helm k9s
 
 # Alternate installation for k9s
 # install k9s

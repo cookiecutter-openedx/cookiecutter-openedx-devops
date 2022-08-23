@@ -28,3 +28,8 @@ then
 
     echo "added openedx_devops login banner"
 fi
+
+# setup a .kube/config file w correct permissions
+mkdir -p .kube
+touch .kube/config
+chmod 600 .kube/config
