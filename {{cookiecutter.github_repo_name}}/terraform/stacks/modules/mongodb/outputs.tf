@@ -4,5 +4,10 @@
 #
 # date: Aug-2022
 #
-# usage: create an EC2 instance with ssh access and a DNS record.
+# usage: create a remote MongoDB server with access limited to the VPC.
 #------------------------------------------------------------------------------
+
+output "mongodb_internal_ip" {
+  description = "The internal ip address of the EC2 instance hosting MongoDB"
+  value       = aws_instance.mongodb.private_ip
+}

@@ -4,7 +4,7 @@
 #
 # date: Aug-2022
 #
-# usage: create an EC2 instance with ssh access and a DNS record.
+# usage: create a remote MongoDB server with access limited to the VPC.
 #------------------------------------------------------------------------------
 
 variable "aws_region" {

@@ -4,7 +4,7 @@
 #
 # date: Aug-2022
 #
-# usage: create an RDS MySQL instance.
+# usage: create a remote MongoDB instance.
 #        store the MySQL credentials in Kubernetes Secrets
 #------------------------------------------------------------------------------
 data "aws_eks_cluster" "eks" {
