@@ -49,3 +49,12 @@ brew install terraform terragrunt helm k9s
 # Install Helm repos
 # -------------------------------------------------------------
 ~/scripts/helm.sh
+
+# install mongodb client
+# -------------------------------------------------------------
+sudo apt install -y awscli software-properties-common gnupg apt-transport-https ca-certificates
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 4B7C549A058F8B6B
+echo "deb [arch=amd64] http://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
+sudo apt update
+sudo apt install mongodb-org
+mongo --version

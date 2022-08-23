@@ -20,6 +20,8 @@ resource "aws_instance" "bastion" {
 
   vpc_security_group_ids = [
     resource.aws_security_group.sg_bastion.id,
+    data.aws_security_group.stack-namespace-node.id,
+    data.aws_security_group.k8s_nodes_idle-eks-node-group.id
   ]
 
   root_block_device {
@@ -193,15 +195,18 @@ data "aws_route53_zone" "stack" {
   name = var.root_domain
 }
 
-# Ubuntu latest stable
+# Ubuntu 20.04 LTS AMI
 # see: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami_ids
+#
+# mcdaniel: note that Ubuntu 20.0.04 is the latest version onto which MongoDB 4.2 can install.
+#           We install mongo in order to use the mongodb client from bastion.
 data "aws_ami" "ubuntu" {
 
   most_recent = true
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-*-*-amd64-server-*"]
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
   }
 
   filter {
@@ -219,6 +224,22 @@ data "aws_ami" "ubuntu" {
 resource "random_integer" "subnet_id" {
   min = 0
   max = 2
+}
+
+data "aws_security_group" "k8s_nodes_idle-eks-node-group" {
+
+  tags = {
+    Name = "k8s_nodes_idle-eks-node-group"
+  }
+
+}
+
+data "aws_security_group" "stack-namespace-node" {
+
+  tags = {
+    Name = "${var.stack_namespace}-node"
+  }
+
 }
 
 # create a dedicated security group for the bastion that

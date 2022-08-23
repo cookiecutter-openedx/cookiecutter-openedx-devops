@@ -4,7 +4,21 @@
 #
 # date: Aug-2022
 #
-# usage: create an EC2 instance with ssh access and a DNS record.
+# usage: create a remote MongoDB server with access limited to the VPC.
+#        - EC2 instance with ssh access from the bastion and a DNS record
+#        - preconfigure bastion with private key and ssh config to this instance
+#        - add aws cli configuration with dedicated IAM user limited to S3 bucket access
+#        - attach to dedicated EBS volume for MongoDB data
+#        - configure mongod to allow remote connections.
+#        - add a login welcome banner w getting started help
+#        - automate the software installation
+#        - create dedicated security group to limit ingress to the VPC on port 27017
+#        - add k8s nodes security groups to this instance
+#        - add connection data to k8s secrets
+#        - create an admin user and password, and add to k8s secrets
+#
+# see:
+#   https://www.digitalocean.com/community/tutorials/how-to-configure-remote-access-for-mongodb-on-ubuntu-20-04
 #------------------------------------------------------------------------------
 locals {
   ssh_private_key_filename = "${var.stack_namespace}-mongodb.pem"
@@ -161,6 +175,18 @@ resource "null_resource" "install_script" {
   triggers = {
     mongodb_instance = aws_instance.mongodb.id
     install_script   = data.template_file.install_tasks.rendered
+  }
+
+  provisioner "file" {
+    connection {
+      type        = "ssh"
+      user        = data.kubernetes_secret.bastion_ssh_key.data["USER"]
+      private_key = data.kubernetes_secret.bastion_ssh_key.data["PRIVATE_KEY_PEM"]
+      host        = data.kubernetes_secret.bastion_ssh_key.data["HOST"]
+    }
+
+    content     = data.template_file.mongod_conf.rendered
+    destination = "/tmp/openedx_devops/mongodb/etc/mongod.conf"
   }
 
   provisioner "file" {
@@ -442,5 +468,12 @@ data "template_file" "install_tasks" {
     ssh_private_key_filename = local.ssh_private_key_filename
     private_ip               = aws_instance.mongodb.private_ip
     ssh_config               = data.template_file.ssh_config.rendered
+  }
+}
+
+data "template_file" "mongod_conf" {
+  template = file("${path.module}/etc/mongod.conf.tpl")
+  vars = {
+    private_ip = aws_instance.mongodb.private_ip
   }
 }
