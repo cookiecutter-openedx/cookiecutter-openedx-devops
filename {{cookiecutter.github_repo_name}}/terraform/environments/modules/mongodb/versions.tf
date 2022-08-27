@@ -1,10 +1,10 @@
 #------------------------------------------------------------------------------
 # written by: Lawrence McDaniel
-#             https://lawrencemcdaniel.com
+#             https://lawrencemcdaniel.com/
 #
-# date: aug-2022
+# date: Aug-2022
 #
-# usage: create environment connection resources for remote MongoDB instance.
+# usage: create a remote MongoDB server with access limited to the VPC.
 #------------------------------------------------------------------------------
 terraform {
   required_version = "~> 1.2"
@@ -12,7 +12,19 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 4.25"
+      version = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+    }
+    local = {
+      source  = "hashicorp/local"
+      version = "{{ cookiecutter.terraform_provider_hashicorp_local_version }}"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "{{ cookiecutter.terraform_provider_hashicorp_random_version }}"
+    }
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "{{ cookiecutter.terraform_provider_kubernetes_version }}"
     }
   }
 }

@@ -1,8 +1,13 @@
 #------------------------------------------------------------------------------
 # written by: Lawrence McDaniel
-#             https://lawrencemcdaniel.com
+#             https://lawrencemcdaniel.com/
 #
-# date: aug-2022
+# date: Aug-2022
 #
-# usage: create environment connection resources for remote MongoDB instance.
+# usage: create a remote MongoDB server with access limited to the VPC.
 #------------------------------------------------------------------------------
+
+output "mongodb_internal_ip" {
+  description = "The internal ip address of the EC2 instance hosting MongoDB"
+  value       = aws_instance.mongodb.private_ip
+}

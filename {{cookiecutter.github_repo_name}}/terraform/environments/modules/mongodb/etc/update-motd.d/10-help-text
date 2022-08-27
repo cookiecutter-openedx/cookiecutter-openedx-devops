@@ -1,0 +1,23 @@
+#!/bin/sh
+#---------------------------------------------------------
+# written by: Lawrence McDaniel
+#             https://lawrencemcdaniel.com
+#
+# date:       aug-2022
+#
+# usage: print the login banner for openedx_devops
+#        cookiecutter.
+#------------------------------------------------------------------------------
+
+
+printf " Quickstart:\n"
+printf "   run install.sh to install preconfigured software packages\n"
+printf " \n"
+printf " Help: \n"
+printf "   aws                      preconfigured AWS command-line interface \n"
+printf "   install.sh               install preconfigured software packages \n"
+printf "   update.sh                update all preconfigured software packages \n"
+printf " \n"
+printf " MongoDB \n"
+printf "   client connection:       mongo \n"
+printf " \n"
