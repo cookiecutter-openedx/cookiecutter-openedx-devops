@@ -7,20 +7,20 @@
 # usage: terraform library dependencies
 #------------------------------------------------------------------------------
 terraform {
-  required_version = "{{ cookiecutter.terraform_required_version }}"
+  required_version = "~> 1.2"
 
   required_providers {
     local = {
       source  = "hashicorp/local"
-      version = "{{ cookiecutter.terraform_provider_hashicorp_local_version }}"
+      version = "~> 2.2"
     }
     random = {
       source  = "hashicorp/random"
-      version = "{{ cookiecutter.terraform_provider_hashicorp_random_version }}"
+      version = "~> 3.3"
     }
     aws = {
       source  = "hashicorp/aws"
-      version = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+      version = "~> 4.25"
     }
   }
 }
