@@ -37,3 +37,7 @@ cookiecutter --checkout $GITHUB_BRANCH \
              mysql_instance_class={{ cookiecutter.mysql_instance_class }} \
              mysql_allocated_storage={{ cookiecutter.mysql_allocated_storage }} \
              redis_node_type={{ cookiecutter.redis_node_type }}
+             {% if cookiecutter.stack_add_remote_mongodb == "Y" -%}
+             mongodb_instance_type={{ cookiecutter.mongodb_instance_type }}
+             mongodb_allocated_storage={{ cookiecutter.mongodb_allocated_storage }}
+             {% endif %}

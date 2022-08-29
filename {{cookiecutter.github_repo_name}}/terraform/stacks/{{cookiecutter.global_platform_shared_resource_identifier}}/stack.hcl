@@ -17,7 +17,7 @@ locals {
   mysql_instance_class = "{{ cookiecutter.mysql_instance_class }}"
   mysql_allocated_storage={{ cookiecutter.mysql_allocated_storage }}
 
-  {%- if cookiecutter.stack_add_remote_mongodb == "Y" -%}
+  {% if cookiecutter.stack_add_remote_mongodb == "Y" -%}
   # MongoDB EC2 instance sizing
   mongodb_instance_type    = "{{ cookiecutter.mongodb_instance_type }}"
   mongodb_allocated_storage = {{ cookiecutter.mongodb_allocated_storage }}
