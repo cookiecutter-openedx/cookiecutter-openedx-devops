@@ -60,7 +60,7 @@ This configuration scales automatically, reliably supporting anywhere from a few
 
 **NEW IN VERSION 1.02: SPOT PRICING FOR EC2 INSTANCES** Save up to 75% off the cost of on-demand EC2 instances by using AWS' flexible `spot-pricing <https://aws.amazon.com/ec2/spot/pricing/>`_ .
 
-** NEW IN VERSION 1.03: an optional fully-configured remote MongoDB server running on an EC2 instance. Set cookiecutter.stack_add_remote_mongodb=Y to choose this option.
+**NEW IN VERSION 1.03: an optional fully-configured remote MongoDB server running on an EC2 instance. Set cookiecutter.stack_add_remote_mongodb=Y to choose this option.**
 
 Github Workflows for Build and Deploy
 -------------------------------------
