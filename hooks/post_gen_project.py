@@ -33,8 +33,15 @@ def remove_mongodb():
     dir_path = os.path.join("terraform", "stacks", "modules", "mongodb")
     rm_directory(dir_path)
 
-    dir_path = os.path.join("terraform", "stacks", "{{ cookiecutter.environment_name }}", "mongodb")
+    dir_path = os.path.join("terraform", "stacks", "{{ cookiecutter.global_platform_shared_resource_identifier }}", "mongodb")
     rm_directory(dir_path)
+
+    dir_path = os.path.join("terraform", "stacks", "modules", "mongodb_volume")
+    rm_directory(dir_path)
+
+    dir_path = os.path.join("terraform", "stacks", "{{ cookiecutter.global_platform_shared_resource_identifier }}", "mongodb_volume")
+    rm_directory(dir_path)
+
 
     dir_path = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "mongodb")
     rm_directory(dir_path)
