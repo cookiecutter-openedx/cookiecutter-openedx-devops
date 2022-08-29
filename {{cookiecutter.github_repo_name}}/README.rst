@@ -49,7 +49,7 @@ production installation of Open edX that will automatically scale up, reliably s
 
 **NEW IN VERSION 1.02: SPOT PRICING FOR EC2 INSTANCES** Save up to 75% off the cost of on-demand EC2 instances by using AWS' flexible `spot-pricing <https://aws.amazon.com/ec2/spot/pricing/>`_ .
 
-** NEW IN VERSION 1.03: an optional fully-configured remote MongoDB server running on an EC2 instance. Set cookiecutter.stack_add_remote_mongodb=Y to choose this option.
+**NEW IN VERSION 1.03: an optional fully-configured remote MongoDB server running on an EC2 instance. Set cookiecutter.stack_add_remote_mongodb=Y to choose this option.**
 
 The Terraform scripts in this repo provide a 1-click means of creating / updating / destroying the following for each environment:
 
