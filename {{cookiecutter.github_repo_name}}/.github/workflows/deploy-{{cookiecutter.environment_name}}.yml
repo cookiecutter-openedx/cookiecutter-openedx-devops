@@ -180,7 +180,7 @@ jobs:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
           {%- if cookiecutter.stack_add_remote_mongodb == "Y" -%}
           remote-server: "true"
-          {%- if cookiecutter.stack_add_remote_mongodb == "N" -%}
+          {%- elif cookiecutter.stack_add_remote_mongodb == "N" -%}
           remote-server: "false"
           {% endif %}
 
