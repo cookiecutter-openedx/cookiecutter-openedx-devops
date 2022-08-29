@@ -178,16 +178,11 @@ jobs:
         uses: openedx-actions/tutor-k8s-configure-mysql@{{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_mongodb_version }}
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
-
-          {%- if cookiecutter.stack_add_remote_mongodb == "Y" -%}
-           \
+{%- if cookiecutter.stack_add_remote_mongodb == "Y" -%}
           remote-server: "true"
-
-          {%- elif cookiecutter.stack_add_remote_mongodb == "N" -%}
-           \
+{%- elif cookiecutter.stack_add_remote_mongodb == "N" -%}
           remote-server: "false"
-
-          {% endif %}
+{% endif %}
 
       # ---------------------------------------------------------------------------------
       # Configure application secrets
