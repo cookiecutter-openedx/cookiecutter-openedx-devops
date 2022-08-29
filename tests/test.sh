@@ -28,5 +28,5 @@ cookiecutter --checkout $GITHUB_BRANCH \
              global_root_domain=stepwisemath.ai \
              global_aws_route53_hosted_zone_id=Z0232691KVI7Y7U23HBD \
              environment_name=prod \
-             environment_add_bastion=N \
+             stack_add_bastion=N \
              environment_subdomain=web \
