@@ -179,9 +179,9 @@ jobs:
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 {%- if cookiecutter.stack_add_remote_mongodb == "Y" -%}
-          remote-server: "true"
+          \remote-server: "true"
 {%- elif cookiecutter.stack_add_remote_mongodb == "N" -%}
-          remote-server: "false"
+          \remote-server: "false"
 {% endif %}
 
       # ---------------------------------------------------------------------------------
