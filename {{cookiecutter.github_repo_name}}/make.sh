@@ -39,6 +39,6 @@ cookiecutter --checkout $GITHUB_BRANCH \
              stack_add_bastion={{ cookiecutter.stack_add_bastion }} \
              stack_add_remote_mongodb={{ cookiecutter.stack_add_remote_mongodb }} \
              {% if cookiecutter.stack_add_remote_mongodb == "Y" -%}
-             mongodb_instance_type={{ cookiecutter.mongodb_instance_type }}
-             mongodb_allocated_storage={{ cookiecutter.mongodb_allocated_storage }}
+             mongodb_instance_type={{ cookiecutter.mongodb_instance_type }} \
+             mongodb_allocated_storage={{ cookiecutter.mongodb_allocated_storage }} \
              {% endif %}
