@@ -9,7 +9,7 @@
 #------------------------------------------------------------------------------
 
 GITHUB_REPO="gh:lpm0073/cookiecutter-openedx-devops"
-GITHUB_BRANCH="main"
+GITHUB_BRANCH="mongodb"
 OUTPUT_FOLDER="../"
 
 cookiecutter --checkout $GITHUB_BRANCH \
