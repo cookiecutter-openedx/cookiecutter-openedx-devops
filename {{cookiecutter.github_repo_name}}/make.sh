@@ -33,10 +33,11 @@ cookiecutter --checkout $GITHUB_BRANCH \
              eks_karpenter_group_min_size={{ cookiecutter.eks_karpenter_group_min_size }} \
              eks_karpenter_group_max_size={{ cookiecutter.eks_karpenter_group_max_size }} \
              eks_karpenter_group_desired_size={{ cookiecutter.eks_karpenter_group_desired_size }} \
-             stack_add_remote_mongodb=Y \
              mysql_instance_class={{ cookiecutter.mysql_instance_class }} \
              mysql_allocated_storage={{ cookiecutter.mysql_allocated_storage }} \
              redis_node_type={{ cookiecutter.redis_node_type }}
+             stack_add_bastion={{ cookiecutter.stack_add_bastion }} \
+             stack_add_remote_mongodb={{ cookiecutter.stack_add_remote_mongodb }} \
              {% if cookiecutter.stack_add_remote_mongodb == "Y" -%}
              mongodb_instance_type={{ cookiecutter.mongodb_instance_type }}
              mongodb_allocated_storage={{ cookiecutter.mongodb_allocated_storage }}
