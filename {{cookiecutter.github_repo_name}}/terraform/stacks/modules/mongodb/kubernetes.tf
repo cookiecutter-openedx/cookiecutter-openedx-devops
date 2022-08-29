@@ -2,17 +2,17 @@
 # written by: Lawrence McDaniel
 #             https://lawrencemcdaniel.com
 #
-# date: April 2022
+# date: Aug-2022
 #
-# usage: create an RDS MySQL instance.
+# usage: create a remote MongoDB instance.
 #        store the MySQL credentials in Kubernetes Secrets
 #------------------------------------------------------------------------------
 data "aws_eks_cluster" "eks" {
-  name = var.resource_name
+  name = var.stack_namespace
 }
 
 data "aws_eks_cluster_auth" "eks" {
-  name = var.resource_name
+  name = var.stack_namespace
 }
 
 provider "kubernetes" {

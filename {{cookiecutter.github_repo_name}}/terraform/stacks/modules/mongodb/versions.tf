@@ -2,29 +2,29 @@
 # written by: Lawrence McDaniel
 #             https://lawrencemcdaniel.com/
 #
-# date: Feb-2022
+# date: Aug-2022
 #
-# usage: create an EC2 instance with ssh access and a DNS record.
+# usage: create a remote MongoDB server with access limited to the VPC.
 #------------------------------------------------------------------------------
 terraform {
-  required_version = "{{ cookiecutter.terraform_required_version }}"
+  required_version = "~> 1.2"
 
   required_providers {
     local = {
       source  = "hashicorp/local"
-      version = "{{ cookiecutter.terraform_provider_hashicorp_local_version }}"
+      version = "~> 2.2"
     }
     random = {
       source  = "hashicorp/random"
-      version = "{{ cookiecutter.terraform_provider_hashicorp_random_version }}"
+      version = "~> 3.3"
     }
     aws = {
       source  = "hashicorp/aws"
-      version = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+      version = "~> 4.25"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "{{ cookiecutter.terraform_provider_kubernetes_version }}"
+      version = "~> 2.12"
     }
   }
 }

@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.3] (2022-08-29)
+
+- add an option to create a remote MongoDB server running on a standalone EC2 instance.
+
 ## [1.0.2] (2022-08-18)
 
 - reconfigure k8s node groups to use [AWS SPOT Pricing](https://aws.amazon.com/ec2/spot/pricing/) for EC2 instances

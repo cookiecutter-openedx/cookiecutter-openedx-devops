@@ -15,12 +15,12 @@ locals {
   root_domain      = local.global_vars.locals.root_domain
   aws_region       = local.global_vars.locals.aws_region
   resource_name    = local.stack_vars.locals.stack_namespace
-  stack_namespace = local.stack_vars.locals.stack_namespace
+  stack_namespace  = local.stack_vars.locals.stack_namespace
 
   tags = merge(
     local.stack_vars.locals.tags,
     local.global_vars.locals.tags,
-    { Name = "${local.resource_name}" }
+    { Name = "${local.resource_name}-bastion" }
   )
 
 }
@@ -82,16 +82,16 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
+  instance_type    = "t3.micro"
+  volume_size      = 20
+  aws_region       = local.aws_region
   root_domain      = local.root_domain
   resource_name    = local.resource_name
   stack_namespace  = local.stack_namespace
   vpc_id            = dependency.vpc.outputs.vpc_id
-  availability_zone = "${local.aws_region}a"
   ingress_cidr_blocks = dependency.vpc.outputs.public_subnets_cidr_blocks
   security_group_name_prefix = local.resource_name
-
-  # FIX NOTE: how to choose only one subnet????
-  subnet_id = dependency.vpc.outputs.public_subnets[0]
+  subnet_ids = dependency.vpc.outputs.public_subnets
   tags      = local.tags
 
 }

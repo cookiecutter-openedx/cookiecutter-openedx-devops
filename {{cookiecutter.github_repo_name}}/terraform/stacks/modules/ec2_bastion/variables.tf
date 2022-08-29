@@ -6,6 +6,18 @@
 #
 # usage: create an EC2 instance with ssh access and a DNS record.
 #------------------------------------------------------------------------------
+
+variable "instance_type" {
+  type = string
+}
+
+variable "volume_size" {
+  type = number
+}
+
+variable "aws_region" {
+  type = string
+}
 variable "vpc_id" {
   description = "VPC where the cluster and workers will be deployed."
   type        = string
@@ -25,9 +37,10 @@ variable "security_group_name_prefix" {
   type        = string
   default     = ""
 }
-variable "subnet_id" {
-  description = "subnet_id"
-  type        = string
+variable "subnet_ids" {
+  description = "subnet_ids"
+  type        = list(any)
+  default     = []
 }
 variable "tags" {
   description = "tags"
