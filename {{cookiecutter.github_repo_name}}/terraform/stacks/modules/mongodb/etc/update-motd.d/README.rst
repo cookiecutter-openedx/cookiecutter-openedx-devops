@@ -12,6 +12,3 @@ Notes:
 
   - THIS IS A TERRAFORM TEMPLATING DIRECTIVE
     $${some_bash_variable_that_should_not_be_substituted_by_terraform}
-
-  - THIS IS A RENDERED BASH DIRECTIVE
-    printf "*%*s\n" $((($${#title}+$COLUMNS)/2)) "$title"
