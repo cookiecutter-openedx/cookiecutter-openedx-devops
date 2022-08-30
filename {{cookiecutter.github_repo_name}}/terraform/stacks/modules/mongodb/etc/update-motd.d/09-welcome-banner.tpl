@@ -15,10 +15,10 @@ attribution="https://github.com/lpm0073/cookiecutter-openedx-devops"
 printf "\n"
 printf "*******************************************************************************\n"
 printf "*\n"
-{% raw %}printf "*%*s\n" $(((${#title}+$COLUMNS)/2)) "$title"{% endraw %}
-{% raw %}printf "*%*s\n" $(((${#sub_title}+$COLUMNS)/2)) "$sub_title"{% endraw %}
+{% raw %}printf "*%*s\n" $((($${#title}+$COLUMNS)/2)) "$title"{% endraw %}
+{% raw %}printf "*%*s\n" $((($${#sub_title}+$COLUMNS)/2)) "$sub_title"{% endraw %}
 printf "*\n"
-{% raw %}printf "*%*s\n" $(((${#attribution}+$COLUMNS)/2)) "$attribution"{% endraw %}
+{% raw %}printf "*%*s\n" $((($${#attribution}+$COLUMNS)/2)) "$attribution"{% endraw %}
 printf "*\n"
 printf "*******************************************************************************\n"
 printf "\n"
