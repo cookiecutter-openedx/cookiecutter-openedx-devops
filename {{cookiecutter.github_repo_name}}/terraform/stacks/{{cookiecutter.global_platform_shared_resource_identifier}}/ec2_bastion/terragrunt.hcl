@@ -12,7 +12,7 @@ locals {
   global_vars       = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
-  platform_name     = local.stack_vars.locals.platform_name
+  platform_name     = local.global_vars.locals.platform_name
   root_domain       = local.global_vars.locals.root_domain
   aws_region        = local.global_vars.locals.aws_region
 
