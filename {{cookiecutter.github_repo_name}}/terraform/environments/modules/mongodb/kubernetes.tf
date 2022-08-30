@@ -63,7 +63,7 @@ resource "kubernetes_secret" "openedx" {
   }
 
   data = {
-    MONGODB_DB       = substr("${var.db_prefix}_edx", -64, -1)
+    MONGODB_DATABASE = substr("${var.db_prefix}_edx", -32, -1)
     MONGODB_USERNAME = substr("${var.db_prefix}_edx", -32, -1)
     MONGODB_PASSWORD = random_password.mongodb_openedx.result
     MONGODB_HOST     = data.kubernetes_secret.mongodb_admin.data.MONGODB_HOST
