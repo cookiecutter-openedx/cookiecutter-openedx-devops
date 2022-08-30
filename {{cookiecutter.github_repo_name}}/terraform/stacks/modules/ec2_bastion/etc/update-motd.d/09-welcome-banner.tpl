@@ -7,14 +7,18 @@
 #
 # usage:      print the login banner for openedx_devops cookiecutter.
 #------------------------------------------------------------------------------
-
+COLUMNS=78
+title="Welcome to the Bastion Server for ${platform_name}"
+sub_title="Created with Cookiecutter for Open edX (tm) Devops"
+attribution="https://github.com/lpm0073/cookiecutter-openedx-devops"
 
 printf "\n"
 printf "*******************************************************************************\n"
-printf "*              Welcome to the Bastion Server for ${platform_name} \n"
-printf "*            Created with Cookiecutter for Open edX (tm) Devops   \n"
-printf "*                                                                 \n"
-printf "*          https://github.com/lpm0073/cookiecutter-openedx-devops \n"
-printf "*                                                                 \n"
+printf "*\n"
+printf "*%*s\n" $(((${#title}+$COLUMNS)/2)) "$title"
+printf "*%*s\n" $(((${#sub_title}+$COLUMNS)/2)) "$sub_title"
+printf "*\n"
+printf "*%*s\n" $(((${#attribution}+$COLUMNS)/2)) "$attribution"
+printf "*\n"
 printf "*******************************************************************************\n"
 printf "\n"
