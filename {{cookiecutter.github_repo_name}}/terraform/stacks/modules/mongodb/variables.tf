@@ -7,6 +7,10 @@
 # usage: create a remote MongoDB server with access limited to the VPC.
 #------------------------------------------------------------------------------
 
+variable "platform_name" {
+  type = string
+}
+
 variable "aws_region" {
   type = string
 }

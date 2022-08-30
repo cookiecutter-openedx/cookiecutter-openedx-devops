@@ -14,6 +14,7 @@ locals {
   stack_namespace           = local.stack_vars.locals.stack_namespace
   mongodb_instance_type     = local.stack_vars.locals.mongodb_instance_type
   mongodb_allocated_storage = local.stack_vars.locals.mongodb_allocated_storage
+  platform_name             = local.global_vars.locals.platform_name
   root_domain               = local.global_vars.locals.root_domain
   aws_region                = local.global_vars.locals.aws_region
   resource_name             = "${local.stack_namespace}-mongodb"
@@ -110,6 +111,7 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
+  platform_name         = local.platform_name
   root_domain           = local.root_domain
   aws_region            = local.aws_region
   stack_namespace       = local.stack_namespace
