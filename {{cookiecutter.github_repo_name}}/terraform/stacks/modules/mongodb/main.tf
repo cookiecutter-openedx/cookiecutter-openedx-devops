@@ -85,7 +85,7 @@ resource "aws_instance" "mongodb" {
       host        = data.kubernetes_secret.bastion_ssh_key.data["HOST"]
     }
 
-    source      = "${path.module}/etc/update-motd.d/09-welcome-banner"
+    content     = data.template_file.welcome_banner.rendered
     destination = "/tmp/openedx_devops/mongodb/etc/09-welcome-banner"
   }
 
@@ -475,5 +475,12 @@ data "template_file" "mongod_conf" {
   template = file("${path.module}/etc/mongod.conf.tpl")
   vars = {
     private_ip = aws_instance.mongodb.private_ip
+  }
+}
+
+data "template_file" "welcome_banner" {
+  template = file("${path.module}/etc/update-motd.d/09-welcome-banner.tpl")
+  vars = {
+    platform_name = var.platform_name
   }
 }
