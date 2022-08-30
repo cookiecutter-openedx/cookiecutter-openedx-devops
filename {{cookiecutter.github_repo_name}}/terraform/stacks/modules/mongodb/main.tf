@@ -389,10 +389,10 @@ resource "kubernetes_secret" "mongodb_admin" {
   }
 
   data = {
-    MONGODB_USERNAME = "${var.username}"
-    MONGODB_PASSWORD = random_password.mongodb_admin.result
-    MONGODB_HOST     = aws_route53_record.mongodb.name
-    MONGODB_PORT     = "${var.port}"
+    MONGODB_ADMIN_USERNAME = "${var.username}"
+    MONGODB_ADMIN_PASSWORD = random_password.mongodb_admin.result
+    MONGODB_HOST           = aws_route53_record.mongodb.name
+    MONGODB_PORT           = "${var.port}"
   }
 
   depends_on = [

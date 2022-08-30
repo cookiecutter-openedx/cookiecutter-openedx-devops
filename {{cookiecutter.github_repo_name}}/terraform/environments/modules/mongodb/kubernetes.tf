@@ -39,8 +39,8 @@ resource "kubernetes_secret" "mongodb_admin" {
   }
 
   data = {
-    MONGODB_ADMIN_USERNAME = data.kubernetes_secret.mongodb_admin.data.MONGODB_USERNAME
-    MONGODB_ADMIN_PASSWORD = data.kubernetes_secret.mongodb_admin.data.MONGODB_PASSWORD
+    MONGODB_ADMIN_USERNAME = data.kubernetes_secret.mongodb_admin.data.MONGODB_ADMIN_USERNAME
+    MONGODB_ADMIN_PASSWORD = data.kubernetes_secret.mongodb_admin.data.MONGODB_ADMIN_PASSWORD
     MONGODB_HOST           = data.kubernetes_secret.mongodb_admin.data.MONGODB_HOST
     MONGODB_PORT           = data.kubernetes_secret.mongodb_admin.data.MONGODB_PORT
   }
@@ -63,10 +63,10 @@ resource "kubernetes_secret" "openedx" {
   }
 
   data = {
-    OPENEDX_MONGODB_DB       = substr("${var.db_prefix}_edx", -64, -1)
-    OPENEDX_MONGODB_USERNAME = substr("${var.db_prefix}_edx", -32, -1)
-    OPENEDX_MONGODB_PASSWORD = random_password.mongodb_openedx.result
-    MONGODB_HOST             = data.kubernetes_secret.mongodb_admin.data.MONGODB_HOST
-    MONGODB_PORT             = data.kubernetes_secret.mongodb_admin.data.MONGODB_PORT
+    MONGODB_DB       = substr("${var.db_prefix}_edx", -64, -1)
+    MONGODB_USERNAME = substr("${var.db_prefix}_edx", -32, -1)
+    MONGODB_PASSWORD = random_password.mongodb_openedx.result
+    MONGODB_HOST     = data.kubernetes_secret.mongodb_admin.data.MONGODB_HOST
+    MONGODB_PORT     = data.kubernetes_secret.mongodb_admin.data.MONGODB_PORT
   }
 }
