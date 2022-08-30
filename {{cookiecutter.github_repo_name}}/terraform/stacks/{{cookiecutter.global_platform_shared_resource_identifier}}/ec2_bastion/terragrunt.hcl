@@ -12,10 +12,10 @@ locals {
   global_vars       = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
-  root_domain           = local.global_vars.locals.root_domain
-  aws_region            = local.global_vars.locals.aws_region
+  platform_name     = local.stack_vars.locals.platform_name
+  root_domain       = local.global_vars.locals.root_domain
+  aws_region        = local.global_vars.locals.aws_region
 
-  global_platform_name      = local.stack_vars.locals.global_platform_name
   resource_name             = local.stack_vars.locals.stack_namespace
   stack_namespace           = local.stack_vars.locals.stack_namespace
   bastion_instance_type     = local.stack_vars.locals.bastion_instance_type
@@ -86,7 +86,7 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  platform_name               = local.global_platform_name
+  platform_name               = local.platform_name
   instance_type               = local.bastion_instance_type
   volume_size                 = local.bastion_allocated_storage
   aws_region                  = local.aws_region
