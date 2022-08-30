@@ -12,10 +12,10 @@ locals {
   global_vars       = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
-  global_platform_name  = local.global_vars.locals.global_platform_name
   root_domain           = local.global_vars.locals.root_domain
   aws_region            = local.global_vars.locals.aws_region
 
+  global_platform_name      = local.stack_vars.locals.global_platform_name
   resource_name             = local.stack_vars.locals.stack_namespace
   stack_namespace           = local.stack_vars.locals.stack_namespace
   bastion_instance_type     = local.stack_vars.locals.bastion_instance_type
