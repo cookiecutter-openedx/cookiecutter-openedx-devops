@@ -377,14 +377,14 @@ data "template_file" "aws_credentials" {
 }
 
 data "template_file" "welcome_banner" {
-  template = file("${path.module}/etc/09-welcome-banner.tpl")
+  template = file("${path.module}/etc/update-motd.d/09-welcome-banner.tpl")
   vars = {
     platform_name = var.platform_name
   }
 }
 
 data "template_file" "help_text" {
-  template = file("${path.module}/etc/10-help-text.tpl")
+  template = file("${path.module}/etc/update-motd.d/10-help-text.tpl")
   vars = {
     stack_namespace = var.stack_namespace
     root_domain     = var.root_domain
