@@ -17,13 +17,19 @@ locals {
   mysql_instance_class = "{{ cookiecutter.mysql_instance_class }}"
   mysql_allocated_storage={{ cookiecutter.mysql_allocated_storage }}
 
+  redis_node_type      = "{{ cookiecutter.redis_node_type }}"
+
   {% if cookiecutter.stack_add_remote_mongodb == "Y" -%}
   # MongoDB EC2 instance sizing
   mongodb_instance_type    = "{{ cookiecutter.mongodb_instance_type }}"
   mongodb_allocated_storage = {{ cookiecutter.mongodb_allocated_storage }}
   {% endif %}
 
-  redis_node_type      = "{{ cookiecutter.redis_node_type }}"
+  {% if cookiecutter.stack_add_bastion == "Y" -%}
+  # Bastion EC2 instance sizing
+  bastion_instance_type    = "{{ cookiecutter.bastion_instance_type }}"
+  bastion_allocated_storage = {{ cookiecutter.bastion_allocated_storage }}
+  {% endif %}
 
   #----------------------------------------------------------------------------
   # AWS Elastic Kubernetes service

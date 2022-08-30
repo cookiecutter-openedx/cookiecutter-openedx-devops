@@ -89,7 +89,7 @@ resource "aws_instance" "bastion" {
       host        = self.public_ip
     }
 
-    source      = "${path.module}/etc/update-motd.d/09-welcome-banner"
+    content     = data.template_file.welcome_banner.rendered
     destination = "/tmp/openedx_devops/etc/09-welcome-banner"
   }
 
@@ -101,7 +101,7 @@ resource "aws_instance" "bastion" {
       host        = self.public_ip
     }
 
-    source      = "${path.module}/etc/update-motd.d/10-help-text"
+    content     = data.template_file.help_text.rendered
     destination = "/tmp/openedx_devops/etc/10-help-text"
   }
 
@@ -373,5 +373,20 @@ data "template_file" "aws_credentials" {
   vars = {
     aws_secret_access_key = aws_iam_access_key.aws_cli.secret
     aws_access_key_id     = aws_iam_access_key.aws_cli.id
+  }
+}
+
+data "template_file" "welcome_banner" {
+  template = file("${path.module}/etc/09-welcome-banner.tpl")
+  vars = {
+    platform_name = var.platform_name
+  }
+}
+
+data "template_file" "help_text" {
+  template = file("${path.module}/etc/10-help-text.tpl")
+  vars = {
+    stack_namespace = var.stack_namespace
+    root_domain     = var.root_domain
   }
 }

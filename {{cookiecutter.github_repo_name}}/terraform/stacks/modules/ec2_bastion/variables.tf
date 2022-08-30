@@ -7,6 +7,10 @@
 # usage: create an EC2 instance with ssh access and a DNS record.
 #------------------------------------------------------------------------------
 
+variable "platform_name" {
+  type = string
+}
+
 variable "instance_type" {
   type = string
 }

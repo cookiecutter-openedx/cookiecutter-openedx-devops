@@ -8,14 +8,18 @@
 #------------------------------------------------------------------------------
 locals {
   # Automatically load stack-level variables
-  stack_vars = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
-  global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
+  stack_vars        = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
+  global_vars       = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
-  root_domain      = local.global_vars.locals.root_domain
-  aws_region       = local.global_vars.locals.aws_region
-  resource_name    = local.stack_vars.locals.stack_namespace
-  stack_namespace  = local.stack_vars.locals.stack_namespace
+  global_platform_name  = local.global_vars.locals.global_platform_name
+  root_domain           = local.global_vars.locals.root_domain
+  aws_region            = local.global_vars.locals.aws_region
+
+  resource_name             = local.stack_vars.locals.stack_namespace
+  stack_namespace           = local.stack_vars.locals.stack_namespace
+  bastion_instance_type     = local.stack_vars.locals.bastion_instance_type
+  bastion_allocated_storage = local.stack_vars.locals.bastion_allocated_storage
 
   tags = merge(
     local.stack_vars.locals.tags,
@@ -82,16 +86,16 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  instance_type    = "t3.micro"
-  volume_size      = 20
-  aws_region       = local.aws_region
-  root_domain      = local.root_domain
-  resource_name    = local.resource_name
-  stack_namespace  = local.stack_namespace
-  vpc_id            = dependency.vpc.outputs.vpc_id
-  ingress_cidr_blocks = dependency.vpc.outputs.public_subnets_cidr_blocks
-  security_group_name_prefix = local.resource_name
-  subnet_ids = dependency.vpc.outputs.public_subnets
-  tags      = local.tags
-
+  platform_name               = local.global_platform_name
+  instance_type               = local.bastion_instance_type
+  volume_size                 = local.bastion_allocated_storage
+  aws_region                  = local.aws_region
+  root_domain                 = local.root_domain
+  resource_name               = local.resource_name
+  stack_namespace             = local.stack_namespace
+  vpc_id                      = dependency.vpc.outputs.vpc_id
+  ingress_cidr_blocks         = dependency.vpc.outputs.public_subnets_cidr_blocks
+  security_group_name_prefix  = local.resource_name
+  subnet_ids                  = dependency.vpc.outputs.public_subnets
+  tags                        = local.tags
 }

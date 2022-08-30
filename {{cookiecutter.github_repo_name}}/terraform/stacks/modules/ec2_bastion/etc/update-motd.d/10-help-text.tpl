@@ -1,12 +1,11 @@
 #!/bin/sh
-#---------------------------------------------------------
+#------------------------------------------------------------------------------
 # written by: Lawrence McDaniel
 #             https://lawrencemcdaniel.com
 #
 # date:       aug-2022
 #
-# usage: print the login banner for openedx_devops
-#        cookiecutter.
+# usage:      print the login help menu for openedx_devops cookiecutter.
 #------------------------------------------------------------------------------
 
 
@@ -27,10 +26,10 @@ printf "   tutor                    run tutor on the command line \n"
 printf "   update.sh                update all preconfigured software packages \n"
 printf " \n"
 printf " MySQL\n"
-printf "   root credentials:        ksecret.sh mysql-root stepwisemath-global-live \n"
-printf "   client connection:       mysql -h mysql.stepwisemath.ai -u root -p {your password} \n"
+printf "   root credentials:        ksecret.sh mysql-root ${stack_namespace} \n"
+printf "   client connection:       mysql -h mysql.${root_domain} -u root -p "your-password" \n"
 printf " \n"
 printf " MongoDB\n"
 printf "   server connection:       ssh mongodb \n"
-printf "   client connection:       mongo 'mongodb://mongodb.stepwisemath.ai:27017' \n"
+printf "   client connection:       mongo 'mongodb://mongodb.${root_domain}:27017' \n"
 printf " \n"
