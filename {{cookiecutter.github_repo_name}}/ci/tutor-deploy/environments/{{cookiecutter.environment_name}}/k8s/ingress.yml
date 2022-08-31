@@ -51,7 +51,7 @@ spec:
             name: cms
             port:
               number: 8000
-{% if cookiecutter.ci_deploy_install_discovery_service == "Y" %}
+{%- if cookiecutter.ci_deploy_install_discovery_service == "Y" %}
   - host: discovery.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
     http:
       paths:
@@ -63,7 +63,7 @@ spec:
             port:
               number: 8000
 {% endif %}
-{% if cookiecutter.ci_deploy_install_notes_service == "Y" %}
+{%- if cookiecutter.ci_deploy_install_notes_service == "Y" %}
   - host: notes.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
     http:
       paths:
@@ -75,7 +75,7 @@ spec:
             port:
               number: 8120
 {% endif %}
-{% if cookiecutter.ci_deploy_install_mfe_service == "Y" %}
+{%- if cookiecutter.ci_deploy_install_mfe_service == "Y" %}
   - host: apps.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
     http:
       paths:
