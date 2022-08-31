@@ -51,6 +51,7 @@ spec:
             name: cms
             port:
               number: 8000
+{% if cookiecutter.ci_deploy_install_discovery_service == "Y" -%}
   - host: discovery.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
     http:
       paths:
@@ -61,6 +62,8 @@ spec:
             name: discovery
             port:
               number: 8000
+{% endif %}
+{% if cookiecutter.ci_deploy_install_notes_service == "Y" -%}
   - host: notes.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
     http:
       paths:
@@ -71,6 +74,8 @@ spec:
             name: notes
             port:
               number: 8120
+{% endif %}
+{% if cookiecutter.ci_deploy_install_mfe_service == "Y" -%}
   - host: apps.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
     http:
       paths:
@@ -81,6 +86,8 @@ spec:
             name: mfe
             port:
               number: 8002
+{% endif %}
+{% if cookiecutter.ci_deploy_install_ecommerce_service == "Y" -%}
   - host: ecommerce.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
     http:
       paths:
@@ -101,6 +108,8 @@ spec:
             name: mfe
             port:
               number: 8002
+{% endif %}
+{% if cookiecutter.ci_deploy_install_credentials_server == "Y" -%}
   - host: credentials.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
     http:
       paths:
@@ -111,6 +120,8 @@ spec:
             name: credentials
             port:
               number: 8000
+{% endif %}
+{% if cookiecutter.ci_deploy_install_license_manager == "Y" -%}
   - host: subscriptions.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
     http:
       paths:
@@ -121,3 +132,4 @@ spec:
             name: license_manager
             port:
               number: 8003
+{% endif %}
