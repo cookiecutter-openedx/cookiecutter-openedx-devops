@@ -52,17 +52,17 @@ jobs:
       {% endif %}
       {%- if cookiecutter.ci_deploy_install_mfe_service == "Y" -%}
       ENABLE_MFE: true
-      {% else %}
+      {%- else -%}
       ENABLE_MFE: false
       {% endif %}
       {%- if cookiecutter.ci_deploy_install_notes_service == "Y" -%}
       ENABLE_NOTES: true
-      {% else %}
+      {%- else -%}
       ENABLE_NOTES: false
       {% endif %}
       {%- if cookiecutter.ci_deploy_install_xqueue_service == "Y" -%}
       ENABLE_XQUEUE: true
-      {% else %}
+      {%- else -%}
       ENABLE_XQUEUE: false
       {% endif %}
 
