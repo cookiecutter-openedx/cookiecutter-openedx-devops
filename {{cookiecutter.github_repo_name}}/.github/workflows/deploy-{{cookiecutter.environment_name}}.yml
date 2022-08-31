@@ -30,22 +30,22 @@ jobs:
       DEBUG_MODE: false
       ENABLE_S3: true
       ENABLE_BACKUP: false
-      {% if cookiecutter.ci_deploy_install_credentials_server == "Y" -%}
+      {% if cookiecutter.ci_deploy_install_credentials_server == "Y" %}
       ENABLE_CREDENTIALS: true
       {% else %}
       ENABLE_CREDENTIALS: false
       {% endif %}
-      {% if cookiecutter.ci_deploy_install_discovery_service == "Y" -%}
+      {% if cookiecutter.ci_deploy_install_discovery_service == "Y" %}
       ENABLE_DISCOVERY: true
       {% else %}
       ENABLE_DISCOVERY: false
       {% endif %}
-      {% if cookiecutter.ci_deploy_install_ecommerce_service == "Y" -%}
+      {% if cookiecutter.ci_deploy_install_ecommerce_service == "Y" %}
       ENABLE_ECOMMERCE: true
       {% else %}
       ENABLE_ECOMMERCE: false
       {% endif %}
-      {% if cookiecutter.ci_deploy_install_forum_service == "Y" -%}
+      {% if cookiecutter.ci_deploy_install_forum_service == "Y" %}
       ENABLE_FORUM: true
       {% else %}
       ENABLE_FORUM: false
