@@ -87,7 +87,7 @@ spec:
             port:
               number: 8002
 {% endif %}
-{% if cookiecutter.ci_deploy_install_ecommerce_service == "Y" %}
+{%- if cookiecutter.ci_deploy_install_ecommerce_service == "Y" %}
   - host: ecommerce.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
     http:
       paths:
@@ -109,7 +109,7 @@ spec:
             port:
               number: 8002
 {% endif %}
-{% if cookiecutter.ci_deploy_install_credentials_server == "Y" %}
+{%- if cookiecutter.ci_deploy_install_credentials_server == "Y" %}
   - host: credentials.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
     http:
       paths:
@@ -121,7 +121,7 @@ spec:
             port:
               number: 8000
 {% endif %}
-{% if cookiecutter.ci_deploy_install_license_manager == "Y" %}
+{%- if cookiecutter.ci_deploy_install_license_manager == "Y" %}
   - host: subscriptions.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
     http:
       paths:
