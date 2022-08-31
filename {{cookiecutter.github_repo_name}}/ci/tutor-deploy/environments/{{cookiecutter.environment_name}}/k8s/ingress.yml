@@ -111,3 +111,13 @@ spec:
             name: credentials
             port:
               number: 8000
+  - host: subscriptions.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: license_manager
+            port:
+              number: 8003
