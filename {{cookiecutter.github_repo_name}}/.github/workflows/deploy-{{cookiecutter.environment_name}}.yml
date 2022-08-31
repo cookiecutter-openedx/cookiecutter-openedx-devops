@@ -30,7 +30,7 @@ jobs:
       DEBUG_MODE: false
       ENABLE_S3: true
       ENABLE_BACKUP: false
-      {%- if cookiecutter.ci_deploy_install_credentials_server == "Y" -%}
+      {% if cookiecutter.ci_deploy_install_credentials_server == "Y" -%}
       ENABLE_CREDENTIALS: true
       {% else -%}
       ENABLE_CREDENTIALS: false
