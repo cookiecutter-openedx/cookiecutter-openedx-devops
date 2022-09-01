@@ -69,3 +69,6 @@ sudo apt install docker-ce
 sudo systemctl enable docker
 sudo systemctl status docker
 sudo docker run hello-world
+sudo usermod -aG docker $USER
+
+echo "Finished. Note that a reboot is required on the first installation of docker."
