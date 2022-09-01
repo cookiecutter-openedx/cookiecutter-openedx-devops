@@ -14,7 +14,7 @@ sudo passwd ubuntu
 
 sudo apt update
 sudo apt upgrade -y
-sudo apt install awscli jq mysql-client-8.0
+sudo apt install awscli jq mysql-client-8.0 python3 python3-pip libyaml-dev
 sudo apt autoremove
 
 sudo snap install kubectl --channel=1.23/stable --classic
