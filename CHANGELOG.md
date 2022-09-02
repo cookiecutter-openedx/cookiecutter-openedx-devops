@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.4] (2022-09-02)
+
+- bump to nutmeg.2
+- bump tutor to 14.0.5
+- tie optional repo build & deployment features to new Y/N flags in Cookiecutter
+- add docker ce and python3 to bastion install.sh script
+- add installed application versions to bastion login screen
+
 ## [1.0.3] (2022-08-29)
 
 - add an option to create a remote MongoDB server running on a standalone EC2 instance.
