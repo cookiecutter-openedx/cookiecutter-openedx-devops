@@ -129,7 +129,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: license_manager
+            name: license-manager
             port:
               number: 8000
 {% endif %}
