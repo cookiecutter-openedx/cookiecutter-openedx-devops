@@ -17,6 +17,7 @@ jobs:
       ENABLE_BACKUP: true
       ENABLE_CREDENTIALS: false
       ENABLE_MFE: true
+      ENABLE_LICENSE_MANAGER: false
 
       SUBDOMAIN: {{ cookiecutter.environment_subdomain }}
       DOMAIN_NAME: {{ cookiecutter.global_root_domain }}
@@ -54,3 +55,7 @@ jobs:
           subdomain: ${SUBDOMAIN}
           domain-name: ${DOMAIN_NAME}
           site-name: ${SITE_NAME}
+
+      - name: Build License Manager
+        if: {% raw %}${{ env.ENABLE_LICENSE_MANAGER == 'true' }}{% endraw %}
+        uses: openedx-actions/tutor-plugin-build-license-manager@{{ cookiecutter.ci_openedx_actions_tutor_plugin_build_license_manager_version }}

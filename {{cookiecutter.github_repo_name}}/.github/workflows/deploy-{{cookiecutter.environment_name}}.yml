@@ -66,6 +66,12 @@ jobs:
       ENABLE_XQUEUE: false
       {% endif %}
 
+      {%- if cookiecutter.ci_deploy_install_license_manager_service == "Y" -%}
+      ENABLE_LICENSE_MANAGER: true
+      {% else -%}
+      ENABLE_LICENSE_MANAGER: false
+      {% endif %}
+
     steps:
       - name: Checkout
         uses: actions/checkout@{{ cookiecutter.ci_actions_checkout_version }}
@@ -102,6 +108,7 @@ jobs:
         run: |-
           echo "AWS_ECR_REPOSITORY_BACKUP=${AWS_ECR_URI}/openedx_backup:latest" >> $GITHUB_ENV
           echo "AWS_ECR_REPOSITORY_CREDENTIALS=${AWS_ECR_URI}/openedx_credentials:latest" >> $GITHUB_ENV
+          echo "AWS_ECR_REPOSITORY_LICENSE_MANAGER=${AWS_ECR_URI}/license_manager:latest" >> $GITHUB_ENV
           echo "AWS_ECR_REPOSITORY_MFE=${AWS_ECR_URI}/openedx_mfe:latest" >> $GITHUB_ENV
           echo "AWS_ECR_REPOSITORY_OPENEDX=${AWS_ECR_URI}/openedx:latest" >> $GITHUB_ENV
 
@@ -181,6 +188,14 @@ jobs:
       - name: Enable tutor plugin - Forum
         uses: openedx-actions/tutor-plugin-enable-forum@{{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_forum_version }}
         if: {% raw %}${{ env.ENABLE_FORUM == 'true' }}{% endraw %}
+
+      - name: Enable tutor plugin - License Manager
+        uses: openedx-actions/tutor-enable-plugin-license-manager@{{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_license_manager_version }}
+        if: {% raw %}${{ env.ENABLE_LICENSE_MANAGER == 'true' }}{% endraw %}
+        with:
+          aws-ecr-uri: ${AWS_ECR_REPOSITORY_LICENSE_MANAGER}
+          host: subscriptions.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
+          lms_host: {{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
 
       # ---------------------------------------------------------------------------------
       # Configure backend services
