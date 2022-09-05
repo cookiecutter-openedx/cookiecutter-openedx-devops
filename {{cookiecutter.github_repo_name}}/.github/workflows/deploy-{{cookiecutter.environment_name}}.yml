@@ -65,7 +65,6 @@ jobs:
       {% else -%}
       ENABLE_XQUEUE: false
       {% endif %}
-
       {%- if cookiecutter.ci_deploy_install_license_manager_service == "Y" -%}
       ENABLE_LICENSE_MANAGER: true
       {% else -%}
