@@ -8,8 +8,6 @@
 # usage:      print the login help menu for openedx_devops cookiecutter.
 #------------------------------------------------------------------------------
 
-TUTOR_VERSION=$(tutor --version | cut -f3 -d' ')
-
 printf " Quickstart:\n"
 printf "   run install.sh to install preconfigured software packages\n"
 printf " \n"
@@ -39,6 +37,6 @@ printf "   Docker ce:               $(docker --version) \n"
 printf "   aws-cli:                 $(aws --version) \n"
 printf "   Python:                  $(python3 --version) \n"
 printf "   pip:                     $(pip3 --version) \n"
-printf "   tutor:                   ${TUTOR_VERSION} \n"
+printf "   tutor:                   $(tutor --version | cut -f3 -d' ') \n"
 printf "   k9s:                     $(k9s version) \n"
 printf " \n"
