@@ -446,10 +446,13 @@ data "template_file" "aws_credentials" {
   }
 }
 
+# mcdaniel aug-2022
+# switching to private ip address bc of occasional delays
+# in updating Route53 DNS entries.
 data "template_file" "ssh_config" {
   template = file("${path.module}/ssh/config.tpl")
   vars = {
-    host                 = local.host_name
+    host                 = aws_instance.mongodb.private_ip
     user                 = "ubuntu"
     private_key_filename = local.ssh_private_key_filename
   }
