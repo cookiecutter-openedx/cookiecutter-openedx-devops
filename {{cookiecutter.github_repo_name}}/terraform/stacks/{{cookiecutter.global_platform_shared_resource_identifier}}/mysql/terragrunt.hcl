@@ -11,6 +11,7 @@ locals {
   stack_vars = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
+  root_domain             = local.global_vars.locals.root_domain
   resource_name           = local.stack_vars.locals.stack_namespace
   mysql_instance_class    = local.stack_vars.locals.mysql_instance_class
   mysql_allocated_storage = local.stack_vars.locals.mysql_allocated_storage
@@ -80,6 +81,7 @@ include {
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
   # AWS RDS instance identifying information
+  root_domain           = local.root_domain
   resource_name         = local.resource_name
   tags                  = local.tags
 
