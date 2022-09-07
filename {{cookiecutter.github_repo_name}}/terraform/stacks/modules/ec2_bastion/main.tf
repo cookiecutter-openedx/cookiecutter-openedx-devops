@@ -388,5 +388,6 @@ data "template_file" "help_text" {
   vars = {
     stack_namespace = var.stack_namespace
     root_domain     = var.root_domain
+    aws_region      = var.aws_region
   }
 }

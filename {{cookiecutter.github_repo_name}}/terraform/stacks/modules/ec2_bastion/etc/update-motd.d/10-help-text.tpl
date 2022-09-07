@@ -10,6 +10,7 @@
 
 printf " Quickstart:\n"
 printf "   run install.sh to install preconfigured software packages\n"
+printf "   run kconfig.sh ${stack_namespace} ${aws_region} to configure .kube access for k9s\n"
 printf " \n"
 printf " Help: \n"
 printf "   aws                      preconfigured AWS command-line interface \n"
