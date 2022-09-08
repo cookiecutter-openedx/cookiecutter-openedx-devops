@@ -50,7 +50,7 @@
     "ci_openedx_actions_tutor_k8s_configure_edx_admin": "v1.0.0",
     "ci_openedx_actions_tutor_k8s_configure_jwt_version": "v1.0.0",
     "ci_openedx_actions_tutor_k8s_configure_mysql_version": "v1.0.2",
-    "ci_openedx_actions_tutor_k8s_configure_mongodb_version": "v1.0.0",
+    "ci_openedx_actions_tutor_k8s_configure_mongodb_version": "v1.0.1",
     "ci_openedx_actions_tutor_k8s_configure_redis_version": "v1.0.0",
     "ci_openedx_actions_tutor_k8s_configure_smtp_version": "v1.0.0",
     "ci_openedx_actions_tutor_print_dump": "v1.0.0",
