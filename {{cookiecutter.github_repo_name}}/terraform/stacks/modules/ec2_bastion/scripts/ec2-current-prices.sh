@@ -10,5 +10,17 @@
 #        hours.
 #--------------------------------------------------------
 
-TIMESTAMP=`date -v-12H +%Y-%m-%dT%H:%M:%S`
-aws ec2 describe-spot-price-history --instance-types t3.medium --product-description Linux/UNIX --start-time ${TIMESTAMP}
+# macOS format
+#TIMESTAMP=`date -v-12H +%Y-%m-%dT%H:%M:%S`
+
+# Ubuntu format
+TIMESTAMP=`date -Is`
+
+if [ $# == 1 ]; then
+    echo "probing for spot prices for EC2 instance type $1 in your default AWS region"
+    aws ec2 describe-spot-price-history --instance-types $1 --product-description Linux/UNIX --start-time ${TIMESTAMP}
+else
+    echo "ec2-current-prices.sh"
+    echo "Usage: ./ec2-current-prices.sh ec2-instance-type (example t3.xlarge) "
+    exit 1
+fi
