@@ -1,5 +1,5 @@
 #!/bin/bash
-#---------------------------------------------------------
+#------------------------------------------------------------------------------
 # written by: lawrence mcdaniel
 #             https://lawrencemcdaniel.com
 #             https://blog.lawrencemcdaniel.com
@@ -9,17 +9,24 @@
 #             combine into a single tarball, store in "backups" folders in user directory
 #
 # reference:  https://github.com/edx/edx-documentation/blob/master/en_us/install_operations/source/platform_releases/ginkgo.rst
-#---------------------------------------------------------
+#------------------------------------------------------------------------------
 
-#------------------------------ SUPER IMPORTANT!!!!!!!! -- initialize these variables
-MYSQL_HOST="SET-ME-PLEASE"
-MYSQL_PWD="SET-ME-PLEASE"
+S3_BUCKET="SET-ME-PLEASE"
+BACKUPS_DIRECTORY="~/backups/"
+WORKING_DIRECTORY="~/backup-tmp/"
+NUMBER_OF_BACKUPS_TO_RETAIN="10"      # Note: this only regards local storage (ie on the ubuntu server).
+                                      # All backups are retained in the S3 bucket forever.
 
-S3_BUCKET="mcdaniel-migration"
-
-BACKUPS_DIRECTORY="/home/ubuntu/backups/"
-WORKING_DIRECTORY="/home/ubuntu/backup-tmp/"
-NUMBER_OF_BACKUPS_TO_RETAIN="10"      #Note: this only regards local storage (ie on the ubuntu server). All backups are retained in the S3 bucket forever.
+#------------------------------------------------------------------------------
+# retrieve the mysql root credentials from k8s secrets. Sets the following environment variables:
+#
+#    MYSQL_HOST=codlp-global-live.cueotjvguuws.eu-west-2.rds.amazonaws.com
+#    MYSQL_PORT=3306
+#    MYSQL_ROOT_PASSWORD=******
+#    MYSQL_ROOT_USERNAME=root
+#
+#------------------------------------------------------------------------------
+$(ksecret.sh mysql-root codlp-global-live)
 
 #Check to see if a working folder exists. if not, create it.
 if [ ! -d ${WORKING_DIRECTORY} ]; then
@@ -45,12 +52,12 @@ cd ${WORKING_DIRECTORY}
 #------------------------------------------------------------------------------------------------------------------------
 echo "Backing up MySQL databases"
 echo "Reading MySQL database names..."
-mysql -h ${MYSQL_HOST} -uroot -p"$MYSQL_PWD" -ANe "SELECT schema_name FROM information_schema.schemata WHERE schema_name NOT IN ('innodb', 'tmp', 'mysql','sys','information_schema','performance_schema')" > /tmp/db.txt
+mysql -h ${MYSQL_HOST} -uroot -p"$MYSQL_ROOT_PASSWORD" -ANe "SELECT schema_name FROM information_schema.schemata WHERE schema_name NOT IN ('innodb', 'tmp', 'mysql','sys','information_schema','performance_schema')" > /tmp/db.txt
 DBS="--databases $(cat /tmp/db.txt)"
 NOW="$(date +%Y%m%dT%H%M%S)"
 SQL_FILE="mysql-data-${NOW}.sql"
 echo "Dumping MySQL structures..."
-mysqldump --set-gtid-purged=OFF --column-statistics=0 -h ${MYSQL_HOST} -uroot -p"$MYSQL_PWD" --add-drop-database ${DBS} > ${SQL_FILE}
+mysqldump --set-gtid-purged=OFF --column-statistics=0 -h ${MYSQL_HOST} -uroot -p"$MYSQL_ROOT_PASSWORD" --add-drop-database ${DBS} > ${SQL_FILE}
 echo "Done backing up MySQL"
 
 #Tarball our mysql backup file
