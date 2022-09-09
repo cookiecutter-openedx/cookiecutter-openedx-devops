@@ -20,7 +20,7 @@ NUMBER_OF_BACKUPS_TO_RETAIN="10"      # Note: this only regards local storage (i
 #------------------------------------------------------------------------------
 # retrieve the mysql root credentials from k8s secrets. Sets the following environment variables:
 #
-#    MYSQL_HOST=codlp-global-live.cueotjvguuws.eu-west-2.rds.amazonaws.com
+#    MYSQL_HOST=your-rds-instance.0123456789.eu-west-2.rds.amazonaws.com
 #    MYSQL_PORT=3306
 #    MYSQL_ROOT_PASSWORD=******
 #    MYSQL_ROOT_USERNAME=root
