@@ -16,6 +16,7 @@ jobs:
     env:
       # common settings
       # --------------------------------------------
+      DEBUG_MODE: false
       AWS_REGION: {{ cookiecutter.global_aws_region }}
 
       # environment settings
@@ -27,7 +28,6 @@ jobs:
 
       # feature flags for optional tutor modules
       # --------------------------------------------
-      DEBUG_MODE: false
       ENABLE_S3: true
       ENABLE_BACKUP: false
       {% if cookiecutter.ci_deploy_install_credentials_server == "Y" -%}
@@ -71,10 +71,16 @@ jobs:
       ENABLE_LICENSE_MANAGER: false
       {% endif %}
 
+    # deployment workflow begins here
+    # --------------------------------------------
     steps:
+      # checkout github repos: this repo, plus, all Gihubs Actions repos in this workflow
       - name: Checkout
         uses: actions/checkout@{{ cookiecutter.ci_actions_checkout_version }}
 
+      # AWS helper method. creates a session token that's usable by all other
+      # aws-actions. Prevents us from having to explicitly provide authentication credentials
+      # to each aws-actions method individually.
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@{{ cookiecutter.ci_actions_configure_aws_credentials_version }}
         with:
@@ -82,6 +88,8 @@ jobs:
           aws-secret-access-key: {% raw %}${{ secrets.AWS_SECRET_ACCESS_KEY }}{% endraw %}
           aws-region: {% raw %}${{ env.AWS_REGION }}{% endraw %}
 
+      # Open edX Github Actions init procedure. Provides reliable initializations of
+      # kubectl, aws-cli and tutor
       - name: Initialize environment
         uses: openedx-actions/tutor-k8s-init@{{ cookiecutter.ci_openedx_actions_tutor_k8s_init_version }}
         with:
@@ -90,6 +98,8 @@ jobs:
           aws-region: {% raw %}${{ env.AWS_REGION }}{% endraw %}
           tutor-version: "{{ cookiecutter.ci_build_tutor_version }}"
 
+      # Setup a connection to our AWS Elastic Container Registry so that we can pull
+      # containers that we created with the build workflows in this Cookiecutter.
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@{{ cookiecutter.ci_actions_amazon_ecr_login_version }}
