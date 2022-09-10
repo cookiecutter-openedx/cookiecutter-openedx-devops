@@ -46,6 +46,10 @@ sudo apt install mongodb-org
 sudo chown -R mongodb /var/lib/mongodb
 sudo chgrp -R mongodb /var/lib/mongodb
 
+sudo mkdir /var/log/mongodb/
+sudo chown -R mongodb /var/log/mongodb
+sudo chgrp -R mongodb /var/log/mongodb
+
 sudo systemctl enable mongod.service
 sudo systemctl start mongod.service
 
