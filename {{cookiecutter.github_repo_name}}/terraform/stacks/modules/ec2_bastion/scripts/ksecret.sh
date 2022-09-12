@@ -10,8 +10,6 @@
 #--------------------------------------------------------
 
 if [ $# == 2 ]; then
-    echo "get k8s secreet $1 from namespace $2"
-
     kubectl get secret $1 -n $2  -o json | jq  '.data | map_values(@base64d)' |   jq -r 'keys[] as $k | "export \($k|ascii_upcase)=\(.[$k])"'
 else
     echo "Usage: ./ksecret.sh secret namespace "
