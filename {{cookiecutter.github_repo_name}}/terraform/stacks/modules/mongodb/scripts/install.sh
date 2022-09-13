@@ -7,6 +7,12 @@
 #
 # usage: run this on your MongoDB Ubuntu bastion instance
 #        to install required software packages
+#
+# help:  - view information about devices attached to this instance
+#        $ sudo lsblk -f
+#
+#        - view mounts
+#        $ df -h
 #--------------------------------------------------------
 
 #
@@ -17,16 +23,19 @@
 #
 # If you're using WiredTiger (MongoDB 3.0+) as a storage engine,
 # it is strongly advised that you ONLY use XFS due to serious stability issues on ext4.
-#
-# to view EBS volumes: sudo lsblk
-# to view mounts: df
 if [ ! -d "/var/lib/mongodb" ]
 then
-sudo mkfs -t ext4 /dev/nvme1n1
-#sudo mkfs -t xfs /dev/nvme1n1      # for future.
-sudo mkdir /var/lib/mongodb -p
-sudo mount /dev/nvme1n1 /var/lib/mongodb
+    # format the volue
+    sudo mkfs -t xfs /dev/nvme1n1
+
+    sudo mkdir /var/lib/mongodb -p
 fi
+
+# mount the volume
+sudo mount /dev/nvme1n1 /var/lib/mongodb
+
+echo "mounted volume /dev/nvme1n1"
+df -h
 
 #
 # Install Mongodb 4.2.x
