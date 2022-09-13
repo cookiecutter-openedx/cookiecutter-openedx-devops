@@ -202,6 +202,7 @@ jobs:
         uses: openedx-actions/tutor-enable-plugin-license-manager@{{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_license_manager_version }}
         if: {% raw %}${{ env.ENABLE_LICENSE_MANAGER == 'true' }}{% endraw %}
         with:
+          namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
           aws-ecr-uri: ${AWS_ECR_REPOSITORY_LICENSE_MANAGER}
           host: subscriptions.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
           lms_host: {{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
