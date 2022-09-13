@@ -8,6 +8,7 @@
 # Also add certs to us-east-1 for Cloudfront distributions.
 #------------------------------------------------------------------------------
 
+{% if cookiecutter.global_aws_region != "us-east-1" -%}
 #------------------------------------------------------------------------------
 # SSL/TLS certs issued in the AWS region for ALB
 #------------------------------------------------------------------------------
@@ -45,3 +46,4 @@ module "acm_environment_domain" {
   )
 
 }
+{% endif %}
