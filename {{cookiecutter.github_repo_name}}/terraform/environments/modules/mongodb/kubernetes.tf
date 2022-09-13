@@ -55,7 +55,8 @@ resource "random_password" "mongodb_openedx" {
   }
 }
 
-
+# not currently using authentication for mongodb, which
+# is the same default treatment as with tutor.
 resource "kubernetes_secret" "openedx" {
   metadata {
     name      = "mongodb-openedx"
@@ -64,8 +65,10 @@ resource "kubernetes_secret" "openedx" {
 
   data = {
     MONGODB_DATABASE = substr("${var.db_prefix}_edx", -32, -1)
-    MONGODB_USERNAME = substr("${var.db_prefix}_edx", -32, -1)
-    MONGODB_PASSWORD = random_password.mongodb_openedx.result
+    #MONGODB_USERNAME = substr("${var.db_prefix}_edx", -32, -1)
+    #MONGODB_PASSWORD = random_password.mongodb_openedx.result
+    MONGODB_USERNAME = ""
+    MONGODB_PASSWORD = ""
     MONGODB_HOST     = data.kubernetes_secret.mongodb_admin.data.MONGODB_HOST
     MONGODB_PORT     = data.kubernetes_secret.mongodb_admin.data.MONGODB_PORT
   }
