@@ -213,8 +213,8 @@ jobs:
       - name: Configure SMTP
         uses: openedx-actions/tutor-k8s-configure-smtp@{{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_smtp_version }}
         with:
-          aws-ses-iam-key: {% raw %}${{ secrets.aws-ses-iam-key }}{% endraw %}
-          aws-ses-iam-secret: {% raw %}${{ secrets.aws-ses-iam-secret }}{% endraw %}
+          aws-ses-iam-key: {% raw %}${{ secrets.AWS_SES_IAM_KEY }}{% endraw %}
+          aws-ses-iam-secret: {% raw %}${{ secrets.AWS_SES_IAM_SECRET }}{% endraw %}
           aws-region: {% raw %}${{ env.AWS_REGION }}{% endraw %}
 
       - name: Configure Redis
