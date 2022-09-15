@@ -65,11 +65,11 @@ jobs:
       {% else -%}
       ENABLE_XQUEUE: false
       {% endif -%}
-      {% if cookiecutter.ci_deploy_install_license_manager_service == "Y" -%}
+      {% if cookiecutter.ci_deploy_install_license_manager_service == "Y" %}
       ENABLE_LICENSE_MANAGER: true
-      {% else -%}
+      {% else %}
       ENABLE_LICENSE_MANAGER: false
-      {% endif -%}
+      {% endif %}
 
     # deployment workflow begins here
     # --------------------------------------------
@@ -236,7 +236,7 @@ jobs:
           remote-server: "true"
           {% elif cookiecutter.stack_add_remote_mongodb == "N" -%}
           remote-server: "false"
-          {% endif -%}
+          {% endif %}
 
       # ---------------------------------------------------------------------------------
       # Configure application secrets
