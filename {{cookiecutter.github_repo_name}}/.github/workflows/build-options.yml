@@ -63,7 +63,7 @@ jobs:
         if: {% raw %}${{ env.ENABLE_CREDENTIALS == 'true' }}{% endraw %}
         uses: openedx-actions/tutor-plugin-build-credentials@{{ cookiecutter.ci_openedx_actions_tutor_plugin_build_credentials_version }}
         with:
-          version: {% raw %}{{ cookiecutter.ci_deploy_tutor_plugin_credentials_version }}{% endraw %}
+          version: {{ cookiecutter.ci_deploy_tutor_plugin_credentials_version }}
 
       - name: Build MFE
         if: {% raw %}${{ env.ENABLE_MFE == 'true' }}{% endraw %}
