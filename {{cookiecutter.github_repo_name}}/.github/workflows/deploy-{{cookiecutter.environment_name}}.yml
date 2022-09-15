@@ -34,7 +34,7 @@ jobs:
       ENABLE_CREDENTIALS: true
       {% else -%}
       ENABLE_CREDENTIALS: false
-      {%- endif -%}
+      {% endif -%}
       {% if cookiecutter.ci_deploy_install_discovery_service == "Y" %}
       ENABLE_DISCOVERY: true
       {% else -%}
