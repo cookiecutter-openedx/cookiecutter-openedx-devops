@@ -18,22 +18,22 @@ jobs:
       ENABLE_BACKUP: true
       {% else -%}
       ENABLE_BACKUP: false
-      {% endif %}
+      {%- endif %}
       {% if cookiecutter.ci_deploy_install_credentials_server == "Y" -%}
       ENABLE_CREDENTIALS: true
       {% else -%}
       ENABLE_CREDENTIALS: false
-      {% endif %}
+      {%- endif %}
       {% if cookiecutter.ci_deploy_install_mfe_service == "Y" -%}
       ENABLE_MFE: true
       {% else -%}
       ENABLE_MFE: false
-      {% endif %}
+      {%- endif %}
       {% if cookiecutter.ci_deploy_install_license_manager_service == "Y" -%}
       ENABLE_LICENSE_MANAGER: true
       {% else -%}
       ENABLE_LICENSE_MANAGER: false
-      {% endif %}
+      {%- endif %}
       SUBDOMAIN: {{ cookiecutter.environment_subdomain }}
       DOMAIN_NAME: {{ cookiecutter.global_root_domain }}
       SITE_NAME: {{ cookiecutter.global_platform_name }}
