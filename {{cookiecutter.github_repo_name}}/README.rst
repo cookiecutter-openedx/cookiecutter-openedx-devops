@@ -94,39 +94,32 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
   {% if cookiecutter.ci_deploy_install_backup_plugin == "Y" -%}
   * - `Tutor Plugin: Backup & Restore <https://github.com/hastexo/tutor-contrib-backup>`_
     - {{ cookiecutter.ci_deploy_tutor_plugin_backup_version }}
-  {%- else -%}
   {%- endif %}
   {% if cookiecutter.ci_deploy_install_credentials_server == "Y" -%}
   * - `Tutor Plugin: Credentials Application <https://github.com/lpm0073/tutor-contrib-credentials>`_
     - {{ cookiecutter.ci_deploy_tutor_plugin_credentials_version }}
-  {%- else -%}
   {%- endif %}
   * - `Tutor Plugin: Discovery Service <https://github.com/overhangio/tutor-discovery>`_
     - latest stable
   {% if cookiecutter.ci_deploy_install_mfe_service == "Y" -%}
   * - `Tutor Plugin: Micro Front-end Service <https://github.com/overhangio/tutor-mfe>`_
     - latest stable
-  {%- else -%}
   {%- endif %}
   {% if cookiecutter.ci_deploy_install_ecommerce_service == "Y" -%}
   * - `Tutor Plugin: Ecommerce Service <https://github.com/overhangio/tutor-ecommerce>`_
     - latest stable
-  {%- else -%}
   {%- endif %}
   {% if cookiecutter.ci_deploy_install_xqueue_service == "Y" -%}
   * - `Tutor Plugin: Xqueue Service <https://github.com/overhangio/tutor-xqueue>`_
     - latest stable
-  {%- else -%}
   {%- endif %}
   {% if cookiecutter.ci_deploy_install_notes_service == "Y" -%}
   * - `Tutor Plugin: Notes Service <https://github.com/overhangio/tutor-notes>`_
     - latest stable
-  {%- else -%}
   {%- endif %}
   {% if cookiecutter.ci_deploy_install_forum_service == "Y" -%}
   * - `Tutor Plugin: Discussion Forum Service <https://github.com/overhangio/tutor-forum>`_
     - latest stable
-  {%- else -%}
   {%- endif %}
   * - `Tutor Plugin: Android Application <https://github.com/overhangio/tutor-android>`_
     - latest stable
