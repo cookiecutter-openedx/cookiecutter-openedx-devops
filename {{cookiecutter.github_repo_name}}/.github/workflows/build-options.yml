@@ -15,7 +15,11 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ENABLE_BACKUP: true
+      {% if cookiecutter.ci_deploy_install_credentials_server == "Y" -%}
+      ENABLE_CREDENTIALS: true
+      {% else -%}
       ENABLE_CREDENTIALS: false
+      {% endif %}
       ENABLE_MFE: true
       ENABLE_LICENSE_MANAGER: false
 
@@ -47,6 +51,8 @@ jobs:
       - name: Build Credentials
         if: {% raw %}${{ env.ENABLE_CREDENTIALS == 'true' }}{% endraw %}
         uses: openedx-actions/tutor-plugin-build-credentials@{{ cookiecutter.ci_openedx_actions_tutor_plugin_build_credentials_version }}
+        with:
+          version: {% raw %}{{ cookiecutter.ci_deploy_tutor_plugin_credentials_version }}{% endraw %}
 
       - name: Build MFE
         if: {% raw %}${{ env.ENABLE_MFE == 'true' }}{% endraw %}
