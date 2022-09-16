@@ -64,6 +64,7 @@ jobs:
         uses: openedx-actions/tutor-plugin-build-credentials@{{ cookiecutter.ci_openedx_actions_tutor_plugin_build_credentials_version }}
         with:
           version: {{ cookiecutter.ci_deploy_tutor_plugin_credentials_version }}
+          aws-ecr-repo: openedx_credentials
 
       - name: Build MFE
         if: {% raw %}${{ env.ENABLE_MFE == 'true' }}{% endraw %}

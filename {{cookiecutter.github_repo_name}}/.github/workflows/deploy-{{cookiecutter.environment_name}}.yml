@@ -116,7 +116,7 @@ jobs:
         shell: bash
         run: |-
           echo "AWS_ECR_REPOSITORY_BACKUP=${AWS_ECR_URI}/openedx_backup:latest" >> $GITHUB_ENV
-          echo "AWS_ECR_REPOSITORY_CREDENTIALS=${AWS_ECR_URI}/credentials:latest" >> $GITHUB_ENV
+          echo "AWS_ECR_REPOSITORY_CREDENTIALS=${AWS_ECR_URI}/openedx_credentials:latest" >> $GITHUB_ENV
           echo "AWS_ECR_REPOSITORY_LICENSE_MANAGER=${AWS_ECR_URI}/license_manager:latest" >> $GITHUB_ENV
           echo "AWS_ECR_REPOSITORY_MFE=${AWS_ECR_URI}/openedx_mfe:latest" >> $GITHUB_ENV
           echo "AWS_ECR_REPOSITORY_OPENEDX=${AWS_ECR_URI}/openedx:latest" >> $GITHUB_ENV
