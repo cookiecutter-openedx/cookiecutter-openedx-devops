@@ -10,6 +10,10 @@
 #        of k8s, kubectl, aws cli, and mysql.
 #--------------------------------------------------------
 
+echo "This password reset initializes a local password value for the ubuntu user so that Homebrew"
+echo "can run as Ubuntu while also performing root operations."
+echo "select a password value that is easy for your remember."
+echo "you can delete the password value, or change it again, after this script completes."
 sudo passwd ubuntu
 
 sudo apt update
@@ -66,9 +70,18 @@ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o 
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt update
 sudo apt install docker-ce
+sudo usermod -aG docker $USER
 sudo systemctl enable docker
+
+# install Docker Compose
+# -------------------------------------------------------------
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+docker-compose --version
+
+# report Docker installation results and service status
+# -------------------------------------------------------------
 sudo systemctl status docker
 sudo docker run hello-world
-sudo usermod -aG docker $USER
 
 echo "Finished. Note that a reboot is required on the first installation of docker."
