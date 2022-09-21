@@ -3,7 +3,7 @@
 # written by: Lawrence McDaniel
 #             https://lawrencemcdaniel.com
 #
-# date:       june-2022
+# date:       sep-2022
 #
 # usage:      install edx-platform and all requirements for prod and dev
 #------------------------------------------------------------------------------
