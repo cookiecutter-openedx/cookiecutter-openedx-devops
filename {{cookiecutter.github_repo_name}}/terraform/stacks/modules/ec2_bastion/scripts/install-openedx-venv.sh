@@ -36,8 +36,6 @@ PYTHON_VERSION=3.8.12
 PYENV_ROOT=/opt/pyenv
 sudo git clone https://github.com/pyenv/pyenv $PYENV_ROOT --branch v2.2.2 --depth 1
 sudo $PYENV_ROOT/bin/pyenv install $PYTHON_VERSION
-#sudo chown -R ubuntu $PYENV_ROOT
-#sudo chgrp -R ubuntu $PYENV_ROOT
 sudo mkdir /openedx
 sudo chown -R ubuntu /openedx
 sudo chgrp -R ubuntu /openedx
