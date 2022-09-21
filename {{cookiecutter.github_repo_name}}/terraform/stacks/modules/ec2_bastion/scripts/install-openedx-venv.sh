@@ -5,9 +5,7 @@
 #
 # date:       june-2022
 #
-# usage: run this on your EC2 Ubuntu bastion instance
-#        to install software packages that are required for use
-#        of k8s, kubectl, aws cli, and mysql.
+# usage:      install edx-platform and all requirements for prod and dev
 #------------------------------------------------------------------------------
 
 echo "*----------------------------------------------------------------------------*"
