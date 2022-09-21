@@ -15,6 +15,10 @@ echo "* - Open edX system packages for Open edX development"
 echo "* - All Open edX python requirements for production and development"
 echo "*----------------------------------------------------------------------------*"
 
+PYTHON_VERSION=3.8.12
+EDX_PLATFORM_REPOSITORY=https://github.com/openedx/edx-platform
+EDX_PLATFORM_VERSION=open-release/nutmeg.master
+
 sudo apt update && sudo apt upgrade -y
 
 # -------------------------------------------------------------
@@ -32,7 +36,6 @@ sudo apt update && \
 # follow tutor steps for installing Python so that we get
 # the version, build and install path to exactly match that of Open edX
 # -------------------------------------------------------------
-PYTHON_VERSION=3.8.12
 PYENV_ROOT=/opt/pyenv
 sudo git clone https://github.com/pyenv/pyenv $PYENV_ROOT --branch v2.2.2 --depth 1
 sudo $PYENV_ROOT/bin/pyenv install $PYTHON_VERSION
@@ -45,8 +48,6 @@ source /openedx/venv/bin/activate
 
 
 ###### Checkout edx-platform code
-EDX_PLATFORM_REPOSITORY=https://github.com/openedx/edx-platform
-EDX_PLATFORM_VERSION=open-release/nutmeg.master
 mkdir -p /openedx/edx-platform && \
     git clone $EDX_PLATFORM_REPOSITORY --branch $EDX_PLATFORM_VERSION --depth 1 /openedx/edx-platform
 
