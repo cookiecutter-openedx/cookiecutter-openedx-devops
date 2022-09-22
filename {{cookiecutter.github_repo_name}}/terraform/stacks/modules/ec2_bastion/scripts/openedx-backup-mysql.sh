@@ -5,7 +5,7 @@
 #             https://blog.lawrencemcdaniel.com
 #
 # date:       sep-2022
-# usage:      backup MySQL and MongoDB data stores
+# usage:      backup MySQL database
 #             combine into a single tarball, store in "backups" folders in user directory
 #
 # reference:  https://github.com/edx/edx-documentation/blob/master/en_us/install_operations/source/platform_releases/ginkgo.rst
