@@ -36,7 +36,7 @@ sudo passwd ubuntu
 
 sudo apt update && sudo apt upgrade -y
 
-{% if cookiecutter.stack_add_bastion == "Y" and cookiecutter.stack_add_bastion_openedx_dev_environment == "Y" -%}
+{% if cookiecutter.stack_add_bastion_openedx_dev_environment == "Y" -%}
 ./install-openedx-venv.sh
 {% endif -%}
 
@@ -51,6 +51,23 @@ sudo snap install yq
 pip install --upgrade pyyaml
 pip install "tutor[full]"
 
+{% if cookiecutter.stack_add_bastion_openedx_dev_environment == "Y" -%}
+echo "Note: adding tutor plugin 'automountvenvs' (https://github.com/kdmccormick/tutor-contrib-kdmccormick)"
+echo "      This plugin mounts your locally-created openedx Python venv to your local openedx container"
+echo "      Using this configuration you are able to make real-time modifications to the pip packages installed"
+echo "      in /openedx/venv/ without needing to rebuild your openedx container, which would otherwise"
+echo "      take around 40 minutes."
+echo ""
+
+pip install git+https://github.com/kdmccormick/tutor-contrib-kdmccormick
+tutor plugins enable automountvenvs
+tutor config save
+
+echo "automountvenvs example usage:""
+echo "tutor dev start -d -m edx-platform -m venv-openedx -m course-discovery -m venv-discovery"
+echo "tutor local start -d -m edx-platform -m venv-openedx"
+echo ""
+{% endif -%}
 
 # install homebrew
 # installation time: around 15 minutes
