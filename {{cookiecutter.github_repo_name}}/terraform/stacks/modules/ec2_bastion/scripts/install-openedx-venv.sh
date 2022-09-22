@@ -48,6 +48,9 @@ sudo apt install python3.8-venv
 python3 -m venv /openedx/venv
 source /openedx/venv/bin/activate
 
+# launch this virtual environment on ubuntu shell logins
+echo 'source /openedx/venv/bin/activate' >> /home/ubuntu/.profile
+
 
 ###### Checkout edx-platform code
 mkdir -p /openedx/edx-platform && \
