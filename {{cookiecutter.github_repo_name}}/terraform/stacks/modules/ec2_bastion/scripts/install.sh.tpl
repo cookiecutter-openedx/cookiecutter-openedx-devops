@@ -36,7 +36,9 @@ sudo passwd ubuntu
 
 sudo apt update && sudo apt upgrade -y
 
+{% if cookiecutter.stack_add_bastion == "Y" and cookiecutter.stack_add_bastion_openedx_dev_environment == "Y" -%}
 ./install-openedx-venv.sh
+{% endif -%}
 
 # add more packages that we need for our stuff
 # -------------------------------------------------------------

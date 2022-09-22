@@ -87,6 +87,7 @@
     "mongodb_instance_type": "t3.medium",
     "mongodb_allocated_storage": 10,
     "stack_add_bastion": ["N", "Y"],
+    "stack_add_bastion_openedx_dev_environment": ["N", "Y"],
     "bastion_instance_type": "t3.micro",
     "bastion_allocated_storage": 20,
     "mysql_username": "root",
