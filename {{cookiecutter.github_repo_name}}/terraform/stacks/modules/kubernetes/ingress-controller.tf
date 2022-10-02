@@ -8,9 +8,7 @@
 #               to be used by any ingress anywhere in the cluster
 #               that does not explicitly specify a different class.
 #
-# see:          https://registry.terraform.io/modules/terraform-iaac/nginx-controller/helm/latest
-#               https://kubernetes.github.io/ingress-nginx/user-guide/multiple-ingress/
-#               https://github.com/kubernetes/ingress-nginx/issues/5593
+# see:          https://github.com/kubernetes/ingress-nginx/issues/5593
 #               https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-class
 #------------------------------------------------------------------------------
 
@@ -39,6 +37,13 @@ resource "helm_release" "ingress-nginx-default" {
     value = "default"
     type  = "string"
   }
+  # mcdaniel: setting this nginx ingress controller to be
+  #           the "default" controller means that all ingress
+  #           objects will, by default, create their nginx
+  #           virtual server on THIS nginx instance regardless
+  #           of what other nginx servers might exist on this
+  #           cluster.
+  # see: https://kubernetes.github.io/ingress-nginx/user-guide/multiple-ingress/
   set {
     name  = "ingressclass.kubernetes.io/is-default-class"
     value = "true"
