@@ -26,13 +26,13 @@ resource "helm_release" "ingress-nginx-default" {
     name  = "service.type"
     value = "ClusterIP"
   }
+  # see: https://github.com/kubernetes/ingress-nginx/issues/6100
+  # mcdaniel: the helm chart tries to set this to the value, "nginx"
+  #           which would cause name collision problems in the event
+  #           that we wanted to add multiple ingress controllers for
+  #           scaling purposes. we therefore force the ingressClass
+  #           name to match the value of the name of the controller, "default".
   set {
-    # see: https://github.com/kubernetes/ingress-nginx/issues/6100
-    # mcdaniel: the helm chart tries to set this to the value, "nginx"
-    #           which would cause name collision problems in the event
-    #           that we wanted to add multiple ingress controllers for
-    #           scaling purposes. we therefore force the ingressClass
-    #           name to match the value of the name of the controller, "default".
     name  = "controller.ingressClassResource.name"
     value = "default"
     type  = "string"
