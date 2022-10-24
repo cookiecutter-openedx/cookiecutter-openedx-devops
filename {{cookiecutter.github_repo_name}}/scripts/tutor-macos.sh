@@ -15,3 +15,4 @@ tutor images build openedx permissions
 tutor dev dc build lms
 tutor dev start -d
 tutor dev init
+tutor dev quickstart

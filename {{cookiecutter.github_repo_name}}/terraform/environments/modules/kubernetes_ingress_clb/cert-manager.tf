@@ -41,9 +41,7 @@ resource "helm_release" "cert-manager" {
 
   chart      = "cert-manager"
   repository = "https://charts.jetstack.io"
-  # mcdaniel oct-2022: it seems like we're better off following
-  #                    latest stable, thus, removing the version pin
-  #version    = "{{ cookiecutter.terraform_helm_cert_manager }}"
+  version    = "{{ cookiecutter.terraform_helm_cert_manager }}"
   values = [
     data.template_file.cert-manager-values.rendered
   ]
