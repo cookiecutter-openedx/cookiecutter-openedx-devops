@@ -261,4 +261,29 @@ WHERE	(id IN 	(
 		);
 
 
+DELETE FROM openedx.auth_accountrecovery
+WHERE	(id IN 	(
+				select id from (
+								SELECT c.id FROM openedx.auth_accountrecovery c JOIN openedx.auth_user u ON (u.id = c.user_id) WHERE (u.username = @username)
+                                ) as d
+                )
+		);
+
+DELETE FROM openedx.student_loginfailures
+WHERE	(id IN 	(
+				select id from (
+								SELECT c.id FROM openedx.student_loginfailures c JOIN openedx.auth_user u ON (u.id = c.user_id) WHERE (u.username = @username)
+                                ) as d
+                )
+		);
+
+DELETE FROM openedx.user_tours_usertour
+WHERE	(id IN 	(
+				select id from (
+								SELECT c.id FROM openedx.student_loginfailures c JOIN openedx.auth_user u ON (u.id = c.user_id) WHERE (u.username = @username)
+                                ) as d
+                )
+		);
+
+
 DELETE FROM	openedx.auth_user WHERE (username = @username);
