@@ -71,7 +71,7 @@
     "ci_openedx_actions_tutor_plugin_enable_k8s_deploy_tasks_version": "v0.0.1",
     "ci_openedx_actions_tutor_plugin_enable_license_manager_version": "v0.0.3",
     "ci_openedx_actions_tutor_plugin_enable_mfe_version": "v0.0.1",
-    "ci_openedx_actions_tutor_plugin_enable_notes_version": "v1.0.0",
+    "ci_openedx_actions_tutor_plugin_enable_notes_version": "v1.0.2",
     "ci_openedx_actions_tutor_plugin_enable_s3_version": "v1.0.0",
     "ci_openedx_actions_tutor_plugin_enable_xqueue_version": "v1.0.0",
     "eks_worker_group_instance_type": "t3.xlarge",
