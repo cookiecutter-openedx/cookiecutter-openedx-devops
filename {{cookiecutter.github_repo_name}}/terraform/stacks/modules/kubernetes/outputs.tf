@@ -26,9 +26,9 @@ output "cluster_endpoint" {
   value       = module.eks.cluster_endpoint
 }
 
-output "cluster_id" {
+output "cluster_name" {
   description = "The name/id of the EKS cluster. Will block on cluster creation until the cluster is really ready"
-  value       = module.eks.cluster_id
+  value       = module.eks.cluster_name
 }
 
 output "cluster_oidc_issuer_url" {

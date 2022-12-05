@@ -5,7 +5,7 @@
 # date: Aug-2022
 #
 # usage: installs Karpenter scaling service.
-# see: https://karpenter.sh/v0.13.2/getting-started/getting-started-with-terraform/
+# see: https://karpenter.sh/{{ cookiecutter.eks_karpenter_helm_version }}/getting-started/getting-started-with-terraform/
 #
 # requirements: you must initialize a local helm repo in order to run
 # this mdoule.

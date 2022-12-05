@@ -111,12 +111,6 @@ module "eks" {
     }
   }
 
-  eks_managed_node_group_defaults = {
-    iam_role_additional_policies = [
-      "arn:${local.partition}:iam::aws:policy/AmazonSSMManagedInstanceCore"
-    ]
-  }
-
   eks_managed_node_groups = {
     # -------------------------------------------------------------------------
     # 1.) Static node group, configured for extended platform idle states.
@@ -163,7 +157,13 @@ module "eks" {
       desired_size      = var.eks_karpenter_group_desired_size
       min_size          = var.eks_karpenter_group_min_size
       max_size          = var.eks_karpenter_group_max_size
-      instance_types    = ["${var.eks_karpenter_group_instance_type}"]
+
+      iam_role_additional_policies = {
+        # Required by Karpenter
+        AmazonSSMManagedInstanceCore = "arn:${local.partition}:iam::aws:policy/AmazonSSMManagedInstanceCore"
+      }
+
+      instance_types = ["${var.eks_karpenter_group_instance_type}"]
       tags = merge(
         var.tags,
         { Name = "eks-${var.shared_resource_identifier}-karpenter" }
