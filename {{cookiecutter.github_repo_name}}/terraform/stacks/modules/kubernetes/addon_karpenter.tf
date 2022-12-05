@@ -25,7 +25,9 @@ resource "helm_release" "karpenter" {
   name       = "karpenter"
   repository = "https://charts.karpenter.sh"
   chart      = "karpenter"
-  version    = "{{ cookiecutter.eks_karpenter_helm_version }}"
+
+  # mcdaniel dec-2022: trying latest stable
+  #version    = "{{ cookiecutter.eks_karpenter_helm_version }}"
 
   set {
     name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
