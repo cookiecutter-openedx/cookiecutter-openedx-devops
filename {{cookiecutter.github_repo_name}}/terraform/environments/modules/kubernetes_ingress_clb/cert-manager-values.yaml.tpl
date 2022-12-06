@@ -19,5 +19,8 @@ serviceAccount:
   namespace: ${environment_namespace}
 # the securityContext is required, so the pod can access files required to assume the IAM role
 securityContext:
-  enabled: true
+  # -------------------------------------------------------------------------------
+  # mcdaniel dec-2022: see https://github.com/cert-manager/cert-manager/issues/5549
+  #enabled: true
+  # -------------------------------------------------------------------------------
   fsGroup: 1001
