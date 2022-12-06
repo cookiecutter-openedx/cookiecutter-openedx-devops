@@ -20,7 +20,7 @@ resource "aws_instance" "bastion" {
 
   vpc_security_group_ids = [
     resource.aws_security_group.sg_bastion.id,
-    data.aws_security_group.k8s_nodes.id
+    data.aws_security_group.stack-namespace-node.id
   ]
 
   root_block_device {
@@ -225,7 +225,7 @@ resource "random_integer" "subnet_id" {
   max = 2
 }
 
-data "aws_security_group" "k8s_nodes" {
+data "aws_security_group" "stack-namespace-node" {
   tags = {
     Name = "${var.stack_namespace}-node"
   }
