@@ -20,8 +20,7 @@ resource "aws_instance" "bastion" {
 
   vpc_security_group_ids = [
     resource.aws_security_group.sg_bastion.id,
-    data.aws_security_group.stack-namespace-node.id,
-    data.aws_security_group.k8s_nodes_idle-eks-node-group.id
+    data.aws_security_group.k8s_nodes.id
   ]
 
   root_block_device {
@@ -226,21 +225,12 @@ resource "random_integer" "subnet_id" {
   max = 2
 }
 
-data "aws_security_group" "k8s_nodes_idle-eks-node-group" {
-
-  tags = {
-    Name = "k8s_nodes_idle-eks-node-group"
-  }
-
-}
-
-data "aws_security_group" "stack-namespace-node" {
-
+data "aws_security_group" "k8s_nodes" {
   tags = {
     Name = "${var.stack_namespace}-node"
   }
-
 }
+
 
 # create a dedicated security group for the bastion that
 # only allows public ssh access.
