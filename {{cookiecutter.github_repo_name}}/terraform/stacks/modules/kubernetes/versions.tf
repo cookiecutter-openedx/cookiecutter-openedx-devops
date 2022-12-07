@@ -28,6 +28,9 @@ terraform {
       source  = "hashicorp/helm"
       version = "{{ cookiecutter.terraform_provider_hashicorp_helm_version }}"
     }
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "{{ cookiecutter.terraform_provider_kubernetes_version }}"
+    }
   }
-
 }

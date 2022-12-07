@@ -112,36 +112,6 @@ module "eks" {
   }
 
   eks_managed_node_groups = {
-    # -------------------------------------------------------------------------
-    # 1.) Static node group, configured for extended platform idle states.
-    # -------------------------------------------------------------------------
-    # This group ensures that one node exists in every
-    # aws availability zone at all times, which is important for ensuring that
-    # there is a matching node for all existing k8s Persistent Volume Claims.
-    # The EC2 instance type for this group should be small. the Cookiecutter
-    # EC2 default instance type is t3.medium.
-    #
-    # Cost optimizing the EC2 instance type for this group is a great idea.
-    # For example, you might consider purchasing EC2 Reserved instances
-    # for these nodes as this will reduce your EC2 costs by around 40%.
-    # https://aws.amazon.com/ec2/pricing/reserved-instances/
-
-    k8s_nodes_idle = {
-      capacity_type     = "SPOT"
-      enable_monitoring = false
-      min_size          = var.eks_worker_group_min_size
-      max_size          = var.eks_worker_group_max_size
-      desired_size      = var.eks_worker_group_desired_size
-      instance_types    = [var.eks_worker_group_instance_type]
-      tags = merge(
-        var.tags,
-        { Name = "eks-${var.shared_resource_identifier}-node-idle" }
-      )
-    }
-
-    # -------------------------------------------------------------------------
-    # 2.) Dynamic node group, for scaling.
-    # -------------------------------------------------------------------------
     # This node group is managed by Karpenter. There must be at least
     # node in this group at all times in order for Karpenter to monitor
     # load and act on metrics data. Karpenter's bin packing algorithms

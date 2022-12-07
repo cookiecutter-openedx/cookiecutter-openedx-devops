@@ -114,7 +114,7 @@
     "terraform_required_version": "~> 1.3",
     "terraform_aws_modules_acm": "~> 4.3",
     "terraform_aws_modules_cloudfront": "~> 3.1",
-    "terraform_aws_modules_eks": "~> 19.00",
+    "terraform_aws_modules_eks": "~> 19.0",
     "terraform_aws_modules_iam": "~> 5.9",
     "terraform_aws_modules_iam_assumable_role_with_oidc": "~> 5.9",
     "terraform_aws_modules_rds": "~> 5.2",
