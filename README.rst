@@ -62,6 +62,16 @@ This configuration scales automatically, reliably supporting anywhere from a few
 
 **NEW IN VERSION 1.03: an optional fully-configured remote MongoDB server running on an EC2 instance. Set cookiecutter.stack_add_remote_mongodb=Y to choose this option.**
 
+**NEW IN VERSION 1.04: Kubernetes upgrade to 1.24, plus a new adminstrative server with all of the preinstalled software that you'll need to administer your Open edX platform. Set cookiecutter.stack_add_bastion=Y to choose this option.**
+
+.. image:: doc/k9s-console.png
+  :width: 45%
+  :alt: K9S Console Screenshot
+
+.. image:: doc/ec2-bastion.png
+  :width: 45%
+  :alt: Bastion Welcome Screen
+
 Github Workflows for Build and Deploy
 -------------------------------------
 
