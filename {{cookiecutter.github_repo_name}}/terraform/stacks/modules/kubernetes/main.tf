@@ -80,6 +80,12 @@ module "eks" {
     { "karpenter.sh/discovery" = var.namespace }
   )
 
+  cluster_addons = {
+    coredns            = {}
+    kube-proxy         = {}
+    aws-ebs-csi-driver = {}
+  }
+
   node_security_group_additional_rules = {
     ingress_self_all = {
       description = "openedx_devops: Node to node all ports/protocols"
