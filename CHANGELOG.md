@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.5] (2022-12-11)
+- bump to K8s 1.24
+- version bumps to all Terraform AWS modules https://registry.terraform.io/namespaces/terraform-aws-modules
+- version bumps to all Open edX Github Actions https://github.com/openedx-actions
+- refactor cert-manager for v1.9
+
+
 ## [1.0.4] (2022-09-02)
 
 - bump to nutmeg.2
