@@ -90,7 +90,7 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
   * - `Redis Cache <https://redis.io/>`_
     - {{ cookiecutter.redis_engine_version }}
   * - `Tutor Docker-based Open edX Installer <https://docs.tutor.overhang.io/>`_
-    - latest stable
+    - {{ cookiecutter.ci_build_tutor_version }}
   * - `Tutor Plugin: Object storage for Open edX with S3 <https://github.com/hastexo/tutor-contrib-s3>`_
     - {{ cookiecutter.ci_deploy_tutor_plugin_s3_version }}
   {% if cookiecutter.ci_deploy_install_backup_plugin == "Y" -%}
