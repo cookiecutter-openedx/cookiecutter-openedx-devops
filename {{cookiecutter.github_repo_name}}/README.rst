@@ -51,6 +51,8 @@ production installation of Open edX that will automatically scale up, reliably s
 
 **NEW IN VERSION 1.03: an optional fully-configured remote MongoDB server running on an EC2 instance. Set cookiecutter.stack_add_remote_mongodb=Y to choose this option.**
 
+**NEW IN VERSION 1.05: Kubernetes upgrade to 1.24, plus a new adminstrative server with all of the preinstalled software that you'll need to administer your Open edX platform. Set cookiecutter.stack_add_bastion=Y to choose this option.**
+
 The Terraform scripts in this repo provide a 1-click means of creating / updating / destroying the following for each environment:
 
 - LMS at https://{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
