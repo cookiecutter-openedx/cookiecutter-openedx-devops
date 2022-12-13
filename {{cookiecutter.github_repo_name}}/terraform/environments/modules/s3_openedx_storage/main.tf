@@ -32,6 +32,9 @@ module "openedx_backup" {
   bucket = var.resource_name_backup
   acl    = "private"
 
+  versioning = {
+    enabled = true
+  }
 }
 
 module "openedx_secrets" {
@@ -78,7 +81,8 @@ data "aws_iam_policy_document" "user_policy" {
       "s3:*"
     ]
     resources = [
-      module.openedx_storage.s3_bucket_arn
+      module.openedx_storage.s3_bucket_arn,
+      module.openedx_backup.s3_bucket_arn
     ]
   }
   statement {
@@ -86,7 +90,8 @@ data "aws_iam_policy_document" "user_policy" {
       "s3:*"
     ]
     resources = [
-      "${module.openedx_storage.s3_bucket_arn}/*"
+      "${module.openedx_storage.s3_bucket_arn}/*",
+      "${module.openedx_backup.s3_bucket_arn}/*"
     ]
   }
 }
