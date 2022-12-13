@@ -5,22 +5,22 @@
 #             https://blog.lawrencemcdaniel.com
 #
 # date:       sep-2022
-# usage:      backup MySQL database
+# usage:      backup MySQL and MongoDB data stores
 #             combine into a single tarball, store in "backups" folders in user directory
 #
 # reference:  https://github.com/edx/edx-documentation/blob/master/en_us/install_operations/source/platform_releases/ginkgo.rst
 #------------------------------------------------------------------------------
 
-S3_BUCKET="SET-ME-PLEASE"
+S3_BUCKET="{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.environment_name }}-storage"
 BACKUPS_DIRECTORY="~/backups/"
 WORKING_DIRECTORY="~/backup-tmp/"
-NUMBER_OF_BACKUPS_TO_RETAIN="10"      # Note: this only regards local storage (ie on the ubuntu server).
+NUMBER_OF_BACKUPS_TO_RETAIN="5"      # Note: this only regards local storage (ie on the ubuntu server).
                                       # All backups are retained in the S3 bucket forever.
 
 #------------------------------------------------------------------------------
 # retrieve the mysql root credentials from k8s secrets. Sets the following environment variables:
 #
-#    MYSQL_HOST=your-rds-instance.0123456789.eu-west-2.rds.amazonaws.com
+#    MYSQL_HOST=mysql.{{ cookiecutter.global_root_domain }}
 #    MYSQL_PORT=3306
 #    MYSQL_ROOT_PASSWORD=******
 #    MYSQL_ROOT_USERNAME=root

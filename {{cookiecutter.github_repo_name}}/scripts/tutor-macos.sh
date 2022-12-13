@@ -1,3 +1,5 @@
+#!/bin/bash
+#---------------------------------------------------------
 export TUTOR_ROOT="~/.tutor"
 [ ! -d "${TUTOR_ROOT}" ] && mkdir $TUTOR_ROOT
 
