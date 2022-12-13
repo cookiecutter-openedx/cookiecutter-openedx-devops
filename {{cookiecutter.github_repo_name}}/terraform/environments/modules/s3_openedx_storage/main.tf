@@ -60,7 +60,7 @@ data "aws_iam_policy_document" "bucket_policy" {
       type        = "*"
     }
     resources = [
-      "${module.openedx_storage.s3_bucket_arn}/*",
+      "${module.openedx_storage.s3_bucket_arn}/*"
     ]
   }
 }
