@@ -13,12 +13,22 @@
 # mongo 'mongodb://${MONGODB_HOST}:27017'
 #---------------------------------------------------------
 
-MONGODB_HOST="mongodb:27017"
-S3_BUCKET="SET-ME-PLEASE"
+S3_BUCKET="{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.environment_name }}-storage"
 
 BACKUPS_DIRECTORY="/home/ubuntu/backups/"
 WORKING_DIRECTORY="/home/ubuntu/backup-tmp/"
 NUMBER_OF_BACKUPS_TO_RETAIN="10"      #Note: this only regards local storage (ie on the ubuntu server). All backups are retained in the S3 bucket forever.
+
+#------------------------------------------------------------------------------
+# retrieve the mongo admin credentials from k8s secrets. Sets the following environment variables:
+#
+# MONGODB_ADMIN_PASSWORD: *******
+# MONGODB_ADMIN_USERNAME: admin
+# MONGODB_HOST: mongodb.{{ cookiecutter.global_root_domain }}
+# MONGODB_PORT: "27017"
+#
+#------------------------------------------------------------------------------
+$(ksecret.sh mongodb-admin {{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.global_platform_shared_resource_identifier }})
 
 #Check to see if a working folder exists. if not, create it.
 if [ ! -d ${WORKING_DIRECTORY} ]; then
