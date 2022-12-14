@@ -8,7 +8,7 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: cms
-  maxReplicas: 25
+  maxReplicas: 2
   minReplicas: 2
   behavior:
     scaleDown:

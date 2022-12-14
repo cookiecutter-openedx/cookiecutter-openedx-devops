@@ -8,7 +8,7 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: smtp
-  maxReplicas: 10
+  maxReplicas: 1
   minReplicas: 1
   behavior:
     scaleDown:
