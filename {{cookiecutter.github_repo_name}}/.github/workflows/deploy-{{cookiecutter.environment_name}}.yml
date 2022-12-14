@@ -285,7 +285,7 @@ jobs:
       - name: Set theme
         shell: bash
         run:  |-
-          tutor k8s settheme edx-theme
+          tutor k8s do settheme edx-theme
 
       - name: Create admin user
         uses: openedx-actions/tutor-k8s-configure-edx-admin@{{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_edx_admin }}
