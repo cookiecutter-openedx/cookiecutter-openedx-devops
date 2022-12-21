@@ -40,7 +40,7 @@ printf "   kubectl                   preconfigured Kubernets command-line interf
 printf " \n"
 printf " MySQL\n"
 printf "   root credentials:         ksecret.sh mysql-root ${stack_namespace} \n"
-printf "   client connection:        mysql -h mysql.${root_domain} -u root -p "your-password" \n"
+printf "   client connection:        mysql -h mysql.${root_domain} -u root -p MYSQL_ROOT_PASSWORD \n"
 printf " \n"
 printf " MongoDB\n"
 printf "   server connection:        ssh mongodb \n"

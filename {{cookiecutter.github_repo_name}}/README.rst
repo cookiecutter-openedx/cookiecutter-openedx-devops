@@ -191,7 +191,7 @@ Set your `global parameters <terraform/environments/global.hcl>`_
   locals {
     platform_name    = "{{ cookiecutter.global_platform_name }}"
     platform_region  = "{{ cookiecutter.global_platform_region }}"
-    root_domain      = "{{ cookiecutter.global_root_domain }}.ai"
+    root_domain      = "{{ cookiecutter.global_root_domain }}"
     aws_region       = "{{ cookiecutter.global_aws_region }}"
     account_id       = "{{ cookiecutter.global_account_id }}"
   }

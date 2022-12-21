@@ -42,7 +42,7 @@ sudo apt update && sudo apt upgrade -y
 
 # add more packages that we need for our stuff
 # -------------------------------------------------------------
-sudo apt install jq mysql-client-8.0 libevent-dev libyaml-dev
+sudo apt install jq mysql-client-8.0 libevent-dev libyaml-dev python3-pip
 sudo apt autoremove
 
 sudo snap install kubectl --channel=1.23/stable --classic
