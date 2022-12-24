@@ -141,6 +141,9 @@ module "eks" {
       iam_role_additional_policies = {
         # Required by Karpenter
         AmazonSSMManagedInstanceCore = "arn:${local.partition}:iam::aws:policy/AmazonSSMManagedInstanceCore"
+
+        # Required by EBS CSI Add-on
+        AmazonEBSCSIDriverPolicy = data.aws_iam_policy.AmazonEBSCSIDriverPolicy.arn
       }
 
       instance_types = ["${var.eks_karpenter_group_instance_type}"]
