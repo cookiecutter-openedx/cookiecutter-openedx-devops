@@ -256,6 +256,11 @@ jobs:
       # ---------------------------------------------------------------------------------
       # Add your custom configuration tasks here ....
       # ---------------------------------------------------------------------------------
+      - name: Disable Caddy web proxy service
+        shell: bash
+        run:  |-
+          tutor config save --set ENABLE_WEB_PROXY=false
+
       - name: Disable LMS courseware micro front-end app
         uses: openedx-actions/tutor-plugin-configure-courseware-mfe@{{ cookiecutter.ci_openedx_actions_tutor_plugin_configure_courseware_mfe_version }}
         with:
