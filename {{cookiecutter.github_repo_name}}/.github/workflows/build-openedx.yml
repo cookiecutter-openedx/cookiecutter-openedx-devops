@@ -35,6 +35,11 @@ jobs:
       #------------------------------------------------------------------------
       - name: Initialize environment
         uses: openedx-actions/tutor-k8s-init@{{ cookiecutter.ci_openedx_actions_tutor_k8s_init_version }}
+        with:
+          eks-namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
+          eks-cluster-name: {% raw %}${{ env.EKS_CLUSTER_NAME }}{% endraw %}
+          aws-region: {% raw %}${{ env.AWS_REGION }}{% endraw %}
+          tutor-version: "{{ cookiecutter.ci_build_tutor_version }}"
 
       #------------------------------------------------------------------------
       # Add a custom theme here.
