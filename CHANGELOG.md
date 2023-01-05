@@ -5,7 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.6] (2023-1-6)
+
+- refactor all non-core kubernetees packages into a new Terraform module named kubernetes_monitoring
+- created new subdomain to host all admin software packages
+- add Kubernetes Dashboard web app
+- add kubeapps by VMWare + Bitnami
+- move grafana to new admin subdomain
+- deprecated Github Action openedx-actions/tutor-plugin-enable-mfe
+- deprecated Github Action openedx-actions/tutor-plugin-build-mfe
+- version bumps to all Terraform AWS modules https://registry.terraform.io/namespaces/terraform-aws-modules
+- version bumps to all Open edX Github Actions https://github.com/openedx-actions
+
 ## [1.0.5] (2022-12-11)
+
 - bump to K8s 1.24
 - version bumps to all Terraform AWS modules https://registry.terraform.io/namespaces/terraform-aws-modules
 - version bumps to all Open edX Github Actions https://github.com/openedx-actions
