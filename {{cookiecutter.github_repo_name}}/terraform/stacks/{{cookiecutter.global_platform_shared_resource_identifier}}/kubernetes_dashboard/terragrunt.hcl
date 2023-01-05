@@ -8,12 +8,12 @@
 #------------------------------------------------------------------------------
 locals {
   # Automatically load stack-level variables
-  stack_vars = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
-  global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
+  stack_vars      = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
+  global_vars     = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
-  dashboard_namespace = "kube-dashboard"
-  dashboard_account_name = "admin-user"
+  dashboard_namespace             = "kube-dashboard"
+  dashboard_account_name          = "admin-user"
   namespace                       = local.stack_vars.locals.stack_namespace
   shared_resource_namespace       = local.stack_vars.locals.shared_resource_namespace
 

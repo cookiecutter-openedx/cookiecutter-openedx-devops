@@ -11,10 +11,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - "dashboard.k8s.lawrencemcdaniel.com"
+    - "dashboard.{{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}"
     secretName: wild-hosting-live-tls
   rules:
-  - host: dashboard.k8s.lawrencemcdaniel.com
+  - host: dashboard.{{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}
     http:
       paths:
       - path: /

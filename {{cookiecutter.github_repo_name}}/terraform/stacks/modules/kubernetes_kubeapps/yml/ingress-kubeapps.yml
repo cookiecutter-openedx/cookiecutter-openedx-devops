@@ -11,10 +11,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - "kubeapps.k8s.lawrencemcdaniel.com"
+    - "kubeapps.{{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}"
     secretName: wild-hosting-live-tls
   rules:
-  - host: kubeapps.k8s.lawrencemcdaniel.com
+  - host: kubeapps.{{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}
     http:
       paths:
       - path: /

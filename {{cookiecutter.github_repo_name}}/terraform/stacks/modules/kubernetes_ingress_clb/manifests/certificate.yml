@@ -16,6 +16,6 @@ spec:
   issuerRef:
     kind: ClusterIssuer
     name: letsencrypt
-  commonName: k8s.lawrencemcdaniel.com
+  commonName: {{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}
   dnsNames:
-    - "*.k8s.lawrencemcdaniel.com"
+    - "*.{{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}"

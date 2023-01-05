@@ -12,6 +12,7 @@ locals {
   platform_region            = "{{ cookiecutter.global_platform_region }}"
   shared_resource_identifier = "{{ cookiecutter.global_platform_shared_resource_identifier }}"
   root_domain                = "{{ cookiecutter.global_root_domain }}"
+  admin_domain               = "{{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}"
   aws_region                 = "{{ cookiecutter.global_aws_region }}"
   account_id                 = "{{ cookiecutter.global_account_id }}"
 
