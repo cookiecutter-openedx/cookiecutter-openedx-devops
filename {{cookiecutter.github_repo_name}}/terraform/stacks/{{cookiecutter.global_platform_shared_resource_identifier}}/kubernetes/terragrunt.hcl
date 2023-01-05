@@ -65,7 +65,6 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  account_id = local.account_id
   shared_resource_identifier = local.shared_resource_identifier
   aws_region = local.aws_region
   root_domain = local.root_domain

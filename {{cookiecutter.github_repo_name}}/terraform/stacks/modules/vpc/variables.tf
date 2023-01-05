@@ -101,6 +101,9 @@ variable "single_nat_gateway" {
   default     = false
 }
 
+variable "root_domain" {
+  type = string
+}
 variable "tags" {
   description = "A map of tags to add to all resources"
   type        = map(string)
