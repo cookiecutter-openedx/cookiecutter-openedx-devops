@@ -12,7 +12,7 @@ variable "environment_domain" {
 
 }
 
-variable "shared_resource_namespace" {
+variable "stack_namespace" {
   type = string
 }
 

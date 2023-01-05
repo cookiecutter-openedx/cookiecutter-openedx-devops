@@ -12,8 +12,8 @@ locals {
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
-  namespace                       = local.stack_vars.locals.stack_namespace
-  shared_resource_namespace       = local.stack_vars.locals.shared_resource_namespace
+  namespace             = local.stack_vars.locals.stack_namespace
+  stack_namespace       = local.stack_vars.locals.stack_namespace
 
   tags = merge(
     local.stack_vars.locals.tags,
@@ -67,7 +67,7 @@ include {
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
   namespace = local.namespace
-  shared_resource_namespace = local.shared_resource_namespace
+  stack_namespace = local.stack_namespace
   karpenter_node_group_iam_role_name = dependency.kubernetes.outputs.karpenter_node_group_iam_role_name
   karpenter_node_group_iam_role_arn = dependency.kubernetes.outputs.karpenter_node_group_iam_role_arn
   oidc_provider_arn = dependency.kubernetes.outputs.oidc_provider_arn

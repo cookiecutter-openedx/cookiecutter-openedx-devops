@@ -6,15 +6,7 @@
 #
 # usage: create an EKS cluster
 #------------------------------------------------------------------------------
-variable "environment_domain" {
-  type = string
-}
-
-variable "shared_resource_namespace" {
-  type = string
-}
-
-variable "namespace" {
+variable "stack_namespace" {
   type = string
 }
 

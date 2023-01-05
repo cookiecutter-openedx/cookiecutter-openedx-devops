@@ -12,15 +12,15 @@
 #}
 
 data "aws_eks_cluster" "eks" {
-  name = var.shared_resource_namespace
+  name = var.namespace
 }
 
 data "aws_eks_cluster" "cluster" {
-  name = var.shared_resource_namespace
+  name = var.namespace
 }
 
 data "aws_eks_cluster_auth" "cluster" {
-  name = var.shared_resource_namespace
+  name = var.namespace
 }
 
 provider "kubernetes" {
@@ -36,12 +36,3 @@ provider "helm" {
     token                  = data.aws_eks_cluster_auth.cluster.token
   }
 }
-
-data "kubernetes_service" "ingress_nginx_controller" {
-  metadata {
-    name      = "default-ingress-nginx-controller"
-    namespace = "kube-system"
-  }
-}
-
-data "aws_elb_hosted_zone_id" "main" {}

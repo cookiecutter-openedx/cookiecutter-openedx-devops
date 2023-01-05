@@ -12,14 +12,12 @@ locals {
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
-  environment_domain              = local.stack_vars.locals.environment_domain
-  namespace                       = local.stack_vars.locals.stack_namespace
-  shared_resource_namespace       = local.stack_vars.locals.shared_resource_namespace
+  stack_namespace       = local.stack_vars.locals.stack_namespace
 
   tags = merge(
     local.stack_vars.locals.tags,
     local.global_vars.locals.tags,
-    { Name = "${local.namespace}-eks" }
+    { Name = "${local.stack_namespace}-eks" }
   )
 }
 
@@ -67,7 +65,6 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  environment_domain = local.environment_domain
-  shared_resource_namespace = local.shared_resource_namespace
+  stack_namespace = local.stack_namespace
   tags = local.tags
 }

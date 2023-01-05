@@ -14,13 +14,12 @@ locals {
   # Extract out common variables for reuse
   dashboard_namespace             = "kube-dashboard"
   dashboard_account_name          = "admin-user"
-  namespace                       = local.stack_vars.locals.stack_namespace
-  shared_resource_namespace       = local.stack_vars.locals.shared_resource_namespace
+  stack_namespace                 = local.stack_vars.locals.stack_namespace
 
   tags = merge(
     local.stack_vars.locals.tags,
     local.global_vars.locals.tags,
-    { Name = "${local.namespace}-eks" }
+    { Name = "${local.stack_namespace}-eks" }
   )
 }
 
@@ -70,6 +69,6 @@ include {
 inputs = {
   dashboard_namespace = local.dashboard_namespace
   dashboard_account_name = local.dashboard_account_name
-  shared_resource_namespace = local.shared_resource_namespace
+  stack_namespace = local.stack_namespace
   tags = local.tags
 }

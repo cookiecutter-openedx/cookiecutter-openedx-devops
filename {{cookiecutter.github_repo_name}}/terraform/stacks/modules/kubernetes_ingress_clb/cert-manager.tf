@@ -14,14 +14,14 @@ module "cert_manager_irsa" {
   role_name                     = "${var.namespace}-cert_manager-irsa"
   provider_url                  = replace(data.aws_eks_cluster.eks.identity[0].oidc[0].issuer, "https://", "")
   role_policy_arns              = [aws_iam_policy.cert_manager_policy.arn]
-  oidc_fully_qualified_subjects = ["system:serviceaccount:${var.environment_namespace}:cert-manager"]
+  oidc_fully_qualified_subjects = ["system:serviceaccount:${var.namespace}:cert-manager"]
 }
 
 data "template_file" "cert-manager-values" {
   template = file("${path.module}/cert-manager-values.yaml.tpl")
   vars = {
-    role_arn              = module.cert_manager_irsa.iam_role_arn
-    environment_namespace = var.environment_namespace
+    role_arn  = module.cert_manager_irsa.iam_role_arn
+    namespace = var.namespace
   }
 }
 
@@ -36,7 +36,7 @@ data "template_file" "cert-manager-values" {
 #-----------------------------------------------------------
 resource "helm_release" "cert-manager" {
   name             = "cert-manager"
-  namespace        = var.environment_namespace
+  namespace        = var.namespace
   create_namespace = false
 
   chart      = "cert-manager"

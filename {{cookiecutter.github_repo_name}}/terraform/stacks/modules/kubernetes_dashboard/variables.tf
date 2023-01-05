@@ -14,7 +14,7 @@ variable "dashboard_account_name" {
   type = string
 }
 
-variable "shared_resource_namespace" {
+variable "stack_namespace" {
   type = string
 }
 

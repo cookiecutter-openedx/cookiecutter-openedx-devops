@@ -66,7 +66,7 @@ resource "helm_release" "karpenter" {
 
   set {
     name  = "clusterName"
-    value = var.shared_resource_namespace
+    value = var.stack_namespace
   }
 
   set {

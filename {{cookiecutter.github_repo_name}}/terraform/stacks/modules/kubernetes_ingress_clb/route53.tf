@@ -6,20 +6,22 @@
 #
 # usage: create DNS records for EKS cluster load balancer
 #------------------------------------------------------------------------------
+data "kubernetes_service" "ingress_nginx_controller" {
+  metadata {
+    name      = "default-ingress-nginx-controller"
+    namespace = "kube-system"
+  }
+}
+
+data "aws_elb_hosted_zone_id" "main" {}
+
 data "aws_route53_zone" "root_domain" {
   name = var.root_domain
 }
 
-data "aws_route53_zone" "environment_domain" {
-  name = var.environment_domain
-  tags = {
-    SharedResourceNamespace = var.shared_resource_namespace
-  }
-}
-
 resource "aws_route53_record" "naked" {
-  zone_id = data.aws_route53_zone.environment_domain.id
-  name    = var.environment_domain
+  zone_id = data.aws_route53_zone.root_domain.id
+  name    = var.root_domain
   type    = "A"
 
   alias {
@@ -30,8 +32,8 @@ resource "aws_route53_record" "naked" {
 }
 
 resource "aws_route53_record" "wildcard" {
-  zone_id = data.aws_route53_zone.environment_domain.id
-  name    = "*.${var.environment_domain}"
+  zone_id = data.aws_route53_zone.root_domain.id
+  name    = "*.${var.root_domain}"
   type    = "A"
 
   alias {
