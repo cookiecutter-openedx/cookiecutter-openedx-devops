@@ -325,7 +325,19 @@ Specifically with regard to MySQL, several 3rd party analytics tools provide out
   :alt: Connecting to MySQL Workbench
 
 
-V. Add more Kubernetes admins
+V. Manage your new Kubernetes cluster
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Installs three of the most popular web applications for Kubernetes administration:
+
+- `Kubernetes Dashboard <https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/>`_. Written by the same team that maintain Kubernetes, Kubernetes Dashboard provides an elegant web UI for monitoring and administering your kubernetes cluster.
+- `Kubeapps <https://kubeapps.dev/>`_. Maintained by VMWare Bitnami, Kubeapps is the easiest way to install popular open source software packages from MySQL and MongoDB to Wordpress and Drupal.
+- `Grafana <https://grafana.com/>`_. Provides an elegant web UI to view time series data gathered by prometheus and metrics-server.
+  - user: admin
+  - pwd: prom-operator
+
+
+VI. Add more Kubernetes admins
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 By default your AWS IAM user account will be the only user who can view, interact with and manage your new Kubernetes cluster. Other IAM users with admin permissions will still need to be explicitly added to the list of Kluster admins.
