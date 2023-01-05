@@ -19,11 +19,11 @@ data "aws_elb_hosted_zone_id" "main" {}
 data "aws_partition" "current" {}
 
 data "aws_eks_cluster" "eks" {
-  name = var.shared_resource_namespace
+  name = var.stack_namespace
 }
 
 data "aws_eks_cluster_auth" "eks" {
-  name = var.shared_resource_namespace
+  name = var.stack_namespace
 }
 
 provider "kubernetes" {
