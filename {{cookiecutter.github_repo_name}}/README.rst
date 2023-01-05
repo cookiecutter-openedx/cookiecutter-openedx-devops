@@ -89,14 +89,14 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
   * - `Tutor Docker-based Open edX Installer <https://docs.tutor.overhang.io/>`_
     - {{ cookiecutter.ci_build_tutor_version }}
   * - `Tutor Plugin: Object storage for Open edX with S3 <https://github.com/hastexo/tutor-contrib-s3>`_
-    - {{ cookiecutter.ci_deploy_tutor_plugin_s3_version }}
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_s3_version }}
   {% if cookiecutter.ci_deploy_install_backup_plugin == "Y" -%}
   * - `Tutor Plugin: Backup & Restore <https://github.com/hastexo/tutor-contrib-backup>`_
-    - {{ cookiecutter.ci_deploy_tutor_plugin_backup_version }}
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_build_backup_version }}
   {% endif -%}
   {% if cookiecutter.ci_deploy_install_credentials_server == "Y" -%}
   * - `Tutor Plugin: Credentials Application <https://github.com/lpm0073/tutor-contrib-credentials>`_
-    - {{ cookiecutter.ci_deploy_tutor_plugin_credentials_version }}
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_credentials_version }}
   {% endif -%}
   * - `Tutor Plugin: Discovery Service <https://github.com/overhangio/tutor-discovery>`_
     - latest stable

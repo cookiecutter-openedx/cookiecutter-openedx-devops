@@ -24,11 +24,6 @@ jobs:
       {% else -%}
       ENABLE_CREDENTIALS: false
       {% endif -%}
-      {% if cookiecutter.ci_deploy_install_mfe_service == "Y" -%}
-      ENABLE_MFE: true
-      {% else -%}
-      ENABLE_MFE: false
-      {% endif -%}
       {% if cookiecutter.ci_deploy_install_license_manager_service == "Y" -%}
       ENABLE_LICENSE_MANAGER: true
       {% else -%}
@@ -70,14 +65,6 @@ jobs:
         with:
           version: {{ cookiecutter.ci_deploy_tutor_plugin_credentials_version }}
           aws-ecr-repo: openedx_credentials
-
-      - name: Build MFE
-        if: {% raw %}${{ env.ENABLE_MFE == 'true' }}{% endraw %}
-        uses: openedx-actions/tutor-plugin-build-mfe@{{ cookiecutter.ci_openedx_actions_tutor_plugin_build_mfe_version }}
-        with:
-          subdomain: ${SUBDOMAIN}
-          domain-name: ${DOMAIN_NAME}
-          site-name: ${SITE_NAME}
 
       - name: Build License Manager
         if: {% raw %}${{ env.ENABLE_LICENSE_MANAGER == 'true' }}{% endraw %}
