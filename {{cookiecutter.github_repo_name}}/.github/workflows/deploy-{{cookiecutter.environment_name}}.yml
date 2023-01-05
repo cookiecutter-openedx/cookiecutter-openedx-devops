@@ -160,10 +160,11 @@ jobs:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
       - name: Enable tutor plugin - MFE
-        uses: openedx-actions/tutor-plugin-enable-mfe@{{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_mfe_version }}
-        if: {% raw %}${{ env.ENABLE_MFE == 'true' }}{% endraw %}
-        with:
-          aws-ecr-uri: ${AWS_ECR_REPOSITORY_MFE}
+        shell: bash
+        run:  |-
+          pip install tutor-mfe
+          tutor plugins enable mfe
+          tutor config save
 
       - name: Enable tutor plugin - Credentials
         uses: openedx-actions/tutor-plugin-enable-credentials@{{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_credentials_version }}
