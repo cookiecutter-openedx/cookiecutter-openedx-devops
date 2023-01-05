@@ -35,6 +35,7 @@
     "ci_deploy_install_forum_service": ["N", "Y"],
     "ci_deploy_install_xqueue_service": ["N", "Y"],
     "ci_deploy_install_license_manager_service": ["N", "Y"],
+    "ci_deploy_tutor_plugin_credentials_version": "latest",
     "ci_deploy_OPENEDX_COMMON_VERSION": "open-release/{{ cookiecutter.ci_build_open_edx_version }}",
     "ci_deploy_EMAIL_HOST": "email-smtp.{{ cookiecutter.global_aws_region|lower|replace(' ', '-') }}.amazonaws.com",
     "ci_deploy_EMAIL_PORT": 587,
