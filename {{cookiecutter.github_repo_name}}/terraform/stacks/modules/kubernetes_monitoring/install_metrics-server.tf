@@ -24,7 +24,7 @@
 
 
 resource "helm_release" "metrics_server" {
-  namespace        = "metrics-server"
+  namespace        = "monitoring"
   create_namespace = true
 
   name       = "metrics-server"
@@ -32,16 +32,12 @@ resource "helm_release" "metrics_server" {
   chart      = "metrics-server"
   version    = "~> 3.8"
 
-  depends_on = [
-    module.eks
-  ]
 }
 
 resource "kubectl_manifest" "vpa-metrics-server" {
   yaml_body = file("${path.module}/yml/verticalpodautoscalers/vpa-metrics-server.yaml")
 
   depends_on = [
-    module.eks,
     helm_release.vpa,
     helm_release.metrics_server
   ]

@@ -5,7 +5,7 @@
 # date: Aug-2022
 #
 # usage: installs Karpenter scaling service.
-# see: https://karpenter.sh/{{ cookiecutter.eks_karpenter_helm_version }}/getting-started/getting-started-with-terraform/
+# see: https://karpenter.sh/v0.19.3/getting-started/getting-started-with-terraform/
 #
 # requirements: you must initialize a local helm repo in order to run
 # this mdoule.
@@ -18,46 +18,6 @@
 # NOTE: run `helm repo update` prior to running this
 #       Terraform module.
 #-----------------------------------------------------------
-resource "helm_release" "karpenter" {
-  namespace        = "karpenter"
-  create_namespace = true
-
-  name       = "karpenter"
-  repository = "https://charts.karpenter.sh"
-  chart      = "karpenter"
-
-  # mcdaniel dec-2022: trying latest stable
-  #version    = "{{ cookiecutter.eks_karpenter_helm_version }}"
-
-  set {
-    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = module.karpenter_controller_irsa_role.iam_role_arn
-  }
-
-  set {
-    name  = "clusterName"
-    value = module.eks.cluster_name
-  }
-
-  set {
-    name  = "clusterEndpoint"
-    value = module.eks.cluster_endpoint
-  }
-
-  set {
-    name  = "aws.defaultInstanceProfile"
-    value = aws_iam_instance_profile.karpenter.name
-  }
-
-  depends_on = [
-    module.eks,
-    module.karpenter_controller_irsa_role,
-    aws_iam_instance_profile.karpenter,
-    aws_iam_role.ec2_spot_fleet_tagging_role,
-    aws_iam_role_policy_attachment.ec2_spot_fleet_tagging,
-  ]
-}
-
 # FIX NOTE: the policy lacks some permissions for creating/terminating instances
 #  as well as pricing:GetProducts.
 #
@@ -74,14 +34,14 @@ module "karpenter_controller_irsa_role" {
   create_role                        = true
   attach_karpenter_controller_policy = true
 
-  karpenter_controller_cluster_id = module.eks.cluster_name
+  karpenter_controller_cluster_id = data.aws_eks_cluster.eks.name
   karpenter_controller_node_iam_role_arns = [
-    module.eks.eks_managed_node_groups["karpenter"].iam_role_arn
+    var.karpenter_node_group_iam_role_arn
   ]
 
   oidc_providers = {
     ex = {
-      provider_arn               = module.eks.oidc_provider_arn
+      provider_arn               = var.oidc_provider_arn
       namespace_service_accounts = ["karpenter:karpenter"]
     }
   }
@@ -90,13 +50,49 @@ module "karpenter_controller_irsa_role" {
 
 }
 
+
+resource "helm_release" "karpenter" {
+  namespace        = "monitoring"
+  create_namespace = true
+
+  name       = "karpenter"
+  repository = "https://charts.karpenter.sh"
+  chart      = "karpenter"
+
+  set {
+    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+    value = module.karpenter_controller_irsa_role.iam_role_arn
+  }
+
+  set {
+    name  = "clusterName"
+    value = var.shared_resource_namespace
+  }
+
+  set {
+    name  = "clusterEndpoint"
+    value = data.aws_eks_cluster.eks.endpoint
+  }
+
+  set {
+    name  = "aws.defaultInstanceProfile"
+    value = aws_iam_instance_profile.karpenter.name
+  }
+
+  depends_on = [
+    helm_release.metrics_server,
+    helm_release.prometheus,
+    helm_release.vpa
+  ]
+}
+
 resource "random_pet" "this" {
   length = 2
 }
 
 resource "aws_iam_instance_profile" "karpenter" {
   name = "KarpenterNodeInstanceProfile-${var.namespace}-${random_pet.this.id}"
-  role = module.eks.eks_managed_node_groups["karpenter"].iam_role_name
+  role = var.karpenter_node_group_iam_role_name
 }
 
 
@@ -135,7 +131,6 @@ resource "kubectl_manifest" "karpenter_provisioner" {
   YAML
 
   depends_on = [
-    module.eks,
     helm_release.karpenter
   ]
 }
@@ -169,7 +164,6 @@ resource "kubectl_manifest" "vpa-karpenter" {
   yaml_body = file("${path.module}/yml/verticalpodautoscalers/vpa-karpenter.yaml")
 
   depends_on = [
-    module.eks,
     helm_release.vpa,
     helm_release.karpenter
   ]

@@ -1,12 +1,12 @@
 apiVersion: autoscaling.k8s.io/v1
 kind: VerticalPodAutoscaler
 metadata:
-  name: vpa-recommender-metrics-server
-  namespace: metrics-server
+  name: vpa-recommender-karpenter
+  namespace: monitoring
 spec:
   targetRef:
     apiVersion: "apps/v1"
     kind:       Deployment
-    name:       metrics-server
+    name:       karpenter
   updatePolicy:
     updateMode: "Auto"

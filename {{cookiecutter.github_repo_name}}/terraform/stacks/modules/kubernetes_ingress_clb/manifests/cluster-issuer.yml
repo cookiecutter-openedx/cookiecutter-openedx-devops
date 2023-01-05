@@ -1,0 +1,28 @@
+#------------------------------------------------------------------------------
+# written by: Miguel Afonso
+#             https://www.linkedin.com/in/mmafonso/
+#
+# date: Aug-2021
+#
+# usage: setup SSL certs for EKS load balancer worker node instances.
+#        see https://cert-manager.io/docs/
+#------------------------------------------------------------------------------
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt
+  namespace: hosting-usa-live
+spec:
+  acme:
+    email: no-reply@lawrencemcdaniel.com
+    privateKeySecretRef:
+      name: letsencrypt
+    server: https://acme-v02.api.letsencrypt.org/directory
+    solvers:
+      - dns01:
+          # NOTE: make sure that this is the hosted Zone ID for
+          # for the environment domain.
+          route53:
+            region: us-east-2
+            hostedZoneID: Z03004421NYF86M35X08H

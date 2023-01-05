@@ -12,7 +12,6 @@
 #               https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-class
 #------------------------------------------------------------------------------
 
-
 resource "helm_release" "ingress-nginx-default" {
   name             = "default"
   namespace        = "kube-system"

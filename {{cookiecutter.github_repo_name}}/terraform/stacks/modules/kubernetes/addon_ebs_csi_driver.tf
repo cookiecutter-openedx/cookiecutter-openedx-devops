@@ -56,7 +56,6 @@ resource "null_resource" "annotate-ebs-csi-controller" {
     command = <<-EOT
       kubectl annotate serviceaccount ebs-csi-controller-sa -n kube-system eks.amazonaws.com/role-arn=arn:aws:iam::${var.account_id}:role/${aws_iam_role.AmazonEKS_EBS_CSI_DriverRole.name}
       kubectl rollout restart deployment ebs-csi-controller -n kube-system
-      kubectl rollout restart deployment ebs-csi-controller -n kube-system
     EOT
   }
 
