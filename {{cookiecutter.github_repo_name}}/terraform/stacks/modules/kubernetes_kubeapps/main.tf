@@ -21,7 +21,7 @@
 locals {
   kubeapps_namespace        = "kubeapps"
   kubeapps_account_name     = "kubeapps-admin"
-  kubeapps_ingress_hostname = "${local.kubeapps_namespace}.${var.environment_domain}"
+  kubeapps_ingress_hostname = "${local.kubeapps_namespace}.${var.admin_domain}"
 }
 
 resource "kubernetes_namespace" "kubeapps" {

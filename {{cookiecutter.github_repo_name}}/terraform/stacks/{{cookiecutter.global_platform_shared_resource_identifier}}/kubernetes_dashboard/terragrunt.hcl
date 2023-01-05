@@ -51,6 +51,10 @@ dependency "kubernetes_ingress_clb" {
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
+  mock_outputs_allowed_terraform_commands = ["init", "validate", "plan"]
+  mock_outputs = {
+    cluster_arn = "fake-cluster-arn"
+  }
 
 }
 
