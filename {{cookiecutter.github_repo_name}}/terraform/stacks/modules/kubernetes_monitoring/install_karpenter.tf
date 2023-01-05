@@ -30,7 +30,7 @@ module "karpenter_controller_irsa_role" {
   # an incomplete IAM policy.
   #version = "~> 5.3"
 
-  role_name                          = "karpenter-controller-${var.namespace}"
+  role_name                          = "karpenter-controller-${var.stack_namespace}"
   create_role                        = true
   attach_karpenter_controller_policy = true
 
@@ -91,7 +91,7 @@ resource "random_pet" "this" {
 }
 
 resource "aws_iam_instance_profile" "karpenter" {
-  name = "KarpenterNodeInstanceProfile-${var.namespace}-${random_pet.this.id}"
+  name = "KarpenterNodeInstanceProfile-${var.stack_namespace}-${random_pet.this.id}"
   role = var.karpenter_node_group_iam_role_name
 }
 
@@ -117,11 +117,11 @@ resource "kubectl_manifest" "karpenter_provisioner" {
         memory: 1600Gi    # 100 * 16Gi
     provider:
       subnetSelector:
-        karpenter.sh/discovery: ${var.namespace}
+        karpenter.sh/discovery: ${var.stack_namespace}
       securityGroupSelector:
-        karpenter.sh/discovery: ${var.namespace}
+        karpenter.sh/discovery: ${var.stack_namespace}
       tags:
-        karpenter.sh/discovery: ${var.namespace}
+        karpenter.sh/discovery: ${var.stack_namespace}
 
     # If nil, the feature is disabled, nodes will never terminate
     ttlSecondsUntilExpired: 600           # 10 minutes = 60 seconds * 10 minutes
