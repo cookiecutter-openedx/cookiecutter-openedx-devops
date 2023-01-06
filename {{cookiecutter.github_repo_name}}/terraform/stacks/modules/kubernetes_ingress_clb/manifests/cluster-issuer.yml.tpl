@@ -21,8 +21,7 @@ spec:
     server: https://acme-v02.api.letsencrypt.org/directory
     solvers:
       - dns01:
-          # NOTE: make sure that this is the hosted Zone ID for
-          # for the admin domain.
+          # hosted Zone ID for the admin domain.
           route53:
             region: ${aws_region}
-            hostedZoneID: ${admin_hosted_zone_id}
+            hostedZoneID: ${hosted_zone_id}

@@ -20,12 +20,12 @@ data "template_file" "cluster-issuer" {
   vars = {
     namespace = var.namespace
     aws_region = var.aws_region
-    admin_hosted_zone_id = data.aws_route53_zone.admin_domain.id
+    hosted_zone_id = data.aws_route53_zone.admin_domain.id
   }
 }
 
 resource "kubectl_manifest" "cluster-issuer" {
-  yaml_body = file("${path.module}/manifests/cluster-issuer.yml")
+  yaml_body = data.template_file.cluster-issuer.rendered
 
   depends_on = [
     module.cert_manager_irsa,
