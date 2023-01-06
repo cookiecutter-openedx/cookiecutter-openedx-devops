@@ -27,7 +27,7 @@ resource "aws_iam_role" "AmazonEKS_EBS_CSI_DriverRole" {
       {
         "Effect" : "Allow",
         "Principal" : {
-          "Federated" : "arn:aws:iam::293205054626:oidc-provider/${module.eks.oidc_provider}"
+          "Federated" : "arn:aws:iam::${var.account_id}:oidc-provider/${module.eks.oidc_provider}"
         },
         "Action" : "sts:AssumeRoleWithWebIdentity",
         "Condition" : {
