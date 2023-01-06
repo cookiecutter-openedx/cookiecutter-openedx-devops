@@ -19,12 +19,12 @@ locals {
   platform_region                 = local.global_vars.locals.platform_region
   account_id                      = local.global_vars.locals.account_id
   aws_region                      = local.global_vars.locals.aws_region
-  namespace                       = local.stack_vars.locals.stack_namespace
+  environment_namespace           = local.stack_vars.locals.environment_namespace
 
   tags = merge(
     local.environment_vars.locals.tags,
     local.global_vars.locals.tags,
-    { Name = "${local.namespace}-eks-ingress" }
+    { Name = "${local.environment_namespace}-eks-ingress" }
   )
 }
 
@@ -69,6 +69,5 @@ inputs = {
   environment_namespace = local.namespace
   shared_resource_namespace = local.shared_resource_namespace
   root_domain = local.root_domain
-  namespace = local.namespace
   tags = local.tags
 }

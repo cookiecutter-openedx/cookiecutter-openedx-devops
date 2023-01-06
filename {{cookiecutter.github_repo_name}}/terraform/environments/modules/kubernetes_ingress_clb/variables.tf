@@ -17,9 +17,6 @@ variable "shared_resource_namespace" {
   type = string
 }
 
-variable "namespace" {
-  type = string
-}
 
 variable "root_domain" {
   description = "Root domain (route53 zone) for the default cluster ingress."
