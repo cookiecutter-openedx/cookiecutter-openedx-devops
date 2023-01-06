@@ -6,6 +6,10 @@
 #
 # usage: Add tls certs for EKS cluster load balancer
 #        see https://cert-manager.io/docs/
+#
+# prequisites:
+#       helm repo add jetstack https://charts.jetstack.io
+#       helm repo update
 #------------------------------------------------------------------------------
 module "cert_manager_irsa" {
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
@@ -18,7 +22,7 @@ module "cert_manager_irsa" {
 }
 
 data "template_file" "cert-manager-values" {
-  template = file("${path.module}/cert-manager-values.yaml.tpl")
+  template = file("${path.module}/manifests/cert-manager-values.yaml.tpl")
   vars = {
     role_arn  = module.cert_manager_irsa.iam_role_arn
     namespace = var.namespace
@@ -41,7 +45,7 @@ resource "helm_release" "cert-manager" {
 
   chart      = "cert-manager"
   repository = "https://charts.jetstack.io"
-  version    = "1.9"
+  version    = "1.10"
   values = [
     data.template_file.cert-manager-values.rendered
   ]
