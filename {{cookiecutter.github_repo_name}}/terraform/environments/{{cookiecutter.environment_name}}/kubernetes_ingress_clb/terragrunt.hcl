@@ -67,7 +67,7 @@ include {
 inputs = {
   aws_region = local.aws_region
   environment_domain = local.environment_domain
-  environment_namespace = local.namespace
+  environment_namespace = local.environment_namespace
   shared_resource_namespace = local.shared_resource_namespace
   root_domain = local.root_domain
   tags = local.tags
