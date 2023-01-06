@@ -1,7 +1,4 @@
 
-data "aws_route53_zone" "environment_domain" {
-  name = var.environment_domain
-}
 data "template_file" "cluster-issuer" {
   template = file("${path.module}/manifests/cluster-issuer.yml.tpl")
   vars = {
