@@ -18,9 +18,7 @@ locals {
   platform_region                 = local.global_vars.locals.platform_region
   account_id                      = local.global_vars.locals.account_id
   aws_region                      = local.global_vars.locals.aws_region
-  env                             = local.environment_vars.locals.environment
-  namespace                       = local.environment_vars.locals.environment_namespace
-  environment_domain              = local.environment_vars.locals.environment_domain
+  namespace                       = local.stack_vars.locals.stack_namespace
 
   tags = merge(
     local.stack_vars.locals.tags,

@@ -12,10 +12,10 @@ apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
   name: letsencrypt
-  namespace: {{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.global_platform_shared_resource_identifier }}
+  namespace: ${namespace}
 spec:
   acme:
-    email: no-reply@{{ cookiecutter.global_root_domain }}
+    email: no-reply@aube.university
     privateKeySecretRef:
       name: letsencrypt
     server: https://acme-v02.api.letsencrypt.org/directory
@@ -24,5 +24,5 @@ spec:
           # NOTE: make sure that this is the hosted Zone ID for
           # for the admin domain.
           route53:
-            region: {{ cookiecutter.global_aws_region }}
+            region: ${aws_region}
             hostedZoneID: ${admin_hosted_zone_id}
