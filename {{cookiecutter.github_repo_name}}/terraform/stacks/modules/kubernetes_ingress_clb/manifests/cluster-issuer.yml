@@ -12,7 +12,7 @@ apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
   name: letsencrypt
-  namespace: hosting-usa-live
+  namespace: {{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.global_platform_shared_resource_identifier }}
 spec:
   acme:
     email: no-reply@lawrencemcdaniel.com
@@ -24,5 +24,5 @@ spec:
           # NOTE: make sure that this is the hosted Zone ID for
           # for the environment domain.
           route53:
-            region: us-east-2
-            hostedZoneID: Z03004421NYF86M35X08H
+            region: {{ cookiecutter.global_aws_region }}
+            hostedZoneID: {{ cookiecutter.global_aws_route53_hosted_zone_id }}
