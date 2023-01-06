@@ -10,5 +10,5 @@
 
 output "cluster_arn" {
   description = "the AWS Route53 wildcard DNS record ID"
-  value       = aws_route53_record.wildcard.id
+  value       = aws_route53_record.root_wildcard.id
 }
