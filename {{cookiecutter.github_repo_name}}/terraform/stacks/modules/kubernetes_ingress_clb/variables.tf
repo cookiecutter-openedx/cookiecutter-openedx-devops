@@ -11,6 +11,10 @@ variable "namespace" {
   type = string
 }
 
+variable "admin_domain" {
+  type = string
+}
+
 variable "root_domain" {
   description = "Root domain (route53 zone) for the default cluster ingress."
   type        = string

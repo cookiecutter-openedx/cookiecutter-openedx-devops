@@ -15,14 +15,14 @@ metadata:
   namespace: {{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.global_platform_shared_resource_identifier }}
 spec:
   acme:
-    email: no-reply@lawrencemcdaniel.com
+    email: no-reply@{{ cookiecutter.global_root_domain }}
     privateKeySecretRef:
       name: letsencrypt
     server: https://acme-v02.api.letsencrypt.org/directory
     solvers:
       - dns01:
           # NOTE: make sure that this is the hosted Zone ID for
-          # for the environment domain.
+          # for the admin domain.
           route53:
             region: {{ cookiecutter.global_aws_region }}
-            hostedZoneID: {{ cookiecutter.global_aws_route53_hosted_zone_id }}
+            hostedZoneID: ${admin_hosted_zone_id}

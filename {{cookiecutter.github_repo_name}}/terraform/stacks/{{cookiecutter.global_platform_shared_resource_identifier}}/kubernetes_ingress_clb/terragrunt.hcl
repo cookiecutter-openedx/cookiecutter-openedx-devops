@@ -13,6 +13,7 @@ locals {
   # Extract out common variables for reuse
   shared_resource_namespace       = local.global_vars.locals.shared_resource_namespace
   root_domain                     = local.global_vars.locals.root_domain
+  admin_domain                    = local.global_vars.locals.admin_domain
   platform_name                   = local.global_vars.locals.platform_name
   platform_region                 = local.global_vars.locals.platform_region
   account_id                      = local.global_vars.locals.account_id
@@ -66,5 +67,6 @@ inputs = {
   aws_region = local.aws_region
   namespace = local.namespace
   root_domain = local.root_domain
+  admin_domain = local.admin_domain
   tags = local.tags
 }
