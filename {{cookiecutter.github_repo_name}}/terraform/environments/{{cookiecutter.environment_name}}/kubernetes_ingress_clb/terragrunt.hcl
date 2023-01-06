@@ -20,6 +20,7 @@ locals {
   account_id                      = local.global_vars.locals.account_id
   aws_region                      = local.global_vars.locals.aws_region
   environment_namespace           = local.environment_vars.locals.environment_namespace
+  environment_domain              = local.environment_vars.locals.environment_domain
 
   tags = merge(
     local.environment_vars.locals.tags,
