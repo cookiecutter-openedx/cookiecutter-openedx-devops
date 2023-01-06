@@ -6,9 +6,9 @@ resource "kubectl_manifest" "certificate" {
   depends_on = [
     module.cert_manager_irsa,
     helm_release.cert-manager,
-    aws_route53_record.naked,
+    aws_route53_record.root_naked,
     aws_iam_policy.cert_manager_policy,
-    aws_route53_record.wildcard,
+    aws_route53_record.root_wildcard,
   ]
 }
 
@@ -30,8 +30,8 @@ resource "kubectl_manifest" "cluster-issuer" {
   depends_on = [
     module.cert_manager_irsa,
     helm_release.cert-manager,
-    aws_route53_record.naked,
+    aws_route53_record.root_naked,
     aws_iam_policy.cert_manager_policy,
-    aws_route53_record.wildcard,
+    aws_route53_record.root_wildcard,
   ]
 }
