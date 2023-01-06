@@ -19,8 +19,8 @@ metadata:
 spec:
   tls:
   - hosts:
-    - "grafana.{{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}"
-    secretName: wild-hosting-live-tls
+    - "*.{{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}"
+    secretName: {{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}-tls
   rules:
   - host: grafana.{{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}
     http:

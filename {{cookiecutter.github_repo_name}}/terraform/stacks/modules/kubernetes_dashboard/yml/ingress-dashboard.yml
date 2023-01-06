@@ -11,8 +11,8 @@ metadata:
 spec:
   tls:
   - hosts:
-    - "dashboard.{{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}"
-    secretName: wild-hosting-live-tls
+    - "*.{{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}"
+    secretName: {{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}-tls
   rules:
   - host: dashboard.{{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}
     http:
