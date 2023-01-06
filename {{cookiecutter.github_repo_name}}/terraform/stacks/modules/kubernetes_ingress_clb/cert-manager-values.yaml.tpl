@@ -16,7 +16,7 @@ serviceAccount:
   annotations:
     eks.amazonaws.com/role-arn: ${role_arn}
   name: cert-manager
-  namespace: ${environment_namespace}
+  namespace: ${namespace}
 # the securityContext is required, so the pod can access files required to assume the IAM role
 securityContext:
   # -------------------------------------------------------------------------------
