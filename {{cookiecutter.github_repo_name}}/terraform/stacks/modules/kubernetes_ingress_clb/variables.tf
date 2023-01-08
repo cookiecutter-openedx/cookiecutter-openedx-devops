@@ -11,9 +11,9 @@ variable "namespace" {
   type = string
 }
 
- variable "cert_manager_namespace" {
+variable "cert_manager_namespace" {
   type = string
- }
+}
 
 variable "admin_domain" {
   type = string
