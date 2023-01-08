@@ -28,7 +28,7 @@ dependencies {
     "../vpc",
     "../kubernetes",
     "../kubernetes_ingress_clb",
-    "../kubernetes_ingress_cert_manager",
+    "../kubernetes_cert_manager",
     ]
 }
 
