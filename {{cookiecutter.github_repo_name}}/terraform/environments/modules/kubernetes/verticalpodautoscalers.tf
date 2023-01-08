@@ -1,25 +1,4 @@
 
-data "template_file" "vpa-cert-manager-cainjector" {
-  template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-cert-manager-cainjector.yaml.tpl")
-  vars = {
-    environment_namespace = var.environment_namespace
-  }
-}
-
-data "template_file" "vpa-cert-manager-webhook" {
-  template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-cert-manager-webhook.yaml.tpl")
-  vars = {
-    environment_namespace = var.environment_namespace
-  }
-}
-
-data "template_file" "vpa-cert-manager" {
-  template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-cert-manager.yaml.tpl")
-  vars = {
-    environment_namespace = var.environment_namespace
-  }
-}
-
 data "template_file" "vpa-cms" {
   template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-cms.yaml.tpl")
   vars = {
@@ -76,12 +55,6 @@ data "template_file" "vpa-mongodb" {
   }
 }
 
-data "template_file" "vpa-nginx" {
-  template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-nginx.yaml.tpl")
-  vars = {
-    environment_namespace = var.environment_namespace
-  }
-}
 
 data "template_file" "vpa-notes" {
   template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-notes.yaml.tpl")

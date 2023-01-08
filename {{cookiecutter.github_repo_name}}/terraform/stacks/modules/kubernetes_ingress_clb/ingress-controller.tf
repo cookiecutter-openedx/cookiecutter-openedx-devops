@@ -12,14 +12,14 @@
 #               https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-class
 #------------------------------------------------------------------------------
 
-resource "helm_release" "ingress-nginx-default" {
+resource "helm_release" "ingress_nginx_controller" {
   name             = "default"
   namespace        = "kube-system"
   create_namespace = false
 
   chart      = "ingress-nginx"
   repository = "https://kubernetes.github.io/ingress-nginx"
-  version    = "~> 4.2"
+  version    = "{{ cookiecutter.terraform_helm_ingress_nginx_controller }}"
 
   set {
     name  = "service.type"
@@ -49,7 +49,4 @@ resource "helm_release" "ingress-nginx-default" {
     type  = "string"
   }
 
-  depends_on = [
-    module.eks
-  ]
 }

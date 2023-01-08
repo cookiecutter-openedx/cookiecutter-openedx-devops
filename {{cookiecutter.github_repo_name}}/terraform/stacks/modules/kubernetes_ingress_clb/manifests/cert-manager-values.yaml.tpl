@@ -3,10 +3,10 @@ global:
     enabled: true
     useAppArmor: false
 image:
-  tag: v1.8.0
+  tag: v1.8.2
 webhook:
   image:
-    tag: v1.8.0
+    tag: v1.8.2
 prometheus:
   enabled: false
 installCRDs: true

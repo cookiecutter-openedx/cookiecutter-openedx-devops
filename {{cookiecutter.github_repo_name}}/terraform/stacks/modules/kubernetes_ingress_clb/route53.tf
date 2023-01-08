@@ -6,11 +6,19 @@
 #
 # usage: create DNS records for EKS cluster load balancer
 #------------------------------------------------------------------------------
+
+# to-do: remove this declaration and refactor references below from
+# data.kubernetes_service.ingress_nginx_controller to
+# helm_release.ingress_nginx_controller
 data "kubernetes_service" "ingress_nginx_controller" {
   metadata {
     name      = "default-ingress-nginx-controller"
     namespace = "kube-system"
   }
+
+  depends_on = [
+    helm_release.ingress_nginx_controller
+  ]
 }
 
 data "aws_elb_hosted_zone_id" "main" {}
