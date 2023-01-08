@@ -11,9 +11,10 @@ locals {
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
-  namespace      = "kube-system"
-  root_domain    = local.global_vars.locals.root_domain
-  admin_domain   = local.global_vars.locals.admin_domain
+  stack_namespace = local.stack_vars.locals.stack_namespace
+  namespace       = "kube-system"
+  root_domain     = local.global_vars.locals.root_domain
+  admin_domain    = local.global_vars.locals.admin_domain
 }
 
 dependencies {
@@ -51,7 +52,8 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  namespace    = local.namespace
-  root_domain  = local.root_domain
-  admin_domain = local.admin_domain
+  namespace       = local.namespace
+  stack_namespace = local.stack_namespace
+  root_domain     = local.root_domain
+  admin_domain    = local.admin_domain
 }

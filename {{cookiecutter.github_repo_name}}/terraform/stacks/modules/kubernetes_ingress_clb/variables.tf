@@ -19,3 +19,7 @@ variable "root_domain" {
 variable "namespace" {
   type = string
 }
+
+variable "stack_namespace" {
+  type = string
+}
