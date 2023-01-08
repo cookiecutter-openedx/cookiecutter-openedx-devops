@@ -6,7 +6,9 @@
 #
 # usage: create DNS records for EKS cluster load balancer
 #------------------------------------------------------------------------------
-
+data "aws_route53_zone" "admin_domain" {
+  name = var.admin_domain
+}
 # to-do: remove this declaration and refactor references below from
 # data.kubernetes_service.ingress_nginx_controller to
 # helm_release.ingress_nginx_controller
