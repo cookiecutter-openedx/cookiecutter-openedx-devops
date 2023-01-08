@@ -8,7 +8,7 @@
 #------------------------------------------------------------------------------
 
 
-output "cluster_arn" {
-  description = "the AWS Route53 wildcard DNS record ID"
-  value       = aws_route53_record.root_wildcard.id
+output "cert_manager_policy" {
+  description = "the cert-manager IAM policy ARN"
+  value = aws_iam_policy.cert_manager_policy.arn
 }
