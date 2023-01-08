@@ -14,7 +14,7 @@
 
 resource "helm_release" "ingress_nginx_controller" {
   name             = "common"
-  namespace        = "kube-system"
+  namespace        = var.namespace
   create_namespace = false
 
   chart      = "ingress-nginx"
