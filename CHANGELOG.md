@@ -5,12 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.6] (2023-1-7)
+
+- version bumps
+- add sql db migration scripts
+- Fix openedx_backup resource configuration
+- refactor build-deploy workflows for tutor upgrade
+- disable tutor web proxy to elminate unused EBS volume
+- add IAM Role for EKS add-on EBS CSI
+- add AmazonEBSCSIDriverPolicy to the karpenter node group
+- add more parameters to openedx-actions/tutor-k8s-init
+
 ## [1.0.5] (2022-12-11)
+
 - bump to K8s 1.24
 - version bumps to all Terraform AWS modules https://registry.terraform.io/namespaces/terraform-aws-modules
 - version bumps to all Open edX Github Actions https://github.com/openedx-actions
 - refactor cert-manager for v1.9
-
 
 ## [1.0.4] (2022-09-02)
 
