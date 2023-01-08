@@ -13,7 +13,7 @@
 #------------------------------------------------------------------------------
 
 resource "helm_release" "ingress_nginx_controller" {
-  name             = "stack"
+  name             = "common"
   namespace        = "kube-system"
   create_namespace = false
 
