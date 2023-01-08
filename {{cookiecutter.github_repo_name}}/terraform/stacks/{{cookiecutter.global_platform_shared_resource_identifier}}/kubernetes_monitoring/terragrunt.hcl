@@ -21,6 +21,15 @@ locals {
   )
 }
 
+dependencies {
+  paths = [
+    "../vpc",
+    "../kubernetes",
+    "../kubernetes_ingress_clb",
+    "../kubernetes_ingress_cert_manager",
+    ]
+}
+
 dependency "vpc" {
   config_path = "../vpc"
 

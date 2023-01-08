@@ -7,11 +7,14 @@
 # usage: build an EKS cluster load balancer
 #------------------------------------------------------------------------------
 
-variable "admin_domain" {
+variable "namespace" {
   type = string
 }
 
-variable "root_domain" {
-  description = "Root domain (route53 zone) for the default cluster ingress."
-  type        = string
+variable "cert_manager_namespace" {
+  type = string
+}
+
+variable "aws_region" {
+  type = string
 }

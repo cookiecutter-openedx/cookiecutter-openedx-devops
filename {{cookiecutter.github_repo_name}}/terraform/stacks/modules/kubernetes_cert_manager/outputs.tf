@@ -7,11 +7,8 @@
 # usage: build an EKS cluster load balancer
 #------------------------------------------------------------------------------
 
-variable "admin_domain" {
-  type = string
-}
 
-variable "root_domain" {
-  description = "Root domain (route53 zone) for the default cluster ingress."
-  type        = string
+output "cluster_arn" {
+  description = "the AWS Route53 wildcard DNS record ID"
+  value       = aws_route53_record.root_wildcard.id
 }

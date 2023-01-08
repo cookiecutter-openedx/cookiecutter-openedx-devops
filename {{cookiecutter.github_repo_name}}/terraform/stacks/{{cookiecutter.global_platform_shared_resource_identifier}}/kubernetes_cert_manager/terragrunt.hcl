@@ -2,24 +2,18 @@
 # written by: Lawrence McDaniel
 #             https://lawrencemcdaniel.com
 #
-# date: Jan-2023
+# date: Mar-2022
 #
-# usage: install kubeapps
+# usage: build an EKS with EC2 worker nodes and ALB
 #------------------------------------------------------------------------------
 locals {
-  # Automatically load stack-level variables
   stack_vars = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
-  stack_namespace       = local.stack_vars.locals.stack_namespace
-  admin_domain          = local.global_vars.locals.admin_domain
-
-  tags = merge(
-    local.stack_vars.locals.tags,
-    local.global_vars.locals.tags,
-    { Name = "${local.stack_namespace}-eks" }
-  )
+  shared_resource_namespace       = local.global_vars.locals.shared_resource_namespace
+  aws_region                      = local.global_vars.locals.aws_region
+  cert_manager_namespace          = "cert-manager"
 }
 
 dependencies {
@@ -27,7 +21,6 @@ dependencies {
     "../vpc",
     "../kubernetes",
     "../kubernetes_ingress_clb",
-    "../kubernetes_ingress_cert_manager",
     ]
 }
 
@@ -43,15 +36,6 @@ dependency "vpc" {
     private_subnets  = ["fake-private-subnet-01", "fake-private-subnet-02"]
     database_subnets = ["fake-database-subnet-01", "fake-database-subnet-02"]
   }
-
-}
-
-dependency "kubernetes" {
-  config_path = "../kubernetes"
-
-  # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
-  # module hasn't been applied yet.
-
 }
 
 dependency "kubernetes_ingress_clb" {
@@ -59,17 +43,16 @@ dependency "kubernetes_ingress_clb" {
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "validate", "plan", "destroy"]
+  mock_outputs_allowed_terraform_commands = ["init", "validate"]
   mock_outputs = {
-    cluster_arn = "fake-cluster-arn"
+    cluster_arn = "flake-cluster-arn"
   }
-
 }
 
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
-  source = "../../modules//kubernetes_kubeapps"
+  source = "../../modules//kubernetes_cert_manager"
 }
 
 # Include all settings from the root terragrunt.hcl file
@@ -79,7 +62,7 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  admin_domain    = local.admin_domain
-  stack_namespace = local.stack_namespace
-  tags = local.tags
+  aws_region              = local.aws_region
+  cert_manager_namespace  = local.cert_manager_namespace
+  namespace               = local.shared_resource_namespace
 }

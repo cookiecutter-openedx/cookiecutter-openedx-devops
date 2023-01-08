@@ -11,20 +11,8 @@ locals {
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
-  shared_resource_namespace       = local.global_vars.locals.shared_resource_namespace
   root_domain                     = local.global_vars.locals.root_domain
   admin_domain                    = local.global_vars.locals.admin_domain
-  platform_name                   = local.global_vars.locals.platform_name
-  platform_region                 = local.global_vars.locals.platform_region
-  account_id                      = local.global_vars.locals.account_id
-  aws_region                      = local.global_vars.locals.aws_region
-  namespace                       = local.stack_vars.locals.stack_namespace
-
-  tags = merge(
-    local.stack_vars.locals.tags,
-    local.global_vars.locals.tags,
-    { Name = "${local.namespace}-eks-ingress" }
-  )
 }
 
 dependencies {
@@ -62,10 +50,6 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  aws_region = local.aws_region
-  namespace = local.namespace
-  cert_manager_namespace = "cert-manager"
   root_domain = local.root_domain
   admin_domain = local.admin_domain
-  tags = local.tags
 }
