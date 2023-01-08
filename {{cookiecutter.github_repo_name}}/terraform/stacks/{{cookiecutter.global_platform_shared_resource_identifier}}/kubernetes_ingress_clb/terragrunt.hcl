@@ -11,8 +11,9 @@ locals {
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
-  root_domain                     = local.global_vars.locals.root_domain
-  admin_domain                    = local.global_vars.locals.admin_domain
+  namespace      = local.stack_vars.locals.stack_namespace
+  root_domain    = local.global_vars.locals.root_domain
+  admin_domain   = local.global_vars.locals.admin_domain
 }
 
 dependencies {
