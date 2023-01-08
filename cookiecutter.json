@@ -114,7 +114,7 @@
     "terraform_aws_modules_cloudfront": "~> 3.1",
     "terraform_aws_modules_eks": "~> 19.4",
     "terraform_aws_modules_iam": "~> 5.9",
-    "terraform_aws_modules_iam_assumable_role_with_oidc": "~> 5.9",
+    "terraform_aws_modules_iam_assumable_role_with_oidc": "~> 5.10",
     "terraform_aws_modules_rds": "~> 5.2",
     "terraform_aws_modules_s3": "~> 3.6",
     "terraform_aws_modules_sg": "~> 4.16",

@@ -13,19 +13,19 @@
 #------------------------------------------------------------------------------
 module "cert_manager_irsa" {
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "~> 5.9"
+  version                       = "{{ cookiecutter.terraform_aws_modules_iam_assumable_role_with_oidc }}"
   create_role                   = true
   role_name                     = "${var.namespace}-cert_manager-irsa"
   provider_url                  = replace(data.aws_eks_cluster.eks.identity[0].oidc[0].issuer, "https://", "")
   role_policy_arns              = [aws_iam_policy.cert_manager_policy.arn]
-  oidc_fully_qualified_subjects = ["system:serviceaccount:${var.namespace}:cert-manager"]
+  oidc_fully_qualified_subjects = ["system:serviceaccount:${var.cert_manager_namespace}:cert-manager"]
 }
 
 data "template_file" "cert-manager-values" {
   template = file("${path.module}/manifests/cert-manager-values.yaml.tpl")
   vars = {
     role_arn  = module.cert_manager_irsa.iam_role_arn
-    namespace = var.namespace
+    namespace = var.cert_manager_namespace
   }
 }
 
@@ -34,17 +34,18 @@ data "template_file" "cert-manager-values" {
 # this script.
 #
 #   brew install helm
-#   helm repo add cert-manager https://charts.jetstack.io/
-#   helm repo update
 #
+#   kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.10.1/cert-manager.crds.yaml
+#   helm repo add jetstack https://charts.jetstack.io
+#   helm repo update
 #-----------------------------------------------------------
 resource "helm_release" "cert-manager" {
   name             = "cert-manager"
-  namespace        = var.namespace
-  create_namespace = false
+  namespace        = var.cert_manager_namespace
+  create_namespace = true
 
   chart      = "cert-manager"
-  repository = "https://charts.jetstack.io"
+  repository = "jetstack"
   version    = "{{ cookiecutter.terraform_helm_cert_manager }}"
   values = [
     data.template_file.cert-manager-values.rendered

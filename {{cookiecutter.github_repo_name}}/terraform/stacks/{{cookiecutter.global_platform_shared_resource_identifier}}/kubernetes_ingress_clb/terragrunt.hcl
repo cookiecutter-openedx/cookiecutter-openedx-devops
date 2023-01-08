@@ -64,6 +64,7 @@ include {
 inputs = {
   aws_region = local.aws_region
   namespace = local.namespace
+  cert_manager_namespace = "cert-manager"
   root_domain = local.root_domain
   admin_domain = local.admin_domain
   tags = local.tags

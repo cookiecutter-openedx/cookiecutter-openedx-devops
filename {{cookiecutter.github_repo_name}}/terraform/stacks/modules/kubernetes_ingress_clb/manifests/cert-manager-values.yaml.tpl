@@ -1,7 +1,7 @@
 global:
   podSecurityPolicy:
     enabled: true
-    useAppArmor: true
+    useAppArmor: false
 image:
   tag: v1.8.0
 webhook:
