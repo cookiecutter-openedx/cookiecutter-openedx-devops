@@ -24,6 +24,7 @@
 # FIXED. but see note below about version.
 #
 # see: https://registry.terraform.io/modules/terraform-aws-modules/iam/aws/latest/submodules/iam-role-for-service-accounts-eks
+
 module "karpenter_controller_irsa_role" {
   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   # mcdaniel aug-2022: specifying an explicit version causes this module to create
@@ -79,11 +80,6 @@ resource "helm_release" "karpenter" {
     value = aws_iam_instance_profile.karpenter.name
   }
 
-  depends_on = [
-    helm_release.metrics_server,
-    helm_release.prometheus,
-    helm_release.vpa
-  ]
 }
 
 resource "random_pet" "this" {
@@ -164,7 +160,6 @@ resource "kubectl_manifest" "vpa-karpenter" {
   yaml_body = file("${path.module}/yml/verticalpodautoscalers/vpa-karpenter.yaml")
 
   depends_on = [
-    helm_release.vpa,
     helm_release.karpenter
   ]
 }

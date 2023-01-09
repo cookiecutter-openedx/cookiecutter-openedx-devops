@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.8] (2023-?-?)
+
+- refactor karpenter into its own module.
+- parameterize helm chart version of vertical-pod-autoscaler
+
 ## [1.0.7] (2023-1-8)
 
 - refactor cert-manager into its own module and move from environment to stack.
