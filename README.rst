@@ -62,7 +62,7 @@ Builds a fully functional Docker-based, horizontally-scaled Open edX installatio
 Complete Kubernetes Auto scaling
 --------------------------------
 
-Your new Kubernetes infrastructure platform leverages prometheus and metrics-servers to provide you with fully self-maintained auto-scaling features:
+Your new Kubernetes infrastructure platform leverages `Prometheus <https://prometheus.io/>`_ and `metrics-server <https://github.com/kubernetes-sigs/metrics-server>`_ to provide you with fully self-maintained auto-scaling features:
 
 - `Vertical Pod Auto-scaling <https://github.com/kubernetes/autoscaler>`_: a set of Kubernetes components that automatically adjust the amount of CPU and memory requested by your running pods based on performance metrics collected real-time by prometheus and metrics-server.
 - `Horizontal Pod Auto-scaling <https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/>`_: a built-in Kubernetes feature that automatically updates the pod count of your application deployments with the aim of automatically scaling the workload to match demand.
