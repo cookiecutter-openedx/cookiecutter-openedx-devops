@@ -1,7 +1,11 @@
 """
 """
 import os
-from .utils import rm_directory
+import shutil
+
+def rm_directory(dir_path: str):
+    if os.path.exists(dir_path):
+        shutil.rmtree(dir_path)
 
 TERMINATOR = "\x1b[0m"
 WARNING = "\x1b[1;33m [WARNING]: "
