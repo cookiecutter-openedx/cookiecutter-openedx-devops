@@ -1,9 +1,7 @@
 """
 """
-
 import os
-import shutil
-
+from .utils import rm_directory
 
 TERMINATOR = "\x1b[0m"
 WARNING = "\x1b[1;33m [WARNING]: "
@@ -12,10 +10,34 @@ HINT = "\x1b[3;33m"
 SUCCESS = "\x1b[1;32m [SUCCESS]: "
 
 
-def rm_directory(dir_path: str):
-    if os.path.exists(dir_path):
-        shutil.rmtree(dir_path)
 
+def remove_k8s_dashboard():
+    dir_path = os.path.join("terraform", "stacks", "modules", "kubernetes_dashboard")
+    rm_directory(dir_path)
+
+    dir_path = os.path.join("terraform", "environments", "modules", "kubernetes_dashboard")
+    rm_directory(dir_path)
+
+def remove_k8s_kubeapps():
+    dir_path = os.path.join("terraform", "stacks", "modules", "kubernetes_kubeapps")
+    rm_directory(dir_path)
+
+    dir_path = os.path.join("terraform", "environments", "modules", "kubernetes_kubeapps")
+    rm_directory(dir_path)
+
+def remove_k8s_karpenter():
+    dir_path = os.path.join("terraform", "stacks", "modules", "kubernetes_karpenter")
+    rm_directory(dir_path)
+
+    dir_path = os.path.join("terraform", "environments", "modules", "kubernetes_karpenter")
+    rm_directory(dir_path)
+
+def remove_k8s_prometheus():
+    dir_path = os.path.join("terraform", "stacks", "modules", "kubernetes_prometheus")
+    rm_directory(dir_path)
+
+    dir_path = os.path.join("terraform", "environments", "modules", "kubernetes_prometheus")
+    rm_directory(dir_path)
 
 def remove_bastion():
     dir_path = os.path.join("terraform", "stacks", "modules", "ec2_bastion")
@@ -76,6 +98,18 @@ def main():
 
     if "{{ cookiecutter.stack_add_remote_mongodb }}".upper() != "Y":
         remove_mongodb()
+
+    if "{{ cookiecutter.stack_install_k8s_dashboard }}".upper() != "Y":
+        remove_k8s_dashboard()
+
+    if "{{ cookiecutter.stack_install_k8s_kubeapps }}".upper() != "Y":
+        remove_k8s_kubeapps()
+
+    if "{{ cookiecutter.stack_install_k8s_karpenter }}".upper() != "Y":
+        remove_k8s_karpenter()
+
+    if "{{ cookiecutter.stack_install_k8s_prometheus }}".upper() != "Y":
+        remove_k8s_prometheus()
 
     print(SUCCESS + "Your Open edX devops repo has been initialized." + TERMINATOR)
 
