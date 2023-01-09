@@ -12,20 +12,20 @@ locals {
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
-  env                             = local.environment_vars.locals.environment
-  environment_domain              = local.environment_vars.locals.environment_domain
-  namespace                       = local.environment_vars.locals.environment_namespace
-  shared_resource_namespace       = local.environment_vars.locals.shared_resource_namespace
+  shared_resource_namespace       = local.global_vars.locals.shared_resource_namespace
   root_domain                     = local.global_vars.locals.root_domain
+  admin_domain                    = local.global_vars.locals.admin_domain
   platform_name                   = local.global_vars.locals.platform_name
   platform_region                 = local.global_vars.locals.platform_region
   account_id                      = local.global_vars.locals.account_id
   aws_region                      = local.global_vars.locals.aws_region
+  environment_namespace           = local.environment_vars.locals.environment_namespace
+  environment_domain              = local.environment_vars.locals.environment_domain
 
   tags = merge(
     local.environment_vars.locals.tags,
     local.global_vars.locals.tags,
-    { Name = "${local.namespace}-eks-ingress" }
+    { Name = "${local.environment_namespace}-eks-ingress" }
   )
 }
 
@@ -67,9 +67,8 @@ include {
 inputs = {
   aws_region = local.aws_region
   environment_domain = local.environment_domain
-  environment_namespace = local.namespace
+  environment_namespace = local.environment_namespace
   shared_resource_namespace = local.shared_resource_namespace
   root_domain = local.root_domain
-  namespace = local.namespace
   tags = local.tags
 }

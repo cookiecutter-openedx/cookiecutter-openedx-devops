@@ -39,7 +39,7 @@ provider "helm" {
 
 data "kubernetes_service" "ingress_nginx_controller" {
   metadata {
-    name      = "default-ingress-nginx-controller"
+    name      = "common-ingress-nginx-controller"
     namespace = "kube-system"
   }
 }

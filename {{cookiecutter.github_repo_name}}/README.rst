@@ -58,9 +58,6 @@ The Terraform scripts in this repo provide a 1-click means of creating / updatin
 - LMS at https://{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
 - CMS at https://studio.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
 - CDN at https://cdn.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }} linked to a public read-only S3 bucket named {{ cookiecutter.environment_subdomain }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-storage
-- Grafana at https://grafana.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}/login
-  - user: admin
-  - pwd: prom-operator
 - public ssh access via a t2.micro Ubuntu 20.04 LTS bastion EC2 instance at bastion.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
 - daily data backups archived into a private S3 bucket named {{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-mongodb-backup
 
@@ -92,14 +89,14 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
   * - `Tutor Docker-based Open edX Installer <https://docs.tutor.overhang.io/>`_
     - {{ cookiecutter.ci_build_tutor_version }}
   * - `Tutor Plugin: Object storage for Open edX with S3 <https://github.com/hastexo/tutor-contrib-s3>`_
-    - {{ cookiecutter.ci_deploy_tutor_plugin_s3_version }}
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_s3_version }}
   {% if cookiecutter.ci_deploy_install_backup_plugin == "Y" -%}
   * - `Tutor Plugin: Backup & Restore <https://github.com/hastexo/tutor-contrib-backup>`_
-    - {{ cookiecutter.ci_deploy_tutor_plugin_backup_version }}
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_build_backup_version }}
   {% endif -%}
   {% if cookiecutter.ci_deploy_install_credentials_server == "Y" -%}
   * - `Tutor Plugin: Credentials Application <https://github.com/lpm0073/tutor-contrib-credentials>`_
-    - {{ cookiecutter.ci_deploy_tutor_plugin_credentials_version }}
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_credentials_version }}
   {% endif -%}
   * - `Tutor Plugin: Discovery Service <https://github.com/overhangio/tutor-discovery>`_
     - latest stable
@@ -274,7 +271,19 @@ Specifically with regard to MySQL, several 3rd party analytics tools provide out
   :width: 700
   :alt: Connecting to MySQL Workbench
 
-V. Add more Kubernetes admins
+V. Manage your new Kubernetes cluster
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Installs four of the most popular web applications:
+
+- `k9s <https://k9scli.io/>`_, preinstalled in the optional EC2 Bastion server. K9s is an amazing retro styled, ascii-based UI for viewing and monitoring all aspects of your Kubernetes cluster. It looks and runs great from any ssh-connected terminal window.
+- `Kubernetes Dashboard <https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/>`_ at https://dashboard.{{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}. Written by the same team that maintain Kubernetes, Kubernetes Dashboard provides an elegant web UI for monitoring and administering your kubernetes cluster.
+- `Kubeapps <https://kubeapps.dev/>`_ at https://kubeapps.{{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}. Maintained by VMWare Bitnami, Kubeapps is the easiest way to install popular open source software packages from MySQL and MongoDB to Wordpress and Drupal.
+- `Grafana <https://grafana.com/>`_ at https://grafana.{{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}/login. Provides an elegant web UI to view time series data gathered by prometheus and metrics-server.
+  - user: admin
+  - pwd: prom-operator
+
+VI. Add more Kubernetes admins
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 By default your AWS IAM user account will be the only user who can view, interact with and manage your new Kubernetes cluster. Other IAM users with admin permissions will still need to be explicitly added to the list of Kluster admins.
