@@ -22,7 +22,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - version bumps to all Terraform AWS modules https://registry.terraform.io/namespaces/terraform-aws-modules
 - version bumps to all Open edX Github Actions https://github.com/openedx-actions
 
-=======
 ## [1.0.6] (2023-1-7)
 
 - version bumps
