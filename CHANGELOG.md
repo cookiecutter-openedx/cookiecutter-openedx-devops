@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [1.0.7] (2023-1-8)
 
-- refactor cert-manager and move from environment to stack. Also, move cert-manager to its own namespace, to simplify Terraform apply/destroy operations
+- refactor cert-manager into its own module and move from environment to stack.
+- Move cert-manager to its own namespace
 - bump cert-manager to v1.8.2
 - bump ingress-nginx-controller to 4.4.2 and parameterize version
 - standardize and consolidate ssl cert to a single secret
