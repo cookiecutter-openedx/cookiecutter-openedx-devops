@@ -35,6 +35,9 @@ def main():
     If we find an existing repository then we should preemptively delete the existing
     Cookiecutter output in order to avoid situations where deleted, deprecated, or relocated
     template files would otherwise remain as 'residue' of the Cookiecutter output.
+
+    FIX NOTE: this runs out of the /tmp folder and therefore none of these paths are found.
+              need to find a code snippet that references the correct destination path
     """
     print(INFO + "Open edX devops Cookiecutter" + TERMINATOR)
 

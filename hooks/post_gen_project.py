@@ -13,8 +13,6 @@ INFO = "\x1b[1;33m [INFO]: "
 HINT = "\x1b[3;33m"
 SUCCESS = "\x1b[1;32m [SUCCESS]: "
 
-
-
 def remove_k8s_dashboard():
     dir_path = os.path.join("terraform", "stacks", "modules", "kubernetes_dashboard")
     rm_directory(dir_path)

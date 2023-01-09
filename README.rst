@@ -59,6 +59,16 @@ Builds a fully functional Docker-based, horizontally-scaled Open edX installatio
   :width: 100%
   :alt: Bastion Welcome Screen
 
+Complete Kubernetes Auto scaling
+--------------------------------
+
+Your new Kubernetes infrastructure platform leverages prometheus and metrics-servers to provide you with fully self-maintained auto-scaling features:
+
+- `Vertical Pod Auto-scaling <https://github.com/kubernetes/autoscaler>`_: a set of Kubernetes components that automatically adjust the amount of CPU and memory requested by your running pods based on performance metrics collected real-time by prometheus and metrics-server.
+- `Horizontal Pod Auto-scaling <https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/>`_: a built-in Kubernetes feature that automatically updates the pod count of your application deployments with the aim of automatically scaling the workload to match demand.
+- `Karpenter <https://karpenter.sh/>`_: automatically launches just the right number of AWS EC2 compute node (ie application server instance) resources to handle your cluster's applications. It is designed to let you take full advantage of the cloud with fast and simple compute provisioning for Kubernetes clusters.
+
+
 Terraform-based AWS infrastructure management
 ---------------------------------------------
 
@@ -72,7 +82,7 @@ This configuration scales automatically, reliably supporting anywhere from a few
 
 **NEW IN VERSION 1.0.5: Kubernetes upgrade to 1.24, plus a new adminstrative server with all of the preinstalled software that you'll need to administer your Open edX platform. Set cookiecutter.stack_add_bastion=Y to choose this option.**
 
-**NEW IN VERSION 1.0.6: `Kubernetes Dashboard <https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/>`_ and `Kubeapps <https://kubeapps.dev/>`_ web applications.
+**NEW IN VERSION 1.0.8: `Kubernetes Dashboard <https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/>`_ and `Kubeapps <https://kubeapps.dev/>`_ web applications.**
 
 Github Workflows for Build and Deploy
 -------------------------------------
