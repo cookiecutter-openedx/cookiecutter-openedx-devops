@@ -18,3 +18,7 @@ variable "cert_manager_namespace" {
 variable "aws_region" {
   type = string
 }
+
+variable "admin_domain" {
+  type = string
+}
