@@ -100,8 +100,8 @@ resource "kubectl_manifest" "certificate" {
 data "template_file" "cluster-issuer" {
   template = file("${path.module}/manifests/cluster-issuer.yml.tpl")
   vars = {
-    namespace = var.namespace
-    aws_region = var.aws_region
+    namespace      = var.namespace
+    aws_region     = var.aws_region
     hosted_zone_id = data.aws_route53_zone.admin_domain.id
   }
 }

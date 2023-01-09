@@ -10,5 +10,5 @@
 
 output "cert_manager_policy" {
   description = "the cert-manager IAM policy ARN"
-  value = aws_iam_policy.cert_manager_policy.arn
+  value       = aws_iam_policy.cert_manager_policy.arn
 }
