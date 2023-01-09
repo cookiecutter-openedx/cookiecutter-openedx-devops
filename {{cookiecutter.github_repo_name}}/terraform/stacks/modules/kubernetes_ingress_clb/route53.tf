@@ -14,7 +14,7 @@ data "aws_route53_zone" "admin_domain" {
 # helm_release.ingress_nginx_controller
 data "kubernetes_service" "ingress_nginx_controller" {
   metadata {
-    name      = "default-ingress-nginx-controller"
+    name      = "common-ingress-nginx-controller"
     namespace = "kube-system"
   }
 
