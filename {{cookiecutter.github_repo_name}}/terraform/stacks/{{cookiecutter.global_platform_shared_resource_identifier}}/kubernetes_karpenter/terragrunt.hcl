@@ -53,6 +53,7 @@ dependency "kubernetes" {
   mock_outputs = {
     karpenter_node_group_iam_role_name = "fake-karpenter-node-group-iam-role-name"
     karpenter_node_group_iam_role_arn  = "fake-karpenter-node-group-iam-role-arn"
+    oidc_provider_arn = "fakse-oidc-provider-arn"
   }
 
 }
