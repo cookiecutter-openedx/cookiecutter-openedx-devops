@@ -41,7 +41,7 @@ spec:
             name: lms
             port:
               number: 8000
-  - host: studio.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
+  - host: {{ cookiecutter.environment_studio_subdomain }}.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
     http:
       paths:
       - path: /

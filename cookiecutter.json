@@ -3,6 +3,7 @@
     "github_repo_name": "openedx_devops",
     "environment_name": "prod",
     "environment_subdomain": "courses",
+    "environment_studio_subdomain": "studio",
     "global_platform_name": "yourschool",
     "global_platform_description": "Your School",
     "global_platform_logo_url": "https://www.edx.org/images/logos/edx-logo-elm.svg",
