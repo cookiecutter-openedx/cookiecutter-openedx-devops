@@ -30,7 +30,7 @@ resource "helm_release" "kubernetes-dashboard" {
   name       = "kubernetes-dashboard"
   repository = "https://kubernetes.github.io/dashboard/"
   chart      = "kubernetes-dashboard"
-  version    = "6.0.0"
+  version    = "{{ cookiecutter.terraform_helm_dashboard }}"
 
   # see https://docs.bitnami.com/kubernetes/infrastructure/dashboard/configuration/expose-service/
   set {

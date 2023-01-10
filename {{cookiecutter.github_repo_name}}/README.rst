@@ -142,8 +142,18 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
     - {{ cookiecutter.terraform_aws_modules_sg }}
   * - `terraform-aws-modules/vpc <https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest>`_
     - {{ cookiecutter.terraform_aws_modules_vpc }}
-  * - Terraform `Helm cert-manager <https://charts.jetstack.io>`_
+  * - `Helm cert-manager <https://charts.jetstack.io>`_
     - {{ cookiecutter.terraform_helm_cert_manager }}
+  * - `Helm Ingress Nginx Controller <https://kubernetes.github.io/ingress-nginx/>`_
+    - {{ cookiecutter.terraform_helm_ingress_nginx_controller }}
+  * - `Helm Vertical Pod Autoscaler <https://github.com/cowboysysop/charts/tree/master/charts/vertical-pod-autoscaler>`_
+    - {{ cookiecutter.terraform_helm_vertical_pod_autoscaler }}
+  * - `Helm Kubernetes Dashboard <https://kubernetes.github.io/dashboard/>`_
+    - {{ cookiecutter.terraform_helm_dashboard }}
+  * - `Helm kubeapps <https://bitnami.com/stack/kubeapps/helm>`_
+    - {{ cookiecutter.terraform_helm_kubeapps }}
+  * - `Helm Karpenter <https://artifacthub.io/packages/helm/karpenter/karpenter>`_
+    - {{ cookiecutter.terraform_helm_karpenter }}
   * - Terraform `Kubernetes Provider <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs>`_
     - {{ cookiecutter.terraform_provider_kubernetes_version }}
   * - Terraform `AWS Provider <https://registry.terraform.io/providers/hashicorp/aws/latest/docs>`_
