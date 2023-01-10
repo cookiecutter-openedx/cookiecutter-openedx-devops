@@ -47,11 +47,13 @@ Tutor Open edX Production Devops Tools
 This repository contains Terraform code and Github Actions workflows to deploy and manage a `Tutor <https://docs.tutor.overhang.io/>`_ Kubernetes-managed
 production installation of Open edX that will automatically scale up, reliably supporting several hundred thousand learners.
 
-**NEW IN VERSION 1.02: SPOT PRICING FOR EC2 INSTANCES** Save up to 75% off the cost of on-demand EC2 instances by using AWS' flexible `spot-pricing <https://aws.amazon.com/ec2/spot/pricing/>`_ .
+**NEW IN VERSION 1.0.2: SPOT PRICING FOR EC2 INSTANCES** Save up to 75% off the cost of on-demand EC2 instances by using AWS' flexible `spot-pricing <https://aws.amazon.com/ec2/spot/pricing/>`_ .
 
-**NEW IN VERSION 1.03: an optional fully-configured remote MongoDB server running on an EC2 instance. Set cookiecutter.stack_add_remote_mongodb=Y to choose this option.**
+**NEW IN VERSION 1.0.3:** an optional fully-configured remote MongoDB server running on an EC2 instance. Set cookiecutter.stack_add_remote_mongodb=Y to choose this option.
 
-**NEW IN VERSION 1.05: Kubernetes upgrade to 1.24, plus a new adminstrative server with all of the preinstalled software that you'll need to administer your Open edX platform. Set cookiecutter.stack_add_bastion=Y to choose this option.**
+**NEW IN VERSION 1.0.5:** Kubernetes upgrade to 1.24, plus a new adminstrative server with all of the preinstalled software that you'll need to administer your Open edX platform. Set cookiecutter.stack_add_bastion=Y to choose this option.
+
+**NEW IN VERSION 1.0.8:** `Kubernetes Dashboard <https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/>`_ and `Kubeapps <https://kubeapps.dev/>`_ web applications.
 
 The Terraform scripts in this repo provide a 1-click means of creating / updating / destroying the following for each environment:
 
@@ -60,6 +62,12 @@ The Terraform scripts in this repo provide a 1-click means of creating / updatin
 - CDN at https://cdn.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }} linked to a public read-only S3 bucket named {{ cookiecutter.environment_subdomain }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-storage
 - public ssh access via a t2.micro Ubuntu 20.04 LTS bastion EC2 instance at bastion.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
 - daily data backups archived into a private S3 bucket named {{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-mongodb-backup
+
+The following adminstrative urls were automatically created:
+
+- Kubernetes Dashboard - https://dashboard.{{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}
+- Kubeapps  - https://kubeapps.{{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}
+- Grafana - https://grafana.{{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}
 
 You can also optionally automatically create additional environments for say, dev and test and QA and so forth.
 These would result in environments like the following:
@@ -142,8 +150,18 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
     - {{ cookiecutter.terraform_aws_modules_sg }}
   * - `terraform-aws-modules/vpc <https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest>`_
     - {{ cookiecutter.terraform_aws_modules_vpc }}
-  * - Terraform `Helm cert-manager <https://charts.jetstack.io>`_
+  * - `Helm cert-manager <https://charts.jetstack.io>`_
     - {{ cookiecutter.terraform_helm_cert_manager }}
+  * - `Helm Ingress Nginx Controller <https://kubernetes.github.io/ingress-nginx/>`_
+    - {{ cookiecutter.terraform_helm_ingress_nginx_controller }}
+  * - `Helm Vertical Pod Autoscaler <https://github.com/cowboysysop/charts/tree/master/charts/vertical-pod-autoscaler>`_
+    - {{ cookiecutter.terraform_helm_vertical_pod_autoscaler }}
+  * - `Helm Kubernetes Dashboard <https://kubernetes.github.io/dashboard/>`_
+    - {{ cookiecutter.terraform_helm_dashboard }}
+  * - `Helm kubeapps <https://bitnami.com/stack/kubeapps/helm>`_
+    - {{ cookiecutter.terraform_helm_kubeapps }}
+  * - `Helm Karpenter <https://artifacthub.io/packages/helm/karpenter/karpenter>`_
+    - {{ cookiecutter.terraform_helm_karpenter }}
   * - Terraform `Kubernetes Provider <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs>`_
     - {{ cookiecutter.terraform_provider_kubernetes_version }}
   * - Terraform `AWS Provider <https://registry.terraform.io/providers/hashicorp/aws/latest/docs>`_

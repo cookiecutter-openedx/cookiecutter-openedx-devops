@@ -60,6 +60,8 @@ resource "helm_release" "karpenter" {
   repository = "https://charts.karpenter.sh"
   chart      = "karpenter"
 
+  version    = "{{ cookiecutter.terraform_helm_karpenter }}"
+
   set {
     name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
     value = module.karpenter_controller_irsa_role.iam_role_arn
