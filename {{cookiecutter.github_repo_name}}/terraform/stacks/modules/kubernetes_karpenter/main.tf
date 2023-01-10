@@ -59,6 +59,7 @@ resource "helm_release" "karpenter" {
   name       = "karpenter"
   repository = "https://charts.karpenter.sh"
   chart      = "karpenter"
+
   version    = "{{ cookiecutter.terraform_helm_karpenter }}"
 
   set {
