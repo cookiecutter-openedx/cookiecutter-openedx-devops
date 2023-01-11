@@ -1,9 +1,6 @@
 
 data "template_file" "vpa-nginx" {
-  template = file("${path.module}/yml/vpa-openedx-nginx.yaml.tpl")
-  vars = {
-    environment_namespace = var.stack_namespace
-  }
+  template = file("${path.module}/yml/vpa-openedx-nginx.yaml")
 }
 
 resource "kubectl_manifest" "nginx" {
