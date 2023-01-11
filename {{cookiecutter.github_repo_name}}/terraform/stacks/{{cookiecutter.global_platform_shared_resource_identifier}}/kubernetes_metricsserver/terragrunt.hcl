@@ -68,6 +68,7 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
+  namespace       = "metrics-server"
   stack_namespace = local.stack_namespace
   tags            = local.tags
 }

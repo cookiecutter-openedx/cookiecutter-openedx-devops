@@ -136,6 +136,14 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
     - {{ cookiecutter.kubernetes_cluster_version }}
   * - `Terraform <https://www.terraform.io/>`_
     - {{ cookiecutter.terraform_required_version }}
+  * - Terraform Provider `Kubernetes <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs>`_
+    - {{ cookiecutter.terraform_provider_kubernetes_version }}
+  * - Terraform Provider `AWS <https://registry.terraform.io/providers/hashicorp/aws/latest/docs>`_
+    - {{ cookiecutter.terraform_provider_hashicorp_aws_version }}
+  * - Terraform Provider `Local <https://registry.terraform.io/providers/hashicorp/local/latest/docs>`_
+    - {{ cookiecutter.terraform_provider_hashicorp_local_version }}
+  * - Terraform Provider `Random <https://registry.terraform.io/providers/hashicorp/random/latest/docs>`_
+    - {{ cookiecutter.terraform_provider_hashicorp_random_version }}
   * - `terraform-aws-modules/acm <https://registry.terraform.io/modules/terraform-aws-modules/acm/aws/latest>`_
     - {{ cookiecutter.terraform_aws_modules_acm }}
   * - `terraform-aws-modules/cloudfront <https://registry.terraform.io/modules/terraform-aws-modules/cloudfront/aws/latest>`_
@@ -168,14 +176,6 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
     - {{ cookiecutter.terraform_helm_metrics_server }}
   * - `Helm Prometheus <https://prometheus-community.github.io/helm-charts/>`_
     - {{ cookiecutter.terraform_helm_prometheus }}
-  * - Terraform `Kubernetes Provider <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs>`_
-    - {{ cookiecutter.terraform_provider_kubernetes_version }}
-  * - Terraform `AWS Provider <https://registry.terraform.io/providers/hashicorp/aws/latest/docs>`_
-    - {{ cookiecutter.terraform_provider_hashicorp_aws_version }}
-  * - Terraform `Local Provider <https://registry.terraform.io/providers/hashicorp/local/latest/docs>`_
-    - {{ cookiecutter.terraform_provider_hashicorp_local_version }}
-  * - Terraform `Random Provider <https://registry.terraform.io/providers/hashicorp/random/latest/docs>`_
-    - {{ cookiecutter.terraform_provider_hashicorp_random_version }}
 
 
 Important Considerations

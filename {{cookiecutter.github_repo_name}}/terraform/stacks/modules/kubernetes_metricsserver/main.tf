@@ -24,7 +24,7 @@
 
 
 resource "helm_release" "metrics_server" {
-  namespace        = "monitoring"
+  namespace        = var.namespace
   create_namespace = true
 
   name       = "metrics-server"

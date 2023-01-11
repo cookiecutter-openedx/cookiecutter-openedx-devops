@@ -10,8 +10,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: kube-prometheus
-  namespace: monitoring
+  name: prometheus-grafana
+  namespace: prometheus
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
     kubernetes.io/ingress.class: "nginx"

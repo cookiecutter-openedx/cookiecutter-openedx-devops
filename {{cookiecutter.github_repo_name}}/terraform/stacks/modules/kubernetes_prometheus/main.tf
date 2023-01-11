@@ -24,7 +24,7 @@
 #-----------------------------------------------------------
 
 resource "helm_release" "prometheus" {
-  namespace        = "monitoring"
+  namespace        = "prometheus"
   create_namespace = true
 
   name       = "prometheus"
