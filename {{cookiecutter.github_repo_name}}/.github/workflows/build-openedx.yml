@@ -88,6 +88,9 @@ jobs:
           #repository-token: {% raw %}${{ secrets.PAT }}{% endraw %}
           #----------------------------------------------
 
+      - name: Dump tutor config
+        uses: openedx-actions/tutor-print-dump@{{ cookiecutter.ci_openedx_actions_tutor_print_dump }}
+
       #------------------------------------------------------------------------
       # Build and upload the Docker container
       #------------------------------------------------------------------------
