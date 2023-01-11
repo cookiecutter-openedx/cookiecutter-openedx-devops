@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.9] (2023-1-11)
+
+- refactor Prometheus into its own module
+- refactor metrics-server into its own module
+- refactor Vertical Pod Autoscaler into its own module
+- bump all Helm chart versions
+- add more Cookiecutter parameters
+
+Note: this concludes the Kubernetes refactoring exercise. Happy new year!
+
 ## [1.0.8] (2023-1-9)
 
 - refactor karpenter into its own module.
