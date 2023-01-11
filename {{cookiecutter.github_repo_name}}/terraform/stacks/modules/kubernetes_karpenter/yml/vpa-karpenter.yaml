@@ -2,7 +2,7 @@ apiVersion: autoscaling.k8s.io/v1
 kind: VerticalPodAutoscaler
 metadata:
   name: vpa-recommender-karpenter
-  namespace: vpa
+  namespace: karpenter
 spec:
   targetRef:
     apiVersion: "apps/v1"

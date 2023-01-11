@@ -53,7 +53,7 @@ module "karpenter_controller_irsa_role" {
 
 
 resource "helm_release" "karpenter" {
-  namespace        = "monitoring"
+  namespace        = "karpenter"
   create_namespace = true
 
   name       = "karpenter"
@@ -159,7 +159,7 @@ resource "aws_iam_role_policy_attachment" "ec2_spot_fleet_tagging" {
 }
 
 resource "kubectl_manifest" "vpa-karpenter" {
-  yaml_body = file("${path.module}/yml/verticalpodautoscalers/vpa-karpenter.yaml")
+  yaml_body = file("${path.module}/yml/vpa-karpenter.yaml")
 
   depends_on = [
     helm_release.karpenter
