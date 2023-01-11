@@ -130,7 +130,7 @@
     "terraform_helm_dashboard": "~> 6.0",
     "terraform_helm_kubeapps": "latest",
     "terraform_helm_metrics_server": "~> 3.8",
-    "terraform_helm_prometheus": "~> 42",
+    "terraform_helm_prometheus": "~> 43",
     "terraform_provider_kubernetes_version": "~> 2.16",
     "terraform_provider_hashicorp_aws_version": "~> 4.48",
     "terraform_provider_hashicorp_local_version": "~> 2.2",

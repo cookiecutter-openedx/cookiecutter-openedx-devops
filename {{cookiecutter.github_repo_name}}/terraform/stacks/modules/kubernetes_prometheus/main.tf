@@ -21,6 +21,17 @@
 #
 # NOTE: run `helm repo update` prior to running this
 #       Terraform module.
+#
+# in the event of install problems, first try running these in
+# order to elminate any existing CRDs:
+#   kubectl delete crd alertmanagerconfigs.monitoring.coreos.com
+#   kubectl delete crd alertmanagers.monitoring.coreos.com
+#   kubectl delete crd podmonitors.monitoring.coreos.com
+#   kubectl delete crd probes.monitoring.coreos.com
+#   kubectl delete crd prometheuses.monitoring.coreos.com
+#   kubectl delete crd prometheusrules.monitoring.coreos.com
+#   kubectl delete crd servicemonitors.monitoring.coreos.com
+#   kubectl delete crd thanosrulers.monitoring.coreos.com
 #-----------------------------------------------------------
 
 resource "helm_release" "prometheus" {
