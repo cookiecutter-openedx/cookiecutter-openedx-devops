@@ -12,11 +12,12 @@ locals {
   global_vars   = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
+  stack_namespace       = local.stack_vars.locals.stack_namespace
 
   tags = merge(
     local.stack_vars.locals.tags,
     local.global_vars.locals.tags,
-    { Name = "${local.stack_namespace}-eks" }
+    { Name = "${local.stack_namespace}-prometheus" }
   )
 }
 
