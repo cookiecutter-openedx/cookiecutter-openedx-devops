@@ -3,7 +3,7 @@ data "template_file" "vpa-cert-manager" {
 }
 
 data "template_file" "vpa-cert-manager-webhook" {
-  template = file("${path.module}/manifests/verticalpodautoscalers/vpa-openedx-cert-manager-webhook.yaml")
+  template = file("${path.module}/manifests/verticalpodautoscalers/vpa-cert-manager-webhook.yaml")
 }
 
 data "template_file" "vpa-cert-manager-cainjector" {
