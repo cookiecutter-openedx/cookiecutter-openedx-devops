@@ -30,7 +30,7 @@ resource "helm_release" "prometheus" {
   name       = "prometheus"
   repository = "https://prometheus-community.github.io/helm-charts"
   chart      = "kube-prometheus-stack"
-  version    = "39.6.0"
+  version    = "{{ cookiecutter.terraform_helm_prometheus }}"
 
   # un-comment to include a yaml manifest with configuration overrides.
   # To generate a yaml file with all possible configuration options:

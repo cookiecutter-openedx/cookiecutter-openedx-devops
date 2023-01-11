@@ -164,6 +164,10 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
     - {{ cookiecutter.terraform_helm_kubeapps }}
   * - `Helm Karpenter <https://artifacthub.io/packages/helm/karpenter/karpenter>`_
     - {{ cookiecutter.terraform_helm_karpenter }}
+  * - `Helm Metrics Server <https://kubernetes-sigs.github.io/metrics-server/>`_
+    - {{ cookiecutter.terraform_helm_metrics_server }}
+  * - `Helm Prometheus <https://prometheus-community.github.io/helm-charts/>`_
+    - {{ cookiecutter.terraform_helm_prometheus }}
   * - Terraform `Kubernetes Provider <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs>`_
     - {{ cookiecutter.terraform_provider_kubernetes_version }}
   * - Terraform `AWS Provider <https://registry.terraform.io/providers/hashicorp/aws/latest/docs>`_

@@ -5,6 +5,14 @@ data "template_file" "vpa-cert-manager-cainjector" {
   }
 }
 
+
+data "template_file" "vpa-cert-manager-cainjector" {
+  template = file("${path.module}/manifests/verticalpodautoscalers/vpa-openedx-cert-manager-cainjector.yaml.tpl")
+  vars = {
+    environment_namespace = var.namespace
+  }
+}
+
 data "template_file" "vpa-cert-manager-webhook" {
   template = file("${path.module}/manifests/verticalpodautoscalers/vpa-openedx-cert-manager-webhook.yaml.tpl")
   vars = {
