@@ -8,11 +8,10 @@
 #------------------------------------------------------------------------------
 locals {
   # Automatically load stack-level variables
-  stack_vars = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
-  global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
+  stack_vars    = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
+  global_vars   = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
-  stack_namespace       = local.stack_vars.locals.stack_namespace
 
   tags = merge(
     local.stack_vars.locals.tags,
@@ -25,8 +24,6 @@ dependencies {
   paths = [
     "../vpc",
     "../kubernetes",
-    "../kubernetes_ingress_clb",
-    "../kubernetes_cert_manager",
     ]
 }
 
@@ -50,42 +47,16 @@ dependency "kubernetes" {
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "validate", "plan"]
-  mock_outputs = {
-    karpenter_node_group_iam_role_name = "fake-karpenter-node-group-iam-role-name"
-    karpenter_node_group_iam_role_arn  = "fake-karpenter-node-group-iam-role-arn"
-    oidc_provider_arn = "fake-oidc-provider-arn"
-  }
-
-}
-
-dependency "kubernetes_ingress_clb" {
-  config_path = "../kubernetes_ingress_clb"
-
-  # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
-  # module hasn't been applied yet.
   mock_outputs_allowed_terraform_commands = ["init", "validate", "plan", "destroy"]
   mock_outputs = {
-    cluster_arn = "fake-cluster-arn"
   }
 
-}
-
-dependency "kubernetes_cert_manager" {
-  config_path = "../kubernetes_cert_manager"
-
-  # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
-  # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "validate", "plan", "destroy"]
-  mock_outputs = {
-    cert_manager_policy = "fake-cert-manager-policy-arn"
-  }
 }
 
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
-  source = "../../modules//kubernetes_monitoring"
+  source = "../../modules//kubernetes_metricsserver"
 }
 
 # Include all settings from the root terragrunt.hcl file
@@ -95,9 +66,5 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  stack_namespace = local.stack_namespace
-  karpenter_node_group_iam_role_name = dependency.kubernetes.outputs.karpenter_node_group_iam_role_name
-  karpenter_node_group_iam_role_arn = dependency.kubernetes.outputs.karpenter_node_group_iam_role_arn
-  oidc_provider_arn = dependency.kubernetes.outputs.oidc_provider_arn
   tags = local.tags
 }

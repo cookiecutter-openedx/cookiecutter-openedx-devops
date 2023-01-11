@@ -4,9 +4,5 @@
 #
 # date: Mar-2022
 #
-# usage: install autoscaling and monitoring subsystems
-#
+# usage: create an EKS cluster
 #------------------------------------------------------------------------------
-
-locals {
-}

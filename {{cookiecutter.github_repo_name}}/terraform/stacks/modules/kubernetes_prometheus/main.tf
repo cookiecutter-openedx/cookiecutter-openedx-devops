@@ -40,7 +40,4 @@ resource "helm_release" "prometheus" {
   #  "${file("${path.module}/yml/values.yaml")}"
   #]
 
-  depends_on = [
-    helm_release.metrics_server
-  ]
 }
