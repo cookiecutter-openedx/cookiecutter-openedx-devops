@@ -25,6 +25,7 @@ dependencies {
   paths = [
     "../vpc",
     "../kubernetes",
+    "../kubernetes_metricsserver",
     ]
 }
 
@@ -53,6 +54,17 @@ dependency "kubernetes" {
     karpenter_node_group_iam_role_name = "fake-karpenter-node-group-iam-role-name"
     karpenter_node_group_iam_role_arn  = "fake-karpenter-node-group-iam-role-arn"
     oidc_provider_arn = "fake-oidc-provider-arn"
+  }
+
+}
+
+dependency "kubernetes_metricsserver" {
+  config_path = "../kubernetes_metricsserver"
+
+  # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
+  # module hasn't been applied yet.
+  mock_outputs_allowed_terraform_commands = ["init", "validate", "plan", "destroy"]
+  mock_outputs = {
   }
 
 }

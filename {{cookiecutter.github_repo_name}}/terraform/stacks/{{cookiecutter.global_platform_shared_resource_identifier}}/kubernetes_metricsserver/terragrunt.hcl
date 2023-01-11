@@ -25,7 +25,6 @@ dependencies {
   paths = [
     "../vpc",
     "../kubernetes",
-    "../kubernetes_cert_manager",
     ]
 }
 
@@ -55,16 +54,6 @@ dependency "kubernetes" {
 
 }
 
-dependency "kubernetes_cert_manager" {
-  config_path = "../kubernetes_cert_manager"
-
-  # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
-  # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "validate", "plan", "destroy"]
-  mock_outputs = {
-  }
-
-}
 
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
