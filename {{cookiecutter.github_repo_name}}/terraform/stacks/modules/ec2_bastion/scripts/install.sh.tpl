@@ -42,7 +42,7 @@ sudo apt update && sudo apt upgrade -y
 
 # add more packages that we need for our stuff
 # -------------------------------------------------------------
-sudo apt install jq mysql-client-8.0 libevent-dev libyaml-dev python3-pip
+sudo apt install jq mysql-client-8.0 libevent-dev libyaml-dev python3-pip build-essential -y
 sudo apt autoremove
 
 sudo snap install kubectl --channel=1.23/stable --classic
@@ -78,7 +78,7 @@ brew install awscli terraform terragrunt helm k9s
 
 # Install Helm repos
 # -------------------------------------------------------------
-~/scripts/helm.sh
+~/scripts/helm_update.sh
 
 # install mongodb client
 # -------------------------------------------------------------
