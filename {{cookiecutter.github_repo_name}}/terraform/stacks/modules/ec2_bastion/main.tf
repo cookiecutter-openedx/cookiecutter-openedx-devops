@@ -368,7 +368,7 @@ data "template_file" "help_text" {
   template = file("${path.module}/etc/update-motd.d/10-help-text.tpl")
   vars = {
     stack_namespace = var.stack_namespace
-    root_domain     = var.root_domain
+    services_subdomain     = var.services_subdomain
     aws_region      = var.aws_region
   }
 }
