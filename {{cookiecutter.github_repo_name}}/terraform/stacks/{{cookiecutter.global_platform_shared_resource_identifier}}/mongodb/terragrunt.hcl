@@ -21,8 +21,7 @@ locals {
 
   tags = merge(
     local.stack_vars.locals.tags,
-    local.global_vars.locals.tags,
-    { Name = local.resource_name }
+    { cookiecutter/name = local.resource_name }
   )
 
 }

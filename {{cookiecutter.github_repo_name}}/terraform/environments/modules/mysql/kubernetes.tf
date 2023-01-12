@@ -71,7 +71,7 @@ resource "kubernetes_secret" "openedx" {
   }
 }
 
-{% if cookiecutter.ci_deploy_install_discovery_service == "Y" -%}
+{% if cookiecutter.ci_deploy_install_discovery_service|upper == "Y" -%}
 resource "random_password" "mysql_discovery" {
   length           = 16
   special          = true
@@ -96,7 +96,7 @@ resource "kubernetes_secret" "discovery" {
   }
 }
 {% endif %}
-{% if cookiecutter.ci_deploy_install_ecommerce_service == "Y" -%}
+{% if cookiecutter.ci_deploy_install_ecommerce_service|upper == "Y" -%}
 resource "random_password" "mysql_ecommerce" {
   length           = 16
   special          = true
@@ -121,7 +121,7 @@ resource "kubernetes_secret" "ecommerce" {
   }
 }
 {% endif %}
-{% if cookiecutter.ci_deploy_install_notes_service == "Y" -%}
+{% if cookiecutter.ci_deploy_install_notes_service|upper == "Y" -%}
 resource "random_password" "mysql_notes" {
   length           = 16
   special          = true
@@ -170,7 +170,7 @@ resource "kubernetes_secret" "xqueue" {
   }
 }
 
-{% if cookiecutter.ci_deploy_install_credentials_server == "Y" -%}
+{% if cookiecutter.ci_deploy_install_credentials_server|upper == "Y" -%}
 resource "random_password" "mysql_credentials" {
   length           = 16
   special          = true
@@ -195,7 +195,7 @@ resource "kubernetes_secret" "credentials" {
   }
 }
 {% endif %}
-{% if cookiecutter.ci_deploy_install_license_manager == "Y" -%}
+{% if cookiecutter.ci_deploy_install_license_manager|upper == "Y" -%}
 resource "random_password" "mysql_license_manager" {
   length           = 16
   special          = true

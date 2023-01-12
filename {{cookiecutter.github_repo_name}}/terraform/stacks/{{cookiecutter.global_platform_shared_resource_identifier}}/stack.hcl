@@ -19,13 +19,13 @@ locals {
 
   redis_node_type           = "{{ cookiecutter.redis_node_type }}"
 
-  {% if cookiecutter.stack_add_remote_mongodb == "Y" -%}
+  {% if cookiecutter.stack_add_remote_mongodb|upper == "Y" -%}
   # MongoDB EC2 instance sizing
   mongodb_instance_type     = "{{ cookiecutter.mongodb_instance_type }}"
   mongodb_allocated_storage = {{ cookiecutter.mongodb_allocated_storage }}
   {% endif %}
 
-  {% if cookiecutter.stack_add_bastion == "Y" -%}
+  {% if cookiecutter.stack_add_bastion|upper == "Y" -%}
   # Bastion EC2 instance sizing
   bastion_instance_type     = "{{ cookiecutter.bastion_instance_type }}"
   bastion_allocated_storage = {{ cookiecutter.bastion_allocated_storage }}
@@ -37,20 +37,22 @@ locals {
   #
   # see: https://aws.amazon.com/ec2/instance-types/
   #----------------------------------------------------------------------------
-  kubernetes_version              = "{{ cookiecutter.kubernetes_cluster_version }}"
-  eks_worker_group_instance_type  = "{{ cookiecutter.eks_worker_group_instance_type }}"
-  eks_worker_group_min_size       = {{ cookiecutter.eks_worker_group_min_size }}
-  eks_worker_group_max_size       = {{ cookiecutter.eks_worker_group_max_size }}
-  eks_worker_group_desired_size   = {{ cookiecutter.eks_worker_group_desired_size }}
+  kubernetes_version                = "{{ cookiecutter.kubernetes_cluster_version }}"
+  eks_worker_group_instance_type    = "{{ cookiecutter.eks_worker_group_instance_type }}"
+  eks_worker_group_min_size         = {{ cookiecutter.eks_worker_group_min_size }}
+  eks_worker_group_max_size         = {{ cookiecutter.eks_worker_group_max_size }}
+  eks_worker_group_desired_size     = {{ cookiecutter.eks_worker_group_desired_size }}
 
   eks_karpenter_group_instance_type = "{{ cookiecutter.eks_karpenter_group_instance_type }}"
   eks_karpenter_group_min_size      = {{ cookiecutter.eks_karpenter_group_min_size }}
   eks_karpenter_group_max_size      =  {{ cookiecutter.eks_karpenter_group_max_size }}
   eks_karpenter_group_desired_size  =  {{ cookiecutter.eks_karpenter_group_desired_size }}
 
-  tags = {
-    Stack             = local.stack
-    Stack-Namespace   = local.stack_namespace
-  }
-
+  tags = merge(
+    local.global_vars.locals.tags,
+    {
+      cookiecutter/stack             = local.stack
+      cookiecutter/stack_namespace   = local.stack_namespace
+    }
+  )
 }
