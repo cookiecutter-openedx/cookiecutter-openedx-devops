@@ -138,6 +138,10 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
     - {{ cookiecutter.terraform_required_version }}
   * - Terraform Provider `Kubernetes <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs>`_
     - {{ cookiecutter.terraform_provider_kubernetes_version }}
+  * - Terraform Provider `kubectl <https://registry.terraform.io/providers/gavinbunney/kubectl/latest/docs>`_
+    - {{ cookiecutter.terraform_provider_hashicorp_kubectl_version }}
+  * - Terraform Provider `helm <https://registry.terraform.io/providers/hashicorp/helm/latest/docs>`_
+    - {{ cookiecutter.terraform_provider_hashicorp_helm_version }}
   * - Terraform Provider `AWS <https://registry.terraform.io/providers/hashicorp/aws/latest/docs>`_
     - {{ cookiecutter.terraform_provider_hashicorp_aws_version }}
   * - Terraform Provider `Local <https://registry.terraform.io/providers/hashicorp/local/latest/docs>`_
