@@ -60,9 +60,9 @@ Open edX Application Software Endpoints
 Services Endpoints
 ------------------
 
-- **Bastion**: bastion.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}. Public ssh access to a {{ cookiecutter.bastion_instance_type }} Ubuntu 20.04 LTS bastion EC2 instance that's preconfigure with all of the software that you'll need to adminster this stack.
-- **MySQL**: mysql.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}. Private VPC access to your AWS RDS MySQL {{ cookiecutter.mysql_instance_class }} instance with allocated storage of {{ cookiecutter.mysql_allocated_storage }}.
-- **MongoDB**: mongodb.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}. Private VPC access to your EC2-based installation of MongoDB on a {{ cookiecutter.mongodb_instance_type }} instance with allocated storage of {{ cookiecutter.mongodb_allocated_storage }}.
+- **Bastion**: bastion.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}:22. Public ssh access to a {{ cookiecutter.bastion_instance_type }} Ubuntu 20.04 LTS bastion EC2 instance that's preconfigure with all of the software that you'll need to adminster this stack.
+- **MySQL**: mysql.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}:3306. Private VPC access to your AWS RDS MySQL {{ cookiecutter.mysql_instance_class }} instance with allocated storage of {{ cookiecutter.mysql_allocated_storage }}.
+- **MongoDB**: mongodb.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}:27017. Private VPC access to your EC2-based installation of MongoDB on a {{ cookiecutter.mongodb_instance_type }} instance with allocated storage of {{ cookiecutter.mongodb_allocated_storage }}.
 {% if cookiecutter.stack_install_k8s_dashboard|upper == "Y" -%}
 - **Kubernetes Dashboard**: https://dashboard.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}. Dashboard is a web-based Kubernetes user interface. You can use Dashboard to deploy containerized applications to a Kubernetes cluster, troubleshoot your containerized application, and manage the cluster resources. You can use Dashboard to get an overview of applications running on your cluster, as well as for creating or modifying individual Kubernetes resources (such as Deployments, Jobs, DaemonSets, etc). For example, you can scale a Deployment, initiate a rolling update, restart a pod or deploy new applications using a deploy wizard.
 {% endif -%}
