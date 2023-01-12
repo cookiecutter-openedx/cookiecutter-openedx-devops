@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.10] (2023-1-12)
+
+- refactor endpoints for all stack services: mysql, mongodb, redis, grafana, dashboard, kubeapps
+- refactor aws resource tags to format of "cookiecutter/name-of-the-tag"
+- enhance Terragrunt stack dependency tree
+
 ## [1.0.9] (2023-1-11)
 
 - refactor Prometheus into its own module

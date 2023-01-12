@@ -73,6 +73,6 @@ variable "tags" {
   default     = {}
 }
 
-variable "root_domain" {
+variable "services_subdomain" {
   type = string
 }

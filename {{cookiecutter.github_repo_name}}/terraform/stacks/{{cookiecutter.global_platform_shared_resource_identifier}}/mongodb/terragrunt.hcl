@@ -15,14 +15,13 @@ locals {
   mongodb_instance_type     = local.stack_vars.locals.mongodb_instance_type
   mongodb_allocated_storage = local.stack_vars.locals.mongodb_allocated_storage
   platform_name             = local.global_vars.locals.platform_name
-  root_domain               = local.global_vars.locals.root_domain
+  services_subdomain        = local.global_vars.locals.services_subdomain
   aws_region                = local.global_vars.locals.aws_region
   resource_name             = "${local.stack_namespace}-mongodb"
 
   tags = merge(
     local.stack_vars.locals.tags,
-    local.global_vars.locals.tags,
-    { Name = local.resource_name }
+    { "cookiecutter/name" = local.resource_name }
   )
 
 }
@@ -112,7 +111,7 @@ include {
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
   platform_name         = local.platform_name
-  root_domain           = local.root_domain
+  services_subdomain    = local.services_subdomain
   aws_region            = local.aws_region
   stack_namespace       = local.stack_namespace
   resource_name         = local.resource_name

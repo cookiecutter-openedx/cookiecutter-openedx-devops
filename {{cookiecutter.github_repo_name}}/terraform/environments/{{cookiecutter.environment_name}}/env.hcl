@@ -9,6 +9,7 @@
 #------------------------------------------------------------------------------
 locals {
   global_vars = read_terragrunt_config(find_in_parent_folders("global.hcl"))
+  stacks_vars = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
 
   environment               = "{{ cookiecutter.environment_name }}"
   environment_subdomain     = "{{ cookiecutter.environment_subdomain }}"
@@ -20,8 +21,10 @@ locals {
   # AWS instance sizing
   redis_node_type      = "{{ cookiecutter.redis_node_type }}"
 
-  tags = {
-    Environment = local.environment
-  }
-
+  tags = merge(
+    local.stacks_vars.locals.tags,
+    {
+      cookiecutter/environment = local.environment
+    }
+  )
 }

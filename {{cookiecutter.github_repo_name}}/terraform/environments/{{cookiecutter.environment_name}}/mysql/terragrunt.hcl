@@ -8,8 +8,8 @@
 #------------------------------------------------------------------------------
 locals {
   # Automatically load environment-level variables
-  environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
+  environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
 
   resource_name             = local.environment_vars.locals.shared_resource_namespace
   environment_domain        = local.environment_vars.locals.environment_domain

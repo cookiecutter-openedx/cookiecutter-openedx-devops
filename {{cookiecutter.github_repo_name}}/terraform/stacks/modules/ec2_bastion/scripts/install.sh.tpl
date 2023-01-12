@@ -36,7 +36,7 @@ sudo passwd ubuntu
 
 sudo apt update && sudo apt upgrade -y
 
-{% if cookiecutter.stack_add_bastion_openedx_dev_environment == "Y" -%}
+{% if cookiecutter.stack_add_bastion_openedx_dev_environment|upper == "Y" -%}
 ./install-openedx-venv.sh
 {% endif -%}
 
@@ -51,7 +51,7 @@ sudo snap install yq
 pip install --upgrade pyyaml
 pip install "tutor[full]"
 
-{% if cookiecutter.stack_add_bastion_openedx_dev_environment == "Y" -%}
+{% if cookiecutter.stack_add_bastion_openedx_dev_environment|upper == "Y" -%}
 ./tutor-enable-automount.sh
 {% endif -%}
 

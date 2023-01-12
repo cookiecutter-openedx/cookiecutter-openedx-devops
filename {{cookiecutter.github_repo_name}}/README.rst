@@ -47,29 +47,31 @@ Tutor Open edX Production Devops Tools
 This repository contains Terraform code and Github Actions workflows to deploy and manage a `Tutor <https://docs.tutor.overhang.io/>`_ Kubernetes-managed
 production installation of Open edX that will automatically scale up, reliably supporting several hundred thousand learners.
 
-**NEW IN VERSION 1.0.2: SPOT PRICING FOR EC2 INSTANCES** Save up to 75% off the cost of on-demand EC2 instances by using AWS' flexible `spot-pricing <https://aws.amazon.com/ec2/spot/pricing/>`_ .
+Open edX Application Software Endpoints
+---------------------------------------
 
-**NEW IN VERSION 1.0.3:** an optional fully-configured remote MongoDB server running on an EC2 instance. Set cookiecutter.stack_add_remote_mongodb=Y to choose this option.
+- LMS: https://{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
+- Course Management Studio: https://{{ cookiecutter.environment_studio_subdomain }}.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
+- **Content Delivery Network (CDN)**: https://cdn.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }} linked to a public read-only S3 bucket named {{ cookiecutter.environment_subdomain }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-storage
+- **AWS S3 Backups**: https://s3.console.aws.amazon.com/s3/buckets/{{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-backup.
+- **AWS S3 Storage**: https://s3.console.aws.amazon.com/s3/buckets/{{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-storage.
+- **AWS S3 Secrets**: https://s3.console.aws.amazon.com/s3/buckets/{{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-secrets.
 
-**NEW IN VERSION 1.0.5:** Kubernetes upgrade to 1.24, plus a new adminstrative server with all of the preinstalled software that you'll need to administer your Open edX platform. Set cookiecutter.stack_add_bastion=Y to choose this option.
+Services Endpoints
+------------------
 
-**NEW IN VERSION 1.0.8:** `Kubernetes Dashboard <https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/>`_ and `Kubeapps <https://kubeapps.dev/>`_ web applications.
-
-The Terraform scripts in this repo provide a 1-click means of creating / updating / destroying the following for each environment:
-
-- LMS at https://{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
-- CMS at https://{{ cookiecutter.environment_studio_subdomain }}.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
-- CDN at https://cdn.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }} linked to a public read-only S3 bucket named {{ cookiecutter.environment_subdomain }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-storage
-- public ssh access via a t2.micro Ubuntu 20.04 LTS bastion EC2 instance at bastion.{{ cookiecutter.global_root_domain }}
-- private vpc access to MySQL instance at mysql.{{ cookiecutter.global_root_domain }}
-- private vpc access to MongoDB instance at mongodb.{{ cookiecutter.global_root_domain }}
-- daily data backups archived into a private S3 bucket named {{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-mongodb-backup
-
-The following adminstrative urls were automatically created:
-
-- Kubernetes Dashboard - https://dashboard.{{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}
-- Kubeapps  - https://kubeapps.{{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}
-- Grafana - https://grafana.{{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}
+- **Bastion**: bastion.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}. Public ssh access to a {{ cookiecutter.bastion_instance_type }} Ubuntu 20.04 LTS bastion EC2 instance that's preconfigure with all of the software that you'll need to adminster this stack.
+- **MySQL**: mysql.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}. Private VPC access to your AWS RDS MySQL {{ cookiecutter.mysql_instance_class }} instance with allocated storage of {{ cookiecutter.mysql_allocated_storage }}.
+- **MongoDB**: mongodb.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}. Private VPC access to your EC2-based installation of MongoDB on a {{ cookiecutter.mongodb_instance_type }} instance with allocated storage of {{ cookiecutter.mongodb_allocated_storage }}.
+{% if cookiecutter.stack_install_k8s_dashboard|upper == "Y" -%}
+- **Kubernetes Dashboard**: https://dashboard.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}. Dashboard is a web-based Kubernetes user interface. You can use Dashboard to deploy containerized applications to a Kubernetes cluster, troubleshoot your containerized application, and manage the cluster resources. You can use Dashboard to get an overview of applications running on your cluster, as well as for creating or modifying individual Kubernetes resources (such as Deployments, Jobs, DaemonSets, etc). For example, you can scale a Deployment, initiate a rolling update, restart a pod or deploy new applications using a deploy wizard.
+{% endif -%}
+{% if cookiecutter.stack_install_k8s_kubeapps|upper == "Y" -%}
+- **Kubeapps**: https://kubeapps.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}. Kubeapps is an in-cluster web-based application that enables users with a one-time installation to deploy, manage, and upgrade applications on a Kubernetes cluster
+{% endif -%}
+{% if cookiecutter.stack_install_k8s_prometheus|upper == "Y" -%}
+- **Grafana**: https://grafana.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}. Grafana is a multi-platform open source analytics and interactive visualization web application. It provides charts, graphs, and alerts for the web when connected to supported data sources.
+{% endif -%}
 
 You can also optionally automatically create additional environments for say, dev and test and QA and so forth.
 These would result in environments like the following:
@@ -79,8 +81,20 @@ These would result in environments like the following:
 - CDN at https://cdn.dev.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }} linked to an S3 bucket named dev-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-storage
 - daily data backups archived into an S3 bucket named dev-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-mongodb-backup
 
+New Features
+------------
+
+**NEW IN VERSION 1.0.2: SPOT PRICING FOR EC2 INSTANCES** Save up to 75% off the cost of on-demand EC2 instances by using AWS' flexible `spot-pricing <https://aws.amazon.com/ec2/spot/pricing/>`_ .
+
+**NEW IN VERSION 1.0.3:** an optional fully-configured remote MongoDB server running on an EC2 instance. Set cookiecutter.stack_add_remote_mongodb=Y to choose this option.
+
+**NEW IN VERSION 1.0.5:** Kubernetes upgrade to 1.24, plus a new adminstrative server with all of the preinstalled software that you'll need to administer your Open edX platform. Set cookiecutter.stack_add_bastion=Y to choose this option.
+
+**NEW IN VERSION 1.0.8:** `Kubernetes Dashboard <https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/>`_ and `Kubeapps <https://kubeapps.dev/>`_ web applications.
+
+
 Cookiecutter Manifest
-------------------------
+---------------------
 
 This repository was generated using `Cookiecutter <https://cookiecutter.readthedocs.io/>`_. Keep your repository up to date with the latest Terraform code and configuration versions of the Open edX application stack, AWS infrastructure services and api code libraries by occasionally re-generating the Cookiecutter template using this `make file <./make.sh>`_.
 
@@ -100,33 +114,33 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
     - {{ cookiecutter.ci_build_tutor_version }}
   * - `Tutor Plugin: Object storage for Open edX with S3 <https://github.com/hastexo/tutor-contrib-s3>`_
     - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_s3_version }}
-  {% if cookiecutter.ci_deploy_install_backup_plugin == "Y" -%}
+  {% if cookiecutter.ci_deploy_install_backup_plugin|upper == "Y" -%}
   * - `Tutor Plugin: Backup & Restore <https://github.com/hastexo/tutor-contrib-backup>`_
     - {{ cookiecutter.ci_openedx_actions_tutor_plugin_build_backup_version }}
   {% endif -%}
-  {% if cookiecutter.ci_deploy_install_credentials_server == "Y" -%}
+  {% if cookiecutter.ci_deploy_install_credentials_server|upper == "Y" -%}
   * - `Tutor Plugin: Credentials Application <https://github.com/lpm0073/tutor-contrib-credentials>`_
     - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_credentials_version }}
   {% endif -%}
   * - `Tutor Plugin: Discovery Service <https://github.com/overhangio/tutor-discovery>`_
     - latest stable
-  {% if cookiecutter.ci_deploy_install_mfe_service == "Y" -%}
+  {% if cookiecutter.ci_deploy_install_mfe_service|upper == "Y" -%}
   * - `Tutor Plugin: Micro Front-end Service <https://github.com/overhangio/tutor-mfe>`_
     - latest stable
   {% endif -%}
-  {% if cookiecutter.ci_deploy_install_ecommerce_service == "Y" -%}
+  {% if cookiecutter.ci_deploy_install_ecommerce_service|upper == "Y" -%}
   * - `Tutor Plugin: Ecommerce Service <https://github.com/overhangio/tutor-ecommerce>`_
     - latest stable
   {% endif -%}
-  {% if cookiecutter.ci_deploy_install_xqueue_service == "Y" -%}
+  {% if cookiecutter.ci_deploy_install_xqueue_service|upper == "Y" -%}
   * - `Tutor Plugin: Xqueue Service <https://github.com/overhangio/tutor-xqueue>`_
     - latest stable
   {% endif -%}
-  {% if cookiecutter.ci_deploy_install_notes_service == "Y" -%}
+  {% if cookiecutter.ci_deploy_install_notes_service|upper == "Y" -%}
   * - `Tutor Plugin: Notes Service <https://github.com/overhangio/tutor-notes>`_
     - latest stable
   {% endif -%}
-  {% if cookiecutter.ci_deploy_install_forum_service == "Y" -%}
+  {% if cookiecutter.ci_deploy_install_forum_service|upper == "Y" -%}
   * - `Tutor Plugin: Discussion Forum Service <https://github.com/overhangio/tutor-forum>`_
     - latest stable
   {% endif -%}
@@ -357,9 +371,9 @@ V. Manage your new Kubernetes cluster
 Installs four of the most popular web applications:
 
 - `k9s <https://k9scli.io/>`_, preinstalled in the optional EC2 Bastion server. K9s is an amazing retro styled, ascii-based UI for viewing and monitoring all aspects of your Kubernetes cluster. It looks and runs great from any ssh-connected terminal window.
-- `Kubernetes Dashboard <https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/>`_ at https://dashboard.{{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}. Written by the same team that maintain Kubernetes, Kubernetes Dashboard provides an elegant web UI for monitoring and administering your kubernetes cluster.
-- `Kubeapps <https://kubeapps.dev/>`_ at https://kubeapps.{{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}. Maintained by VMWare Bitnami, Kubeapps is the easiest way to install popular open source software packages from MySQL and MongoDB to Wordpress and Drupal.
-- `Grafana <https://grafana.com/>`_ at https://grafana.{{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}/login. Provides an elegant web UI to view time series data gathered by prometheus and metrics-server.
+- `Kubernetes Dashboard <https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/>`_ at https://dashboard.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}. Written by the same team that maintain Kubernetes, Kubernetes Dashboard provides an elegant web UI for monitoring and administering your kubernetes cluster.
+- `Kubeapps <https://kubeapps.dev/>`_ at https://kubeapps.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}. Maintained by VMWare Bitnami, Kubeapps is the easiest way to install popular open source software packages from MySQL and MongoDB to Wordpress and Drupal.
+- `Grafana <https://grafana.com/>`_ at https://grafana.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}/login. Provides an elegant web UI to view time series data gathered by prometheus and metrics-server.
   - user: admin
   - pwd: prom-operator
 

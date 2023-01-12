@@ -8,8 +8,8 @@
 #------------------------------------------------------------------------------
 locals {
   # Automatically load environment-level variables
-  environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
+  environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
 
   # Extract out common variables for reuse
   kubernetes_name       = local.environment_vars.locals.shared_resource_namespace
@@ -21,7 +21,6 @@ locals {
 
   tags = merge(
     local.environment_vars.locals.tags,
-    local.global_vars.locals.tags,
     { Name = "${local.environment_vars.locals.environment_namespace}" }
   )
 

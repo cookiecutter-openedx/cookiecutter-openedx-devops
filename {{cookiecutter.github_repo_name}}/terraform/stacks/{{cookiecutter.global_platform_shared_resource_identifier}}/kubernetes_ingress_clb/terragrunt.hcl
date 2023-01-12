@@ -14,7 +14,7 @@ locals {
   stack_namespace = local.stack_vars.locals.stack_namespace
   namespace       = "kube-system"
   root_domain     = local.global_vars.locals.root_domain
-  admin_domain    = local.global_vars.locals.admin_domain
+  services_subdomain    = local.global_vars.locals.services_subdomain
 }
 
 dependencies {
@@ -78,5 +78,5 @@ inputs = {
   namespace       = local.namespace
   stack_namespace = local.stack_namespace
   root_domain     = local.root_domain
-  admin_domain    = local.admin_domain
+  services_subdomain    = local.services_subdomain
 }

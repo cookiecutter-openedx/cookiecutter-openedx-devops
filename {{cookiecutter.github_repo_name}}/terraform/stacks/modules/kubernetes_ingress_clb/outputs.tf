@@ -8,7 +8,7 @@
 #------------------------------------------------------------------------------
 
 
-output "cluster_arn" {
-  description = "the AWS Route53 wildcard DNS record ID"
-  value       = aws_route53_record.root_wildcard.id
+output "ingress_nginx_controller_id" {
+  description = "the ID of the ingress controller"
+  value       = helm_release.ingress_nginx_controller.id
 }

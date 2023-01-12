@@ -18,7 +18,7 @@ variable "stack_namespace" {
   type = string
 }
 
-variable "admin_domain" {
+variable "services_subdomain" {
   type = string
 }
 variable "tags" {

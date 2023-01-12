@@ -8,12 +8,17 @@
 #------------------------------------------------------------------------------
 locals {
   # Automatically load environment-level variables
-  environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
+  environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
 
   resource_name = local.environment_vars.locals.shared_resource_namespace
   environment_name = local.environment_vars.locals.environment
   environment_namespace = local.environment_vars.locals.environment_namespace
+
+  tags = merge(
+    local.environment_vars.locals.tags,
+    { Name = "${local.environment_namespace}-eks" }
+  )
 }
 
 dependencies {
@@ -52,7 +57,8 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  environment_name = local.environment_name
-  resource_name = local.resource_name
+  environment_name      = local.environment_name
+  resource_name         = local.resource_name
   environment_namespace = local.environment_namespace
+  tags                  = local.tags
 }

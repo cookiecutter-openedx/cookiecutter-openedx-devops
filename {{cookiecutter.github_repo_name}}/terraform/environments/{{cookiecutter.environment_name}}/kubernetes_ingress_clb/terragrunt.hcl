@@ -8,13 +8,13 @@
 #------------------------------------------------------------------------------
 locals {
   # Automatically load environment-level variables
-  environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
+  environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
 
   # Extract out common variables for reuse
   shared_resource_namespace       = local.global_vars.locals.shared_resource_namespace
   root_domain                     = local.global_vars.locals.root_domain
-  admin_domain                    = local.global_vars.locals.admin_domain
+  services_subdomain                    = local.global_vars.locals.services_subdomain
   platform_name                   = local.global_vars.locals.platform_name
   platform_region                 = local.global_vars.locals.platform_region
   account_id                      = local.global_vars.locals.account_id
@@ -24,7 +24,6 @@ locals {
 
   tags = merge(
     local.environment_vars.locals.tags,
-    local.global_vars.locals.tags,
     { Name = "${local.environment_namespace}-eks-ingress" }
   )
 }

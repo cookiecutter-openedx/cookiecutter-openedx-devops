@@ -21,7 +21,6 @@ locals {
 
   tags = merge(
     local.environment_vars.locals.tags,
-    local.global_vars.locals.tags,
     { Name = "${local.resource_name}" }
   )
 
