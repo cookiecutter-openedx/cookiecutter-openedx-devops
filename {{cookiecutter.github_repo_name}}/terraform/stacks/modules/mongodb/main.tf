@@ -22,7 +22,7 @@
 #------------------------------------------------------------------------------
 locals {
   ssh_private_key_filename = "${var.stack_namespace}-mongodb.pem"
-  host_name                = "mongodb.${var.root_domain}"
+  host_name                = "mongodb.${var.services_subdomain}"
 }
 
 # create the MongoDB instance and install configuration files.
