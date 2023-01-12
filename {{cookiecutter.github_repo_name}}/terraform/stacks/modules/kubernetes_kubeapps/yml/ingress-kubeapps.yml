@@ -11,10 +11,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - "*.{{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}"
-    secretName: {{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}-tls
+    - "*.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}"
+    secretName: {{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}-tls
   rules:
-  - host: kubeapps.{{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}
+  - host: kubeapps.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}
     http:
       paths:
       - path: /

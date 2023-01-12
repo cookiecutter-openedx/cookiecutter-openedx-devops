@@ -13,14 +13,17 @@ locals {
   shared_resource_identifier = "{{ cookiecutter.global_platform_shared_resource_identifier }}"
   shared_resource_namespace  = "{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.global_platform_shared_resource_identifier }}"
   root_domain                = "{{ cookiecutter.global_root_domain }}"
-  admin_domain               = "{{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}"
+  services_subdomain         = "{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}"
   aws_region                 = "{{ cookiecutter.global_aws_region }}"
   account_id                 = "{{ cookiecutter.global_account_id }}"
 
   tags = {
-    Platform        = local.platform_name
-    Platform-Region = local.platform_region
-    Terraform       = "true"
+    Platform                    = local.platform_name
+    Platform-Region             = local.platform_region
+    Shared-Resource-Identifier  = local.shared_resource_identifier
+    Root-Domain                 = local.root_domain
+    Services-Domain             = local.services_subdomain
+    Terraform                   = "true"
   }
 
 }

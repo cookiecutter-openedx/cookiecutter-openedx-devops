@@ -11,8 +11,8 @@
 #       helm repo add jetstack https://charts.jetstack.io
 #       helm repo update
 #------------------------------------------------------------------------------
-data "aws_route53_zone" "admin_domain" {
-  name = var.admin_domain
+data "aws_route53_zone" "services_subdomain" {
+  name = var.services_subdomain
 }
 
 resource "aws_iam_policy" "cert_manager_policy" {
@@ -102,7 +102,7 @@ data "template_file" "cluster-issuer" {
   vars = {
     namespace      = var.namespace
     aws_region     = var.aws_region
-    hosted_zone_id = data.aws_route53_zone.admin_domain.id
+    hosted_zone_id = data.aws_route53_zone.services_subdomain.id
   }
 }
 

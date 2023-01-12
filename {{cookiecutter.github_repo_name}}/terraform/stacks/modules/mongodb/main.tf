@@ -251,10 +251,6 @@ resource "aws_volume_attachment" "mongodb" {
 }
 
 
-data "aws_route53_zone" "stack" {
-  name = var.root_domain
-}
-
 # Ubuntu 20.04 LTS AMI
 # see: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami_ids
 #
@@ -345,26 +341,6 @@ resource "aws_key_pair" "mongodb" {
   public_key = tls_private_key.mongodb.public_key_openssh
 }
 
-resource "kubernetes_secret" "ssh_secret" {
-  metadata {
-    name      = "mongodb-ssh-key"
-    namespace = var.stack_namespace
-  }
-
-  data = {
-    HOST            = aws_route53_record.mongodb.name
-    USER            = "ubuntu"
-    PRIVATE_KEY_PEM = tls_private_key.mongodb.private_key_pem
-  }
-}
-
-resource "aws_route53_record" "mongodb" {
-  zone_id = data.aws_route53_zone.stack.id
-  name    = local.host_name
-  type    = "A"
-  ttl     = "600"
-  records = [aws_instance.mongodb.private_ip]
-}
 
 
 resource "random_password" "mongodb_admin" {
@@ -376,24 +352,6 @@ resource "random_password" "mongodb_admin" {
   }
 }
 
-resource "kubernetes_secret" "mongodb_admin" {
-  metadata {
-    name      = "mongodb-admin"
-    namespace = var.stack_namespace
-  }
-
-  data = {
-    MONGODB_ADMIN_USERNAME = "${var.username}"
-    MONGODB_ADMIN_PASSWORD = random_password.mongodb_admin.result
-    MONGODB_HOST           = aws_route53_record.mongodb.name
-    MONGODB_PORT           = "${var.port}"
-  }
-
-  depends_on = [
-    random_password.mongodb_admin,
-    aws_route53_record.mongodb
-  ]
-}
 
 # Create an IAM user with a key/secret to use with the aws cli.
 # Then create handles to template files for the aws cli configuration

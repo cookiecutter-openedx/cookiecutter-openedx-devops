@@ -6,13 +6,6 @@
 #
 # usage: create an RDS MySQL instance.
 #------------------------------------------------------------------------------
-locals {
-  host_name = "mysql.${var.root_domain}"
-}
-
-data "aws_route53_zone" "stack" {
-  name = var.root_domain
-}
 
 resource "aws_db_subnet_group" "mysql_subnet_group" {
   name       = "mysql_subnet_group"
@@ -120,12 +113,4 @@ module "db" {
   monitoring_interval                   = var.monitoring_interval
   parameters                            = var.parameters
   tags                                  = var.tags
-}
-
-resource "aws_route53_record" "mysql" {
-  zone_id = data.aws_route53_zone.stack.id
-  name    = local.host_name
-  type    = "CNAME"
-  ttl     = "600"
-  records = [module.db.db_instance_address]
 }

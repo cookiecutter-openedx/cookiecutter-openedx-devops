@@ -61,7 +61,7 @@ variable "resource_name" {
   type = string
 }
 
-variable "root_domain" {
+variable "services_subdomain" {
   type = string
 }
 

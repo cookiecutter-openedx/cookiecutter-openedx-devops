@@ -6,8 +6,8 @@
 #
 # usage: create DNS records for EKS cluster load balancer
 #------------------------------------------------------------------------------
-data "aws_route53_zone" "admin_domain" {
-  name = var.admin_domain
+data "aws_route53_zone" "services_subdomain" {
+  name = var.services_subdomain
 }
 # to-do: remove this declaration and refactor references below from
 # data.kubernetes_service.ingress_nginx_controller to
@@ -61,8 +61,8 @@ resource "aws_route53_record" "root_wildcard" {
 # -------------------------------------------------------------------------------------
 
 resource "aws_route53_record" "admin_naked" {
-  zone_id = data.aws_route53_zone.admin_domain.id
-  name    = var.admin_domain
+  zone_id = data.aws_route53_zone.services_subdomain.id
+  name    = var.services_subdomain
   type    = "A"
 
   alias {
@@ -73,8 +73,8 @@ resource "aws_route53_record" "admin_naked" {
 }
 
 resource "aws_route53_record" "admin_wildcard" {
-  zone_id = data.aws_route53_zone.admin_domain.id
-  name    = "*.${var.admin_domain}"
+  zone_id = data.aws_route53_zone.services_subdomain.id
+  name    = "*.${var.services_subdomain}"
   type    = "A"
 
   alias {

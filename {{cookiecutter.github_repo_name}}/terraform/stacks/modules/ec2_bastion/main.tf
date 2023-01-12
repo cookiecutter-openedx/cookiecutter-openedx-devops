@@ -190,9 +190,6 @@ resource "aws_instance" "bastion" {
 #                        SUPPORTING RESOURCES
 #------------------------------------------------------------------------------
 
-data "aws_route53_zone" "stack" {
-  name = var.root_domain
-}
 
 # Ubuntu 20.04 LTS AMI
 # see: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami_ids
@@ -267,15 +264,6 @@ resource "aws_eip" "elasticip" {
   tags     = var.tags
 }
 
-resource "aws_route53_record" "bastion" {
-  zone_id = data.aws_route53_zone.stack.id
-  name    = "bastion.${var.root_domain}"
-  type    = "A"
-  ttl     = "600"
-
-
-  records = [aws_eip.elasticip.public_ip]
-}
 
 # private ssh key for public access to the bastion.
 # we'll store this in kubernetes secrets so that we have

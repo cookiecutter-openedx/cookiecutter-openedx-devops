@@ -12,10 +12,10 @@ kind: Certificate
 metadata:
   name: le-crt
 spec:
-  secretName: {{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}-tls
+  secretName: {{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}-tls
   issuerRef:
     kind: ClusterIssuer
     name: letsencrypt
-  commonName: {{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}
+  commonName: {{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}
   dnsNames:
-    - "*.{{ cookiecutter.global_admin_subdomain }}.{{ cookiecutter.global_root_domain }}"
+    - "*.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}"

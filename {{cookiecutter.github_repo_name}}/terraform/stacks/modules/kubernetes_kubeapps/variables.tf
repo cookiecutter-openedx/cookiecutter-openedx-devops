@@ -7,7 +7,7 @@
 # usage: create an EKS cluster
 #------------------------------------------------------------------------------
 
-variable "admin_domain" {
+variable "services_subdomain" {
   type = string
 
 }

@@ -91,7 +91,7 @@ variable "public_subnet_tags" {
   default     = {}
 }
 
-variable "admin_domain" {
+variable "services_subdomain" {
   type = string
 }
 

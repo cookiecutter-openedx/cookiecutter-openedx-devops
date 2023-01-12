@@ -13,7 +13,7 @@ locals {
 
   # Extract out common variables for reuse
   stack_namespace       = local.stack_vars.locals.stack_namespace
-  admin_domain          = local.global_vars.locals.admin_domain
+  services_subdomain          = local.global_vars.locals.services_subdomain
 
   tags = merge(
     local.stack_vars.locals.tags,
@@ -95,7 +95,7 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  admin_domain    = local.admin_domain
+  services_subdomain    = local.services_subdomain
   stack_namespace = local.stack_namespace
   tags = local.tags
 }
