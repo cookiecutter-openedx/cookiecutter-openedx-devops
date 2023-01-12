@@ -9,7 +9,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - refactor endpoints for all stack services: mysql, mongodb, redis, grafana, dashboard, kubeapps
 - refactor aws resource tags to format of "cookiecutter/name-of-the-tag"
+- rename Cookiecutter default global_platform_shared_resource_identifier=service
+- move VPA manifest for metrics-server to kubernetes_vpa, since its a dependency
+- pin each EKS Add-On version
 - enhance Terragrunt stack dependency tree
+- remove nginx ingress CLB DNS records from root domain
 
 ## [1.0.9] (2023-1-11)
 
