@@ -8,7 +8,7 @@
     "global_platform_description": "Your School",
     "global_platform_logo_url": "https://www.edx.org/images/logos/edx-logo-elm.svg",
     "global_platform_region": "global",
-    "global_platform_shared_resource_identifier": "live",
+    "global_platform_shared_resource_identifier": "service",
     "global_services_subdomain": "{{ cookiecutter.global_platform_shared_resource_identifier|lower|replace(' ', '-') }}",
     "global_root_domain": "{{ cookiecutter.global_platform_name|lower|replace(' ', '-') }}.edu",
     "global_aws_route53_hosted_zone_id": "Z1234567ABCDE1U23DEF",
