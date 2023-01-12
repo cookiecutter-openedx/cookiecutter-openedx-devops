@@ -180,6 +180,58 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
     - {{ cookiecutter.terraform_helm_metrics_server }}
   * - `Helm Prometheus <https://prometheus-community.github.io/helm-charts/>`_
     - {{ cookiecutter.terraform_helm_prometheus }}
+  * - `openedx-actions/tutor-k8s-init <https://github.com/marketplace/actions/open-edx-tutor-k8s-init>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_k8s_init_version }}
+  * - `openedx-actions/tutor-k8s-configure-edx-secret <https://github.com/openedx-actions/tutor-k8s-configure-edx-secret>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_edx_secret_version }}
+  * - `openedx-actions/tutor-k8s-configure-edx-admin <https://github.com/openedx-actions/tutor-k8s-configure-edx-admin>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_edx_admin }}
+  * - `openedx-actions/tutor-k8s-configure-jwt <https://github.com/openedx-actions/tutor-k8s-configure-jwt>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_jwt_version }}
+  * - `openedx-actions/tutor-k8s-configure-mysql <https://github.com/openedx-actions/tutor-k8s-configure-mysql>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_mysql_version }}
+  * - `openedx-actions/tutor-k8s-configure-mongodb <https://github.com/openedx-actions/tutor-k8s-configure-mongodb>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_mongodb_version }}
+  * - `openedx-actions/tutor-k8s-configure-redis <https://github.com/openedx-actions/tutor-k8s-configure-redis>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_redis_version }}
+  * - `openedx-actions/tutor-k8s-configure-smtp <https://github.com/openedx-actions/tutor-k8s-configure-smtp>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_smtp_version }}
+  * - `openedx-actions/tutor-print-dump <https://github.com/openedx-actions/tutor-print-dump>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_print_dump }}
+  * - `openedx-actions/tutor-plugin-build-backup <https://github.com/openedx-actions/tutor-plugin-build-backup>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_build_backup_version }}
+  * - `openedx-actions/tutor-plugin-build-credentials <https://github.com/openedx-actions/tutor-plugin-build-credentials>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_build_credentials_version }}
+  * - `openedx-actions/tutor-plugin-build-license-manager <https://github.com/openedx-actions/tutor-plugin-build-license-manager>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_build_license_manager_version }}
+  * - `openedx-actions/tutor-plugin-build-openedx <https://github.com/openedx-actions/tutor-plugin-build-openedx>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_build_openedx_version }}
+  * - `openedx-actions/tutor-plugin-build-openedx-add-requirement <https://github.com/openedx-actions/tutor-plugin-build-openedx-add-requirement>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_build_openedx_add_requirement_version }}
+  * - `openedx-actions/tutor-plugin-build-openedx-add-theme <https://github.com/openedx-actions/tutor-plugin-build-openedx-add-theme>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_build_openedx_add_theme_version }}
+  * - `openedx-actions/tutor-plugin-configure-courseware-mfe <https://github.com/openedx-actions/tutor-plugin-configure-courseware-mfe>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_configure_courseware_mfe_version }}
+  * - `openedx-actions/tutor-plugin-enable-backup <https://github.com/openedx-actions/tutor-plugin-enable-backup>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_backup_version }}
+  * - `openedx-actions/tutor-plugin-enable-credentials <https://github.com/openedx-actions/tutor-plugin-enable-credentials>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_credentials_version }}
+  * - `openedx-actions/tutor-plugin-enable-discovery <https://github.com/openedx-actions/tutor-plugin-enable-discovery>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_discovery_version }}
+  * - `openedx-actions/tutor-plugin-enable-ecommerce <https://github.com/openedx-actions/tutor-plugin-enable-ecommerce>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_ecommerce_version }}
+  * - `openedx-actions/tutor-plugin-enable-forum <https://github.com/openedx-actions/tutor-plugin-enable-forum>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_forum_version }}
+  * - `openedx-actions/tutor-plugin-enable-k8s-deploy-tasks <https://github.com/openedx-actions/tutor-plugin-enable-k8s-deploy-tasks>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_k8s_deploy_tasks_version }}
+  * - `openedx-actions/tutor-enable-plugin-license-manager <https://github.com/openedx-actions/tutor-enable-plugin-license-manager>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_license_manager_version }}
+  * - `openedx-actions/tutor-plugin-enable-notes <https://github.com/openedx-actions/tutor-plugin-enable-notes>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_notes_version }}
+  * - `openedx-actions/tutor-plugin-enable-s3 <https://github.com/openedx-actions/tutor-plugin-enable-s3>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_s3_version }}
+  * - `openedx-actions/tutor-plugin-enable-xqueue <https://github.com/openedx-actions/tutor-plugin-enable-xqueue>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_xqueue_version }}
 
 
 Important Considerations
