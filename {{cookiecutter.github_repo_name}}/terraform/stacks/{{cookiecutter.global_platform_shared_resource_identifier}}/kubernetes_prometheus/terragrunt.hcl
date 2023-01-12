@@ -27,6 +27,7 @@ dependencies {
     "../kubernetes",
     "../kubernetes_metricsserver",
     "../kubernetes_vpa",
+    "../kubernetes_ingress_clb",
     ]
 }
 
@@ -61,6 +62,17 @@ dependency "kubernetes" {
 
 dependency "kubernetes_metricsserver" {
   config_path = "../kubernetes_metricsserver"
+
+  # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
+  # module hasn't been applied yet.
+  mock_outputs_allowed_terraform_commands = ["init", "validate", "plan", "destroy"]
+  mock_outputs = {
+  }
+
+}
+
+dependency "kubernetes_ingress_clb" {
+  config_path = "../kubernetes_ingress_clb"
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
