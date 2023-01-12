@@ -10,7 +10,6 @@ locals {
   # Automatically load stack-level variables
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
   stack_vars = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
-  environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
 
   services_subdomain            = local.global_vars.locals.services_subdomain
   resource_name           = local.stack_vars.locals.stack_namespace
@@ -18,7 +17,7 @@ locals {
   mysql_allocated_storage = local.stack_vars.locals.mysql_allocated_storage
 
   tags = merge(
-    local.environment_vars.locals.tags,
+    local.stack_vars.locals.tags,
     { "cookiecutter/name" = "${local.resource_name}" }
   )
 
