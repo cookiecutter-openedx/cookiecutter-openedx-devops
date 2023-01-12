@@ -18,12 +18,12 @@ locals {
   account_id                 = "{{ cookiecutter.global_account_id }}"
 
   tags = {
-    cookiecutter/platform_name                = local.platform_name
-    cookiecutter/platform_region              = local.platform_region
-    cookiecutter/shared_resource_identifier   = local.shared_resource_identifier
-    cookiecutter/root_domain                  = local.root_domain
-    cookiecutter/services_subdomain           = local.services_subdomain
-    cookiecutter/terraform                    = "true"
+    "cookiecutter/platform_name"                = local.platform_name
+    "cookiecutter/platform_region"              = local.platform_region
+    "cookiecutter/shared_resource_identifier"   = local.shared_resource_identifier
+    "cookiecutter/root_domain"                  = local.root_domain
+    "cookiecutter/services_subdomain"           = local.services_subdomain
+    "cookiecutter/terraform"                    = "true"
   }
 
 }

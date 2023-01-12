@@ -51,8 +51,8 @@ locals {
   tags = merge(
     local.global_vars.locals.tags,
     {
-      cookiecutter/stack             = local.stack
-      cookiecutter/stack_namespace   = local.stack_namespace
+      "cookiecutter/stack"             = local.stack
+      "cookiecutter/stack_namespace"   = local.stack_namespace
     }
   )
 }

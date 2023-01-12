@@ -32,7 +32,7 @@ locals {
 
   tags = merge(
     local.stack_vars.locals.tags,
-    { cookiecutter/name = "${local.namespace}-eks" }
+    { "cookiecutter/name" = "${local.namespace}-eks" }
   )
 }
 
