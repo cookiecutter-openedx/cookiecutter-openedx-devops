@@ -10,5 +10,5 @@ resource "aws_route53_record" "bastion" {
   ttl     = "600"
 
 
-  records = [aws_eip.elasticip.public_ip]
+  records = [aws_eip.bastion.public_ip]
 }
