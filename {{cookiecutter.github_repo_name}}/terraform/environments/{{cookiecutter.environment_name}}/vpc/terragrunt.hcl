@@ -8,19 +8,16 @@
 #------------------------------------------------------------------------------
 locals {
   # Automatically load environment-level variables
-  env_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
+  environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
 
-  environment_domain = local.env_vars.locals.environment_domain
+  environment_domain = local.environment_vars.locals.environment_domain
   root_domain        = local.global_vars.locals.root_domain
   aws_region         = local.global_vars.locals.aws_region
 
   tags = merge(
-    local.env_vars.locals.tags,
-    local.global_vars.locals.tags,
-    {
-    Namespace = local.env_vars.locals.environment_namespace
-    }
+    local.environment_vars.locals.tags,
+    {}
   )
 }
 
@@ -59,8 +56,8 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  environment_domain = local.environment_domain
-  root_domain        = local.root_domain
-  aws_region         = local.aws_region
-  tags = local.tags
+  environment_domain  = local.environment_domain
+  root_domain         = local.root_domain
+  aws_region          = local.aws_region
+  tags                = local.tags
 }
