@@ -150,11 +150,3 @@ resource "kubectl_manifest" "smtp" {
     kubernetes_namespace.environment_namespace
   ]
 }
-
-resource "kubectl_manifest" "nginx" {
-  yaml_body = data.template_file.vpa-nginx.rendered
-
-  depends_on = [
-    kubernetes_namespace.environment_namespace
-  ]
-}
