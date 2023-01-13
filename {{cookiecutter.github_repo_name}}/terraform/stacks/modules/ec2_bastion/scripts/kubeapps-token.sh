@@ -7,4 +7,4 @@
 #
 # usage:      echo the kubeapp sign-in token to the console
 #--------------------------------------------------------
-kubectl get --namespace kubeapps secret kubeapps-admin -o go-template='{{.data.token | base64decode}}'
+kubectl get --namespace kubeapps secret kubeapps-admin -o go-template='{% raw %}{{.data.token | base64decode}}{% endraw %}'
