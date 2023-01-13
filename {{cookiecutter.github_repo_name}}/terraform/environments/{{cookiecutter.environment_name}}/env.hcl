@@ -9,7 +9,6 @@
 #------------------------------------------------------------------------------
 locals {
   global_vars = read_terragrunt_config(find_in_parent_folders("global.hcl"))
-  stacks_vars = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
 
   environment               = "{{ cookiecutter.environment_name }}"
   environment_subdomain     = "{{ cookiecutter.environment_subdomain }}"
@@ -22,9 +21,13 @@ locals {
   redis_node_type      = "{{ cookiecutter.redis_node_type }}"
 
   tags = merge(
-    local.stacks_vars.locals.tags,
+    local.global_vars.locals.tags,
     {
-      cookiecutter/environment = local.environment
+      "cookiecutter/environment"                = local.environment
+      "cookiecutter/environment_subdomain"      = local.environment_subdomain
+      "cookiecutter/environment_domain"         = local.environment_domain
+      "cookiecutter/environment_namespace"      = local.environment_namespace
+      "cookiecutter/shared_resource_namespace"  = local.shared_resource_namespace
     }
   )
 }
