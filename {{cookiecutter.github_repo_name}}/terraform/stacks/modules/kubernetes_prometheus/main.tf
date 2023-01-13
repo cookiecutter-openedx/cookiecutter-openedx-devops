@@ -51,6 +51,8 @@ resource "helm_release" "prometheus" {
   chart      = "kube-prometheus-stack"
   version    = "{{ cookiecutter.terraform_helm_prometheus }}"
 
+  # changes the password (stored in k8s secret prometheus-grafana) from 'prom-operator'
+  # to our own randomly generated 16-character strong password.
   set {
     name  = "grafana.adminPassword"
     value = random_password.grafana.result
