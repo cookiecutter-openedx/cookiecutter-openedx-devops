@@ -374,8 +374,6 @@ Installs four of the most popular web applications:
 - `Kubernetes Dashboard <https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/>`_ at https://dashboard.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}. Written by the same team that maintain Kubernetes, Kubernetes Dashboard provides an elegant web UI for monitoring and administering your kubernetes cluster.
 - `Kubeapps <https://kubeapps.dev/>`_ at https://kubeapps.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}. Maintained by VMWare Bitnami, Kubeapps is the easiest way to install popular open source software packages from MySQL and MongoDB to Wordpress and Drupal.
 - `Grafana <https://grafana.com/>`_ at https://grafana.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}/login. Provides an elegant web UI to view time series data gathered by prometheus and metrics-server.
-  - user: admin
-  - pwd: prom-operator
 
 VI. Add more Kubernetes admins
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

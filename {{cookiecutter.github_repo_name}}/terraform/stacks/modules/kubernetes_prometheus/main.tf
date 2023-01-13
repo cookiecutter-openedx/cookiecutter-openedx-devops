@@ -34,6 +34,14 @@
 #   kubectl delete crd thanosrulers.monitoring.coreos.com
 #-----------------------------------------------------------
 
+resource "random_password" "grafana" {
+  length  = 16
+  special = false
+  keepers = {
+    version = "1"
+  }
+}
+
 resource "helm_release" "prometheus" {
   namespace        = "prometheus"
   create_namespace = true
@@ -42,6 +50,11 @@ resource "helm_release" "prometheus" {
   repository = "https://prometheus-community.github.io/helm-charts"
   chart      = "kube-prometheus-stack"
   version    = "{{ cookiecutter.terraform_helm_prometheus }}"
+
+  set {
+    name  = "grafana.adminPassword"
+    value = random_password.grafana.result
+  }
 
   # un-comment to include a yaml manifest with configuration overrides.
   # To generate a yaml file with all possible configuration options:
