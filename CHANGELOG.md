@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.11] (2023-1-12)
+
+- refactor AWS resource tags
+- set global_platform_shared_resource_identifier=service
+- bugs fixes related to refactoring of bastion, MongoDB, and Kubernetes
+- refine Terragrunt Kubernetes dependencies
+
 ## [1.0.10] (2023-1-12)
 
 - refactor endpoints for all stack services: mysql, mongodb, redis, grafana, dashboard, kubeapps
