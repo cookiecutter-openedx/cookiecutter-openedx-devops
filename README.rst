@@ -167,7 +167,7 @@ Now run it against this repo, using the following example usage pattern:
                 global_account_id=012345678912 \
                 global_root_domain=schoolofrock.edu \
                 global_aws_route53_hosted_zone_id=Z123456789ABCDEFGHIJK \
-                environment_name=live \
+                environment_name={{ cookiecutter.global_platform_shared_resource_identifier }} \
                 environment_subdomain=courses
 
 

@@ -9,7 +9,7 @@
 #        kubectl with the AWS EKS kubernetes cluster
 #        configuration credentials that are
 #        located here:
-#        https://us-east-2.console.aws.amazon.com/eks/home?region=us-east-2#/clusters/stepwisemath-global-live
+#        https://{{ cookiecutter.global_aws_region }}.console.aws.amazon.com/eks/home?region={{ cookiecutter.global_aws_region }}#/clusters/{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.global_platform_shared_resource_identifier }}
 #--------------------------------------------------------
 
 if [ $# == 2 ]; then

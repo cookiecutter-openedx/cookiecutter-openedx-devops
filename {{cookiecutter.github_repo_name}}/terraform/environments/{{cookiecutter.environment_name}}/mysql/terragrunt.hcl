@@ -21,15 +21,15 @@ locals {
 
 dependencies {
   paths = [
-    "../../../stacks/live/vpc",
-    "../../../stacks/live/kubernetes",
-    "../../../stacks/live/mysql",
+    "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/vpc",
+    "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/kubernetes",
+    "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/mysql",
     "../kubernetes_secrets"
   ]
 }
 
 dependency "vpc" {
-  config_path = "../../../stacks/live/vpc"
+  config_path = "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/vpc"
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
@@ -44,7 +44,7 @@ dependency "vpc" {
 }
 
 dependency "mysql" {
-  config_path = "../../../stacks/live/mysql"
+  config_path = "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/mysql"
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.

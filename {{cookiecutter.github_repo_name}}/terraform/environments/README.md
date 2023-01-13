@@ -4,7 +4,7 @@ Terraform environments give you the ability to create multiple, distinct AWS VPC
 
 The envisioned implementations of additional environments would consist of environments like: `prod`, `dev`, `test`, `qa`, `mcdaniel`, etcetera.
 
-These additional environments will run on shared infrastructure, named `live` by default, unless you have specified otherwise. However, each environment has its own data and its own Kubernetes namespace.
+These additional environments will run on shared infrastructure, named `{{ cookiecutter.global_platform_shared_resource_identifier }}` by default, unless you have specified otherwise. However, each environment has its own data and its own Kubernetes namespace.
 
 The general strategy is that a common set of parameters are defined in [terraform/environments/global.hcl](./global.hcl) that each environment uses, plus, each environment maintains its own set of parameters for environment-specific settings like domain names and resource instances sizes for example.
 

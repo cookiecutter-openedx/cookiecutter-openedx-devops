@@ -22,7 +22,7 @@ cookiecutter --checkout $GITHUB_BRANCH \
              github_repo_name=openedx_devops \
              global_platform_name=stepwisemath \
              global_platform_region=mexico \
-             global_platform_shared_resource_identifier=live \
+             global_platform_shared_resource_identifier={{ cookiecutter.global_platform_shared_resource_identifier }} \
              global_aws_region=us-east-2 \
              global_account_id=320713933456 \
              global_root_domain=stepwisemath.ai \
