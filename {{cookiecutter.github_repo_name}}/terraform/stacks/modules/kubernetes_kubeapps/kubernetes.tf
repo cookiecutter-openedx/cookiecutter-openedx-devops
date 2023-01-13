@@ -8,7 +8,7 @@
 #         see:  https://kubeapps.dev/docs/latest/tutorials/getting-started/
 #
 #         to retrieve this token
-#         kubectl get --namespace kubeapps secret kubeapps-admin -o go-template='{{.data.token | base64decode}}'
+#         kubectl get --namespace kubeapps secret kubeapps-admin -o go-template='{% raw %}{{.data.token | base64decode}}{% endraw %}'
 #------------------------------------------------------------------------------
 
 resource "kubernetes_namespace" "kubeapps" {
