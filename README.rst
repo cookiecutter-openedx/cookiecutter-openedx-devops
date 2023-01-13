@@ -501,7 +501,7 @@ Why Use Terragrunt?
 Get Involved!
 -------------
 
-Contributors are welcome. Contact me here: `lawrencemcdaniel.com <https://lawrencemcdaniel.com/contact>`_ if you're interested in becomming a contributor to this project.
+Contributors are welcome. Contact me here: `lawrencemcdaniel.com <https://lawrencemcdaniel.com/contact>`_ if you're interested in becoming a contributor to this project.
 
 Local Development Quick Start
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -545,5 +545,8 @@ Several large-scale Open edX installations already use this code base to manage 
 - `UK Cabinet Office <https://www.gov.uk/government/organisations/cabinet-office>`_
 - `Stepwise Math <https://stepwisemath.ai/>`_
 - `Turn The Bus <https://app.turnthebus.org/>`_
-- `University of South Florida MUMA College of Business <https://www.usf.edu/business//>`_
+- `University of South Florida MUMA College of Business <https://www.usf.edu/business/>`_
 - `MRI Online <https://mrionline.com/>`_
+- `University of British Columbia Learn ExL <https://www.ubc.ca/>`_
+- `blend-ed <https://blend-ed.com/>`_
+- `YAM <https://yam-edu.com/>`_
