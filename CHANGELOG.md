@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.13] (2023-1-14)
+
+- minor bug fixes after fully testing a build from scratch.
+- ensure that sudo apt get install operations do not solicit input
+
 ## [1.0.12] (2023-1-13)
 
 - refactor environment tags
