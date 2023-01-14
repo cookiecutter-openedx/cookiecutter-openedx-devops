@@ -13,7 +13,7 @@ data "aws_route53_zone" "root_domain" {
 data "aws_route53_zone" "environment_domain" {
   name = var.environment_domain
   tags = {
-    Namespace = var.environment_namespace
+    "cookiecutter/environment_namespace" = var.environment_namespace
   }
 }
 
