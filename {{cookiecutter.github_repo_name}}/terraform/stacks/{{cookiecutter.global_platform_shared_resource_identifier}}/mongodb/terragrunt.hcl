@@ -35,7 +35,7 @@ dependency "vpc" {
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "validate"]
+  mock_outputs_allowed_terraform_commands = ["init", "validate", "destroy"]
   mock_outputs = {
     vpc_id           = "fake-vpc-id"
     database_subnets = ["fake-subnetid-01", "fake-subnetid-02"]
@@ -48,7 +48,7 @@ dependency "kubernetes" {
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "validate"]
+  mock_outputs_allowed_terraform_commands = ["init", "validate", "destroy"]
   mock_outputs = {
     cluster_arn           = "fake-cluster-arn"
     cluster_certificate_authority_data = "fake-cert"
@@ -74,6 +74,8 @@ dependency "bastion" {
   config_path = "../ec2_bastion"
   skip_outputs = true
 
+  mock_outputs_allowed_terraform_commands = ["init", "validate", "destroy"]
+  mock_outputs = {}
 }
 
 dependency "mongodb_volume" {
@@ -81,7 +83,7 @@ dependency "mongodb_volume" {
   config_path = "../mongodb_volume"
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "validate"]
+  mock_outputs_allowed_terraform_commands = ["init", "validate", "destroy"]
   mock_outputs = {
     mongodb_volume_id = "fake-volume-id"
     mongodb_volume_arn = "fake-volume-arn"
