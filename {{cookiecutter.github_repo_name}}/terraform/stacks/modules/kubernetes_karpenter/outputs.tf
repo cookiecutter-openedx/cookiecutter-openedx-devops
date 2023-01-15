@@ -31,15 +31,6 @@ output "helm_release_repository" {
   value       = helm_release.karpenter.repository
 }
 
-output "irsa_role_name" {
-  description = "IRSA role name for Karpenter"
-  value = module.karpenter_controller_irsa_role.role_name
-}
-
-output "irsa_role_karpenter_controller_cluster_id" {
-  description = "the ID of the cluster to which the karpenter controller is assigned"
-  value = module.karpenter_controller_cluster_id.karpenter_controller_cluster_id
-}
 
 output "irsa_role_oidc_provider_arn" {
   description = "the OIDC provider ARN "

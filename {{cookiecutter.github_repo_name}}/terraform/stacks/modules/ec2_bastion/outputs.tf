@@ -13,12 +13,6 @@ output "bastion_internal_ip" {
 }
 
 
-output "kubernetes_secret_bastion_ssh_private_key" {
-  description = "The ssh private key for the bastion server"
-  value = kubernetes_secret.ssh_secret.data
-}
-
-
 output "bastion_hostname" {
   description = "The bastion host subdomain"
   value = local.hostname

@@ -15,12 +15,12 @@ output "mongodb_internal_ip" {
 
 output "kubernetes_secret_mongodb_admin_name" {
   description = "The name of the k8s secret for the MongoDB admin user credentials"
-  value = kubernetes_secret.mongodb_admin.metadata.name
+  value = kubernetes_secret.mongodb_admin.metadata[0].name
 }
 
 output "kubernetes_secret_mongodb_admin_namespace" {
   description = "The namespace of the k8s secret for the MongoDB admin user credentials"
-  value = kubernetes_secret.mongodb_admin.metadata.namespace
+  value = kubernetes_secret.mongodb_admin.metadata[0].namespace
 }
 
 output "mongodb_hostname" {
