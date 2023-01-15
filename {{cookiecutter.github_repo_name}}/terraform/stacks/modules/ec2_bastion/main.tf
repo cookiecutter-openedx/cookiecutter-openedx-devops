@@ -6,7 +6,9 @@
 #
 # usage: create an EC2 instance with ssh access and a DNS record.
 #------------------------------------------------------------------------------
-
+locals {
+  hostname = "bastion.${var.services_subdomain}"
+}
 resource "aws_instance" "bastion" {
 
   ami               = data.aws_ami.ubuntu.id
