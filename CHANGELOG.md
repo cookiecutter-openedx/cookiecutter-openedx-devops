@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.14] (2023-1-15)
+
+- set stack mysql k8s secret HOST to route53 subdomain
+- add a more complete set of outputs to each stack module
+- add missing cluster name and namespace to build workflow
+- add complete mock inputs and dependency declarations through environment hcl files.
+
 ## [1.0.13] (2023-1-14)
 
 - minor bug fixes after fully testing a build from scratch.
