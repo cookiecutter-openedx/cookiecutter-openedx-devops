@@ -15,6 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       AWS_REGION: {{ cookiecutter.global_aws_region }}
+      NAMESPACE: {{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.environment_name }}
+      EKS_CLUSTER_NAME: {{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.global_platform_shared_resource_identifier }}
 
       CUSTOM_THEME_REPOSITORY: {{ cookiecutter.ci_build_theme_repository }}
       CUSTOM_THEME_REPOSITORY_ORGANIZATION: {{ cookiecutter.ci_build_theme_repository_organization }}
