@@ -16,40 +16,28 @@ locals {
 ################################################################################
 # Supporting Resources
 ################################################################################
-
-module "security_group" {
-  source  = "terraform-aws-modules/security-group/aws"
-  version = "{{ cookiecutter.terraform_aws_modules_sg }}"
-
-  name        = local.name
-  description = "openedx_devops: Allow access to MySQL"
+resource "aws_security_group" "redis" {
+  description = "openedx_devops: Redis"
+  name_prefix = local.name
   vpc_id      = var.vpc_id
 
-  # ingress
-  ingress_with_cidr_blocks = [
-    {
-      description = "openedx_devops: Redis access from within VPC"
-      from_port   = var.port
-      to_port     = var.port
-      protocol    = "tcp"
-      cidr_blocks = join(",", var.ingress_cidr_blocks)
-    },
-  ]
-
-  egress_with_cidr_blocks = [
-    {
-      description      = "openedx_devops: Node all egress"
-      protocol         = "-1"
-      from_port        = 0
-      to_port          = 0
-      type             = "egress"
-      cidr_blocks      = "0.0.0.0/0"
-      ipv6_cidr_blocks = "::/0"
-    },
-  ]
+  ingress {
+    description = "openedx_devops: Redis access from within VPC"
+    from_port   = var.port
+    to_port     = var.port
+    protocol    = "tcp"
+    cidr_blocks = var.ingress_cidr_blocks
+  }
+  egress {
+    description      = "openedx_devops: Redis out to anywhere"
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
 
   tags = var.tags
-
 }
 
 
@@ -63,7 +51,7 @@ module "redis" {
   engine_version             = var.engine_version
   num_cache_clusters         = var.num_cache_clusters
   port                       = var.port
-  vpc_security_group_ids     = [module.security_group.security_group_id]
+  vpc_security_group_ids     = [aws_security_group.redis.id]
   transit_encryption_enabled = var.transit_encryption_enabled
   family                     = var.family
   node_type                  = var.node_type
