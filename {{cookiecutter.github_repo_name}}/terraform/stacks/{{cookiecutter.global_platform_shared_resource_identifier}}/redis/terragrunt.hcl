@@ -13,7 +13,7 @@ locals {
 
   services_subdomain        = local.global_vars.locals.services_subdomain
   resource_name             = local.stack_vars.locals.stack_namespace
-  shared_resource_namespace = local.stack_vars.locals.shared_resource_namespace
+  shared_resource_namespace = local.stack_vars.locals.stack_namespace
   redis_node_type           = local.stack_vars.locals.redis_node_type
 
   tags = merge(
@@ -37,7 +37,7 @@ dependency "vpc" {
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "validate", "plan". "destroy"]
+  mock_outputs_allowed_terraform_commands = ["init", "validate", "plan", "destroy"]
   mock_outputs = {
     vpc_id           = "fake-vpc-id"
     database_subnets = ["fake-subnetid-01", "fake-subnetid-02"]
@@ -51,7 +51,7 @@ dependency "kubernetes" {
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "validate"]
+  mock_outputs_allowed_terraform_commands = ["init", "validate", "plan", "destroy"]
   mock_outputs = {
     cluster_arn           = "fake-cluster-arn"
     cluster_certificate_authority_data = "fake-cert"
@@ -99,7 +99,7 @@ inputs = {
   # cache engine configuration
   engine                        = "redis"
   engine_version                = "{{ cookiecutter.redis_engine_version }}"
-  num_cache_clusters         = {{ cookiecutter.redis_num_cache_clusters }}
+  num_cache_clusters            = {{ cookiecutter.redis_num_cache_clusters }}
   port                          = {{ cookiecutter.redis_port }}
   family                        = "{{ cookiecutter.redis_family }}"
   node_type                     = local.redis_node_type
