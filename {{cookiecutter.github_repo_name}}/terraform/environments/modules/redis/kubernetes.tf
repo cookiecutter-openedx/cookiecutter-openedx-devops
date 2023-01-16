@@ -21,13 +21,6 @@ provider "kubernetes" {
   token                  = data.aws_eks_cluster_auth.eks.token
 }
 
-data "kubernetes_secret" "service_redis" {
-  metadata {
-    name      = "redis"
-    namespace = var.shared_resource_namespace
-  }
-}
-
 resource "kubernetes_secret" "environment_redis" {
   metadata {
     name      = "redis"
