@@ -21,4 +21,11 @@ resource "aws_elasticache_parameter_group" "this" {
   lifecycle {
     create_before_destroy = true
   }
+
+  tags = merge(
+    var.tags,
+    {
+      "Name" = var.name
+    },
+  )
 }
