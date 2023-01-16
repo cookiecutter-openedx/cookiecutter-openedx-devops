@@ -93,7 +93,7 @@ inputs = {
   tags                          = local.tags
 
   # cache instance identifying information
-  replication_group_description = "${local.stack_vars.locals.environment_namespace}"
+  replication_group_description = local.shared_resource_namespace
   create_random_auth_token      = "false"
 
   # cache engine configuration

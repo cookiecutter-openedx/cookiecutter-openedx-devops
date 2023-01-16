@@ -1,9 +1,6 @@
 
 data "aws_route53_zone" "services_subdomain" {
   name = var.services_subdomain
-  tags = {
-    "cookiecutter/shared_resource_namespace" = var.shared_resource_namespace
-  }
 }
 
 resource "aws_route53_record" "primary" {

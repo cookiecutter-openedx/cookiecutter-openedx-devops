@@ -176,11 +176,6 @@ variable "ingress_cidr_blocks" {
   default     = []
 }
 
-variable "environment_namespace" {
-  description = "kubernetes namespace where to place resources"
-  type        = string
-}
-
 variable "resource_name" {
   description = "the full environment-qualified name of this resource."
   type        = string

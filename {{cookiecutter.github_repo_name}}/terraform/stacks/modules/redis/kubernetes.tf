@@ -24,7 +24,7 @@ provider "kubernetes" {
 resource "kubernetes_secret" "secret" {
   metadata {
     name      = "redis"
-    namespace = var.environment_namespace
+    namespace = var.shared_resource_namespace
   }
 
   data = {
