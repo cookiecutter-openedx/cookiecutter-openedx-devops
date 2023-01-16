@@ -14,10 +14,10 @@ resource "random_id" "auth_token" {
 }
 
 resource "random_string" "id" {
-  lower    = true
-  special  = false
-  numeric  = false
-  length   = 8
+  lower   = true
+  special = false
+  numeric = false
+  length  = 8
 }
 
 module "elasticache_subnet_group" {

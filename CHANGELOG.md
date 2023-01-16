@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.15] (2023-1-16)
+
+- move redis module from environment to stack
+
 ## [1.0.14] (2023-1-15)
 
 - set stack mysql k8s secret HOST to route53 subdomain
