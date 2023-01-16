@@ -15,20 +15,20 @@ output "bastion_internal_ip" {
 
 output "bastion_hostname" {
   description = "The bastion host subdomain"
-  value = local.hostname
+  value       = local.hostname
 }
 
 output "bastion_subnet_id" {
   description = "the VPC subnet in which this instance was created"
-  value = aws_instance.bastion.subnet_id
+  value       = aws_instance.bastion.subnet_id
 }
 
 output "bastion_ami" {
   description = "the Ubuntu Amazon Machine Image for this instance"
-  value = aws_instance.bastion.ami
+  value       = aws_instance.bastion.ami
 }
 
 output "bastion_subnet_ssh_keyname" {
   description = "the name of the ssh keypair assigned to this instance"
-  value = aws_instance.bastion.key_name
+  value       = aws_instance.bastion.key_name
 }

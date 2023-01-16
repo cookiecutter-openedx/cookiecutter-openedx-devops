@@ -16,7 +16,7 @@ resource "random_id" "auth_token" {
 resource "random_string" "id" {
   lower   = true
   special = false
-  number  = false
+  numeric = false
   length  = 8
 }
 
