@@ -69,6 +69,16 @@ module "eks" {
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = true
   enable_irsa                     = true
+  create_kms_key                  = true
+
+  # UN-COMMENT THIS TO ADD MORE CLUSTER ADMINISTRATORS
+  # ---------------------------------------------------------------------------
+  #kms_key_owners                  = [
+  #                                  "arn:aws:iam::YOUR-AWS-ACCOUNT-NUMBER:user/ci",
+  #                                  "arn:aws:iam::YOUR-AWS-ACCOUNT-NUMBER:user/system/bastion-user/yamedu-global-live-bastion",
+  #                                  ]
+  # ---------------------------------------------------------------------------
+
   vpc_id                          = var.vpc_id
   subnet_ids                      = var.private_subnet_ids
   create_cloudwatch_log_group     = false
