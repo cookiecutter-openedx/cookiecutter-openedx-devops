@@ -71,14 +71,14 @@ module "eks" {
   enable_irsa                     = true
   create_kms_key                  = true
 
-  # UN-COMMENT THIS TO ADD MORE CLUSTER ADMINISTRATORS
-  # ---------------------------------------------------------------------------
-  #kms_key_owners                  = [
-  #                                  "arn:aws:iam::YOUR-AWS-ACCOUNT-NUMBER:user/ci",
-  #                                  "arn:aws:iam::YOUR-AWS-ACCOUNT-NUMBER:user/system/bastion-user/yamedu-global-live-bastion",
-  #                                  ]
-  # ---------------------------------------------------------------------------
-
+  # NOTE:
+  # larger organizations might want to further restrict which IAM users have access to
+  # the AWS EKS KMS key. At creation, this key is benign since Kubernetes secrets encryption
+  # is not enabled by default.
+  kms_key_owners                  = [
+                                    "arn:aws:iam::${var.account_id}:user/*",
+                                    "arn:aws:iam::${var.account_id}:user/system/*",
+                                    ]
   vpc_id                          = var.vpc_id
   subnet_ids                      = var.private_subnet_ids
   create_cloudwatch_log_group     = false
