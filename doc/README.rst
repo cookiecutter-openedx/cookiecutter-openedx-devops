@@ -154,14 +154,6 @@ Cookiecutter AWS Services Stack Installation Options
 
   This option is required if you choose Y to stack_add_bastion_openedx_dev_environment.
 
-  *default value: Y*
-
-- **stack_add_bastion_openedx_dev_environment:**
-  'Y' to include Open edX development essentials in the bastion configuration. These include for example,
-  installing a version of Python that exactly matches that of your Open edX deployments, building a matching
-  Python virtual environment and including misc apt packages that are requirements of the the PyPi packages included
-  in the Python virtual environment.
-
   The bastion server provides several important software packages, some of which involve non-trivial configuration
   that might otherwise be challenging for you to install on your own:
 
@@ -176,6 +168,15 @@ Cookiecutter AWS Services Stack Installation Options
   - mysql client software
   - mongodb client software
 
+  *default value: Y*
+
+- **stack_add_bastion_openedx_dev_environment:**
+  'Y' to include Open edX development essentials in the bastion configuration. These include for example:
+
+  - a version of Python that exactly matches that of your Open edX deployments
+  - building a matching Python virtual environment
+  - including the apt packages that are requirements of the the PyPi packages included in the Python virtual environment.
+
   *default value: N*
 
 Cookiecutter AWS Services Stack Configuration Options
@@ -184,15 +185,81 @@ Cookiecutter AWS Services Stack Configuration Options
 AWS Elastics Kubernetes Service Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-eks_worker_group_instance_type: t3.xlarge
-eks_worker_group_min_size: 0
-eks_worker_group_max_size: 1
-eks_worker_group_desired_size: 0
-eks_karpenter_group_instance_type: t3.large
-eks_karpenter_group_min_size: 3
-eks_karpenter_group_max_size: 10
-eks_karpenter_group_desired_size: 3
-kubernetes_cluster_version: 1.24
+- **kubernetes_cluster_version:**
+  The `Kubernetes version release <https://kubernetes.io/releases/`_ to use when creating the AWS EKS cluster. We choose this value carefully
+  and we don't change it until we're absolutely certain that we, the maintainers of this repository, fully understand
+  the implications of the change.
+
+  **BE AWARE:** there are far-reaching and often times irreversible consequences to changing this value.
+  DO NOT change this value unless you're certain that you understand whaat you're doing.
+
+  *default value: 1.24*
+
+The Karpenter node group is created for you automatically and is the default node group for the cluster.
+Karpenter nodes use spot-pricing which varies based on market conditions but is typically around 1/3 the cost
+of the same instance type's on-demand price. Note that spot-priced EC2 instances are effectively rented from
+their rightful 'owner' and can be called back into service by the 'owner' at any time. Karpenter manages this process
+for you, immediately replacing any node that is called back by its owner. This happens infrequently, with the exception of the eu-west-2 (London)
+AWS data center.
+
+- **eks_karpenter_group_instance_type:**
+  The *preferred* instance type that Karpenter will acquire on your behalf from the spot-price marketplace. Note
+  that the Terraform scripts include several fallback options in the event that your preferred instance type is not
+  available.
+
+  *default value: t3.large*
+
+- **eks_karpenter_group_min_size:*
+  The minimum number of EC2 instance compute nodes to maintain inside the compute plane of your cluster. This value
+  needs to be at least 1 in order for Karpenter to gather real-time load and performance metrics that it uses
+  for node auto scaling decisions. Also, note that most AWS data centers maintain 3 physical availability zones,
+  which is the origin of this parameter's default value of 3. Also of note is that 3 spot-priced EC2 instances cost
+  around the same amount of money as a single equivalent on-demand priced EC2 instance.
+
+  *default value: 3*
+
+- **eks_karpenter_group_max_size:**
+  The maximum number of EC2 instances that Karpenter is permitted to add to the Kubernetes compute plane
+  regardless of real-time load metrics.
+
+  **BE AWARE** that misconfigured pods can lead to unbounded node scaling, which in turn would
+  result in an unbounded AWS invoice at the end of the billing period, leading to a potentially
+  unwelcome career change on your part :O
+
+  *default value:  10*
+
+- **eks_karpenter_group_desired_size:**
+  The initial setting that Karpenter will use when the EKS cluster is created and initialized.
+  This value will poentially change (higher or lower) as soon as metrics-server and promethus
+  service begin reporting performance metrics to Karpenter.
+
+  *default value: 3*
+
+eks_worker_group is an optional, supplemental EC2 node worker group that is included in the
+AWS EKS build. If you chose to install Karpenter then you can ignore these options.
+Nodes created in this group will use on-demand pricing, which will cost around 3x as compared
+to the Karpenter nodes, which use spot-pricing. However, availability of on-demand nodes is guaranteed by AWS.
+
+- **eks_worker_group_min_size:**
+  The minimum allowed quanity of nodes for this group.
+
+  *default value: 0*
+
+- **eks_worker_group_max_size:**
+  The maximum allowed quanity of nodes for this group.
+
+  *default value: 0*
+
+- **eks_worker_group_desired_size:**
+  The current run-time requested quanity of nodes for this group.
+
+  *default value: 0*
+
+- **eks_worker_group_instance_type:**
+  The AWS EC2 instance type that will be created for all nodes in this group.
+
+  *default value: t3.xlarge*
+
 
 MongoDB Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
