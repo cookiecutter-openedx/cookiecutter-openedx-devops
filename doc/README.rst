@@ -209,7 +209,7 @@ AWS data center.
 
   *default value: t3.large*
 
-- **eks_karpenter_group_min_size:*
+- **eks_karpenter_group_min_size:**
   The minimum number of EC2 instance compute nodes to maintain inside the compute plane of your cluster. This value
   needs to be at least 1 in order for Karpenter to gather real-time load and performance metrics that it uses
   for node auto scaling decisions. Also, note that most AWS data centers maintain 3 physical availability zones,
@@ -264,33 +264,103 @@ to the Karpenter nodes, which use spot-pricing. However, availability of on-dema
 MongoDB Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-mongodb_instance_type: t3.medium
-mongodb_allocated_storage: 10
+- **mongodb_instance_type:**
+  The EC2 instance type to use when creating the MongoDB server.
+
+  *default value: t3.medium*
+
+- **mongodb_allocated_storage:**
+  Note that the remote MongoDB relies on an AWS EBS
+  drive volume that is separately managed by a different Terraform module. This
+  will enable you to, for example, recreate the MongoDB EC2 instance as needed
+  while not endangering the MongoDB data contents.
+
+  **BE AWARE** changing this value later on will result in Terraform attempting
+  to destroy and recreate the EBS volume which likely is **not** what you want. As a
+  safeguard against this possibility, the Terraform script's "destroy" action will result
+  in a Terraform run-time error. That is, you'll need to manually destroy the EBS volume
+  using the AWS web console.
+
+  *default value: 10*
 
 AWS EC2 Bastion Server Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-bastion_instance_type: t3.micro
-bastion_allocated_storage: 50
+- **bastion_instance_type:**
+  The AWS EC2 instance type to use when creating the bastion server.
+
+  *default value: t3.micro*
+
+- **bastion_allocated_storage:**
+  The size of the EBS volume for the bastion server. Make sure to provide adequate
+  storage for all of the software that is pre-installed, plus, to allow reasonable
+  Docker caching space. Docker caching consumes a LOT of drive space btw.
+
+  *default value: 50*
 
 AWS RDS MySQL Server Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-mysql_username: root
-mysql_port: 3306
-mysql_engine: mysql
-mysql_family: mysql5.7
-mysql_major_engine_version: 5.7
-mysql_engine_version: 5.7.33
-mysql_allocated_storage: 10
-mysql_create_random_password: true
-mysql_iam_database_authentication_enabled: false
-mysql_instance_class: db.t2.small
-mysql_maintenance_window: Sun:00:00-Sun:03:00
-mysql_backup_window: 03:00-06:00
-mysql_backup_retention_period: 7
-mysql_deletion_protection: false
-mysql_skip_final_snapshot: true
+Note that the MySQL engine version parameters are carefully chosen to exactly match
+Open edX's recommended configuration. Change these values at your own risk.
+
+- **mysql_instance_class:**
+  The AWS RDS instance size for the single instance created by the
+  Terraform stack. Note that RDS service can safely vertically scale-descale
+  your instance size after its been initially created.
+
+  *default value: db.t2.small*
+
+- **mysql_allocated_storage:**
+  The allocated MySQL EBS storage volume size. Note that AWS RDS determines your
+  `"burst balance" https://aws.amazon.com/blogs/database/understanding-burst-vs-baseline-performance-with-amazon-rds-and-gp2/`_
+  largely based on the size the drive volume attached to the RDS instance.
+
+  *default value: 10*
+
+- **mysql_username:**
+  *default value: root*
+
+- **mysql_port:**
+  *default value: 3306*
+
+- **mysql_engine:**
+  *default value: mysql*
+
+- **mysql_family:**
+  *default value: mysql5.7*
+
+- **mysql_major_engine_version:**
+  *default value: 5.7*
+
+- **mysql_engine_version:**
+  *default value: 5.7.33*
+
+- **mysql_create_random_password:**
+  *default value: true*
+
+- **mysql_iam_database_authentication_enabled:**
+  *default value: false*
+
+- **mysql_maintenance_window:**
+  *default value: Sun:00:00-Sun:03:00*
+
+- **mysql_backup_window:**
+
+  *default value: 03:00-06:00*
+
+- **mysql_backup_retention_period:**
+
+  *default value: 7*
+
+- **mysql_deletion_protection:**
+
+  *default value: false*
+
+- **mysql_skip_final_snapshot:**
+
+  *default value: true*
+
 
 AWS Elasticache Redis Cluster Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
