@@ -6,6 +6,7 @@ Project Identifiers
 -------------------
 
 - **github_account_name:**
+
   The Github organization for the source cookiecutter (ie this repository).
   This is a command-line option only and is will not otherwise be sound in this
   sourcecode.
@@ -13,6 +14,7 @@ Project Identifiers
   *default value: lpm0073*
 
 - **github_repo_name:**
+
   The Github repository for the source cookiecutter (ie this repository).
   This is a command-line option only and is will not otherwise be sound in this
   sourcecode.
@@ -20,6 +22,7 @@ Project Identifiers
   *default value: openedx_devops*
 
 - **environment_name:**
+
   This cookiecutter will create one Open edX deployment environment for you,
   named environment_name and located in the file path ./terraform/environments/environment_name.
   You'll find extensive references to environment_name throughout ./terraform/environments/modules.
@@ -28,16 +31,19 @@ Project Identifiers
   *default value: prod*
 
 - **environment_subdomain:**
+
   This cookiecutter will create several URL endpoints for each environment_name, with
   each endpoint residing inside a common subdomain named environment_subdomain.
 
   *default value: courses*
 
 - **environment_studio_subdomain:**
+
   The subdomain name to use for the Open edX Course Management Studio URL endpoint.
   *default value: studio*
 
 - **global_platform_name:**
+
   This is a global variable, stored in ./terraform/glocal.hcl that is ysed for creating
   the standardized naming identifiers in AWS resources and resource tags. You'll also
   find references to global_platform_name in the pre-configured helper bash scripts and the
@@ -47,6 +53,7 @@ Project Identifiers
   *default value: yourschool*
 
 - **global_platform_region:**
+
   This is a global variable, stored in ./terraform/glocal.hcl that is ysed for creating
   the standardized naming identifiers in AWS resources and resource tags. You'll also
   find references to global_platform_name in the pre-configured helper bash scripts and the
@@ -57,6 +64,7 @@ Project Identifiers
   *default value: global*
 
 - **global_platform_shared_resource_identifier:**
+
   This is a stack variable, stored in ./terraform/stacks/global_platform_shared_resource_identifier/stack.hcl that is ysed for creating
   the standardized naming identifiers in AWS resources and resource tags. You'll also
   find references to global_platform_shared_resource_identifier in the pre-configured helper bash scripts and the
@@ -67,6 +75,7 @@ Project Identifiers
   *default value: service*
 
 - **global_services_subdomain:**
+
   This cookiecutter will create several URL endpoints for each stack service, with
   each endpoint residing inside a common subdomain named global_services_subdomain.
   Examples include mysql.global_services_subdomain, mongodb.global_services_subdomain, redis.global_services_subdomain.
@@ -74,9 +83,11 @@ Project Identifiers
   *default value:  same as global_platform_shared_resource_identifier*
 
 - **global_root_domain:**
+
   The fully-qualified domain name that will contain **ALL* URL endpoints. Example: yourschool.edu
 
 - **global_aws_route53_hosted_zone_id:**
+
   The AWS Route53 Hosted Zone ID of the global_root_domain.
   Cookiecutter assumes that DNS is managed by AWS Route53. Note however that you can still use this cookiecutter
   even if you manage your DNS for the global_root_domain elsewhere. But, in either case you'll need to create a
@@ -86,6 +97,7 @@ Project Identifiers
   *Example: Z08529743UBLZ51RJDD76*
 
 - **global_aws_region:**
+
   The `3-part character code <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions>`_ for
   the AWS data center in which you'll deploy all AWS resources. You should choose the data center that is physically
   located nearest your learners.
@@ -93,16 +105,19 @@ Project Identifiers
   *default value: us-east-1*
 
 - **global_account_id:**
+
   Your 12-character AWS account number.
 
   *Example: 123456789012*
 
 - **global_platform_description:**
+
   The value assigned to edx-platform Django settings variable PLATFORM_DESCRIPTION.
 
   *default value: Your School*
 
 - **global_platform_logo_url:**
+
   Future use.
 
   *default value: https://www.edx.org/images/logos/edx-logo-elm.svg*
@@ -111,6 +126,7 @@ Cookiecutter AWS Services Stack Installation Options
 ----------------------------------------------------
 
 - **stack_install_k8s_dashboard:**
+
   'Y' to install `Kubernetes Dashboard <https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/>`_
   in the AWS EKS cluster and add an ingress, ssl-tls cert and url endpoint to global_services_subdomain.
 
@@ -119,6 +135,7 @@ Cookiecutter AWS Services Stack Installation Options
   *default value: Y*
 
 - **stack_install_k8s_kubeapps:**
+
   'Y' to install `VMWare Bitnami Kubeapps <https://kubeapps.dev/>`_
   in the AWS EKS cluster and add an ingress, ssl-tls cert and url endpoint to global_services_subdomain.
 
@@ -127,6 +144,7 @@ Cookiecutter AWS Services Stack Installation Options
   *default value: Y*
 
 - **stack_install_k8s_karpenter:**
+
   'Y' to install `Karpenter <https://karpenter.sh/>`_ in the AWS EKS cluster.
 
   Karpenter is an open-source project lead by AWS that provides just-in-time compute nodes for any Kubernetes cluster.
@@ -136,18 +154,21 @@ Cookiecutter AWS Services Stack Installation Options
   *default value: Y*
 
 - **stack_install_k8s_prometheus:**
+
   'Y' to install `Prometheus <https://prometheus.io/`_ in the AWS EKS cluster. This is required if you chose
   to install Karpenter.
 
   *default value: Y*
 
 - **stack_add_remote_mongodb:**
+
   'Y' to create an EC2 instance-based MongoDB server. This is recommended because we have encountered occasional compatibility issues with
   AWS DocumentDB.
 
   *default value: Y*
 
 - **stack_add_bastion:**
+
   'Y' to create an EC2 instance-based Bastion server. This is strongly recommended. The bastion server provides an ssh private key based entry point to
   services that are only accessible from within your AWS Virtual Private Cloud (VPC). Additionally, the bastion server contains a curated collection of
   preinstalled and preconfigured software that you'll need for administering your Open edX installation.
@@ -171,6 +192,7 @@ Cookiecutter AWS Services Stack Installation Options
   *default value: Y*
 
 - **stack_add_bastion_openedx_dev_environment:**
+
   'Y' to include Open edX development essentials in the bastion configuration. These include for example:
 
   - a version of Python that exactly matches that of your Open edX deployments
@@ -186,6 +208,7 @@ AWS Elastics Kubernetes Service Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - **kubernetes_cluster_version:**
+
   The `Kubernetes version release <https://kubernetes.io/releases/`_ to use when creating the AWS EKS cluster. We choose this value carefully
   and we don't change it until we're absolutely certain that we, the maintainers of this repository, fully understand
   the implications of the change.
@@ -203,6 +226,7 @@ for you, immediately replacing any node that is called back by its owner. This h
 AWS data center.
 
 - **eks_karpenter_group_instance_type:**
+
   The *preferred* instance type that Karpenter will acquire on your behalf from the spot-price marketplace. Note
   that the Terraform scripts include several fallback options in the event that your preferred instance type is not
   available.
@@ -210,6 +234,7 @@ AWS data center.
   *default value: t3.large*
 
 - **eks_karpenter_group_min_size:**
+
   The minimum number of EC2 instance compute nodes to maintain inside the compute plane of your cluster. This value
   needs to be at least 1 in order for Karpenter to gather real-time load and performance metrics that it uses
   for node auto scaling decisions. Also, note that most AWS data centers maintain 3 physical availability zones,
@@ -219,6 +244,7 @@ AWS data center.
   *default value: 3*
 
 - **eks_karpenter_group_max_size:**
+
   The maximum number of EC2 instances that Karpenter is permitted to add to the Kubernetes compute plane
   regardless of real-time load metrics.
 
@@ -229,6 +255,7 @@ AWS data center.
   *default value:  10*
 
 - **eks_karpenter_group_desired_size:**
+
   The initial setting that Karpenter will use when the EKS cluster is created and initialized.
   This value will poentially change (higher or lower) as soon as metrics-server and promethus
   service begin reporting performance metrics to Karpenter.
@@ -287,11 +314,13 @@ AWS EC2 Bastion Server Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - **bastion_instance_type:**
+
   The AWS EC2 instance type to use when creating the bastion server.
 
   *default value: t3.micro*
 
 - **bastion_allocated_storage:**
+
   The size of the EBS volume for the bastion server. Make sure to provide adequate
   storage for all of the software that is pre-installed, plus, to allow reasonable
   Docker caching space. Docker caching consumes a LOT of drive space btw.
@@ -305,6 +334,7 @@ Note that the MySQL engine version parameters are carefully chosen to exactly ma
 Open edX's recommended configuration. Change these values at your own risk.
 
 - **mysql_instance_class:**
+
   The AWS RDS instance size for the single instance created by the
   Terraform stack. Note that RDS service can safely vertically scale-descale
   your instance size after its been initially created.
@@ -320,6 +350,7 @@ Open edX's recommended configuration. Change these values at your own risk.
   - up to 100,000 learners: db.t2.2xlarge
 
 - **mysql_allocated_storage:**
+
   The allocated MySQL EBS storage volume size. Note that AWS RDS determines your
   `"burst balance" <https://aws.amazon.com/blogs/database/understanding-burst-vs-baseline-performance-with-amazon-rds-and-gp2/>`_
   largely based on the size of the EBS drive volume that is attached to the RDS instance.
@@ -467,6 +498,7 @@ include a custom theme, one or more custom openedx plugins, one or more XBlocks,
 The scaffolding that is generated by Cookiecutter provides the code samples that you need to get started in customizing your build.
 
 - **ci_build_tutor_version:**
+
   Aside from the eventual customized contents of your openedx build, the specific version of
   `Tutor <https://docs.tutor.overhang.io/>`_ that you choose for managing the build process will potentially bear signficantly on how well things work.
   The default value that we maintain is known to work, whereas any other version might produce undesired results.
@@ -474,6 +506,7 @@ The scaffolding that is generated by Cookiecutter provides the code samples that
   *default value: 14.2.3*
 
 - **ci_build_kubectl_version:**
+
   `kubectl <https://kubernetes.io/docs/tasks/tools/>`_ is the defacto Kubernetes command-line interface and the
   singular tool at your disposal for programatically administering your Kubernetes cluster. Your choice of `kubectl <https://kubernetes.io/docs/tasks/tools/>`_ version (and its installation method) have an equally significan impact to
   the reliability of your deploy workflows.
@@ -519,51 +552,61 @@ Open edX Deployment
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 - **ci_openedx_actions_tutor_print_dump:**
+
   prints a complete dump to the Gihub Actions console of ubuntu environment variables, saved tutor config settings, and python requirements added.
 
   *default value: v1.0.0*
 
 - **ci_deploy_open_edx_version:**
+
   The Open edX release version for your deployment. This is the single most consequential choice amongst the long list of Cookiecutter options.
 
   *default value: nutmeg.2*
 
 - **ci_deploy_install_credentials_server:**
+
   'Y' to install the `Open edX Credentials service <https://github.com/openedx/credentials>`_
 
   *default value: N*
 
 - **ci_deploy_install_discovery_service:**
+
   'Y' to install the `Open edX Course Discovery service <https://github.com/openedx/course-discovery>`_
 
   *default value: Y*
 
 - **ci_deploy_install_mfe_service:**
+
   'Y' to install the `Open edX MFE service <https://github.com/overhangio/tutor-mfe>`_
 
   *default value: Y*
 
 - **ci_deploy_install_notes_service:**
+
   'Y' to install the `Open edX Notes service <https://github.com/openedx/edx-notes-api>`_
 
   *default value: Y*
 
 - **ci_deploy_install_ecommerce_service:**
+
   'Y' to install the `Open edX E-commerce service <https://github.com/openedx/ecommerce>`_
 
   *default value: N*
 
 - **ci_deploy_install_forum_service:**
+
   'Y' to install the `Open edX Discussion Forum service <https://github.com/openedx/edx-platform>`_
 
   *default value: N*
 
 - **ci_deploy_install_xqueue_service:**
+
   'Y' to install the `Open edX XQueue service <https://github.com/openedx/edx-platform>`_. Choose 'N' if you're unfamiliar with this service.
 
   *default value: N*
 
 - **ci_deploy_install_license_manager_service:**
+
   'Y' to install the `Open edX License Manager service <https://github.com/openedx/license-manager>`_.
 
   *default value: N*
