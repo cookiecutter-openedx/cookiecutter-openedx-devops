@@ -2,8 +2,8 @@ Project Generation Options
 ==========================
 
 The cookiecutter provides nearly 150 configuration parameters, so there's a pretty good chance that you'll be able to generate a customized repo that exactly fits your needs.
-We've almost spent copious amount of time curating a set of sensible defaults for all of these options. If you're just getting started then you might want to consider
-setting up a make file similar to the following:
+We've also invested copious amounts of time curating a set of sensible defaults for all of these options. If you're just getting started then you might want to consider
+initially running something similar to the following:
 
 .. code-block:: shell
 
