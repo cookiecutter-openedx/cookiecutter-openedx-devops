@@ -314,35 +314,44 @@ Open edX's recommended configuration. Change these values at your own risk.
 - **mysql_allocated_storage:**
   The allocated MySQL EBS storage volume size. Note that AWS RDS determines your
   `"burst balance" <https://aws.amazon.com/blogs/database/understanding-burst-vs-baseline-performance-with-amazon-rds-and-gp2/>`_
-  largely based on the size the drive volume attached to the RDS instance.
+  largely based on the size of the EBS drive volume that is attached to the RDS instance.
 
   *default value: 10*
 
 - **mysql_username:**
+
   *default value: root*
 
 - **mysql_port:**
+
   *default value: 3306*
 
 - **mysql_engine:**
+
   *default value: mysql*
 
 - **mysql_family:**
+
   *default value: mysql5.7*
 
 - **mysql_major_engine_version:**
+
   *default value: 5.7*
 
 - **mysql_engine_version:**
+
   *default value: 5.7.33*
 
 - **mysql_create_random_password:**
+
   *default value: true*
 
 - **mysql_iam_database_authentication_enabled:**
+
   *default value: false*
 
 - **mysql_maintenance_window:**
+
   *default value: Sun:00:00-Sun:03:00*
 
 - **mysql_backup_window:**
