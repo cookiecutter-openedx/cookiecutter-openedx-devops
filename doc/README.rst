@@ -407,12 +407,49 @@ learners.
 
   *default value: redis6.x*
 
+Cookiecutter Terraform Options
+--------------------------------------------------
+
+Terraform is an open-source infrastructure-as-code software tool created by HashiCorp.
+Users define, implement and manage cloud data center infrastructure using a declarative configuration language known as HashiCorp Configuration Language (HCL).
+Terraform is an extensible automation technology with a vibrant community-support ecosystem of various providers and modules.
+
+Cookiecutter leverages open source providers and modules authored by Terraform, AWS and Helm.
+We carefully vetted the libraries that we've added to the cookiecutter. Some of these libraries, the Kubernetes libraries in particular, evolve rapidly and sometimes include breaking changes.
+These version settings are therefore of particular interest because the default version setting that we publish are know to
+work together. Cookiecutter releases represent points in time in which various combinations of these version where known to work.
+
+So, noting that testing these new library versions is time consuming, and for the benefit of the Cookiecutter community, please make pull requests to this repo to suggest new Terraform provider and/or module versions that you successfully test.
+
+- **terraform_required_version:** ~> 1.3
+- **terraform_aws_modules_acm:** ~> 4.3
+- **terraform_aws_modules_cloudfront:** ~> 3.1
+- **terraform_aws_modules_eks:** ~> 19.4
+- **terraform_aws_modules_iam:** ~> 5.9
+- **terraform_aws_modules_iam_assumable_role_with_oidc:** ~> 5.10
+- **terraform_aws_modules_rds:** ~> 5.2
+- **terraform_aws_modules_s3:** ~> 3.6
+- **terraform_aws_modules_sg:** ~> 4.16
+- **terraform_aws_modules_vpc:** ~> 3.18
+- **terraform_helm_cert_manager:** ~> 1.10
+- **terraform_helm_ingress_nginx_controller:** ~> 4.4
+- **terraform_helm_vertical_pod_autoscaler:** ~> 6.0
+- **terraform_helm_karpenter:** ~> 0.16
+- **terraform_helm_dashboard:** ~> 6.0
+- **terraform_helm_kubeapps:** latest
+- **terraform_helm_metrics_server:** ~> 3.8
+- **terraform_helm_prometheus:** ~> 43
+- **terraform_provider_kubernetes_version:** ~> 2.16
+- **terraform_provider_hashicorp_aws_version:** ~> 4.48
+- **terraform_provider_hashicorp_local_version:** ~> 2.2
+- **terraform_provider_hashicorp_random_version:** ~> 3.4
+- **terraform_provider_hashicorp_kubectl_version:** ~> 1.14
+- **terraform_provider_hashicorp_helm_version:** ~> 2.8
 
 Cookiecutter Github Actions Open edX Build Options
 --------------------------------------------------
 
 ci_build_tutor_version: 14.2.3
-ci_build_open_edx_version: nutmeg.2
 ci_build_theme_repository: edx-theme-example
 ci_build_theme_repository_organization: lpm0073
 ci_build_theme_ref: main
@@ -426,6 +463,7 @@ ci_build_kubectl_version: 1.24/stable
 
 Cookiecutter Github Actions Open edX Deploy Options
 ---------------------------------------------------
+ci_deploy_open_edx_version: nutmeg.2
 ci_deploy_install_backup_plugin: [N Y]
 ci_deploy_install_credentials_server: [N Y]
 ci_deploy_install_license_manager: [Y Y]
@@ -437,7 +475,7 @@ ci_deploy_install_forum_service: [N Y]
 ci_deploy_install_xqueue_service: [N Y]
 ci_deploy_install_license_manager_service: [N Y]
 ci_deploy_tutor_plugin_credentials_version: latest
-ci_deploy_OPENEDX_COMMON_VERSION: open-release/{{ cookiecutter.ci_build_open_edx_version }}
+ci_deploy_OPENEDX_COMMON_VERSION: open-release/{{ cookiecutter.ci_deploy_open_edx_version }}
 ci_deploy_EMAIL_HOST: email-smtp.{{ cookiecutter.global_aws_region|lower|replace(' ' '-') }}.amazonaws.com
 ci_deploy_EMAIL_PORT: 587
 ci_deploy_EMAIL_USE_TLS: true
@@ -477,28 +515,3 @@ ci_openedx_actions_tutor_plugin_enable_mfe_version: v0.0.1
 ci_openedx_actions_tutor_plugin_enable_notes_version: v1.0.2
 ci_openedx_actions_tutor_plugin_enable_s3_version: v1.0.2
 ci_openedx_actions_tutor_plugin_enable_xqueue_version: v1.0.0
-
-terraform_required_version: ~> 1.3
-terraform_aws_modules_acm: ~> 4.3
-terraform_aws_modules_cloudfront: ~> 3.1
-terraform_aws_modules_eks: ~> 19.4
-terraform_aws_modules_iam: ~> 5.9
-terraform_aws_modules_iam_assumable_role_with_oidc: ~> 5.10
-terraform_aws_modules_rds: ~> 5.2
-terraform_aws_modules_s3: ~> 3.6
-terraform_aws_modules_sg: ~> 4.16
-terraform_aws_modules_vpc: ~> 3.18
-terraform_helm_cert_manager: ~> 1.10
-terraform_helm_ingress_nginx_controller: ~> 4.4
-terraform_helm_vertical_pod_autoscaler: ~> 6.0
-terraform_helm_karpenter: ~> 0.16
-terraform_helm_dashboard: ~> 6.0
-terraform_helm_kubeapps: latest
-terraform_helm_metrics_server: ~> 3.8
-terraform_helm_prometheus: ~> 43
-terraform_provider_kubernetes_version: ~> 2.16
-terraform_provider_hashicorp_aws_version: ~> 4.48
-terraform_provider_hashicorp_local_version: ~> 2.2
-terraform_provider_hashicorp_random_version: ~> 3.4
-terraform_provider_hashicorp_kubectl_version: ~> 1.14
-terraform_provider_hashicorp_helm_version: ~> 2.8
