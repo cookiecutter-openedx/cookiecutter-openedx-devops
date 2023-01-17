@@ -2,7 +2,7 @@ Project Generation Options
 ==========================
 
 The cookiecutter provides nearly 150 configuration parameters, so there's a pretty good chance that you'll be able to generate a customized repo that exactly fits your needs.
-We've also invested copious amounts of time curating a set of sensible defaults for all of these options. If you're just getting started then you might want to consider
+We've also curated a set of sensible defaults for all of these options. If you're just getting started then you might want to consider
 initially running something similar to the following:
 
 .. code-block:: shell
@@ -21,7 +21,7 @@ initially running something similar to the following:
               global_root_domain=ADD-YOUR-ROOT-DOMAIN \
               global_aws_route53_hosted_zone_id=ADD-YOUR-HOSTED-ZONE-ID \
 
-After reviewing the cookiecutter's initial outut you'll quickly get a general idea of what additional options you want to add to this basic patter in order to acheive your desired results.
+After reviewing the cookiecutter's initial outut you'll quickly get a general idea of what additional options you want to add to this basic pattern in order to acheive your desired results.
 
 Project Identifiers
 -------------------
