@@ -311,6 +311,14 @@ Open edX's recommended configuration. Change these values at your own risk.
 
   *default value: db.t2.small*
 
+  Some rules of thumb on instance size:
+
+  - during pre-producion: db.t2.small
+  - less than 1,000 learners: db.t2.medium
+  - up to 5,000 learners: db.t2.large
+  - up to 25,000 learners: db.t2.xlarge
+  - up to 100,000 learners: db.t2.2xlarge
+
 - **mysql_allocated_storage:**
   The allocated MySQL EBS storage volume size. Note that AWS RDS determines your
   `"burst balance" <https://aws.amazon.com/blogs/database/understanding-burst-vs-baseline-performance-with-amazon-rds-and-gp2/>`_
@@ -374,11 +382,31 @@ Open edX's recommended configuration. Change these values at your own risk.
 AWS Elasticache Redis Cluster Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-redis_engine_version: 6.x
-redis_num_cache_clusters: 1
-redis_node_type: cache.t2.small
-redis_port: 6379
-redis_family: redis6.x
+These configuration values have been carefully selected by on
+Open edX's configuration recommendations. These settings are known
+to work well on installations supporting as many as 250,000 enrolled
+learners.
+
+- **redis_engine_version:**
+
+  *default value: 6.x*
+
+- **redis_num_cache_clusters:**
+
+  *default value: 1*
+
+- **redis_node_type:**
+
+  *default value: cache.t2.small*
+
+- **redis_port:**
+
+  *default value: 6379*
+
+- **redis_family:**
+
+  *default value: redis6.x*
+
 
 Cookiecutter Github Actions Open edX Build Options
 --------------------------------------------------
