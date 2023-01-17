@@ -1,6 +1,27 @@
 Project Generation Options
 ==========================
 
+The cookiecutter provides nearly 150 configuration parameters, so there's a pretty good chance that you'll be able to generate a customized repo that exactly fits your needs.
+We've almost spent copious amount of time curating a set of sensible defaults for all of these options. If you're just getting started then you might want to consider
+setting up a make file similar to the following:
+
+.. code-block:: shell
+
+  GITHUB_REPO="gh:lpm0073/cookiecutter-openedx-devops"
+  GITHUB_BRANCH="main"
+  OUTPUT_FOLDER="../"
+
+  cookiecutter --checkout $GITHUB_BRANCH \
+              --output-dir $OUTPUT_FOLDER \
+              --overwrite-if-exists \
+              --no-input \
+              $GITHUB_REPO \
+              global_aws_region=us-east-1 \
+              global_account_id=ADD-YOUR-ACCOUNT-NUMBER \
+              global_root_domain=ADD-YOUR-ROOT-DOMAIN \
+              global_aws_route53_hosted_zone_id=ADD-YOUR-HOSTED-ZONE-ID \
+
+After reviewing the cookiecutter's initial outut you'll quickly get a general idea of what additional options you want to add to this basic patter in order to acheive your desired results.
 
 Project Identifiers
 -------------------
