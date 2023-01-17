@@ -118,7 +118,7 @@ Cookiecutter AWS Services Stack Installation Options
 
   *default value: Y*
 
-- **stack_install_k8s_kubeapps:*
+- **stack_install_k8s_kubeapps:**
   'Y' to install `VMWare Bitnami Kubeapps <https://kubeapps.dev/>`_
   in the AWS EKS cluster and add an ingress, ssl-tls cert and url endpoint to global_services_subdomain.
 
@@ -164,6 +164,7 @@ Cookiecutter AWS Services Stack Installation Options
 
   The bastion server provides several important software packages, some of which involve non-trivial configuration
   that might otherwise be challenging for you to install on your own:
+
   - homebrew
   - helm
   - Docker
