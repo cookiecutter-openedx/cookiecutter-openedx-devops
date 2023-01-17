@@ -195,7 +195,7 @@ resource "kubernetes_secret" "credentials" {
   }
 }
 {% endif %}
-{% if cookiecutter.ci_deploy_install_license_manager|upper == "Y" -%}
+{% if cookiecutter.ci_deploy_install_license_manager_service|upper == "Y" -%}
 resource "random_password" "mysql_license_manager" {
   length           = 16
   special          = true
