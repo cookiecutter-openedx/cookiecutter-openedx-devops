@@ -32,12 +32,14 @@ runs:
       run: |-
         echo "CONFIG_PATH=$(tutor config printroot)/env/apps/openedx/config" >> $GITHUB_ENV
 
-
-    - name: Create Kubernetes add-on resources
-      shell: bash
-      run:  |-
-        # Create kubernetes ingress and other environment resources
-        kubectl apply -f "ci/tutor-deploy/environments/{% raw %}${{ inputs.environment-id }}{% endraw %}/k8s"
+    # mcdaniel jan-2023: we'll probably deprecate this given that all of the
+    #                    manifests have to moved to terraform.
+    #
+    #- name: Create Kubernetes add-on resources
+    #  shell: bash
+    #  run:  |-
+    #    # Create kubernetes ingress and other environment resources
+    #    kubectl apply -f "ci/tutor-deploy/environments/{% raw %}${{ inputs.environment-id }}{% endraw %}/k8s"
 
     #------------------------------------------------------------------------
     # IV. Merge all of the configuration data into Tutor's Open edX
