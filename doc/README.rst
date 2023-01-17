@@ -1,6 +1,9 @@
-Project Generation Option
-=========================
+Project Generation Options
+==========================
 
+
+Project Identifiers
+-------------------
 
 - **github_account_name:**
   The Github organization for the source cookiecutter (ie this repository).
@@ -104,10 +107,135 @@ Project Generation Option
 
   *default value: https://www.edx.org/images/logos/edx-logo-elm.svg*
 
-stack_install_k8s_dashboard: [Y N]
-stack_install_k8s_kubeapps: [Y N]
-stack_install_k8s_karpenter: [Y N]
-stack_install_k8s_prometheus: [Y N]
+Cookiecutter AWS Services Stack Installation Options
+----------------------------------------------------
+
+- **stack_install_k8s_dashboard:**
+  'Y' to install `Kubernetes Dashboard <https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/>`_
+  in the AWS EKS cluster and add an ingress, ssl-tls cert and url endpoint to global_services_subdomain.
+
+  Dashboard is a web-based Kubernetes user interface. You can use Dashboard to deploy containerized applications to a Kubernetes cluster, troubleshoot your containerized application, and manage the cluster resources. You can use Dashboard to get an overview of applications running on your cluster, as well as for creating or modifying individual Kubernetes resources (such as Deployments, Jobs, DaemonSets, etc). For example, you can scale a Deployment, initiate a rolling update, restart a pod or deploy new applications using a deploy wizard.
+
+  *default value: Y*
+
+- **stack_install_k8s_kubeapps:*
+  'Y' to install `VMWare Bitnami Kubeapps <https://kubeapps.dev/>`_
+  in the AWS EKS cluster and add an ingress, ssl-tls cert and url endpoint to global_services_subdomain.
+
+  Kubeapps is an in-cluster web-based application that enables users with a one-time installation to deploy, manage, and upgrade applications on a Kubernetes cluster
+
+  *default value: Y*
+
+- **stack_install_k8s_karpenter:**
+  'Y' to install `Karpenter <https://karpenter.sh/>`_ in the AWS EKS cluster.
+
+  Karpenter is an open-source project lead by AWS that provides just-in-time compute nodes for any Kubernetes cluster.
+  Karpenter simplifies Kubernetes infrastructure with the right nodes at the right time.
+  Karpenter automatically launches just the right compute resources to handle your cluster's applications. It is designed to let you take full advantage of the cloud with fast and simple compute provisioning for Kubernetes clusters.
+
+  *default value: Y*
+
+- **stack_install_k8s_prometheus:**
+  'Y' to install `Prometheus <https://prometheus.io/`_ in the AWS EKS cluster. This is required if you chose
+  to install Karpenter.
+
+  *default value: Y*
+
+- **stack_add_remote_mongodb:**
+  'Y' to create an EC2 instance-based MongoDB server. This is recommended because we have encountered occasional compatibility issues with
+  AWS DocumentDB.
+
+  *default value: Y*
+
+- **stack_add_bastion:**
+  'Y' to create an EC2 instance-based Bastion server. This is strongly recommended. The bastion server provides an ssh private key based entry point to
+  services that are only accessible from within your AWS Virtual Private Cloud (VPC). Additionally, the bastion server contains a curated collection of
+  preinstalled and preconfigured software that you'll need for administering your Open edX installation.
+
+  This option is required if you choose Y to stack_add_bastion_openedx_dev_environment.
+
+  *default value: Y*
+
+- **stack_add_bastion_openedx_dev_environment:**
+  'Y' to include Open edX development essentials in the bastion configuration. These include for example,
+  installing a version of Python that exactly matches that of your Open edX deployments, building a matching
+  Python virtual environment and including misc apt packages that are requirements of the the PyPi packages included
+  in the Python virtual environment.
+
+  The bastion server provides several important software packages, some of which involve non-trivial configuration
+  that might otherwise be challenging for you to install on your own:
+  - homebrew
+  - helm
+  - Docker
+  - tutor
+  - aws cli
+  - kubectl
+  - k9s
+  - terraform and terragrunt
+  - mysql client software
+  - mongodb client software
+
+  *default value: N*
+
+Cookiecutter AWS Services Stack Configuration Options
+-----------------------------------------------------
+
+AWS Elastics Kubernetes Service Configuration Options
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+eks_worker_group_instance_type: t3.xlarge
+eks_worker_group_min_size: 0
+eks_worker_group_max_size: 1
+eks_worker_group_desired_size: 0
+eks_karpenter_group_instance_type: t3.large
+eks_karpenter_group_min_size: 3
+eks_karpenter_group_max_size: 10
+eks_karpenter_group_desired_size: 3
+kubernetes_cluster_version: 1.24
+
+MongoDB Configuration Options
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+mongodb_instance_type: t3.medium
+mongodb_allocated_storage: 10
+
+AWS EC2 Bastion Server Configuration Options
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+bastion_instance_type: t3.micro
+bastion_allocated_storage: 50
+
+AWS RDS MySQL Server Configuration Options
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+mysql_username: root
+mysql_port: 3306
+mysql_engine: mysql
+mysql_family: mysql5.7
+mysql_major_engine_version: 5.7
+mysql_engine_version: 5.7.33
+mysql_allocated_storage: 10
+mysql_create_random_password: true
+mysql_iam_database_authentication_enabled: false
+mysql_instance_class: db.t2.small
+mysql_maintenance_window: Sun:00:00-Sun:03:00
+mysql_backup_window: 03:00-06:00
+mysql_backup_retention_period: 7
+mysql_deletion_protection: false
+mysql_skip_final_snapshot: true
+
+AWS Elasticache Redis Cluster Configuration Options
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+redis_engine_version: 6.x
+redis_num_cache_clusters: 1
+redis_node_type: cache.t2.small
+redis_port: 6379
+redis_family: redis6.x
+
+Cookiecutter Github Actions Open edX Build Options
+--------------------------------------------------
+
 ci_build_tutor_version: 14.2.3
 ci_build_open_edx_version: nutmeg.2
 ci_build_theme_repository: edx-theme-example
@@ -120,6 +248,9 @@ ci_build_xblock_org: openedx
 ci_build_xblock_repository: edx-ora2
 ci_build_xblock_ref: master
 ci_build_kubectl_version: 1.24/stable
+
+Cookiecutter Github Actions Open edX Deploy Options
+---------------------------------------------------
 ci_deploy_install_backup_plugin: [N Y]
 ci_deploy_install_credentials_server: [N Y]
 ci_deploy_install_license_manager: [Y Y]
@@ -135,6 +266,10 @@ ci_deploy_OPENEDX_COMMON_VERSION: open-release/{{ cookiecutter.ci_build_open_edx
 ci_deploy_EMAIL_HOST: email-smtp.{{ cookiecutter.global_aws_region|lower|replace(' ' '-') }}.amazonaws.com
 ci_deploy_EMAIL_PORT: 587
 ci_deploy_EMAIL_USE_TLS: true
+
+Cookiecutter Github Actions Configuration Options
+-------------------------------------------------
+
 ci_actions_setup_build_action_version: v2.2.1
 ci_actions_amazon_ecr_login_version: v1.5.3
 ci_actions_checkout_version: v3.2.0
@@ -167,42 +302,7 @@ ci_openedx_actions_tutor_plugin_enable_mfe_version: v0.0.1
 ci_openedx_actions_tutor_plugin_enable_notes_version: v1.0.2
 ci_openedx_actions_tutor_plugin_enable_s3_version: v1.0.2
 ci_openedx_actions_tutor_plugin_enable_xqueue_version: v1.0.0
-eks_worker_group_instance_type: t3.xlarge
-eks_worker_group_min_size: 0
-eks_worker_group_max_size: 1
-eks_worker_group_desired_size: 0
-eks_karpenter_group_instance_type: t3.large
-eks_karpenter_group_min_size: 3
-eks_karpenter_group_max_size: 10
-eks_karpenter_group_desired_size: 3
-kubernetes_cluster_version: 1.24
-stack_add_remote_mongodb: [Y N]
-mongodb_instance_type: t3.medium
-mongodb_allocated_storage: 10
-stack_add_bastion: [Y N]
-stack_add_bastion_openedx_dev_environment: [N Y]
-bastion_instance_type: t3.micro
-bastion_allocated_storage: 50
-mysql_username: root
-mysql_port: 3306
-mysql_engine: mysql
-mysql_family: mysql5.7
-mysql_major_engine_version: 5.7
-mysql_engine_version: 5.7.33
-mysql_allocated_storage: 10
-mysql_create_random_password: true
-mysql_iam_database_authentication_enabled: false
-mysql_instance_class: db.t2.small
-mysql_maintenance_window: Sun:00:00-Sun:03:00
-mysql_backup_window: 03:00-06:00
-mysql_backup_retention_period: 7
-mysql_deletion_protection: false
-mysql_skip_final_snapshot: true
-redis_engine_version: 6.x
-redis_num_cache_clusters: 1
-redis_node_type: cache.t2.small
-redis_port: 6379
-redis_family: redis6.x
+
 terraform_required_version: ~> 1.3
 terraform_aws_modules_acm: ~> 4.3
 terraform_aws_modules_cloudfront: ~> 3.1
