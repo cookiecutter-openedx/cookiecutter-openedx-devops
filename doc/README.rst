@@ -18,8 +18,8 @@ Project Generation Option
 
 - **environment_name:**
   This cookiecutter will create one Open edX deployment environment for you,
-  named environment_name and located in the file path terraform/environments/environment_name.
-  You'll find extensive references to environment_name throughout terraform/environments/modules.
+  named environment_name and located in the file path ./terraform/environments/environment_name.
+  You'll find extensive references to environment_name throughout ./terraform/environments/modules.
   Note that you can copy-paste this folder to create additional environments.
 
   *default value: prod*
@@ -30,17 +30,80 @@ Project Generation Option
 
   *default value: courses*
 
-environment_studio_subdomain: studio
-global_platform_name: yourschool
-global_platform_description: Your School
-global_platform_logo_url: https://www.edx.org/images/logos/edx-logo-elm.svg
-global_platform_region: global
-global_platform_shared_resource_identifier: service
-global_services_subdomain: {{ cookiecutter.global_platform_shared_resource_identifier|lower|replace(' ' '-') }}
-global_root_domain: {{ cookiecutter.global_platform_name|lower|replace(' ' '-') }}.edu
-global_aws_route53_hosted_zone_id: Z1234567ABCDE1U23DEF
-global_aws_region: us-east-1
-global_account_id: 123456789012
+- **environment_studio_subdomain:**
+  The subdomain name to use for the Open edX Course Management Studio URL endpoint.
+  *default value: studio*
+
+- **global_platform_name:**
+  This is a global variable, stored in ./terraform/glocal.hcl that is ysed for creating
+  the standardized naming identifiers in AWS resources and resource tags. You'll also
+  find references to global_platform_name in the pre-configured helper bash scripts and the
+  Kubernetes ingress manifests. global_platform_name is a short description identifying the Open edX platform that this
+  cookiecutter will ultimately deploy, typically this is the root domain name for the project.
+
+  *default value: yourschool*
+
+- **global_platform_region:**
+  This is a global variable, stored in ./terraform/glocal.hcl that is ysed for creating
+  the standardized naming identifiers in AWS resources and resource tags. You'll also
+  find references to global_platform_name in the pre-configured helper bash scripts and the
+  Kubernetes ingress manifests. global_platform_region is a short description identifying the
+  geographic area that this Open edX installation will serve. This value is nearly always set
+  to the value 'global', meaning that this is the sole platform and it serves a global audience.
+
+  *default value: global*
+
+- **global_platform_shared_resource_identifier:**
+  This is a stack variable, stored in ./terraform/stacks/global_platform_shared_resource_identifier/stack.hcl that is ysed for creating
+  the standardized naming identifiers in AWS resources and resource tags. You'll also
+  find references to global_platform_shared_resource_identifier in the pre-configured helper bash scripts and the
+  Terragrunt templates. global_platform_shared_resource_identifier is a short description identifying the
+  name of the shared collection of AWS resources that support one or more Open edX environments. You'll see this identifier
+  as a suffix to the AWS resource tag names of resources like AWS VPC, AWS EKS, AWS RDS MySQL, MongoDB, and Elasticache.
+
+  *default value: service*
+
+- **global_services_subdomain:**
+  This cookiecutter will create several URL endpoints for each stack service, with
+  each endpoint residing inside a common subdomain named global_services_subdomain.
+  Examples include mysql.global_services_subdomain, mongodb.global_services_subdomain, redis.global_services_subdomain.
+
+  *default value:  same as global_platform_shared_resource_identifier*
+
+- **global_root_domain:**
+  The fully-qualified domain name that will contain **ALL* URL endpoints. Example: yourschool.edu
+
+- **global_aws_route53_hosted_zone_id:**
+  The AWS Route53 Hosted Zone ID of the global_root_domain.
+  Cookiecutter assumes that DNS is managed by AWS Route53. Note however that you can still use this cookiecutter
+  even if you manage your DNS for the global_root_domain elsewhere. But, in either case you'll need to create a
+  Route53 hosted zone for the global_root_domain which Terraform will reference when created additional hosted zones
+  for the environment and stack subdomains.
+
+  *Example: Z08529743UBLZ51RJDD76*
+
+- **global_aws_region:**
+  The `3-part character code <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions>`_ for
+  the AWS data center in which you'll deploy all AWS resources. You should choose the data center that is physically
+  located nearest your learners.
+
+  *default value: us-east-1*
+
+- **global_account_id:**
+  Your 12-character AWS account number.
+
+  *Example: 123456789012*
+
+- **global_platform_description:**
+  The value assigned to edx-platform Django settings variable PLATFORM_DESCRIPTION.
+
+  *default value: Your School*
+
+- **global_platform_logo_url:**
+  Future use.
+
+  *default value: https://www.edx.org/images/logos/edx-logo-elm.svg*
+
 stack_install_k8s_dashboard: [Y N]
 stack_install_k8s_kubeapps: [Y N]
 stack_install_k8s_karpenter: [Y N]
