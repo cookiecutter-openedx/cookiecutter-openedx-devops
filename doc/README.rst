@@ -9,14 +9,14 @@ Project Generation Option
 
   *default value: lpm0073*
 
-- github_repo_name:
+- **github_repo_name:**
   The Github repository for the source cookiecutter (ie this repository).
   This is a command-line option only and is will not otherwise be sound in this
   sourcecode.
 
   *default value: openedx_devops*
 
-- environment_name:
+- **environment_name:**
   This cookiecutter will create one Open edX deployment environment for you,
   named environment_name and located in the file path terraform/environments/environment_name.
   You'll find extensive references to environment_name throughout terraform/environments/modules.
@@ -24,7 +24,7 @@ Project Generation Option
 
   *default value: prod*
 
-- environment_subdomain:
+- **environment_subdomain:**
   This cookiecutter will create several URL endpoints for each environment_name, with
   each endpoint residing inside a common subdomain named environment_subdomain.
 
