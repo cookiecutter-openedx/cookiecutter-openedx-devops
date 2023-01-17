@@ -44,7 +44,7 @@ Cookiecutter Tutor Open edX Production Devops Tools
 |
 
 
-Powered by `Cookiecutter <https://github.com/cookiecutter/cookiecutter>`_, Cookiecutter Tutor Open edX Production Devops Tools is a community maintained project template for jumpstarting production-ready, Kubernetes-based installations of Open edX. The template offers a number of generation options, we invite you to check the dedicated `docs <https://github.com/cookiecutter/cookiecutter/doc>`_ pages to learn more about each of them.
+Powered by `Cookiecutter <https://github.com/cookiecutter/cookiecutter>`_, Cookiecutter Tutor Open edX Production Devops Tools is a community maintained project template for jumpstarting production-ready, Kubernetes-based installations of Open edX. The template offers a number of generation options, we invite you to check the dedicated `docs <https://github.com/lpm0073/cookiecutter-openedx-devops/tree/main/doc>`_ pages to learn more about each of them.
 
 Scalable and Secure
 -------------------
