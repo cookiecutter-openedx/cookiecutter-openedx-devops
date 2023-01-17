@@ -105,7 +105,7 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
   * - Software
     - Version
   * - `Open edX Named Release <https://edx.readthedocs.io/projects/edx-developer-docs/en/latest/named_releases.html>`_
-    - {{ cookiecutter.ci_build_open_edx_version }}
+    - {{ cookiecutter.ci_deploy_open_edx_version }}
   * - `MySQL Server <https://www.mysql.com/>`_
     - {{ cookiecutter.mysql_engine_version }}
   * - `Redis Cache <https://redis.io/>`_
@@ -437,7 +437,7 @@ Both the Build as well as the Deploy workflows were pre-configured based on your
 I. Build your Tutor Docker Image
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Use `this automated Github Actions workflow <https://github.com/{{ cookiecutter.github_account_name }}/{{ cookiecutter.github_repo_name }}/actions/workflows/tutor_build_image.yml>`_ to build a customized Open edX Docker container based on the latest stable version of Open edX (current {{ cookiecutter.ci_build_open_edx_version }}) and
+Use `this automated Github Actions workflow <https://github.com/{{ cookiecutter.github_account_name }}/{{ cookiecutter.github_repo_name }}/actions/workflows/tutor_build_image.yml>`_ to build a customized Open edX Docker container based on the latest stable version of Open edX (current {{ cookiecutter.ci_deploy_open_edx_version }}) and
 your Open edX custom theme repository and Open edX plugin repository. Your new Docker image will be automatically uploaded to `AWS Amazon Elastic Container Registry <https://{{ cookiecutter.global_aws_region }}.console.aws.amazon.com/ecr/repositories?region={{ cookiecutter.global_aws_region }}>`_
 
 

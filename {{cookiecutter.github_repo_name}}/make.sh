@@ -18,7 +18,7 @@ cookiecutter --checkout $GITHUB_BRANCH \
              --no-input \
              $GITHUB_REPO \
              ci_deploy_install_credentials_server={{ cookiecutter.ci_deploy_install_credentials_server }} \
-             ci_deploy_install_license_manager={{ cookiecutter.ci_deploy_install_license_manager }} \
+             ci_deploy_install_license_manager_service={{ cookiecutter.ci_deploy_install_license_manager_service }} \
              ci_deploy_install_discovery_service={{ cookiecutter.ci_deploy_install_discovery_service }} \
              ci_deploy_install_mfe_service={{ cookiecutter.ci_deploy_install_mfe_service }} \
              ci_deploy_install_notes_service={{ cookiecutter.ci_deploy_install_notes_service }} \

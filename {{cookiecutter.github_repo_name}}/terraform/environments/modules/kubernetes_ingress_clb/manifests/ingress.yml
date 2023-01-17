@@ -121,7 +121,7 @@ spec:
             port:
               number: 8000
 {% endif %}
-{%- if cookiecutter.ci_deploy_install_license_manager|upper == "Y" %}
+{%- if cookiecutter.ci_deploy_install_license_manager_service|upper == "Y" %}
   - host: subscriptions.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
     http:
       paths:
