@@ -44,7 +44,7 @@ Cookiecutter Tutor Open edX Production Devops Tools
 |
 
 
-This repository contains a `Cookiecutter <https://github.com/cookiecutter/cookiecutter>`_ to create a new repository that includes Terraform code for managing your AWS infrastructure, and Github Actions workflows for building and deploying your Open edX applications.
+Powered by `Cookiecutter <https://github.com/cookiecutter/cookiecutter>`_, Cookiecutter Tutor Open edX Production Devops Tools is a community maintained project template for jumpstarting production-ready, Kubernetes-based installations of Open edX. The template offers a number of generation options, we invite you to check the dedicated `docs <https://github.com/cookiecutter/cookiecutter>`_ pages to learn more about each of them.
 
 Scalable and Secure
 -------------------
