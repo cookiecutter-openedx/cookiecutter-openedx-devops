@@ -83,10 +83,7 @@ module "eks" {
   #
   # audit your AWS EKS KMS key access by running:
   # aws kms get-key-policy --key-id ADD-YOUR-KEY-ID-HERE --region {{ cookiecutter.global_aws_region }} --policy-name default --output text
-  kms_key_owners                  = [
-                                    "arn:aws:iam::${var.account_id}:user/*",
-                                    "arn:aws:iam::${var.account_id}:user/system/*",
-                                    ]
+  kms_key_owners                  = ["arn:aws:iam::${var.account_id}:user/system/bastion-user/${shared_resource_identifier}-bastion"]
 
   tags = merge(
     var.tags,
