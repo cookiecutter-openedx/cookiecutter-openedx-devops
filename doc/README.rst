@@ -22,6 +22,17 @@ After reviewing the cookiecutter's initial outut you'll quickly get a general id
 Project Identifiers
 -------------------
 
+These parameters identify high-level information about your Open edX installation.
+Additionally, Terraform relies on AWS resource tags for programatically identifying and managing resources.
+The Cookiecutter parameters that follow, in addition to identifying your AWS account and data center, will
+also be used to generate the common sets of AWS resource tags that are used throughout your Open edX platform.
+See this example screen shot of a typical AWS resource. In this case, an AWS RDS MySQL server instance:
+
+.. image:: doc/cookiecutter-tags.png
+  :width: 100%
+  :alt: Cookiecutter Tags
+
+
 - **github_account_name:**
 
   The Github organization for the source cookiecutter (ie this repository).
