@@ -59,10 +59,6 @@ Builds a fully functional Docker-based, horizontally-scaled Open edX installatio
   :width: 100%
   :alt: K9S Console Screenshot
 
-.. image:: doc/ec2-bastion.png
-  :width: 100%
-  :alt: Bastion Welcome Screen
-
 Complete Kubernetes Auto scaling
 --------------------------------
 
@@ -317,7 +313,18 @@ We also recommend that you install `k9s <https://k9scli.io/>`_, a popular tool f
   terragrunt run-all apply
 
 
-IV. Connect To Your backend Services
+IV. Connect To Your new bastion server
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+v1.01 introduced a newly designed bastion server with a complete set of preinstalled and preconfigured software for adminstering your
+Open edX platform.
+
+.. image:: doc/ec2-bastion.png
+  :width: 100%
+  :alt: Bastion Welcome Screen
+
+
+V. Connect To Your backend Services
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Terraform creates friendly subdomain names for any of the backend services which you are likely to connect: Cloudfront, MySQL, Mongo and Redis.
@@ -341,7 +348,7 @@ Specifically with regard to MySQL, several 3rd party analytics tools provide out
   :alt: Connecting to MySQL Workbench
 
 
-V. Manage your new Kubernetes cluster
+VI. Manage your new Kubernetes cluster
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Installs four of the most popular web applications for Kubernetes administration:
@@ -354,7 +361,7 @@ Installs four of the most popular web applications for Kubernetes administration
   - pwd: prom-operator
 
 
-VI. Add more Kubernetes admins
+VII. Add more Kubernetes admins
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 By default your AWS IAM user account will be the only user who can view, interact with and manage your new Kubernetes cluster. Other IAM users with admin permissions will still need to be explicitly added to the list of Kluster admins.
