@@ -79,8 +79,10 @@ module "eks" {
   # the AWS EKS KMS key. At creation, this key is benign since Kubernetes secrets encryption
   # is not enabled by default.
   #
+  # AWS EKS KMS console: https://{{ cookiecutter.global_aws_region }}.console.aws.amazon.com/kms/home
+  #
   # audit your AWS EKS KMS key access by running:
-  # aws kms get-key-policy --key-id ADD-YOU-KEY-ID-HERE --region {{ cookiecutter.global_aws_region }} --policy-name default --output text
+  # aws kms get-key-policy --key-id ADD-YOUR-KEY-ID-HERE --region {{ cookiecutter.global_aws_region }} --policy-name default --output text
   kms_key_owners                  = [
                                     "arn:aws:iam::${var.account_id}:user/*",
                                     "arn:aws:iam::${var.account_id}:user/system/*",
