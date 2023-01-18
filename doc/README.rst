@@ -255,7 +255,7 @@ AWS Elastics Kubernetes Service Configuration Options
   the IAM user who creates the cluster. Thereon you'll need to explicitly add additional
   permitted IAM users manually by editing the Terraform variable kms_key_owners in ./terraform/stacks/modules/kubernets/main.tf .
 
-  *default value: N*
+  *default value: Y*
 
 The Karpenter node group is created for you automatically and is the default node group for the cluster.
 Karpenter nodes use spot-pricing which varies based on market conditions but is typically around 1/3 the cost

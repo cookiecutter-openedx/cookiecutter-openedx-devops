@@ -50,7 +50,7 @@ variable "kubernetes_cluster_version" {
 }
 
 variable "eks_create_kms_key" {
-  type = false
+  type = bool
 }
 
 variable "eks_worker_group_min_size" {
