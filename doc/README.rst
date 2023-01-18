@@ -28,7 +28,7 @@ The Cookiecutter parameters that follow, in addition to identifying your AWS acc
 also be used to generate the common sets of AWS resource tags that are used throughout your Open edX platform.
 See this example screen shot of a typical AWS resource. In this case, an AWS RDS MySQL server instance:
 
-.. image:: doc/cookiecutter-tags.png
+.. image:: ./cookiecutter-tags.png
   :width: 100%
   :alt: Cookiecutter Tags
 
