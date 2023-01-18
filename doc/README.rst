@@ -7,15 +7,11 @@ initially running something similar to the following:
 
 .. code-block:: shell
 
-  GITHUB_REPO="gh:lpm0073/cookiecutter-openedx-devops"
-  GITHUB_BRANCH="main"
-  OUTPUT_FOLDER="../"
-
-  cookiecutter --checkout $GITHUB_BRANCH \
-              --output-dir $OUTPUT_FOLDER \
+  cookiecutter --checkout main \
+              --output-dir ./ \
               --overwrite-if-exists \
               --no-input \
-              $GITHUB_REPO \
+              gh:lpm0073/cookiecutter-openedx-devops \
               global_aws_region=us-east-1 \
               global_account_id=ADD-YOUR-ACCOUNT-NUMBER \
               global_root_domain=ADD-YOUR-ROOT-DOMAIN \

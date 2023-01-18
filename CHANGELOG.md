@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.16] (2023-1-17)
+
+- add a kms_key_owners list to AWS EKS stack
+- add Cookiecutter parameter documentation
+
 ## [1.0.15] (2023-1-16)
 
 - move redis module from environment to stack
