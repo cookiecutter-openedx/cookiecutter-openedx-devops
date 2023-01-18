@@ -77,7 +77,7 @@
     "ci_openedx_actions_tutor_plugin_enable_s3_version": "v1.0.2",
     "ci_openedx_actions_tutor_plugin_enable_xqueue_version": "v1.0.0",
     "eks_worker_group_instance_type": "t3.xlarge",
-    "eks_create_kms_key": ["N", "Y"],
+    "eks_create_kms_key": ["Y", "N"],
     "eks_worker_group_min_size": 0,
     "eks_worker_group_max_size": 1,
     "eks_worker_group_desired_size": 0,
