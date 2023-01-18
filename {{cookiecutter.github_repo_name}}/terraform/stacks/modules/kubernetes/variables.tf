@@ -49,6 +49,10 @@ variable "kubernetes_cluster_version" {
   type = string
 }
 
+variable "eks_create_kms_key" {
+  type = string
+}
+
 variable "eks_worker_group_min_size" {
   type = number
 }

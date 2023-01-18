@@ -21,6 +21,7 @@ locals {
   aws_region                      = local.global_vars.locals.aws_region
   shared_resource_identifier      = local.global_vars.locals.shared_resource_identifier
   kubernetes_version              = local.stack_vars.locals.kubernetes_version
+  eks_create_kms_key              = local.stack_vars.locals.eks_create_kms_key
   eks_worker_group_instance_type  = local.stack_vars.locals.eks_worker_group_instance_type
   eks_worker_group_min_size       = local.stack_vars.locals.eks_worker_group_min_size
   eks_worker_group_max_size       = local.stack_vars.locals.eks_worker_group_max_size
@@ -73,6 +74,7 @@ inputs = {
   public_subnet_ids = dependency.vpc.outputs.public_subnets
   vpc_id  = dependency.vpc.outputs.vpc_id
   kubernetes_cluster_version = local.kubernetes_version
+  eks_create_kms_key = local.eks_create_kms_key
   eks_worker_group_instance_type  = local.eks_worker_group_instance_type
   eks_worker_group_min_size = local.eks_worker_group_min_size
   eks_worker_group_max_size = local.eks_worker_group_max_size

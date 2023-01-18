@@ -38,6 +38,11 @@ locals {
   # see: https://aws.amazon.com/ec2/instance-types/
   #----------------------------------------------------------------------------
   kubernetes_version                = "{{ cookiecutter.kubernetes_cluster_version }}"
+  {% if cookiecutter.eks_create_kms_key|upper == "Y" -%}
+  eks_create_kms_key                = true
+  {% else -%}
+  eks_create_kms_key                = false
+  {% endif -%}
   eks_worker_group_instance_type    = "{{ cookiecutter.eks_worker_group_instance_type }}"
   eks_worker_group_min_size         = {{ cookiecutter.eks_worker_group_min_size }}
   eks_worker_group_max_size         = {{ cookiecutter.eks_worker_group_max_size }}

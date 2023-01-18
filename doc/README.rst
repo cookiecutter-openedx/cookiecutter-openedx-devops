@@ -246,6 +246,17 @@ AWS Elastics Kubernetes Service Configuration Options
 
   *default value: 1.24*
 
+- **eks_create_kms_key:**
+
+  'Y' if you want to add an AWS KMS key to your AWS EKS cluster. A KMS key is used for encrypting Kubernetes Secrets
+  in an AWS EKS cluster. In most cases this is unnecesary since access to the secrets first requires access to the cluster,
+  which itself is already limited. The ecrypted secrets option is therefore disabled by default.
+  Note that setting this value to 'Y' will effectively limit Terraform programatic access to the cluster to
+  the IAM user who creates the cluster. Thereon you'll need to explicitly add additional
+  permitted IAM users manually by editing the Terraform variable kms_key_owners in ./terraform/stacks/modules/kubernets/main.tf .
+
+  *default value: N*
+
 The Karpenter node group is created for you automatically and is the default node group for the cluster.
 Karpenter nodes use spot-pricing which varies based on market conditions but is typically around 1/3 the cost
 of the same instance type's on-demand price. Note that spot-priced EC2 instances are effectively rented from
