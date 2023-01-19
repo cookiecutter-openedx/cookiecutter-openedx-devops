@@ -54,6 +54,15 @@ resource "null_resource" "annotate-ebs-csi-controller" {
 
   provisioner "local-exec" {
     command = <<-EOT
+      # 1. conifugre kubeconfig locally with the credentials data of the just-created
+      # kubernetes cluster.
+      # ---------------------------------------
+      aws eks --region ap-south-1 update-kubeconfig --name ${var.namespace} --alias ${var.namespace}
+      kubectl config use-context ${var.namespace}
+      kubectl config set-context --current --namespace=kube-system
+
+      # 2. final install steps for EBS CSI Driver
+      # ---------------------------------------
       kubectl annotate serviceaccount ebs-csi-controller-sa -n kube-system eks.amazonaws.com/role-arn=arn:aws:iam::${var.account_id}:role/${aws_iam_role.AmazonEKS_EBS_CSI_DriverRole.name}
       kubectl rollout restart deployment ebs-csi-controller -n kube-system
     EOT
