@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.17] (2023-1-??)
+
+- add aws eks update-kubeconfig call ahead of annotating service account for AWS EBS CSI Driver
+- add Terraform outputs to environments/modules/acm so that Terragrunt run-all won't complain
+
 ## [1.0.16] (2023-1-17)
 
 - add a kms_key_owners list to AWS EKS stack
