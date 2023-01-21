@@ -9,6 +9,11 @@
 variable "environment_domain" {
   type = string
 }
+
+variable "environment_subdomain" {
+  type = string
+}
+
 variable "services_subdomain" {
   type = string
 }

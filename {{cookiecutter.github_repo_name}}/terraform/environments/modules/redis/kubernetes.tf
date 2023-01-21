@@ -28,6 +28,7 @@ resource "kubernetes_secret" "environment_redis" {
   }
 
   data = {
+    REDIS_KEY_PREFIX = "${var.environment_subdomain}"
     REDIS_HOST = "redis.primary.${var.environment_domain}"
   }
 }

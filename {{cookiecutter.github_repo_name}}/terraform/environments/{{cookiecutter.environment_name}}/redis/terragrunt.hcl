@@ -14,6 +14,7 @@ locals {
   services_subdomain        = local.global_vars.locals.services_subdomain
   shared_resource_namespace = local.global_vars.locals.shared_resource_namespace
   environment_domain        = local.environment_vars.locals.environment_domain
+  environment_subdomain     = local.environment_vars.locals.environment_subdomain
   environment_namespace     = local.environment_vars.locals.environment_namespace
   resource_name             = local.environment_vars.locals.environment_namespace
 
@@ -96,6 +97,7 @@ inputs = {
   shared_resource_namespace     = local.shared_resource_namespace
   environment_namespace         = local.environment_namespace
   environment_domain            = local.environment_domain
+  environment_subdomain         = local.environment_subdomain
   services_subdomain            = local.services_subdomain
   tags                          = local.tags
 }
