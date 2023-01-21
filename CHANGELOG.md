@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - add aws eks update-kubeconfig call ahead of annotating service account for AWS EBS CSI Driver
 - add Terraform outputs to environments/modules/acm so that Terragrunt run-all won't complain
+- parameterize environment ingress and certificate manifests
 
 ## [1.0.16] (2023-1-17)
 
