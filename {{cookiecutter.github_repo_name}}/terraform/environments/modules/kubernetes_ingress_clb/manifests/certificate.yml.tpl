@@ -10,12 +10,14 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: le-crt
+  name: ${environment_domain}-tls
+  namespace: ${namespace}
 spec:
-  secretName: {{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}-tls
+  secretName: ${environment_domain}-tls
   issuerRef:
     kind: ClusterIssuer
     name: letsencrypt
-  commonName: {{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
+  commonName: ${environment_domain}
   dnsNames:
-    - "*.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}"
+    - "${environment_domain}"
+    - "*.${environment_domain}"

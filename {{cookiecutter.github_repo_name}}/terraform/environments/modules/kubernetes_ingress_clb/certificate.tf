@@ -8,6 +8,22 @@ data "template_file" "cluster-issuer" {
   }
 }
 
+data "template_file" "certificate" {
+  template = file("${path.module}/manifests/certificate.yml.tpl")
+  vars = {
+    namespace          = var.environment_namespace
+    environment_domain = var.environment_domain
+  }
+}
+
+data "template_file" "ingress" {
+  template = file("${path.module}/manifests/ingress.yml.tpl")
+  vars = {
+    namespace          = var.environment_namespace
+    environment_domain = var.environment_domain
+  }
+}
+
 resource "kubectl_manifest" "cluster-issuer" {
   yaml_body = data.template_file.cluster-issuer.rendered
 
@@ -18,7 +34,7 @@ resource "kubectl_manifest" "cluster-issuer" {
 }
 
 resource "kubectl_manifest" "certificate" {
-  yaml_body = file("${path.module}/manifests/certificate.yml")
+  yaml_body = data.template_file.certificate.rendered
 
   depends_on = [
     aws_route53_record.naked,
@@ -27,7 +43,7 @@ resource "kubectl_manifest" "certificate" {
 }
 
 resource "kubectl_manifest" "ingress" {
-  yaml_body = file("${path.module}/manifests/ingress.yml")
+  yaml_body = data.template_file.ingress.rendered
 
   depends_on = [
     aws_route53_record.naked,

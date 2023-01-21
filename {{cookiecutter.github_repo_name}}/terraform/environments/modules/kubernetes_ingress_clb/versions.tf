@@ -7,28 +7,28 @@
 # usage: build an EKS cluster load balancer
 #------------------------------------------------------------------------------
 terraform {
-  required_version = "{{ cookiecutter.terraform_required_version }}"
+  required_version = "~> 1.3"
 
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+      version = "~> 4.48"
     }
     local = {
       source  = "hashicorp/local"
-      version = "{{ cookiecutter.terraform_provider_hashicorp_local_version }}"
+      version = "~> 2.2"
     }
     random = {
       source  = "hashicorp/random"
-      version = "{{ cookiecutter.terraform_provider_hashicorp_random_version }}"
+      version = "~> 3.4"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "{{ cookiecutter.terraform_provider_kubernetes_version }}"
+      version = "~> 2.16"
     }
     kubectl = {
       source  = "gavinbunney/kubectl"
-      version = "{{ cookiecutter.terraform_provider_hashicorp_kubectl_version }}"
+      version = "~> 1.14"
     }
   }
 }
