@@ -15,7 +15,6 @@ locals {
   aws_region                      = local.global_vars.locals.aws_region
   cert_manager_namespace          = "cert-manager"
   services_subdomain              = local.global_vars.locals.services_subdomain
-  services_subdomain              = local.global_vars.locals.services_subdomain
 }
 
 dependencies {
