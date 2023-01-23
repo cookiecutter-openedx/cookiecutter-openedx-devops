@@ -14,7 +14,8 @@ locals {
   shared_resource_namespace       = local.global_vars.locals.shared_resource_namespace
   aws_region                      = local.global_vars.locals.aws_region
   cert_manager_namespace          = "cert-manager"
-  services_subdomain                    = local.global_vars.locals.services_subdomain
+  services_subdomain              = local.global_vars.locals.services_subdomain
+  services_domain                 = local.global_vars.locals.services_domain
 }
 
 dependencies {
@@ -77,4 +78,5 @@ inputs = {
   aws_region              = local.aws_region
   cert_manager_namespace  = local.cert_manager_namespace
   namespace               = local.shared_resource_namespace
+  services_domain         = local.services_domain
 }

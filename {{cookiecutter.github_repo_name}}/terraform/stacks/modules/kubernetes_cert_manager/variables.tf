@@ -19,10 +19,6 @@ variable "aws_region" {
   type = string
 }
 
-variable "services_subdomain" {
-  type = string
-}
-
 variable "services_domain" {
   type = string
 }
