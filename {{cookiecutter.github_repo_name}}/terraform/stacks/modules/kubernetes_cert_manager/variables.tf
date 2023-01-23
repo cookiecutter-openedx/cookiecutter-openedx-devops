@@ -22,3 +22,7 @@ variable "aws_region" {
 variable "services_subdomain" {
   type = string
 }
+
+variable "services_domain" {
+  type = string
+}

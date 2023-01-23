@@ -87,8 +87,16 @@ resource "helm_release" "cert-manager" {
   ]
 }
 
+data "template_file" "certificate" {
+  template = file("${path.module}/manifests/certificate.yml.tpl")
+  vars = {
+    services_domain         = var.services_domain
+    cert_manager_namespace  = var.cert_manager_namespace
+  }
+}
+
 resource "kubectl_manifest" "certificate" {
-  yaml_body = file("${path.module}/manifests/certificate.yml")
+  yaml_body = data.template_file.certificate.rendered
 
   depends_on = [
     module.cert_manager_irsa,
