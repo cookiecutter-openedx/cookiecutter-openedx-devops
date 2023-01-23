@@ -12,7 +12,7 @@ spec:
   tls:
   - hosts:
     - "*.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}"
-    secretName: {{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}-tls
+    secretName: dashboard.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}-tls
   rules:
   - host: dashboard.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}
     http:

@@ -10,14 +10,14 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: ${services_domain}-tls
+  name: ${services_subdomain}-tls
   namespace: ${namespace}
 spec:
-  secretName: ${services_domain}-tls
+  secretName: ${services_subdomain}-tls
   issuerRef:
     kind: ClusterIssuer
     name: letsencrypt
-  commonName: ${services_domain}
+  commonName: ${services_subdomain}
   dnsNames:
-    - "${services_domain}"
-    - "*.${services_domain}"
+    - "${services_subdomain}"
+    - "*.${services_subdomain}"
