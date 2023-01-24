@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.18] (2023-1-23)
+
+- convert defalt stack certificate.yml to a template to parameterize name and namespace
+- ensure that the secret name of all cert requests matches the domain name of the request itself
+
 ## [1.0.17] (2023-1-21)
 
 - add aws eks update-kubeconfig call ahead of annotating service account for AWS EBS CSI Driver
