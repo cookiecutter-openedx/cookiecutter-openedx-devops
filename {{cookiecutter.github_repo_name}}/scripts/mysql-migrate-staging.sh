@@ -15,7 +15,7 @@ DB_PREFIX="{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platfo
 #------------------------------------------------------------------------------
 # retrieve the mysql root credentials from k8s secrets. Sets the following environment variables:
 #
-#    MYSQL_HOST=mysql.{{ cookiecutter.global_root_domain }}
+#    MYSQL_HOST=mysql.{{ cookiecutter.global_platform_shared_resource_identifier }}.{{ cookiecutter.global_root_domain }}
 #    MYSQL_PORT=3306
 #    MYSQL_ROOT_PASSWORD=******
 #    MYSQL_ROOT_USERNAME=root
@@ -23,6 +23,15 @@ DB_PREFIX="{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platfo
 #------------------------------------------------------------------------------
 $(ksecret.sh mysql-root {{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.global_platform_shared_resource_identifier }})
 
+# example for tutor-to-tutor MySQL migration:
+#------------------------------------------------------------------------------
+echo "migrating openedx database"
+mysql -h $MYSQL_HOST -u $MYSQL_ROOT_USERNAME -p$MYSQL_ROOT_PASSWORD -e "DROP DATABASE IF EXISTS ${DB_PREFIX}edx; CREATE DATABASE ${DB_PREFIX}edx CHARACTER SET utf8 COLLATE utf8_general_ci"
+mysqldump --set-gtid-purged=OFF --column-statistics=0 -h $MYSQL_HOST -u $MYSQL_ROOT_USERNAME -p$MYSQL_ROOT_PASSWORD openedx | mysql -h $MYSQL_HOST  -u $MYSQL_ROOT_USERNAME -p$MYSQL_ROOT_PASSWORD -D ${DB_PREFIX}edx
+#------------------------------------------------------------------------------
+
+# examples for native build-to-tutor MySQL migration (Lilac and older):
+#------------------------------------------------------------------------------
 echo "migrating discovery database"
 mysql -h $MYSQL_HOST -u $MYSQL_ROOT_USERNAME -p$MYSQL_ROOT_PASSWORD -e "DROP DATABASE IF EXISTS ${DB_PREFIX}disc; CREATE DATABASE ${DB_PREFIX}disc CHARACTER SET utf8 COLLATE utf8_general_ci"
 mysqldump --set-gtid-purged=OFF --column-statistics=0 -h $MYSQL_HOST  -u $MYSQL_ROOT_USERNAME -p$MYSQL_ROOT_PASSWORD discovery | mysql -h $MYSQL_HOST  -u $MYSQL_ROOT_USERNAME -p$MYSQL_ROOT_PASSWORD -D ${DB_PREFIX}disc
@@ -38,3 +47,4 @@ mysqldump --set-gtid-purged=OFF --column-statistics=0 -h $MYSQL_HOST -u $MYSQL_R
 echo "migrating notes database"
 mysql -h $MYSQL_HOST -u $MYSQL_ROOT_USERNAME -p$MYSQL_ROOT_PASSWORD -e "DROP DATABASE IF EXISTS ${DB_PREFIX}notes; CREATE DATABASE ${DB_PREFIX}notes CHARACTER SET utf8 COLLATE utf8_general_ci"
 mysqldump --set-gtid-purged=OFF --column-statistics=0 -h $MYSQL_HOST -u $MYSQL_ROOT_USERNAME -p$MYSQL_ROOT_PASSWORD edx_notes_api | mysql -h $MYSQL_HOST  -u $MYSQL_ROOT_USERNAME -p$MYSQL_ROOT_PASSWORD -D ${DB_PREFIX}notes
+#------------------------------------------------------------------------------

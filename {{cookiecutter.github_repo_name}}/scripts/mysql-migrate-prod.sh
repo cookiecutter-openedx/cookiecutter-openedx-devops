@@ -15,7 +15,7 @@ DEST_DB_PREFIX="{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_p
 #------------------------------------------------------------------------------
 # retrieve the mysql root credentials from k8s secrets. Sets the following environment variables:
 #
-#    MYSQL_HOST=mysql.{{ cookiecutter.global_root_domain }}
+#    MYSQL_HOST=mysql.{{ cookiecutter.global_platform_shared_resource_identifier }}.{{ cookiecutter.global_root_domain }}
 #    MYSQL_PORT=3306
 #    MYSQL_ROOT_PASSWORD=******
 #    MYSQL_ROOT_USERNAME=root
