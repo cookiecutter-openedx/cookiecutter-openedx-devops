@@ -276,12 +276,14 @@ jobs:
       #                       --set MFE_DISCUSSIONS_MFE_APP=null \
       #                       --set MFE_AUTHN_MFE_APP=null \
 
+
       # ---------------------------------------------------------------------------------
       # install and enable tutor plugin https://github.com/lpm0073/tutor-contrib-k8s-deploy-tasks
       # this resolves any problems that cannot be address by directly manipulating tutor's
       # config.yml and/or the resources that it generates in its lms and cms working folders.
       #
       # this includes the following:
+      # ----------------------------
       # 1. oauth misconfiguration. tutor relies on an environment variable ENABLE_HTTPS to determine the protocol of the
       # production oauth client for applications that rely on the LMS oauth service. For Kubernetes installations however,
       # this value needs to be set to false which results in ./manage.py lms create_dot_application misconfiguring the oauth
