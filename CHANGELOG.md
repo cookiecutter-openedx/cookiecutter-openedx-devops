@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.19] (2023-1-28)
+
+- support for MFE's
+
 ## [1.0.18] (2023-1-23)
 
 - convert defalt stack certificate.yml to a template to parameterize name and namespace
