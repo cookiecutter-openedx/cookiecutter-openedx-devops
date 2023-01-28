@@ -1,16 +1,22 @@
 #------------------------------------------------------------------------------
-# written by: Miguel Afonso
-#             https://www.linkedin.com/in/mmafonso/
+# written by: Lawrence McDaniel
+#             https://lawrencemcdaniel.com
+
+# date: Jan-2023
 #
-# date: Aug-2021
+# usage: open-release olive.1 and newer include the url endpoint /api/mfe_config/v1
+#        that is implemented in edx-platform/lms/djangoapps/mfe_config_api.
 #
-# usage: setup nginx for EKS load balancer.
-#        see https://cert-manager.io/docs/
+#        we need to add a special ingress, just for this endpoint.
+#        note that this ingress requires an additional annotation to set the
+#        Host header in the request to the hostname of the lms.
+#
+# example: https://apps.${environment_domain}/api/mfe_config/v1?mfe=authn
 #------------------------------------------------------------------------------
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ${environment_namespace}
+  name: ${environment_namespace}-mfe-config
   namespace: ${environment_namespace}
   annotations:
     # mcdaniel
@@ -24,6 +30,16 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
     kubernetes.io/ingress.class: "nginx"
     cert-manager.io/cluster-issuer: "letsencrypt"
+    # ----------------------
+    # We need to specify the host header, otherwise it will be rejected with 400
+    # from the lms.
+    # ----------------------
+    nginx.ingress.kubernetes.io/upstream-vhost: ${environment_domain}
+
+    # to eliminate the trailing slash without loosing the param
+    # see: https://github.com/kubernetes/ingress-nginx/blob/main/docs/examples/rewrite/README.md
+    # ----------------------
+    nginx.ingress.kubernetes.io/rewrite-target: /api/mfe_config/v1$2
 spec:
   tls:
   - hosts:
@@ -31,44 +47,13 @@ spec:
     - "*.${environment_domain}"
     secretName: ${environment_domain}-tls
   rules:
-  - host: ${environment_domain}
+  - host: apps.${environment_domain}
     http:
       paths:
-      - path: /
+      - path: /api/mfe_config/v1(/|$)(.*)
         pathType: Prefix
         backend:
           service:
             name: lms
             port:
               number: 8000
-  - host: ${studio_subdomain}.${environment_domain}
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: cms
-            port:
-              number: 8000
-  - host: discovery.${environment_domain}
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: discovery
-            port:
-              number: 8000
-
-  - host: apps.${environment_domain}
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: mfe
-            port:
-              number: 8002

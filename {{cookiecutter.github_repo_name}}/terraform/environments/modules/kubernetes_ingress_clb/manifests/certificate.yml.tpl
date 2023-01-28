@@ -10,8 +10,7 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: ${environment_domain}-tls
-  namespace: ${namespace}
+  name: le-crt
 spec:
   secretName: ${environment_domain}-tls
   issuerRef:
@@ -19,5 +18,4 @@ spec:
     name: letsencrypt
   commonName: ${environment_domain}
   dnsNames:
-    - "${environment_domain}"
     - "*.${environment_domain}"

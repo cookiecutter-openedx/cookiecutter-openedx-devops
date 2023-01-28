@@ -16,6 +16,7 @@ locals {
   services_subdomain         = "{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}"
   aws_region                 = "{{ cookiecutter.global_aws_region }}"
   account_id                 = "{{ cookiecutter.global_account_id }}"
+  studio_subdomain           = "{{ cookiecutter.environment_studio_subdomain }}"
 
   tags = {
     "cookiecutter/platform_name"                = local.platform_name

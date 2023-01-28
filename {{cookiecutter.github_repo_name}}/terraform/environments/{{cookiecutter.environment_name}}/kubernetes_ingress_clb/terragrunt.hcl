@@ -21,6 +21,7 @@ locals {
   aws_region                      = local.global_vars.locals.aws_region
   environment_namespace           = local.environment_vars.locals.environment_namespace
   environment_domain              = local.environment_vars.locals.environment_domain
+  studio_subdomain                = local.global_vars.locals.studio_subdomain
 
   tags = merge(
     local.environment_vars.locals.tags,
@@ -94,6 +95,7 @@ inputs = {
   aws_region = local.aws_region
   environment_domain = local.environment_domain
   environment_namespace = local.environment_namespace
+  studio_subdomain = local.studio_subdomain
   shared_resource_namespace = local.shared_resource_namespace
   root_domain = local.root_domain
   tags = local.tags

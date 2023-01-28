@@ -13,6 +13,9 @@ variable "environment_namespace" {
   type = string
 }
 
+variable "studio_subdomain" {
+  type = string
+}
 variable "shared_resource_namespace" {
   type = string
 }
