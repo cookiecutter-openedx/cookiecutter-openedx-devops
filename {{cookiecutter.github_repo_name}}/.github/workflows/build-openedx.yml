@@ -18,10 +18,6 @@ jobs:
       NAMESPACE: {{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.environment_name }}
       EKS_CLUSTER_NAME: {{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.global_platform_shared_resource_identifier }}
 
-      CUSTOM_THEME_REPOSITORY: {{ cookiecutter.ci_build_theme_repository }}
-      CUSTOM_THEME_REPOSITORY_ORGANIZATION: {{ cookiecutter.ci_build_theme_repository_organization }}
-      CUSTOM_THEME_REPOSITORY_REF: {{ cookiecutter.ci_build_theme_ref }}
-
     steps:
       - uses: actions/checkout@{{ cookiecutter.ci_actions_checkout_version }}
 
@@ -49,9 +45,9 @@ jobs:
       - name: Add a custom theme
         uses: openedx-actions/tutor-plugin-build-openedx-add-theme@{{ cookiecutter.ci_openedx_actions_tutor_plugin_build_openedx_add_theme_version }}
         with:
-          repository: {% raw %}${{ env.CUSTOM_THEME_REPOSITORY }}{% endraw %}
-          repository-organization: {% raw %}${{ env.CUSTOM_THEME_REPOSITORY_ORGANIZATION }}{% endraw %}
-          repository-ref: {% raw %}${{ env.CUSTOM_THEME_REPOSITORY_REF }}{% endraw %}
+          repository: {{ cookiecutter.ci_build_theme_repository }}
+          repository-organization: {{ cookiecutter.ci_build_theme_repository_organization }}
+          repository-ref: {{ cookiecutter.ci_build_theme_ref }}
           # UN-COMMENT THIS IF YOUR REPO IS PRIVATE.
           #----------------------------------------------
           #repository-token: {% raw %}${{ secrets.PAT }}{% endraw %}

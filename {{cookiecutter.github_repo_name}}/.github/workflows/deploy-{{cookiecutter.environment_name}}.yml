@@ -118,7 +118,6 @@ jobs:
           echo "AWS_ECR_REPOSITORY_BACKUP=${AWS_ECR_URI}/openedx_backup:latest" >> $GITHUB_ENV
           echo "AWS_ECR_REPOSITORY_CREDENTIALS=${AWS_ECR_URI}/openedx_credentials:latest" >> $GITHUB_ENV
           echo "AWS_ECR_REPOSITORY_LICENSE_MANAGER=${AWS_ECR_URI}/license_manager:latest" >> $GITHUB_ENV
-          echo "AWS_ECR_REPOSITORY_MFE=${AWS_ECR_URI}/openedx_mfe:latest" >> $GITHUB_ENV
           echo "AWS_ECR_REPOSITORY_OPENEDX=${AWS_ECR_URI}/openedx:latest" >> $GITHUB_ENV
 
       - name: Load environment specific settings (direct)
@@ -254,44 +253,61 @@ jobs:
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
-      # ---------------------------------------------------------------------------------
+      # -----------------------------------------------------------------------
       # Add your custom configuration tasks here ....
-      # ---------------------------------------------------------------------------------
+      # -----------------------------------------------------------------------
       - name: Disable Caddy web proxy service
         shell: bash
         run:  |-
           tutor config save --set ENABLE_WEB_PROXY=false
-
-      - name: Disable LMS courseware micro front-end app
-        uses: openedx-actions/tutor-plugin-configure-courseware-mfe@{{ cookiecutter.ci_openedx_actions_tutor_plugin_configure_courseware_mfe_version }}
-        with:
-          enabled: 'false'
-
-      - name: Disable Caddy web proxy service
-        shell: bash
-        run:  |-
-          tutor config save --set ENABLE_WEB_PROXY=false
+                            --set RUN_CADDY=false
 
       # see: https://github.com/overhangio/tutor-mfe
-      - name: Disable all MFEs
-        shell: bash
-        run: |-
-          tutor config save --set MFE_ACCOUNT_MFE_APP=null \
-                            --set MFE_GRADEBOOK_MFE_APP=null \
-                            --set MFE_PROFILE_MFE_APP=null \
-                            --set MFE_COURSE_AUTHORING_MFE_APP=null \
-                            --set MFE_DISCUSSIONS_MFE_APP=null \
-                            --set MFE_AUTHN_MFE_APP=null \
-
-      - name: Dump tutor config
-        uses: openedx-actions/tutor-print-dump@{{ cookiecutter.ci_openedx_actions_tutor_print_dump }}
+      # un-comment this section to disable specific MFEs
+      # -----------------------------------------------------------------------
+      # - name: Disable all MFEs
+      #   shell: bash
+      #   run: |-
+      #     tutor config save --set MFE_ACCOUNT_MFE_APP=null \
+      #                       --set MFE_GRADEBOOK_MFE_APP=null \
+      #                       --set MFE_PROFILE_MFE_APP=null \
+      #                       --set MFE_COURSE_AUTHORING_MFE_APP=null \
+      #                       --set MFE_DISCUSSIONS_MFE_APP=null \
+      #                       --set MFE_AUTHN_MFE_APP=null \
 
       # ---------------------------------------------------------------------------------
-      # Deploy
+      # install and enable tutor plugin https://github.com/lpm0073/tutor-contrib-k8s-deploy-tasks
+      # this resolves any problems that cannot be address by directly manipulating tutor's
+      # config.yml and/or the resources that it generates in its lms and cms working folders.
+      #
+      # this includes the following:
+      # 1. oauth misconfiguration. tutor relies on an environment variable ENABLE_HTTPS to determine the protocol of the
+      # production oauth client for applications that rely on the LMS oauth service. For Kubernetes installations however,
+      # this value needs to be set to false which results in ./manage.py lms create_dot_application misconfiguring the oauth
+      # client for some, but not all, of these oauth clients. This plugin reconfigures the oauth clients of cms,
+      # discovery, ecommerce and credentials to use https protocol for redirect URI.
+
+      # 2. Nutmeg upgrade and initializataion tasks There are a few manage.py tasks that need to run for platforms that are
+      # upgrading to Nutmeg or newer from Maple or older. This plugin runs those tasks for you. For more information see
+      # Open edX Nutmeg Release.
+
+      # 3. Missing user profile records. User accounts created with manage.py lack a corresponding auth_userprofile record,
+      # which causes a 500 exception during login for that account. Adds a blank record in cases where a record is missing.
+
+      # 4. MFE misconfiguration. tutor-mfe relies on the value of ENABLE_HTTPS when generating the dict MFE_CONFIG,
+      # which in the case of k8s deployments will result in the browser blocking content due to "Mixed content".
+      # This plugin overrides the results of tutor-mfe openedx-lms-production-settings, replacing protocol produced
+      # by logic relying on ENABLE_HTTPS (assumed to result in 'http') with the hard-coded value 'https'.
       # ---------------------------------------------------------------------------------
       - name: Add tutor k8s-specific deployment tasks
         uses: openedx-actions/tutor-plugin-enable-k8s-deploy-tasks@{{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_k8s_deploy_tasks_version }}
 
+      - name: Dump tutor config
+        uses: openedx-actions/tutor-print-dump@{{ cookiecutter.ci_openedx_actions_tutor_print_dump }}
+
+      # -----------------------------------------------------------------------
+      # Deploy
+      # -----------------------------------------------------------------------
       - name: Deploy to Kubernetes
         uses: ./.github/actions/tutor/k8s/deploy
         with:
@@ -307,7 +323,3 @@ jobs:
         uses: openedx-actions/tutor-k8s-configure-edx-admin@{{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_edx_admin }}
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
-
-      - name: Summary
-        shell: bash
-        run: kubectl get hpa
