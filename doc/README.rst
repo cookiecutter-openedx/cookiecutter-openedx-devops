@@ -195,6 +195,18 @@ Cookiecutter AWS Services Stack Installation Options
 
   *default value: Y*
 
+- **stack_add_remote_redis:**
+
+  'Y' to create an AWS Elasticache Redis cluster. This is recommended in order to avoid potential user experience degredation due to redeployents of the software to Kubernetes.
+
+  *default value: Y*
+
+- **stack_add_remote_mysql:**
+
+  'Y' to create an AWS RDS MySQL database instance. Your budget permitting, this is recommended in order to maximize the stability and configurability of your MySQL database service.
+
+  *default value: Y*
+
 - **stack_add_bastion:**
 
   'Y' to create an EC2 instance-based Bastion server. This is strongly recommended. The bastion server provides an ssh private key based entry point to
