@@ -140,6 +140,15 @@ def main():
     if "{{ cookiecutter.stack_add_k8s_prometheus }}".upper() != "Y":
         remove_k8s_prometheus()
 
+    if "{{ cookiecutter.stack_add_remote_redis }}".upper() != "Y":
+        remove_redis()
+
+    if "{{ cookiecutter.stack_add_remote_mysql }}".upper() != "Y":
+        remove_mysql()
+
+    if "{{ cookiecutter.stack_add_remote_mongodb }}".upper() != "Y":
+        remove_mongodb()
+
     print(SUCCESS + "Your Open edX devops repo has been initialized." + TERMINATOR)
 
 
