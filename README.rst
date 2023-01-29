@@ -79,7 +79,7 @@ This configuration scales automatically, reliably supporting anywhere from a few
 New Features
 ------------
 
-**RELEASE v1.0.19** Out of the box support for all MFE's.
+**RELEASE v1.0.19:** Out of the box support for all MFE's.
 
 **RELEASE v1.0.8:** `Kubernetes Dashboard <https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/>`_ and `Kubeapps <https://kubeapps.dev/>`_ web applications.
 
