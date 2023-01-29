@@ -218,5 +218,4 @@ resource "kubernetes_secret" "license_manager" {
     MYSQL_HOST                     = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
     MYSQL_PORT                     = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
   }
-}
-{% endif %}
+}{% endif %}
