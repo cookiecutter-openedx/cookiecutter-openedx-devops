@@ -90,8 +90,8 @@ resource "helm_release" "cert-manager" {
 data "template_file" "certificate" {
   template = file("${path.module}/manifests/certificate.yml.tpl")
   vars = {
-    services_subdomain   = var.services_subdomain
-    namespace            = var.namespace
+    services_subdomain = var.services_subdomain
+    namespace          = var.namespace
   }
 }
 
