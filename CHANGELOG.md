@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.19] (2023-1-29)
+
+Adds the following feature toggles:
+
+- stack_add_remote_mysql: Y to create and auto-configure AWS RDS for MySQL, N to use tutor's k8s pod
+- stack_add_remote_mongodb: Y to create and auto-configure AWS EC2 remote MongoDB, N to use tutor's k8s pod
+- stack_add_remote_redis: Y to create and auto-configure AWS ElastiCache Redis, N to use tutor's k8s pod
+- stack_add_k8s_dashboard: Y to install and configure Kubernetes Dashboard
+- stack_add_k8s_kubeapps: Y to install and configure VMWare Kubeapps
+- stack_add_k8s_karpenter: Y to install and configure Karpenter
+- stack_add_k8s_prometheus: Y to install and configure Prometheus
+
 ## [1.0.18] (2023-1-28)
 
 - support for MFE's
