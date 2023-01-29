@@ -153,7 +153,7 @@ See this example screen shot of a typical AWS resource. In this case, an AWS RDS
 Cookiecutter AWS Services Stack Installation Options
 ----------------------------------------------------
 
-- **stack_install_k8s_dashboard:**
+- **stack_add_k8s_dashboard:**
 
   'Y' to install `Kubernetes Dashboard <https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/>`_
   in the AWS EKS cluster and add an ingress, ssl-tls cert and url endpoint to global_services_subdomain.
@@ -162,7 +162,7 @@ Cookiecutter AWS Services Stack Installation Options
 
   *default value: Y*
 
-- **stack_install_k8s_kubeapps:**
+- **stack_add_k8s_kubeapps:**
 
   'Y' to install `VMWare Bitnami Kubeapps <https://kubeapps.dev/>`_
   in the AWS EKS cluster and add an ingress, ssl-tls cert and url endpoint to global_services_subdomain.
@@ -171,7 +171,7 @@ Cookiecutter AWS Services Stack Installation Options
 
   *default value: Y*
 
-- **stack_install_k8s_karpenter:**
+- **stack_add_k8s_karpenter:**
 
   'Y' to install `Karpenter <https://karpenter.sh/>`_ in the AWS EKS cluster.
 
@@ -181,7 +181,7 @@ Cookiecutter AWS Services Stack Installation Options
 
   *default value: Y*
 
-- **stack_install_k8s_prometheus:**
+- **stack_add_k8s_prometheus:**
 
   'Y' to install `Prometheus <https://prometheus.io/`_ in the AWS EKS cluster. This is required if you chose
   to install Karpenter.

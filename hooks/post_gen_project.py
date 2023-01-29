@@ -101,16 +101,16 @@ def main():
     if "{{ cookiecutter.stack_add_remote_mongodb }}".upper() != "Y":
         remove_mongodb()
 
-    if "{{ cookiecutter.stack_install_k8s_dashboard }}".upper() != "Y":
+    if "{{ cookiecutter.stack_add_k8s_dashboard }}".upper() != "Y":
         remove_k8s_dashboard()
 
-    if "{{ cookiecutter.stack_install_k8s_kubeapps }}".upper() != "Y":
+    if "{{ cookiecutter.stack_add_k8s_kubeapps }}".upper() != "Y":
         remove_k8s_kubeapps()
 
-    if "{{ cookiecutter.stack_install_k8s_karpenter }}".upper() != "Y":
+    if "{{ cookiecutter.stack_add_k8s_karpenter }}".upper() != "Y":
         remove_k8s_karpenter()
 
-    if "{{ cookiecutter.stack_install_k8s_prometheus }}".upper() != "Y":
+    if "{{ cookiecutter.stack_add_k8s_prometheus }}".upper() != "Y":
         remove_k8s_prometheus()
 
     print(SUCCESS + "Your Open edX devops repo has been initialized." + TERMINATOR)
