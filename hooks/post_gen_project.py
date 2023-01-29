@@ -17,27 +17,51 @@ def remove_redis():
     dir_path = os.path.join("terraform", "stacks", "modules", "redis")
     rm_directory(dir_path)
 
+    dir_path = os.path.join("terraform", "stacks", "{{ cookiecutter.global_platform_shared_resource_identifier }}", "redis")
+    rm_directory(dir_path)
+
     dir_path = os.path.join("terraform", "environments", "modules", "redis")
+    rm_directory(dir_path)
+
+    dir_path = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "redis")
     rm_directory(dir_path)
 
 def remove_mysql():
     dir_path = os.path.join("terraform", "stacks", "modules", "mysql")
     rm_directory(dir_path)
 
+    dir_path = os.path.join("terraform", "stacks", "{{ cookiecutter.global_platform_shared_resource_identifier }}", "mysql")
+    rm_directory(dir_path)
+
     dir_path = os.path.join("terraform", "environments", "modules", "mysql")
+    rm_directory(dir_path)
+
+    dir_path = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "mysql")
     rm_directory(dir_path)
 
 def remove_mongodb():
     dir_path = os.path.join("terraform", "stacks", "modules", "mongodb")
     rm_directory(dir_path)
 
-    dir_path = os.path.join("terraform", "environments", "modules", "mongodb")
+    dir_path = os.path.join("terraform", "stacks", "{{ cookiecutter.global_platform_shared_resource_identifier }}", "mongodb")
     rm_directory(dir_path)
 
     dir_path = os.path.join("terraform", "stacks", "modules", "mongodb_volume")
     rm_directory(dir_path)
 
+    dir_path = os.path.join("terraform", "stacks", "{{ cookiecutter.global_platform_shared_resource_identifier }}", "mongodb_volume")
+    rm_directory(dir_path)
+
+    dir_path = os.path.join("terraform", "environments", "modules", "mongodb")
+    rm_directory(dir_path)
+
     dir_path = os.path.join("terraform", "environments", "modules", "mongodb_volume")
+    rm_directory(dir_path)
+
+    dir_path = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "mongodb")
+    rm_directory(dir_path)
+
+    dir_path = os.path.join("terraform", "environments", "{{ cookiecutter.environment_name }}", "mongodb_volume")
     rm_directory(dir_path)
 
 def remove_k8s_dashboard():
