@@ -127,10 +127,8 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
   {% endif -%}
   * - `Tutor Plugin: Discovery Service <https://github.com/overhangio/tutor-discovery>`_
     - latest stable
-  {% if cookiecutter.ci_deploy_install_mfe_service|upper == "Y" -%}
   * - `Tutor Plugin: Micro Front-end Service <https://github.com/overhangio/tutor-mfe>`_
     - latest stable
-  {% endif -%}
   {% if cookiecutter.ci_deploy_install_ecommerce_service|upper == "Y" -%}
   * - `Tutor Plugin: Ecommerce Service <https://github.com/overhangio/tutor-ecommerce>`_
     - latest stable
@@ -227,8 +225,6 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
     - {{ cookiecutter.ci_openedx_actions_tutor_plugin_build_openedx_add_requirement_version }}
   * - `openedx-actions/tutor-plugin-build-openedx-add-theme <https://github.com/openedx-actions/tutor-plugin-build-openedx-add-theme>`_
     - {{ cookiecutter.ci_openedx_actions_tutor_plugin_build_openedx_add_theme_version }}
-  * - `openedx-actions/tutor-plugin-configure-courseware-mfe <https://github.com/openedx-actions/tutor-plugin-configure-courseware-mfe>`_
-    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_configure_courseware_mfe_version }}
   * - `openedx-actions/tutor-plugin-enable-backup <https://github.com/openedx-actions/tutor-plugin-enable-backup>`_
     - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_backup_version }}
   * - `openedx-actions/tutor-plugin-enable-credentials <https://github.com/openedx-actions/tutor-plugin-enable-credentials>`_

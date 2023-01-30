@@ -626,9 +626,9 @@ Open edX Deployment
 
   *default value: Y*
 
-- **ci_deploy_install_mfe_service:**
+- **ci_deploy_enable_mfes:**
 
-  'Y' to install the `Open edX MFE service <https://github.com/overhangio/tutor-mfe>`_
+  'Y' to enable all MFE's using `Open edX MFE service <https://github.com/overhangio/tutor-mfe>`_
 
   *default value: Y*
 
@@ -696,7 +696,6 @@ AWS ECR Build Actions
 - **ci_openedx_actions_tutor_plugin_build_openedx_version:** v1.0.2
 - **ci_openedx_actions_tutor_plugin_build_openedx_add_requirement_version:** v1.0.4
 - **ci_openedx_actions_tutor_plugin_build_openedx_add_theme_version:** v1.0.0
-- **ci_openedx_actions_tutor_plugin_configure_courseware_mfe_version:** v0.0.2
 
 Open edX Deployment Feature Flags
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -708,7 +707,6 @@ Open edX Deployment Feature Flags
 - **ci_openedx_actions_tutor_plugin_enable_forum_version:** v1.0.0
 - **ci_openedx_actions_tutor_plugin_enable_k8s_deploy_tasks_version:** v0.0.1
 - **ci_openedx_actions_tutor_plugin_enable_license_manager_version:** v0.0.3
-- **ci_openedx_actions_tutor_plugin_enable_mfe_version:** v0.0.1
 - **ci_openedx_actions_tutor_plugin_enable_notes_version:** v1.0.2
 - **ci_openedx_actions_tutor_plugin_enable_s3_version:** v1.0.2
 - **ci_openedx_actions_tutor_plugin_enable_xqueue_version:** v1.0.0
