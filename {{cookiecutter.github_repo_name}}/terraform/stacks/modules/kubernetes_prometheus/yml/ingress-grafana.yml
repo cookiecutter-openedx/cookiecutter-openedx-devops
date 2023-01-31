@@ -20,7 +20,7 @@ spec:
   tls:
   - hosts:
     - "*.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}"
-    secretName: grafana.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}-tls
+    secretName: {{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}-tls
   rules:
   - host: grafana.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}
     http:
