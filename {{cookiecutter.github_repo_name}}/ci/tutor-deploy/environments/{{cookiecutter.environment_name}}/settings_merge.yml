@@ -4,6 +4,7 @@ CORS_ORIGIN_WHITELIST:
 - https://{{ cookiecutter.global_root_domain }}
 - https://{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
 - https://{{ cookiecutter.environment_studio_subdomain }}.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
+- https://apps.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
 CROSS_DOMAIN_CSRF_COOKIE_DOMAIN: "{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}"
 CROSS_DOMAIN_CSRF_COOKIE_NAME: native-csrf-cookie
 CSRF_COOKIE_SECURE: true
