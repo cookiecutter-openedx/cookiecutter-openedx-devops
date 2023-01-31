@@ -25,7 +25,7 @@ NOW="$(date +%Y%m%dT%H%M%S)"
 #
 # MONGODB_ADMIN_PASSWORD: *******
 # MONGODB_ADMIN_USERNAME: admin
-# MONGODB_HOST: mongodb.{{ cookiecutter.global_root_domain }}
+# MONGODB_HOST: mongodb.{{ cookiecutter.global_platform_shared_resource_identifier }}.{{ cookiecutter.global_root_domain }}
 # MONGODB_PORT: "27017"
 #
 #------------------------------------------------------------------------------
