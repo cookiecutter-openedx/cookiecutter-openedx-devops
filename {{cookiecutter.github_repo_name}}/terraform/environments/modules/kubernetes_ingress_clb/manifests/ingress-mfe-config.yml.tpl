@@ -29,7 +29,7 @@ metadata:
     # ---------------------
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
     kubernetes.io/ingress.class: "nginx"
-    cert-manager.io/cluster-issuer: "letsencrypt"
+    cert-manager.io/cluster-issuer: ${environment_domain}
     # ----------------------
     # We need to specify the host header, otherwise it will be rejected with 400
     # from the lms.

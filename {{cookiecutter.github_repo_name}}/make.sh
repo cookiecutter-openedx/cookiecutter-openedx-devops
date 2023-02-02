@@ -25,6 +25,8 @@ cookiecutter --checkout $GITHUB_BRANCH \
             ci_deploy_install_ecommerce_service={{ cookiecutter.ci_deploy_install_ecommerce_service }} \
             global_platform_name={{ cookiecutter.global_platform_name }} \
             global_platform_region={{ cookiecutter.global_platform_region }} \
+            global_platform_shared_resource_identifier={{ cookiecutter.global_platform_shared_resource_identifier }} \
+            global_services_subdomain={{ cookiecutter.global_services_subdomain }} \
             global_aws_region={{ cookiecutter.global_aws_region }} \
             global_account_id={{ cookiecutter.global_account_id }} \
             global_root_domain={{ cookiecutter.global_root_domain }} \

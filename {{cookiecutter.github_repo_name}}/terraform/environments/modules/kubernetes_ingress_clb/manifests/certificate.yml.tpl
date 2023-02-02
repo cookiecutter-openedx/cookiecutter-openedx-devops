@@ -15,7 +15,7 @@ spec:
   secretName: ${environment_domain}-tls
   issuerRef:
     kind: ClusterIssuer
-    name: letsencrypt
+    name: ${environment_domain}
   commonName: ${environment_domain}
   dnsNames:
     - "*.${environment_domain}"

@@ -15,7 +15,7 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
     kubernetes.io/ingress.class: "nginx"
-    cert-manager.io/cluster-issuer: "letsencrypt"
+    cert-manager.io/cluster-issuer: {{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}
 spec:
   tls:
   - hosts:

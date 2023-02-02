@@ -11,13 +11,13 @@
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
-  name: letsencrypt
+  name: {{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}
   namespace: ${namespace}
 spec:
   acme:
     email: no-reply@aube.university
     privateKeySecretRef:
-      name: letsencrypt
+      name: {{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}
     server: https://acme-v02.api.letsencrypt.org/directory
     solvers:
       - dns01:

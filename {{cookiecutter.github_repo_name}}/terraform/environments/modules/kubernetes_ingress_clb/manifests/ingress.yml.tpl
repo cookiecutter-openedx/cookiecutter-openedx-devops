@@ -23,7 +23,7 @@ metadata:
     # ---------------------
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
     kubernetes.io/ingress.class: "nginx"
-    cert-manager.io/cluster-issuer: "letsencrypt"
+    cert-manager.io/cluster-issuer: ${environment_domain}
 spec:
   tls:
   - hosts:
