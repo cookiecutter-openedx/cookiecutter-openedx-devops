@@ -10,7 +10,7 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: le-crt
+  name: ${environment_domain}
 spec:
   secretName: ${environment_domain}-tls
   issuerRef:

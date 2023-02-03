@@ -15,7 +15,7 @@ metadata:
   namespace: ${namespace}
 spec:
   acme:
-    email: no-reply@aube.university
+    email: no-reply@${root_domain}
     privateKeySecretRef:
       name: ${environment_domain}
     server: https://acme-v02.api.letsencrypt.org/directory

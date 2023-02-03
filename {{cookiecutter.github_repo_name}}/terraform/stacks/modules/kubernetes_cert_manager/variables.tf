@@ -6,6 +6,9 @@
 #
 # usage: build an EKS cluster load balancer
 #------------------------------------------------------------------------------
+variable "root_domain" {
+  type = string
+}
 
 variable "namespace" {
   type = string
