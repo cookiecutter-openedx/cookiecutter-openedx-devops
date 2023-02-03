@@ -177,10 +177,6 @@ module "eks" {
 
 }
 
-#------------------------------------------------------------------------------
-# Tutor deploys into this namespace, bc of a namesapce command-line argument
-# that we pass inside of GitHub Actions deploy workflow
-#------------------------------------------------------------------------------
 resource "kubernetes_namespace" "namespace-shared" {
   metadata {
     name = var.namespace
