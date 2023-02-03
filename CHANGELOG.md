@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.20] (2023-2-2)
+
+- parameterize cluster issuer email address
+- name cluster issuers and certificates by domain name
+- add MFE url endpoint to CORS whitelist
+- use a common TLS secret for service url endpoints
+- bug fix MONGODB_HOST
+- bump aws-ebs-csi-driver=v1.15.0-eksbuild.1
+- refactor MFE treatment
+
 ## [1.0.19] (2023-1-29)
 
 Adds the following feature toggles:
