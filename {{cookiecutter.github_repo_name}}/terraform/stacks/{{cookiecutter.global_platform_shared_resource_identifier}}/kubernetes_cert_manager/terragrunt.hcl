@@ -15,6 +15,7 @@ locals {
   shared_resource_namespace       = local.global_vars.locals.shared_resource_namespace
   aws_region                      = local.global_vars.locals.aws_region
   cert_manager_namespace          = "cert-manager"
+  cert_manager_image_version      = {{ cookiecutter.cert_manager_image_version }}
   services_subdomain              = local.global_vars.locals.services_subdomain
 }
 
@@ -75,9 +76,10 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  root_domain             = local.root_domain
-  aws_region              = local.aws_region
-  cert_manager_namespace  = local.cert_manager_namespace
-  namespace               = local.shared_resource_namespace
-  services_subdomain      = local.services_subdomain
+  root_domain                 = local.root_domain
+  aws_region                  = local.aws_region
+  cert_manager_namespace      = local.cert_manager_namespace
+  cert_manager_image_version  = local.cert_manager_image_version
+  namespace                   = local.shared_resource_namespace
+  services_subdomain          = local.services_subdomain
 }
