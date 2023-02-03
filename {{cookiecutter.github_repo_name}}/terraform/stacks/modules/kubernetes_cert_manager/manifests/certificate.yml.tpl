@@ -16,7 +16,7 @@ spec:
   secretName: ${services_subdomain}-tls
   issuerRef:
     kind: ClusterIssuer
-    name: {{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}
+    name: ${services_subdomain}
   commonName: ${services_subdomain}
   dnsNames:
     - "${services_subdomain}"

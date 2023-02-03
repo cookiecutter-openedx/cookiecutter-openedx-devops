@@ -3,10 +3,10 @@ global:
     enabled: true
     useAppArmor: false
 image:
-  tag: v1.8.2
+  tag: {{ cookiecutter.cert_manager_image_version }}
 webhook:
   image:
-    tag: v1.8.2
+    tag: {{ cookiecutter.cert_manager_image_version }}
 prometheus:
   enabled: false
 installCRDs: true
