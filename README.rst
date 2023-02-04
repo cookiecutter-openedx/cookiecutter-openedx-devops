@@ -542,6 +542,11 @@ Why Use Terragrunt?
 
 `Terragrunt <https://terragrunt.gruntwork.io/>`_ is a thin wrapper that provides extra tools for keeping your configurations DRY, working with multiple Terraform modules, and managing remote state. DRY means don't repeat yourself. That helped a lot with self-repeating modules we had to use in this architecture.
 
+License
+-------
+
+The code in this repository is licensed under version 3 of the AGPL unless otherwise noted. Please see the `LICENSE <./LICENSE>`_ file for details.
+
 Get Involved!
 -------------
 
