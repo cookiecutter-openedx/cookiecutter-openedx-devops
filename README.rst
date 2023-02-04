@@ -444,10 +444,6 @@ For any other IAM users you'll need to modify the following in terraform/stacks/
       "arn:aws:iam::${var.account_id}:user/system/user/your-iam-user"
     ]
 
-since June-2022 the AWS EKS Kubernetes cluster configuration excludes public api access. This means that kubectl is only accessible via the bastion, from inside of the AWS VPC on the private subnets.
-The convenience script /scripts/bastion-config.sh installs all of the Ubuntu packages and additional software that you'll need to connect to the k8s cluster using kubectl and k9s. You'll also need to
-configure aws cli with an IAM key and secret with the requisite admin permissions.**
-
 
 Continuous Integration (CI)
 ---------------------------
