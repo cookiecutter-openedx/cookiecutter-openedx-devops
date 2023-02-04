@@ -9,7 +9,7 @@
 #------------------------------------------------------------------------------
 
 GITHUB_REPO="gh:lpm0073/cookiecutter-openedx-devops"
-GITHUB_BRANCH="main"
+GITHUB_BRANCH="{{ cookiecutter.github_release }}"
 OUTPUT_FOLDER="../"
 
 cookiecutter --checkout $GITHUB_BRANCH \
@@ -17,6 +17,7 @@ cookiecutter --checkout $GITHUB_BRANCH \
             --overwrite-if-exists \
             --no-input \
             $GITHUB_REPO \
+            github_repo_name={{ cookiecutter.github_repo_name }} \
             ci_deploy_install_credentials_server={{ cookiecutter.ci_deploy_install_credentials_server }} \
             ci_deploy_install_license_manager_service={{ cookiecutter.ci_deploy_install_license_manager_service }} \
             ci_deploy_install_discovery_service={{ cookiecutter.ci_deploy_install_discovery_service }} \
@@ -33,6 +34,7 @@ cookiecutter --checkout $GITHUB_BRANCH \
             global_aws_route53_hosted_zone_id={{ cookiecutter.global_aws_route53_hosted_zone_id }} \
             environment_name={{ cookiecutter.environment_name }} \
             environment_subdomain={{ cookiecutter.environment_subdomain }} \
+            eks_create_kms_key={{ cookiecutter.eks_create_kms_key }} \
             eks_worker_group_instance_type={{ cookiecutter.eks_worker_group_instance_type }} \
             eks_worker_group_min_size={{ cookiecutter.eks_worker_group_min_size }} \
             eks_worker_group_max_size={{ cookiecutter.eks_worker_group_max_size }} \
