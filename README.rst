@@ -315,7 +315,7 @@ We also recommend that you install `k9s <https://k9scli.io/>`_, a popular tool f
   # -------------------------------------
   # to manage an individual resource
   # -------------------------------------
-  cd ./terraform/environments/{{ cookiecutter.environment_name }}/mysql
+  cd ./terraform/environments/prod/mysql
   terragrunt init
   terragrunt plan
   terragrunt apply
@@ -324,7 +324,7 @@ We also recommend that you install `k9s <https://k9scli.io/>`_, a popular tool f
   # -------------------------------------
   # to build the entire backend
   # -------------------------------------
-  cd ./terraform/environments/{{ cookiecutter.environment_name }}
+  cd ./terraform/environments/prod
   terragrunt run-all init
   terragrunt run-all apply
 
