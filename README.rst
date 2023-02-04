@@ -433,9 +433,9 @@ Following is an example aws-auth configMap with additional IAM user accounts add
       resourceVersion: "499488"
       uid: 52d6e7fd-01b7-4c80-b831-b971507e5228
 
-Note that by default, Kubernetes version 1.24 and newer encrypts all secrets data using AWS Key Management Service (KMS).
+Note that by default, Kubernetes version 1.24 and newer encrypts all secrets data using `AWS Key Management Service (KMS) <https://aws.amazon.com/kms/>`_.
 The Cookiecutter automatically adds the IAM user for the bastion server.
-For any other IAM user you'll need to modify the following in terraform/stacks/modules/kubernetes/main.tf:
+For any other IAM users you'll need to modify the following in terraform/stacks/modules/kubernetes/main.tf:
 
 .. code-block:: terraform
 
