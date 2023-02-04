@@ -15,7 +15,7 @@ locals {
   shared_resource_namespace       = local.global_vars.locals.shared_resource_namespace
   aws_region                      = local.global_vars.locals.aws_region
   cert_manager_namespace          = "cert-manager"
-  cert_manager_image_version      = {{ cookiecutter.cert_manager_image_version }}
+  cert_manager_image_version      = "{{ cookiecutter.cert_manager_image_version }}"
   services_subdomain              = local.global_vars.locals.services_subdomain
 }
 
