@@ -444,6 +444,8 @@ For any other IAM users you'll need to modify the following in terraform/stacks/
       "arn:aws:iam::${var.account_id}:user/system/user/your-iam-user"
     ]
 
+Alternatively, you can disable encrypted Kubernetes secrets by setting Cookiecutter parameter eks_create_kms_key=N.
+
 
 Continuous Integration (CI)
 ---------------------------
