@@ -261,8 +261,41 @@ Important Considerations
 Quick Start
 -----------
 
-I. Add Your Secret Credentials To This Repository
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+I. Setup your local dev environment
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The following *should* work for macOS, Linux and Windows. Most of the code in this repository is Terraform or Terragrunt. However,
+running the Terraform modules will in turn invoke several other software packages; namely, the AWS Command Line Interface awscli, the Kubernetes
+Command Line Interface kubectl, and Helm. For best results, you should regularly update all of these packages.
+
+.. code-block:: shell
+
+    $ brew install awscli python@3.8 black helm jq k9s kubernetes-cli pre-commit pyyaml terraform terragrunt tflint yq
+
+    # add and/or update all Helm charts
+    $ helm repo add bitnami https://charts.bitnami.com/bitnami
+    $ helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
+    $ helm repo add karpenter https://charts.karpenter.sh/
+    $ helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+    $ helm repo add cowboysysop https://cowboysysop.github.io/charts/
+    $ helm repo add jetstack https://charts.jetstack.io
+    $ helm repo update
+
+    # to configure kubectl to connect to your new Kubernetes cluster
+    $ aws eks --region us-east-2 update-kubeconfig --name {{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.global_platform_shared_resource_identifier }} --alias {{ cookiecutter.global_platform_name }}
+    $ kubectl config use-context {{ cookiecutter.global_platform_name }}
+    $ kubectl config set-context --current --namespace={{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.environment_name }}
+
+Be aware that awscli requires separate configuration, and also that it will require extensive permissions in order to create, modify and destroy AWS infrastructure resources.
+To check your awscli version as well as to see which IAM user is associated with your key-secret, run the following:
+
+.. code-block:: shell
+
+    $ aws --version
+    $ aws sts get-caller-identity
+
+II. Add Your Secret Credentials To This Repository
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Github Actions workflows in this repository depend on several `workflow secrets <settings>`_ including two sets of AWS IAM keypairs, one for CI workflows and another for the AWS Simple Email Service.
 Additionally, they require a Github Personal Access Token (PAT) for a Github user account with all requisite privileges in this repository as well as any other repositories that are cloned during any of the build / installation pipelines.
@@ -271,8 +304,8 @@ Additionally, they require a Github Personal Access Token (PAT) for a Github use
   :width: 700
   :alt: Github Repository Secrets
 
-II. Configure Your Open edX Back End
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+III. Configure Your Open edX Back End
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Set your `global parameters <terraform/environments/global.hcl>`_
 
@@ -308,7 +341,7 @@ Set your `production environment parameters <terraform/environments/{{ cookiecut
 
 
 
-III. Build Your Open edX Backend
+IV. Build Your Open edX Backend
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The backend build procedure is automated using `Terragrunt <https://terragrunt.gruntwork.io/>`_ for `Terraform <https://www.terraform.io/>`_.
@@ -341,7 +374,7 @@ We also recommend that you install `k9s <https://k9scli.io/>`_, a popular tool f
   :alt: terragrunt run-all init
 
 
-IV. Connect To Your backend Services
+V. Connect To Your backend Services
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Terraform creates friendly subdomain names for any of the backend services which you are likely to connect: Cloudfront, MySQL, Mongo and Redis.
@@ -364,8 +397,8 @@ Specifically with regard to MySQL, several 3rd party analytics tools provide out
   :width: 700
   :alt: Connecting to MySQL Workbench
 
-V. Manage your new Kubernetes cluster
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+VI. Manage your new Kubernetes cluster
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Installs four of the most popular web applications:
 
@@ -374,8 +407,8 @@ Installs four of the most popular web applications:
 - `Kubeapps <https://kubeapps.dev/>`_ at https://kubeapps.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}. Maintained by VMWare Bitnami, Kubeapps is the easiest way to install popular open source software packages from MySQL and MongoDB to Wordpress and Drupal.
 - `Grafana <https://grafana.com/>`_ at https://grafana.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}/login. Provides an elegant web UI to view time series data gathered by prometheus and metrics-server.
 
-VI. Add more Kubernetes admins
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+VII. Add more Kubernetes admins
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 By default your AWS IAM user account will be the only user who can view, interact with and manage your new Kubernetes cluster. Other IAM users with admin permissions will still need to be explicitly added to the list of Kluster admins.
 If you're new to Kubernetes then you'll find detailed technical how-to instructions in the AWS EKS documentation, `Enabling IAM user and role access to your cluster <https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html>`_.

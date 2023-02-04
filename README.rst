@@ -175,7 +175,6 @@ Now run it against this repo, using the following example usage pattern:
                 environment_name=prod \
                 environment_subdomain=courses
 
-
 Alternatively, you can run Cookiecutter without providing any prompts, which will result in it generating a questionnaire that includes all of the 75 or so input parameters. You'll be prompted for some values. Provide them, then a complete git repository will be created for you, with Github Actions workflows to automate the build and deployment of your Tutor Open edX platform, and Terraform scripts to automate the build of your AWS backend.
 
 Answer the prompts with your own desired options. For example:
@@ -222,7 +221,28 @@ Now take a look at your repo. Don't forget to carefully look at the generated RE
 Quick Start (After running Cookiecutter)
 ----------------------------------------
 
-I. Add Your Secret Credentials To Your New Repository
+I. Setup your local dev environment
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The following *should* work for macOS, Linux and Windows. Most of the code in this repository is Terraform or Terragrunt. However,
+running the Terraform modules will in turn invoke several other software packages; namely, the AWS Command Line Interface awscli, the Kubernetes
+Command Line Interface kubectl, and Helm. For best results, you should regularly update all of these packages.
+
+.. code-block:: shell
+
+    $ brew install awscli python@3.8 black helm jq k9s kubernetes-cli pre-commit pyyaml terraform terragrunt tflint yq
+
+    # add all Helm charts
+    $ helm repo add bitnami https://charts.bitnami.com/bitnami
+    $ helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
+    $ helm repo add karpenter https://charts.karpenter.sh/
+    $ helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+    $ helm repo add cowboysysop https://cowboysysop.github.io/charts/
+    $ helm repo add jetstack https://charts.jetstack.io
+    $ helm repo update
+
+
+II. Add Your Secret Credentials To Your New Repository
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Github Actions workflows in your new repository will depend on several workflow secrets including two sets of AWS IAM keypairs, one for CI workflows and another for the AWS Simple Email Service.
@@ -232,7 +252,7 @@ Additionally, they require a Github Personal Access Token (PAT) for a Github use
   :width: 700
   :alt: Github Repository Secrets
 
-II. Review The Configuration For Your Open edX Back End
+III. Review The Configuration For Your Open edX Back End
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Review your global parameters. These will be pre-populated from your responses to the Cookiecutter command-line questionnaire.
@@ -281,7 +301,7 @@ Review your production environment parameters.
 
 
 
-III. Build Your Open edX Backend
+IV. Build Your Open edX Backend
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The backend build procedure is automated using `Terragrunt <https://terragrunt.gruntwork.io/>`_ for `Terraform <https://www.terraform.io/>`_.
@@ -318,7 +338,7 @@ We also recommend that you install `k9s <https://k9scli.io/>`_, a popular tool f
   terragrunt run-all apply
 
 
-IV. Connect To Your new bastion server
+V. Connect To Your new bastion server
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 v1.01 introduced a newly designed bastion server with a complete set of preinstalled and preconfigured software for adminstering your
@@ -329,7 +349,7 @@ Open edX platform.
   :alt: Bastion Welcome Screen
 
 
-V. Connect To Your backend Services
+VI. Connect To Your backend Services
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Terraform creates friendly subdomain names for any of the backend services which you are likely to connect: Cloudfront, MySQL, Mongo and Redis.
@@ -353,7 +373,7 @@ Specifically with regard to MySQL, several 3rd party analytics tools provide out
   :alt: Connecting to MySQL Workbench
 
 
-VI. Manage your new Kubernetes cluster
+VII. Manage your new Kubernetes cluster
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Installs four of the most popular web applications for Kubernetes administration:
@@ -366,7 +386,7 @@ Installs four of the most popular web applications for Kubernetes administration
   - pwd: prom-operator
 
 
-VII. Add more Kubernetes admins
+VIII. Add more Kubernetes admins
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 By default your AWS IAM user account will be the only user who can view, interact with and manage your new Kubernetes cluster. Other IAM users with admin permissions will still need to be explicitly added to the list of Kluster admins.
