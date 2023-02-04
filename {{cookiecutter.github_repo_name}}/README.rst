@@ -355,7 +355,7 @@ We also recommend that you install `k9s <https://k9scli.io/>`_, a popular tool f
   # -------------------------------------
   # to build the entire backend
   # -------------------------------------
-  cd ./terraform/environments/{{ cookiecutter.environment_name }}/vpc
+  cd ./terraform/environments/{{ cookiecutter.environment_name }}
   terragrunt run-all init
   terragrunt run-all apply
 

@@ -324,17 +324,8 @@ We also recommend that you install `k9s <https://k9scli.io/>`_, a popular tool f
   # -------------------------------------
   # to build the entire backend
   # -------------------------------------
-
-  # 1. create the VPC
-  cd ./terraform/environments/{{ cookiecutter.environment_name }}/vpc
-  terragrunt apply
-
-  # 2. create the Elastic Kubernetes Cluster
-  cd ../kubernetes
-  terragrunt apply
-
-  # 3. create everthing else
-  cd ..
+  cd ./terraform/environments/{{ cookiecutter.environment_name }}
+  terragrunt run-all init
   terragrunt run-all apply
 
 
