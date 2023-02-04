@@ -357,14 +357,13 @@ Passwords for the root/admin accounts are accessible from Kubernetes Secrets. No
 
 .. code-block:: shell
 
-  ssh bastion.courses.yourschool.edu -i path/to/yourschool-ohio.pem
+  ssh bastion.service.yourschool.edu -i path/to/yourschool-ohio.pem
 
-  mysql -h mysql.courses.yourschool.edu -u root -p
+  mysql -h mysql.service.yourschool.edu -u root -p
 
-  mongo --port 27017 --host mongo.master.courses.yourschool.edu -u root -p
-  mongo --port 27017 --host mongo.reader.courses.yourschool.edu -u root -p
+  mongo --port 27017 --host mongo.service.yourschool.edu -u root -p
 
-  redis-cli -h redis.primary.courses.yourschool.edu -p 6379
+  redis-cli -h redis.service.yourschool.edu -p 6379
 
 Specifically with regard to MySQL, several 3rd party analytics tools provide out-of-the-box connectivity to MySQL via a bastion server. Following is an example of how to connect to your MySQL environment using MySQL Workbench.
 
@@ -391,11 +390,7 @@ VIII. Add more Kubernetes admins
 
 By default your AWS IAM user account will be the only user who can view, interact with and manage your new Kubernetes cluster. Other IAM users with admin permissions will still need to be explicitly added to the list of Kluster admins.
 If you're new to Kubernetes then you'll find detailed technical how-to instructions in the AWS EKS documentation, `Enabling IAM user and role access to your cluster <https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html>`_.
-You'll need kubectl in order to modify the aws-auth pod in your Kubernets cluster.
-
-**Note that since June-2022 the AWS EKS Kubernetes cluster configuration excludes public api access. This means that kubectl is only accessible via the bastion, from inside of the AWS VPC on the private subnets.
-The convenience script /scripts/bastion-config.sh installs all of the Ubuntu packages and additional software that you'll need to connect to the k8s cluster using kubectl and k9s. You'll also need to
-configure aws cli with an IAM key and secret with the requisite admin permissions.**
+You'll need kubectl in order to modify the aws-auth configMap in your Kubernets cluster.
 
 .. code-block:: bash
 
@@ -437,6 +432,21 @@ Following is an example aws-auth configMap with additional IAM user accounts add
       namespace: kube-system
       resourceVersion: "499488"
       uid: 52d6e7fd-01b7-4c80-b831-b971507e5228
+
+Note that by default, Kubernetes version 1.24 and newer encrypts all secrets data using AWS Key Management Service (KMS).
+The Cookiecutter automatically adds the IAM user for the bastion server.
+For any other IAM user you'll need to modify the following in terraform/stacks/modules/kubernetes/main.tf:
+
+.. code-block:: terraform
+
+    kms_key_owners = [
+      "arn:aws:iam::${var.account_id}:user/system/bastion-user/${var.namespace}-bastion",
+      "arn:aws:iam::${var.account_id}:user/system/user/your-iam-user"
+    ]
+
+since June-2022 the AWS EKS Kubernetes cluster configuration excludes public api access. This means that kubectl is only accessible via the bastion, from inside of the AWS VPC on the private subnets.
+The convenience script /scripts/bastion-config.sh installs all of the Ubuntu packages and additional software that you'll need to connect to the k8s cluster using kubectl and k9s. You'll also need to
+configure aws cli with an IAM key and secret with the requisite admin permissions.**
 
 
 Continuous Integration (CI)
