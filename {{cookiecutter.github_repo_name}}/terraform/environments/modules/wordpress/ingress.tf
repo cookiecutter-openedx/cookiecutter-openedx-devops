@@ -1,3 +1,11 @@
+#------------------------------------------------------------------------------
+# written by: Lawrence McDaniel
+#             https://lawrencemcdaniel.com/
+#
+# date: Feb-2023
+#
+# usage: Wordpress module ingress
+#------------------------------------------------------------------------------
 data "template_file" "ingress" {
   template = file("${path.module}/yml/ingress-wordpress.yaml.tpl")
   vars = {

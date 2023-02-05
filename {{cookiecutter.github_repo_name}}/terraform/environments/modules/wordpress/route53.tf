@@ -1,10 +1,10 @@
 #------------------------------------------------------------------------------
-# written by: Miguel Afonso
-#             https://www.linkedin.com/in/mmafonso/
+# written by: Lawrence McDaniel
+#             https://lawrencemcdaniel.com/
 #
-# date: Aug-2021
+# date: Feb-2023
 #
-# usage: create DNS records for EKS cluster load balancer
+# usage: Wordpress module DNS record
 #------------------------------------------------------------------------------
 data "aws_route53_zone" "root_domain" {
   name = var.root_domain

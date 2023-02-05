@@ -2,9 +2,9 @@
 # written by: Lawrence McDaniel
 #             https://lawrencemcdaniel.com/
 #
-# date: Mar-2022
+# date: Feb-2023
 #
-# usage: create an EKS cluster
+# usage: Wordpress module Terraform provider configurations
 #------------------------------------------------------------------------------
 terraform {
   required_version = "{{ cookiecutter.terraform_required_version }}"

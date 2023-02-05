@@ -1,4 +1,9 @@
-#-----------------------------------------------------------
+#------------------------------------------------------------------------------
+# written by: Lawrence McDaniel
+#             https://lawrencemcdaniel.com/
+#
+# date: Feb-2023
+#
 # NOTE: you must initialize a local helm repo in order to run
 # this script.
 #

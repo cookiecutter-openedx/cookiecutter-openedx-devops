@@ -1,3 +1,11 @@
+#------------------------------------------------------------------------------
+# written by: Lawrence McDaniel
+#             https://lawrencemcdaniel.com/
+#
+# date: Feb-2023
+#
+# usage: Wordpress module vertical pod autoscaler configuration
+#------------------------------------------------------------------------------
 
 data "template_file" "vpa-wordpress" {
   template = file("${path.module}/yml/vpa-wordpress.yaml.tpl")
