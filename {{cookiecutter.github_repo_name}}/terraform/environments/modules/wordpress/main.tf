@@ -41,11 +41,9 @@ resource "kubernetes_secret" "wordpress" {
     name      = "wordpress"
     namespace = var.environment_namespace
   }
-
   data = {
     wordpress-password  = random_password.wordpress_password.result
   }
-
 }
 
 data "template_file" "wordpress-values" {
@@ -85,6 +83,7 @@ data "template_file" "wordpress-values" {
     externalDatabaseUser              = "bn_wordpress"
     externalDatabasePassword          = random_password.mariadb.result
     externalDatabaseDatabase          = "bitnami_wordpress"
+    memcachedEnabled                  = false
     externalCacheHost                 = "localhost"
     externalCachePort                 = "11211"
   }

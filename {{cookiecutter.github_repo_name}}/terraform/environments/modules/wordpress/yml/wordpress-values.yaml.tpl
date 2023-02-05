@@ -96,49 +96,27 @@ image:
 ## WordPress settings based on environment variables
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/wordpress#environment-variables
 ##
-
-## @param wordpressUsername WordPress username
-##
-wordpressUsername: user
-## @param wordpressPassword WordPress user password
-## Defaults to a random 10-character alphanumeric string if not set
-##
-wordpressPassword: ""
+wordpressUsername: ${wordpressUsername}
 ## @param existingSecret Name of existing secret containing WordPress credentials
 ## NOTE: Must contain key `wordpress-password`
 ## NOTE: When it's set, the `wordpressPassword` parameter is ignored
 ##
-existingSecret: ""
+existingSecret: ${existingSecret}
 ## @param wordpressEmail WordPress user email
 ##
-wordpressEmail: user@example.com
+wordpressEmail: ${wordpressEmail}
 ## @param wordpressFirstName WordPress user first name
 ##
-wordpressFirstName: FirstName
+wordpressFirstName: ${wordpressFirstName}
 ## @param wordpressLastName WordPress user last name
 ##
-wordpressLastName: LastName
+wordpressLastName: ${wordpressLastName}
 ## @param wordpressBlogName Blog name
 ##
-wordpressBlogName: User's Blog!
+wordpressBlogName: ${wordpressBlogName}
 ## @param wordpressTablePrefix Prefix to use for WordPress database tables
 ##
-wordpressTablePrefix: wp_
-## @param wordpressScheme Scheme to use to generate WordPress URLs
-##
-wordpressScheme: http
-## @param wordpressSkipInstall Skip wizard installation
-## NOTE: useful if you use an external database that already contains WordPress data
-## ref: https://github.com/bitnami/containers/tree/main/bitnami/wordpress#connect-wordpress-docker-container-to-an-existing-database
-##
-wordpressSkipInstall: false
-## @param wordpressExtraConfigContent Add extra content to the default wp-config.php file
-## e.g:
-## wordpressExtraConfigContent: |
-##   @ini_set( 'post_max_size', '128M');
-##   @ini_set( 'memory_limit', '256M' );
-##
-wordpressExtraConfigContent: ""
+wordpressExtraConfigContent: ${wordpressExtraConfigContent}
 ## @param wordpressConfiguration The content for your custom wp-config.php file (advanced feature)
 ## NOTE: This will override configuring WordPress based on environment variables (including those set by the chart)
 ## NOTE: Currently only supported when `wordpressSkipInstall=true`
@@ -151,14 +129,14 @@ existingWordPressConfigurationSecret: ""
 ## @param wordpressConfigureCache Enable W3 Total Cache plugin and configure cache settings
 ## NOTE: useful if you deploy Memcached for caching database queries or you use an external cache server
 ##
-wordpressConfigureCache: false
+wordpressConfigureCache: ${wordpressConfigureCache}
 ## @param wordpressPlugins Array of plugins to install and activate. Can be specified as `all` or `none`.
 ## NOTE: If set to all, only plugins that are already installed will be activated, and if set to none, no plugins will be activated
 ##
-wordpressPlugins: none
+wordpressPlugins: ${wordpressPlugins}
 ## @param apacheConfiguration The content for your custom httpd.conf file (advanced feature)
 ##
-apacheConfiguration: ""
+apacheConfiguration: ${apacheConfiguration}
 ## @param existingApacheConfigurationConfigMap The name of an existing secret with your custom httpd.conf file (advanced feature)
 ## NOTE: When it's set the `apacheConfiguration` parameter is ignored
 ##
@@ -189,19 +167,18 @@ customPostInitScripts: {}
 ## @param smtpPassword SMTP user password
 ## @param smtpProtocol SMTP protocol
 ##
-smtpHost: ""
-smtpPort: ""
-smtpUser: ""
-smtpPassword: ""
-smtpProtocol: ""
+smtpHost: ${smtpHost}
+smtpPort: ${smtpPort}
+smtpUser: ${smtpUser}
+smtpProtocol: ${smtpProtocol}
 ## @param smtpExistingSecret The name of an existing secret with SMTP credentials
 ## NOTE: Must contain key `smtp-password`
 ## NOTE: When it's set, the `smtpPassword` parameter is ignored
 ##
-smtpExistingSecret: ""
+smtpExistingSecret: ${existingSecret}
 ## @param allowEmptyPassword Allow the container to be started with blank passwords
 ##
-allowEmptyPassword: true
+allowEmptyPassword: ${allowEmptyPassword}
 ## @param allowOverrideNone Configure Apache to prohibit overriding directives with htaccess files
 ##
 allowOverrideNone: false
@@ -297,10 +274,10 @@ hostAliases:
       - "status.localhost"
 ## @param extraVolumes Optionally specify extra list of additional volumes for WordPress pods
 ##
-extraVolumes: []
+extraVolumes: ${extraVolumes}
 ## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for WordPress container(s)
 ##
-extraVolumeMounts: []
+extraVolumeMounts: ${extraVolumeMounts}
 ## @param sidecars Add additional sidecar containers to the WordPress pod
 ## e.g:
 ## sidecars:
@@ -325,11 +302,11 @@ initContainers: []
 ## @param podLabels Extra labels for WordPress pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
-podLabels: {}
+podLabels: ${podLabels}
 ## @param podAnnotations Annotations for WordPress pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
-podAnnotations: {}
+podAnnotations: ${podAnnotations}
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
@@ -363,7 +340,7 @@ affinity: {}
 ## @param nodeSelector Node labels for pod assignment
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
-nodeSelector: {}
+nodeSelector: ${nodeSelector}
 ## @param tolerations Tolerations for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
@@ -721,7 +698,7 @@ persistence:
   dataSource: {}
   ## @param persistence.existingClaim The name of an existing PVC to use for persistence
   ##
-  existingClaim: ""
+  existingClaim: ${PersistenceExistingClaim}
   ## @param persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
   ## If set, the PVC can't have a PV dynamically provisioned for it
   ## E.g.
@@ -729,10 +706,7 @@ persistence:
   ##   matchLabels:
   ##     app: my-app
   ##
-  selector: {}
-  ## @param persistence.annotations Persistent Volume Claim annotations
-  ##
-  annotations: {}
+  selector: ${PersistenceSelector}
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each node
@@ -789,18 +763,18 @@ volumePermissions:
 serviceAccount:
   ## @param serviceAccount.create Enable creation of ServiceAccount for WordPress pod
   ##
-  create: false
+  create: ${serviceAccountCreate}
   ## @param serviceAccount.name The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the common.names.fullname template
   ##
-  name: ""
+  name: ${serviceAccountName}
   ## @param serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
   ## Can be set to false if pods using this serviceAccount do not need to use K8s API
   ##
   automountServiceAccountToken: true
   ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
   ##
-  annotations: {}
+  annotations: ${serviceAccountAnnotations}
 ## WordPress Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ## @param pdb.create Enable a Pod Disruption Budget creation
@@ -808,7 +782,7 @@ serviceAccount:
 ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
 ##
 pdb:
-  create: false
+  create: ${PodDisruptionBudgetCreate}
   minAvailable: 1
   maxUnavailable: ""
 ## WordPress Autoscaling configuration
@@ -820,9 +794,9 @@ pdb:
 ## @param autoscaling.targetMemory Target Memory utilization percentage
 ##
 autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 11
+  enabled: ${HorizontalAutoscalingCreate}
+  minReplicas: ${HorizontalAutoscalingMinReplicas}
+  maxReplicas: ${HorizontalAutoscalingMaxReplicas}
   targetCPU: 50
   targetMemory: 50
 
@@ -1083,7 +1057,7 @@ mariadb:
   ## @param mariadb.enabled Deploy a MariaDB server to satisfy the applications database requirements
   ## To use an external database set this to false and configure the `externalDatabase.*` parameters
   ##
-  enabled: true
+  enabled: false
   ## @param mariadb.architecture MariaDB architecture. Allowed values: `standalone` or `replication`
   ##
   architecture: standalone
@@ -1123,31 +1097,26 @@ mariadb:
 externalDatabase:
   ## @param externalDatabase.host External Database server host
   ##
-  host: localhost
+  host: ${externalDatabaseHost}
   ## @param externalDatabase.port External Database server port
   ##
-  port: 3306
+  port: ${externalDatabasePort}
   ## @param externalDatabase.user External Database username
   ##
-  user: bn_wordpress
+  user: ${externalDatabaseUser}
   ## @param externalDatabase.password External Database user password
   ##
-  password: ""
+  password: ${externalDatabasePassword}
   ## @param externalDatabase.database External Database database name
   ##
-  database: bitnami_wordpress
-  ## @param externalDatabase.existingSecret The name of an existing secret with database credentials. Evaluated as a template
-  ## NOTE: Must contain key `mariadb-password`
-  ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
-  ##
-  existingSecret: ""
+  database: ${externalDatabaseDatabase}
 ## Memcached chart configuration
 ## ref: https://github.com/bitnami/charts/blob/main/bitnami/memcached/values.yaml
 ##
 memcached:
   ## @param memcached.enabled Deploy a Memcached server for caching database queries
   ##
-  enabled: false
+  enabled: ${memcachedEnabled}
   ## Authentication parameters
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/memcached#creating-the-memcached-admin-user
   ##
@@ -1173,7 +1142,7 @@ memcached:
 externalCache:
   ## @param externalCache.host External cache server host
   ##
-  host: localhost
+  host: ${externalCacheHost}
   ## @param externalCache.port External cache server port
   ##
-  port: 11211
+  port: ${externalCachePort}

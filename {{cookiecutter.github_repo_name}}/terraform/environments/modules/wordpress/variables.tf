@@ -7,14 +7,13 @@
 # usage: create an EKS cluster
 #------------------------------------------------------------------------------
 
-variable "resource_name" {
+variable "environment_domain" {
   type = string
 }
 
-variable "environment_name" {
+variable "wordpress_domain" {
   type = string
 }
-
 variable "environment_namespace" {
   type = string
 }
