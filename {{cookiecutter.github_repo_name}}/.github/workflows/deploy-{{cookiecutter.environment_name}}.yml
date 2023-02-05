@@ -252,6 +252,14 @@ jobs:
                             --set RUN_CADDY=false
 
       # see: https://github.com/overhangio/tutor-mfe
+      - name: enable mfe
+        shell: bash
+        run: |-
+          pip install tutor-mfe
+          tutor plugins enable mfe
+          tutor config save
+
+      # see: https://github.com/overhangio/tutor-mfe
   {% if cookiecutter.ci_deploy_enable_mfes|upper == "Y" -%}
       # un-comment this section to disable specific MFEs
       # -----------------------------------------------------------------------
