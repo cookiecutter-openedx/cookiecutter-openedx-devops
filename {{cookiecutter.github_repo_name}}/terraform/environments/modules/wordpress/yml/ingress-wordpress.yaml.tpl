@@ -11,7 +11,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ${wordpress_domain}
-  namespace: ${environment_namespace}
+  namespace: ${wordpress_namespace}
   annotations:
     # mcdaniel
     # https://www.cyberciti.biz/faq/nginx-upstream-sent-too-big-header-while-reading-response-header-from-upstream/
@@ -23,7 +23,7 @@ metadata:
     # ---------------------
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
     kubernetes.io/ingress.class: "nginx"
-    cert-manager.io/cluster-issuer: ${environment_domain}
+    cert-manager.io/cluster-issuer: ${wordpress_namespace}
 spec:
   tls:
   - hosts:

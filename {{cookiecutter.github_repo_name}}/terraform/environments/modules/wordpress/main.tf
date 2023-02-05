@@ -8,17 +8,9 @@
 #   helm install wordpress bitnami/wordpress
 #   helm repo update
 #   helm show all bitnami/wordpress
+#   helm show values bitnami/wordpress
 #-----------------------------------------------------------
-resource "random_password" "wordpress_password" {
-  length           = 16
-  special          = true
-  override_special = "_%@"
-  keepers = {
-    version = "1"
-  }
-}
-
-resource "random_password" "wordpress_admin" {
+resource "random_password" "wordpress_admin_password" {
   length           = 16
   special          = true
   override_special = "_%@"
@@ -42,7 +34,7 @@ resource "kubernetes_secret" "wordpress" {
     namespace = var.environment_namespace
   }
   data = {
-    wordpress-password  = random_password.wordpress_password.result
+    wordpress-password  = random_password.wordpress_admin_password.result
   }
 }
 
@@ -91,14 +83,16 @@ data "template_file" "wordpress-values" {
 
 resource "helm_release" "wordpress" {
   name             = "wordpress"
-  namespace        = var.environment_namespace
+  namespace        = var.wordpress_namespace
   create_namespace = true
 
   chart      = "wordpress"
-  repository = "bitname"
-  #version    = "????"
+  repository = "bitnami"
+  version    = "{{ cookiecutter.terraform_helm_wordpress }}"
 
   # https://github.com/bitnami/charts/blob/main/bitnami/wordpress/values.yaml
+  # or
+  # helm show values bitnami/wordpress
   values = [
     data.template_file.wordpress-values.rendered
   ]
