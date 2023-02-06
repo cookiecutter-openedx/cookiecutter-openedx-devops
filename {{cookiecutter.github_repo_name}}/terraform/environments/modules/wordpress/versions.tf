@@ -30,5 +30,9 @@ terraform {
       source  = "gavinbunney/kubectl"
       version = "{{ cookiecutter.terraform_provider_hashicorp_kubectl_version }}"
     }
+    mysql   = {
+      source = "petoju/mysql"
+      version = "~> 3.0"
+    }
   }
 }

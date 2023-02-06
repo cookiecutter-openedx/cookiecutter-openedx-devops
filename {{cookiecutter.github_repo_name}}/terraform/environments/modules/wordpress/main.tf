@@ -25,8 +25,8 @@ locals {
     serviceAccountName                = local.wordpress
     HorizontalAutoscalingMinReplicas  = 1
     HorizontalAutoscalingMaxReplicas  = 2
-    externalDatabaseUser              = local.wordpressUsername
-    externalDatabaseDatabase          = local.wordpressUsername
+    externalDatabaseUser              = var.wordpressConfig["DatabaseUser"]
+    externalDatabaseDatabase          = var.wordpressConfig["Database"]
     externalCachePort                 = "11211"
 }
 

@@ -1,13 +1,12 @@
 #------------------------------------------------------------------------------
-# written by: Miguel Afonso
-#             https://www.linkedin.com/in/mmafonso/
+# written by: Lawrence McDaniel
+#             https://lawrencemcdaniel.com
 #
-# date: Aug-2021
+# date: Feb-2023
 #
-# usage: create an ElastiCache Redis cache
+# usage: deploy a Wordpress site
 #------------------------------------------------------------------------------
 locals {
-  # Automatically load environment-level variables
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
   environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
 
@@ -22,13 +21,15 @@ locals {
   wordpress_namespace       = replace("${local.wordpress_domain}", ".", "-")
 
   wordpressConfig = {
-    Domain    = local.wordpress_domain,
-    Namespace = local.wordpress_namespace,
-    Username = "wordpress_admin",
-    Email    = "wordpress_admin@${local.root_domain}",
-    FirstName = "Lawrence",
-    LastName  = "McDaniel",
-    BlogName  = "Cookiecutter Wordpress Site"
+    Domain        = local.wordpress_domain,
+    Namespace     = local.wordpress_namespace,
+    Username      = "wordpress_admin",
+    Email         = "wordpress_admin@${local.root_domain}",
+    FirstName     = "Lawrence",
+    LastName      = "McDaniel",
+    BlogName      = "Cookiecutter Wordpress Site",
+    DatabaseUser  = "lpm0073"
+    Database      = "lpm0073"
   }
 
   tags = merge(
@@ -42,6 +43,7 @@ dependencies {
     "../../../stacks/service/vpc",
     "../../../stacks/service/kubernetes",
     "../../../stacks/service/mysql",
+    "../../../stacks/service/redis",
     ]
 }
 

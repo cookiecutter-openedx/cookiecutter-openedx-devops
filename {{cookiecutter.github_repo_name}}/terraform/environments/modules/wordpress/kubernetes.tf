@@ -2,9 +2,9 @@
 # written by: Lawrence McDaniel
 #             https://lawrencemcdaniel.com
 #
-# date: April 2022
+# date: Feb-2023
 #
-# usage: Wordpress
+# usage: Wordpress Kubernetes resources
 #------------------------------------------------------------------------------
 resource "random_password" "wordpressAdminPassword" {
   length           = 16
@@ -40,7 +40,7 @@ data "kubernetes_secret" "redis" {
 
 resource "kubernetes_namespace" "wordpress_namespace" {
   metadata {
-    name = var.wordpress_namespace
+    name = var.wordpressConfig["Namespace"]
   }
 }
 
