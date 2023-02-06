@@ -6,18 +6,6 @@
 #
 # usage: Wordpress module ingress
 #------------------------------------------------------------------------------
-data "aws_elb_hosted_zone_id" "main" {}
-
-data "kubernetes_service" "ingress_nginx_controller" {
-  metadata {
-    name      = "common-ingress-nginx-controller"
-    namespace = "kube-system"
-  }
-}
-
-data "aws_route53_zone" "root_domain" {
-  name = var.root_domain
-}
 
 data "template_file" "ingress" {
   template = file("${path.module}/yml/ingress-wordpress.yaml.tpl")

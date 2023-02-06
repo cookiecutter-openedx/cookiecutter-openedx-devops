@@ -46,7 +46,7 @@ resource "kubernetes_secret" "wordpress" {
 data "template_file" "wordpress-values" {
   template = file("${path.module}/yml/wordpress-values.yaml.tpl")
   vars = {
-    existingSecret                    = "wordpress"
+    existingSecret                    = kubernetes_secret.wordpress
     wordpressUsername                 = "lpm0073"
     wordpressEmail                    = "lpm0073@gmail.com"
     wordpressFirstName                = "Lawrence"
