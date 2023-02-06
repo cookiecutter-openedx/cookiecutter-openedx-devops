@@ -19,7 +19,7 @@ resource "kubectl_manifest" "ingress_wordpress" {
   yaml_body = data.template_file.ingress.rendered
 
   depends_on = [
-    kubernetes_namespace.wordpress_namespace,
+    kubernetes_namespace.wordpress,
     helm_release.wordpress
   ]
 }
@@ -39,7 +39,7 @@ resource "kubectl_manifest" "cluster-issuer" {
   yaml_body = data.template_file.cluster-issuer.rendered
 
   depends_on = [
-    kubernetes_namespace.wordpress_namespace,
+    kubernetes_namespace.wordpress,
     helm_release.wordpress
   ]
 }

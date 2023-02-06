@@ -101,7 +101,7 @@ wordpressUsername: ${wordpressUsername}
 ## NOTE: Must contain key `wordpress-password`
 ## NOTE: When it's set, the `wordpressPassword` parameter is ignored
 ##
-existingSecret: ${existingSecret}
+existingSecret: ""
 ## @param wordpressEmail WordPress user email
 ##
 wordpressEmail: ${wordpressEmail}

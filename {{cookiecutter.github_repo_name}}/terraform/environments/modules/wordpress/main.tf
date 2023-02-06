@@ -71,7 +71,6 @@ data "template_file" "wordpressExtraConfigContent" {
 data "template_file" "wordpress-values" {
   template = file("${path.module}/config/wordpress-values.yaml.tpl")
   vars = {
-    existingSecret                    = kubernetes_secret.wordpress.metadata[0].name
     wordpressUsername                 = local.wordpressUsername
     wordpressEmail                    = local.wordpressEmail
     wordpressFirstName                = local.wordpressFirstName
@@ -80,7 +79,7 @@ data "template_file" "wordpress-values" {
     wordpressExtraConfigContent       = data.template_file.wordpressExtraConfigContent.rendered
     wordpressConfigureCache           = false
     wordpressPlugins                  = data.template_file.wordpressPlugins.rendered
-    allowEmptyPassword                = false
+    allowEmptyPassword                = true
     extraVolumes                      = data.template_file.extraVolumes.rendered
     extraVolumeMounts                 = data.template_file.extraVolumeMounts.rendered
     podLabels                         = data.template_file.podLabels.rendered
@@ -123,7 +122,7 @@ resource "helm_release" "wordpress" {
   ]
 
   depends_on = [
-    kubernetes_namespace.wordpress_namespace,
+    kubernetes_namespace.wordpress,
     ssh_sensitive_resource.mysql
   ]
 }

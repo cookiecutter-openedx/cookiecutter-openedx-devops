@@ -7,10 +7,17 @@
 # usage: Wordpress module vertical pod autoscaler configuration
 #------------------------------------------------------------------------------
 
-data "template_file" "vpa-wordpress" {
+data "template_file" "vpa_wordpress" {
   template = file("${path.module}/config/vpa-wordpress.yaml.tpl")
   vars = {
-    environment_namespace = var.environment_namespace,
-    helm_release.wordpress
+    environment_namespace = var.environment_namespace
   }
+}
+
+resource "kubectl_manifest" "vpa-prometheus-operator" {
+  yaml_body = data.template_file.vpa_wordpress.rendered
+
+  depends_on = [
+    helm_release.wordpress
+  ]
 }

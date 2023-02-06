@@ -6,15 +6,6 @@
 #
 # usage: Wordpress Kubernetes resources
 #------------------------------------------------------------------------------
-resource "random_password" "wordpressAdminPassword" {
-  length           = 16
-  special          = true
-  override_special = "_%@"
-  keepers = {
-    version = "1"
-  }
-}
-
 resource "random_password" "externalDatabasePassword" {
   length           = 16
   special          = true
@@ -45,7 +36,7 @@ data "kubernetes_secret" "redis" {
   }
 }
 
-resource "kubernetes_namespace" "wordpress_namespace" {
+resource "kubernetes_namespace" "wordpress" {
   metadata {
     name = var.wordpressConfig["Namespace"]
   }
@@ -53,11 +44,10 @@ resource "kubernetes_namespace" "wordpress_namespace" {
 
 resource "kubernetes_secret" "wordpress" {
   metadata {
-    name      = local.wordpress
+    name      = "wordpress-db"
     namespace = var.wordpressConfig["Namespace"]
   }
   data = {
-    wordpress-password  = random_password.wordpressAdminPassword.result
     MYSQL_HOST          = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
     MYSQL_PORT          = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
     MYSQL_DATABASE      = local.externalDatabaseDatabase
@@ -68,7 +58,7 @@ resource "kubernetes_secret" "wordpress" {
   }
 
   depends_on = [
-    kubernetes_namespace.wordpress_namespace
+    kubernetes_namespace.wordpress
   ]
 }
 
