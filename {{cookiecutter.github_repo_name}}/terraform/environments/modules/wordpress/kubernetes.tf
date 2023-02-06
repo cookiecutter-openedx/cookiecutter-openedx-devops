@@ -24,6 +24,13 @@ resource "random_password" "externalDatabasePassword" {
   }
 }
 
+data "kubernetes_secret" "bastion" {
+  metadata {
+    name      = "bastion-ssh-key"
+    namespace = var.shared_resource_namespace
+  }
+}
+
 data "kubernetes_secret" "mysql_root" {
   metadata {
     name      = "mysql-root"

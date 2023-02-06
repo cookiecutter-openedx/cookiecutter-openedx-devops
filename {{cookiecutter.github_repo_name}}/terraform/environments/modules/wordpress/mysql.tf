@@ -7,28 +7,42 @@
 # usage: Wordpress MySQL resources
 #------------------------------------------------------------------------------
 
-provider "mysql" {
-  endpoint = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
-  username = data.kubernetes_secret.mysql_root.data.MYSQL_ROOT_USERNAME
-  password = data.kubernetes_secret.mysql_root.data.MYSQL_ROOT_PASSWORD
-  port     = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
+data "template_file" "mysql_config" {
+  template = file("${path.module}/config/mysql-config.sql.tpl")
+  vars = {
+    MYSQL_HOST                = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
+    MYSQL_PORT                = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
+    MYSQL_ROOT_USERNAME       = data.kubernetes_secret.mysql_root.data.MYSQL_ROOT_USERNAME
+    MYSQL_ROOT_PASSWORD       = data.kubernetes_secret.mysql_root.data.MYSQL_ROOT_PASSWORD
+    WORDPRESS_MYSQL_DATABASE  = var.wordpressConfig["Database"]
+    OPENEDX_MYSQL_USERNAME    = var.wordpressConfig["Username"]
+    WORDPRESS_MYSQL_PASSWORD  = random_password.externalDatabasePassword.result
+  }
 }
 
-# Create a second database, in addition to the "initial_db" created
-# by the aws_db_instance resource above.
-resource "mysql_database" "wordpress" {
-  name = var.wordpressConfig["Database"]
-}
+# login to the bastion EC2 instance and execute mysql-config.sh
+resource "ssh_sensitive_resource" "init" {
+  triggers = {
+    always_run = "${timestamp()}"
+  }
 
-resource "mysql_user" "wordpress_admin" {
-  user               = var.wordpressConfig["Username"]
-  host               = "%"
-  plaintext_password = random_password.externalDatabasePassword.result
-}
+  host         = kubernetes_secret.bastion.data.HOST
+  user         = kubernetes_secret.bastion.data.USER
+  host_user    = kubernetes_secret.bastion.data.USER
+  private_key  = kubernetes_secret.bastion.data.PRIVATE_KEY_PEM
+  agent        = true
 
-resource "mysql_grant" "wordpress_admin" {
-  user       = mysql_user.wordpress_admin.user
-  host       = mysql_user.wordpress_admin.host
-  database   = mysql_database.wordpress.name
-  privileges = ["ALL"]
+  file {
+    source      = data.template_file.mysql_config.rendered
+    destination = "/tmp/mysql-config.sh"
+    permissions = "0755"
+  }
+
+  timeout = "1m"
+  retry_delay = "10s"
+
+  commands = [
+    "/tmp/mysql-config.sh",
+    "rm /tmp/mysql-config.sh"
+  ]
 }
