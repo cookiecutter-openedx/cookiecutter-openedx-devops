@@ -36,4 +36,8 @@ resource "aws_route53_record" "wordpress" {
     zone_id                = data.aws_elb_hosted_zone_id.main.id
     evaluate_target_health = true
   }
+
+  depends_on = [
+    kubernetes_namespace.wordpress_namespace
+  ]
 }

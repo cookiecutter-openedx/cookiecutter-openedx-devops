@@ -15,6 +15,12 @@
 #   helm show all bitnami/wordpress
 #   helm show values bitnami/wordpress
 #-----------------------------------------------------------
+resource "kubernetes_namespace" "wordpress_namespace" {
+  metadata {
+    name = var.wordpress_domain
+  }
+}
+
 resource "random_password" "wordpress_admin_password" {
   length           = 16
   special          = true
@@ -36,11 +42,15 @@ resource "random_password" "mariadb" {
 resource "kubernetes_secret" "wordpress" {
   metadata {
     name      = "wordpress"
-    namespace = var.environment_namespace
+    namespace = var.wordpress_namespace
   }
   data = {
     wordpress-password  = random_password.wordpress_admin_password.result
   }
+
+  depends_on = [
+    kubernetes_namespace.wordpress_namespace
+  ]
 }
 
 data "template_file" "PersistenceSelector" {
@@ -125,7 +135,7 @@ data "template_file" "wordpress-values" {
 resource "helm_release" "wordpress" {
   name             = "wordpress"
   namespace        = var.wordpress_namespace
-  create_namespace = true
+  create_namespace = false
 
   chart      = "wordpress"
   repository = "bitnami"
@@ -136,5 +146,9 @@ resource "helm_release" "wordpress" {
   # helm show values bitnami/wordpress
   values = [
     data.template_file.wordpress-values.rendered
+  ]
+
+  depends_on = [
+        kubernetes_namespace.wordpress_namespace
   ]
 }
