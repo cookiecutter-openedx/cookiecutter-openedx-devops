@@ -136,7 +136,7 @@ wordpressConfigureCache: ${wordpressConfigureCache}
 wordpressPlugins: ${wordpressPlugins}
 ## @param apacheConfiguration The content for your custom httpd.conf file (advanced feature)
 ##
-apacheConfiguration: ${apacheConfiguration}
+apacheConfiguration: ""
 ## @param existingApacheConfigurationConfigMap The name of an existing secret with your custom httpd.conf file (advanced feature)
 ## NOTE: When it's set the `apacheConfiguration` parameter is ignored
 ##
