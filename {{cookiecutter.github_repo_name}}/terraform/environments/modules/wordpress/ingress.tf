@@ -8,7 +8,7 @@
 #------------------------------------------------------------------------------
 
 data "template_file" "ingress" {
-  template = file("${path.module}/yml/ingress-wordpress.yaml.tpl")
+  template = file("${path.module}/config/ingress-wordpress.yaml.tpl")
   vars = {
     wordpress_namespace   = var.wordpress_namespace
     wordpress_domain      = var.wordpress_domain
@@ -24,7 +24,7 @@ resource "kubectl_manifest" "ingress_wordpress" {
 }
 
 data "template_file" "cluster-issuer" {
-  template = file("${path.module}/yml/cluster-issuer.yml.tpl")
+  template = file("${path.module}/config/cluster-issuer.yml.tpl")
   vars = {
     root_domain         = var.root_domain
     wordpress_domain    = var.wordpress_domain

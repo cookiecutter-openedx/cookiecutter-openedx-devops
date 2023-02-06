@@ -15,93 +15,71 @@
 #   helm show all bitnami/wordpress
 #   helm show values bitnami/wordpress
 #-----------------------------------------------------------
-resource "kubernetes_namespace" "wordpress_namespace" {
-  metadata {
-    name = var.wordpress_namespace
-  }
-}
-
-resource "random_password" "wordpress_admin_password" {
-  length           = 16
-  special          = true
-  override_special = "_%@"
-  keepers = {
-    version = "1"
-  }
-}
-
-resource "random_password" "mariadb" {
-  length           = 16
-  special          = true
-  override_special = "_%@"
-  keepers = {
-    version = "1"
-  }
-}
-
-resource "kubernetes_secret" "wordpress" {
-  metadata {
-    name      = "wordpress"
-    namespace = var.wordpress_namespace
-  }
-  data = {
-    wordpress-password  = random_password.wordpress_admin_password.result
-  }
-
-  depends_on = [
-    kubernetes_namespace.wordpress_namespace
-  ]
-}
-
-data "template_file" "PersistenceSelector" {
-  template = file("${path.module}/yml/persistence-selector.json")
-}
-
-data "template_file" "serviceAccountAnnotations" {
-  template = file("${path.module}/yml/service-account-annotations.yaml")
-}
-
-data "template_file" "wordpressPlugins" {
-  template = file("${path.module}/yml/wordpress-plugins.yaml")
-}
-
-data "template_file" "extraVolumes" {
-  template = file("${path.module}/yml/extra-volumes.yaml")
-}
-
-data "template_file" "extraVolumeMounts" {
-  template = file("${path.module}/yml/extra-volume-mounts.yaml")
-}
-
-data "template_file" "podLabels" {
-  template = file("${path.module}/yml/pod-labels.yaml")
-}
-
-data "template_file" "podAnnotations" {
-  template = file("${path.module}/yml/pod-annotations.yaml")
-}
-
-data "template_file" "nodeSelector" {
-  template = file("${path.module}/yml/node-selector.yaml")
-}
-
-data "template_file" "wordpress-values" {
-  template = file("${path.module}/yml/wordpress-values.yaml.tpl")
-  vars = {
-    existingSecret                    = kubernetes_secret.wordpress.metadata[0].name
+locals {
+    wordpress                         = "wordpress"
     wordpressUsername                 = "lpm0073"
     wordpressEmail                    = "lpm0073@gmail.com"
     wordpressFirstName                = "Lawrence"
     wordpressLastName                 = "McDaniel"
     wordpressBlogName                 = "Cookiecutter Wordpress Site"
-    wordpressExtraConfigContent       = ""
+    serviceAccountName                = local.wordpress
+    HorizontalAutoscalingMinReplicas  = 1
+    HorizontalAutoscalingMaxReplicas  = 2
+    externalDatabaseUser              = local.wordpressUsername
+    externalDatabaseDatabase          = local.wordpressUsername
+    externalCachePort                 = "11211"
+}
+
+
+
+data "template_file" "PersistenceSelector" {
+  template = file("${path.module}/config/persistence-selector.json")
+}
+
+data "template_file" "serviceAccountAnnotations" {
+  template = file("${path.module}/config/service-account-annotations.json")
+}
+
+data "template_file" "wordpressPlugins" {
+  template = file("${path.module}/config/wordpress-plugins.yaml")
+}
+
+data "template_file" "extraVolumes" {
+  template = file("${path.module}/config/extra-volumes.json")
+}
+
+data "template_file" "extraVolumeMounts" {
+  template = file("${path.module}/config/extra-volume-mounts.json")
+}
+
+data "template_file" "podLabels" {
+  template = file("${path.module}/config/pod-labels.json")
+}
+
+data "template_file" "podAnnotations" {
+  template = file("${path.module}/config/pod-annotations.yaml")
+}
+
+data "template_file" "nodeSelector" {
+  template = file("${path.module}/config/node-selector.yaml")
+}
+
+data "template_file" "wordpressExtraConfigContent" {
+  template = file("${path.module}/config/wordpress-extra-config-content.php")
+}
+
+data "template_file" "wordpress-values" {
+  template = file("${path.module}/config/wordpress-values.yaml.tpl")
+  vars = {
+    existingSecret                    = kubernetes_secret.wordpress.metadata[0].name
+    wordpressUsername                 = local.wordpressUsername
+    wordpressEmail                    = local.wordpressEmail
+    wordpressFirstName                = local.wordpressFirstName
+    wordpressLastName                 = local.wordpressFirstName
+    wordpressBlogName                 = local.wordpressBlogName
+    wordpressExtraConfigContent       = data.template_file.wordpressExtraConfigContent.rendered
     wordpressConfigureCache           = false
     wordpressPlugins                  = data.template_file.wordpressPlugins.rendered
-    apacheConfiguration               = ""
-    smtpHost                          = ""
-    smtpPort                          = ""
-    smtpUser                          = ""
-    smtpProtocol                      = ""
     allowEmptyPassword                = false
     extraVolumes                      = data.template_file.extraVolumes.rendered
     extraVolumeMounts                 = data.template_file.extraVolumeMounts.rendered
@@ -111,35 +89,31 @@ data "template_file" "wordpress-values" {
     PersistenceExistingClaim          = ""
     PersistenceSelector               = data.template_file.PersistenceSelector.rendered
     serviceAccountCreate              = true
-    serviceAccountName                = "wordpress"
+    serviceAccountName                = local.serviceAccountName
     serviceAccountAnnotations         = data.template_file.serviceAccountAnnotations.rendered
     PodDisruptionBudgetCreate         = true
     HorizontalAutoscalingCreate       = true
-    HorizontalAutoscalingMinReplicas  = 1
-    HorizontalAutoscalingMaxReplicas  = 2
-    externalDatabaseHost              = "localhost"
-    externalDatabasePort              = "3306"
-    externalDatabaseUser              = "bn_wordpress"
-    externalDatabasePassword          = random_password.mariadb.result
-    externalDatabaseDatabase          = "bitnami_wordpress"
+    HorizontalAutoscalingMinReplicas  = local.HorizontalAutoscalingMinReplicas
+    HorizontalAutoscalingMaxReplicas  = local.HorizontalAutoscalingMaxReplicas
+    externalDatabaseHost              = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
+    externalDatabasePort              = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
+    externalDatabaseUser              = local.externalDatabaseUser
+    externalDatabasePassword          = random_password.externalDatabasePassword.result
+    externalDatabaseDatabase          = local.externalDatabaseDatabase
     memcachedEnabled                  = false
-    externalCacheHost                 = "localhost"
-    externalCachePort                 = "11211"
+    externalCacheHost                 = data.kubernetes_secret.redis.data.REDIS_HOST
+    externalCachePort                 = local.externalCachePort
   }
-
-  depends_on = [
-    kubernetes_secret.wordpress
-  ]
 }
 
 resource "helm_release" "wordpress" {
-  name             = "wordpress"
+  name             = local.wordpress
   namespace        = var.wordpress_namespace
   create_namespace = false
 
   chart      = "wordpress"
   repository = "bitnami"
-  version    = "{{ cookiecutter.terraform_helm_wordpress }}"
+  version    = "{{ cookiecutter.terraform_helm_wordpress_version }}"
 
   # https://github.com/bitnami/charts/blob/main/bitnami/wordpress/values.yaml
   # or
@@ -149,6 +123,6 @@ resource "helm_release" "wordpress" {
   ]
 
   depends_on = [
-        kubernetes_namespace.wordpress_namespace
+    kubernetes_namespace.wordpress_namespace
   ]
 }

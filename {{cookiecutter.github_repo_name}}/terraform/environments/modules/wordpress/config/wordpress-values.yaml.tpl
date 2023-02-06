@@ -167,10 +167,10 @@ customPostInitScripts: {}
 ## @param smtpPassword SMTP user password
 ## @param smtpProtocol SMTP protocol
 ##
-smtpHost: ${smtpHost}
-smtpPort: ${smtpPort}
-smtpUser: ${smtpUser}
-smtpProtocol: ${smtpProtocol}
+smtpHost: ""
+smtpPort: ""
+smtpUser: ""
+smtpProtocol: ""
 ## @param smtpExistingSecret The name of an existing secret with SMTP credentials
 ## NOTE: Must contain key `smtp-password`
 ## NOTE: When it's set, the `smtpPassword` parameter is ignored
