@@ -78,7 +78,7 @@ data "template_file" "nodeSelector" {
 data "template_file" "wordpress-values" {
   template = file("${path.module}/yml/wordpress-values.yaml.tpl")
   vars = {
-    existingSecret                    = kubernetes_secret.wordpress
+    existingSecret                    = kubernetes_secret.wordpress.metadata[0].name
     wordpressUsername                 = "lpm0073"
     wordpressEmail                    = "lpm0073@gmail.com"
     wordpressFirstName                = "Lawrence"
@@ -116,6 +116,10 @@ data "template_file" "wordpress-values" {
     externalCacheHost                 = "localhost"
     externalCachePort                 = "11211"
   }
+
+  depends_on = [
+    kubernetes_secret.wordpress
+  ]
 }
 
 resource "helm_release" "wordpress" {

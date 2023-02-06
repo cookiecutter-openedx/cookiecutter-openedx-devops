@@ -11,8 +11,8 @@
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
-  name: ${wordpress_namespace}
-  namespace: ${wordpress_namespace}
+  name: ${namespace}
+  namespace: ${namespace}
 spec:
   acme:
     email: no-reply@${root_domain}
