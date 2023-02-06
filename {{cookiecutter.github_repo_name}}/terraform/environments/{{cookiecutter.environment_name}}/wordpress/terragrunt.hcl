@@ -13,13 +13,13 @@ locals {
 
   aws_region                = local.global_vars.locals.aws_region
   root_domain               = local.global_vars.locals.root_domain
-  wordpress_domain          = "test.lawrencemcdaniel.com"
-  wordpress_namespace       = local.wordpress_domain
   shared_resource_namespace = local.global_vars.locals.shared_resource_namespace
   environment_domain        = local.environment_vars.locals.environment_domain
   environment_subdomain     = local.environment_vars.locals.environment_subdomain
   environment_namespace     = local.environment_vars.locals.environment_namespace
   resource_name             = local.environment_vars.locals.environment_namespace
+  wordpress_domain          = "wp.${local.environment_domain}"
+  wordpress_namespace       = local.wordpress_domain
 
   tags = merge(
     local.environment_vars.locals.tags,
