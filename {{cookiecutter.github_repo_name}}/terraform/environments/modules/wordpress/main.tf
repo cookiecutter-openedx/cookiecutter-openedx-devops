@@ -57,11 +57,11 @@ data "template_file" "podLabels" {
 }
 
 data "template_file" "podAnnotations" {
-  template = file("${path.module}/config/pod-annotations.yaml")
+  template = file("${path.module}/config/pod-annotations.json")
 }
 
 data "template_file" "nodeSelector" {
-  template = file("${path.module}/config/node-selector.yaml")
+  template = file("${path.module}/config/node-selector.json")
 }
 
 data "template_file" "wordpressExtraConfigContent" {

@@ -115,6 +115,6 @@ inputs = {
   environment_domain            = local.environment_domain
   environment_subdomain         = local.environment_subdomain
   aws_region                    = local.aws_region
-  wordpress_config              = local.wordpressConfig
+  wordpressConfig               = local.wordpressConfig
   tags                          = local.tags
 }

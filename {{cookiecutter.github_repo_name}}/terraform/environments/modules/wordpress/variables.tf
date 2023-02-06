@@ -13,13 +13,6 @@ variable "environment_domain" {
   type = string
 }
 
-variable "wordpress_domain" {
-  type = string
-}
-
-variable "wordpress_namespace" {
-  type = string
-}
 variable "environment_namespace" {
   type = string
 }
