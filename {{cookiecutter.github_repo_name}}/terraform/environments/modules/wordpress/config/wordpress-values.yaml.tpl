@@ -1110,6 +1110,11 @@ externalDatabase:
   ## @param externalDatabase.database External Database database name
   ##
   database: ${externalDatabaseDatabase}
+  ## @param externalDatabase.existingSecret The name of an existing secret with database credentials. Evaluated as a template
+  ## NOTE: Must contain key `mariadb-password`
+  ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
+  ##
+  existingSecret: ${externalDatabaseExistingSecret}
 ## Memcached chart configuration
 ## ref: https://github.com/bitnami/charts/blob/main/bitnami/memcached/values.yaml
 ##

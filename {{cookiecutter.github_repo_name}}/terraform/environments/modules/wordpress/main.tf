@@ -17,11 +17,11 @@
 #-----------------------------------------------------------
 locals {
     wordpress                         = "wordpress"
-    wordpressUsername                 = "lpm0073"
-    wordpressEmail                    = "lpm0073@gmail.com"
-    wordpressFirstName                = "Lawrence"
-    wordpressLastName                 = "McDaniel"
-    wordpressBlogName                 = "Cookiecutter Wordpress Site"
+    wordpressUsername                 = var.wordpressConfig["Username"]
+    wordpressEmail                    = var.wordpressConfig["Email"]
+    wordpressFirstName                = var.wordpressConfig["FirstName"]
+    wordpressLastName                 = var.wordpressConfig["LastName"]
+    wordpressBlogName                 = var.wordpressConfig["BlogName"]
     serviceAccountName                = local.wordpress
     HorizontalAutoscalingMinReplicas  = 1
     HorizontalAutoscalingMaxReplicas  = 2
@@ -99,6 +99,7 @@ data "template_file" "wordpress-values" {
     externalDatabaseUser              = local.externalDatabaseUser
     externalDatabasePassword          = random_password.externalDatabasePassword.result
     externalDatabaseDatabase          = local.externalDatabaseDatabase
+    externalDatabaseExistingSecret    = kubernetes_secret.wordpress_db.metadata[0].name
     memcachedEnabled                  = false
     externalCacheHost                 = data.kubernetes_secret.redis.data.REDIS_HOST
     externalCachePort                 = local.externalCachePort

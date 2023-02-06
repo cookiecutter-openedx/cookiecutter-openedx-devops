@@ -48,6 +48,7 @@ resource "kubernetes_secret" "wordpress" {
     namespace = var.wordpressConfig["Namespace"]
   }
   data = {
+    mariadb-password    = random_password.externalDatabasePassword.result
     MYSQL_HOST          = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
     MYSQL_PORT          = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
     MYSQL_DATABASE      = local.externalDatabaseDatabase
