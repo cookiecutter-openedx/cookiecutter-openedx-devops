@@ -38,6 +38,7 @@ resource "aws_route53_record" "wordpress" {
   }
 
   depends_on = [
-    kubernetes_namespace.wordpress_namespace
+    kubernetes_namespace.wordpress_namespace,
+    helm_release.wordpress
   ]
 }

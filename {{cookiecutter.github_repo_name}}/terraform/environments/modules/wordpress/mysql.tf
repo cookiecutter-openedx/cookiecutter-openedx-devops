@@ -29,10 +29,10 @@ resource "ssh_sensitive_resource" "mysql" {
   host         = data.kubernetes_secret.bastion.data.HOST
   user         = data.kubernetes_secret.bastion.data.USER
   private_key  = data.kubernetes_secret.bastion.data.PRIVATE_KEY_PEM
-  agent        = true
+  agent        = false
 
   file {
-    source      = data.template_file.mysql_config.rendered
+    content     = data.template_file.mysql_config.rendered
     destination = "/tmp/mysql-config.sh"
     permissions = "0755"
   }

@@ -10,6 +10,7 @@
 data "template_file" "vpa-wordpress" {
   template = file("${path.module}/config/vpa-wordpress.yaml.tpl")
   vars = {
-    environment_namespace = var.environment_namespace
+    environment_namespace = var.environment_namespace,
+    helm_release.wordpress
   }
 }
