@@ -6,6 +6,10 @@
 #
 # usage: Wordpress module outputs
 #------------------------------------------------------------------------------
+output "wordpressConfig" {
+  value = var.wordpressConfig
+}
+
 output "wordpress-id" {
   description = "The Wordpress helm id"
   value       = helm_release.wordpress.id
@@ -69,4 +73,22 @@ output "kubernetes_secret-wordpress-id" {
 output "kubernetes_secret-wordpress-metadata" {
   description = "The Wordpress Kubernetes secret metadata"
   value       = kubernetes_secret.wordpress.metadata
+}
+
+output "wordpress_mysql_host" {
+  sensitive   = true
+  value       = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
+}
+
+output "wordpress_mysql_port" {
+  sensitive   = true
+  value       = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
+}
+
+output "wordpress_mysql_database" {
+  value       = var.wordpressConfig["Database"]
+}
+
+output "wordpress_mysql_username" {
+  value       = var.wordpressConfig["Username"]
 }
