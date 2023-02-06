@@ -123,6 +123,7 @@ resource "helm_release" "wordpress" {
   ]
 
   depends_on = [
-    kubernetes_namespace.wordpress_namespace
+    kubernetes_namespace.wordpress_namespace,
+    ssh_sensitive_resource.mysql
   ]
 }
