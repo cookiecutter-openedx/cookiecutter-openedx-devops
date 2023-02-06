@@ -19,7 +19,7 @@ locals {
   environment_namespace     = local.environment_vars.locals.environment_namespace
   resource_name             = local.environment_vars.locals.environment_namespace
   wordpress_domain          = "wp.${local.environment_domain}"
-  wordpress_namespace       = replace(local.wordpress_domain, ".", "-")
+  wordpress_namespace       = replace("${local.wordpress_domain}", ".", "-")
 
   tags = merge(
     local.environment_vars.locals.tags,

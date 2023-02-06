@@ -17,7 +17,7 @@
 #-----------------------------------------------------------
 resource "kubernetes_namespace" "wordpress_namespace" {
   metadata {
-    name = var.wordpress_domain
+    name = var.wordpress_namespace
   }
 }
 
@@ -54,7 +54,7 @@ resource "kubernetes_secret" "wordpress" {
 }
 
 data "template_file" "PersistenceSelector" {
-  template = file("${path.module}/yml/persistence-selector.yaml")
+  template = file("${path.module}/yml/persistence-selector.json")
 }
 
 data "template_file" "serviceAccountAnnotations" {
