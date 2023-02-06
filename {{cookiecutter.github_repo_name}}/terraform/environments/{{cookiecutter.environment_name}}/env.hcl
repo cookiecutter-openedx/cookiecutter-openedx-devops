@@ -20,6 +20,9 @@ locals {
   # AWS instance sizing
   redis_node_type      = "{{ cookiecutter.redis_node_type }}"
 
+  #
+  wordpress_disk_volume_size = "{{ cookiecutter.wordpress_disk_volume_size }}"
+
   tags = merge(
     local.global_vars.locals.tags,
     {

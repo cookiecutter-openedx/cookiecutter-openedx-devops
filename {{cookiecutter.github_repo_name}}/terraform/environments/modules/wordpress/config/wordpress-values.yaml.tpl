@@ -692,7 +692,7 @@ persistence:
   accessMode: ReadWriteOnce
   ## @param persistence.size Persistent Volume size
   ##
-  size: 10Gi
+  size: ${persistenceSize}
   ## @param persistence.dataSource Custom PVC data source
   ##
   dataSource: {}

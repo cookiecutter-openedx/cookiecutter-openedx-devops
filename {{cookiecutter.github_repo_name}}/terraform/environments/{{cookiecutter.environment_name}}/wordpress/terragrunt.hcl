@@ -21,15 +21,16 @@ locals {
   wordpress_namespace       = replace("${local.wordpress_domain}", ".", "-")
 
   wordpressConfig = {
-    Domain        = local.wordpress_domain,
-    Namespace     = local.wordpress_namespace,
-    Username      = "wordpress_admin",
-    Email         = "wordpress_admin@${local.root_domain}",
-    FirstName     = "Lawrence",
-    LastName      = "McDaniel",
-    BlogName      = "Cookiecutter Wordpress Site",
-    DatabaseUser  = "lpm0073"
-    Database      = "lpm0073"
+    Domain         = local.wordpress_domain,
+    Namespace      = local.wordpress_namespace,
+    Username       = "wordpress_admin",
+    Email          = "wordpress_admin@${local.root_domain}",
+    FirstName      = "Lawrence",
+    LastName       = "McDaniel",
+    BlogName       = "Cookiecutter Wordpress Site",
+    DatabaseUser   = "lpm0073",
+    Database       = "lpm0073",
+    DiskVolumeSize = local.environment_vars.locals.wordpress_disk_volume_size
   }
 
   tags = merge(

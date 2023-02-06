@@ -22,6 +22,7 @@ locals {
     wordpressFirstName                = var.wordpressConfig["FirstName"]
     wordpressLastName                 = var.wordpressConfig["LastName"]
     wordpressBlogName                 = var.wordpressConfig["BlogName"]
+    persistenceSize                   = var.wordpressConfig["DiskVolumeSize"]
     serviceAccountName                = local.wordpress
     HorizontalAutoscalingMinReplicas  = 1
     HorizontalAutoscalingMaxReplicas  = 2
@@ -67,7 +68,7 @@ data "template_file" "wordpress-values" {
     allowEmptyPassword                = true
     extraVolumes                      = data.template_file.extraVolumes.rendered
     extraVolumeMounts                 = data.template_file.extraVolumeMounts.rendered
-    PersistenceExistingClaim          = ""
+    persistenceSize                   = local.persistenceSize
     serviceAccountCreate              = true
     serviceAccountName                = local.serviceAccountName
     serviceAccountAnnotations         = data.template_file.serviceAccountAnnotations.rendered
