@@ -43,6 +43,14 @@ resource "kubernetes_secret" "wordpress" {
   }
 }
 
+data "template_file" "PersistenceSelector" {
+  template = file("${path.module}/yml/persistence-selector.yaml")
+}
+
+data "template_file" "serviceAccountAnnotations" {
+  template = file("${path.module}/yml/service-account-annotations.yaml")
+}
+
 data "template_file" "wordpress-values" {
   template = file("${path.module}/yml/wordpress-values.yaml.tpl")
   vars = {
@@ -67,10 +75,10 @@ data "template_file" "wordpress-values" {
     podAnnotations                    = {}
     nodeSelector                      = {}
     PersistenceExistingClaim          = ""
-    PersistenceSelector               = {}
+    PersistenceSelector               = data.template_file.PersistenceSelector.rendered
     serviceAccountCreate              = true
     serviceAccountName                = "wordpress"
-    serviceAccountAnnotations         = {}
+    serviceAccountAnnotations         = data.template_file.serviceAccountAnnotations.rendered
     PodDisruptionBudgetCreate         = true
     HorizontalAutoscalingCreate       = true
     HorizontalAutoscalingMinReplicas  = 1
