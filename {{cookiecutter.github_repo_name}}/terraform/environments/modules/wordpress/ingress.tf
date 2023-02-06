@@ -16,14 +16,10 @@ data "template_file" "ingress" {
 
 resource "kubectl_manifest" "ingress_wordpress" {
   yaml_body = data.template_file.ingress.rendered
-
-  depends_on = [
-    helm_release.prometheus
-  ]
 }
 
 data "template_file" "cluster-issuer" {
-  template = file("${path.module}/manifests/cluster-issuer.yml.tpl")
+  template = file("${path.module}/yml/cluster-issuer.yml.tpl")
   vars = {
     root_domain         = var.root_domain
     wordpress_domain    = var.wordpress_domain

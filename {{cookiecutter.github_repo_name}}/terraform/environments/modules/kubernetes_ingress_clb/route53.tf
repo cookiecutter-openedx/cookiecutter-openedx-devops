@@ -6,6 +6,14 @@
 #
 # usage: create DNS records for EKS cluster load balancer
 #------------------------------------------------------------------------------
+data "aws_elb_hosted_zone_id" "main" {}
+data "kubernetes_service" "ingress_nginx_controller" {
+  metadata {
+    name      = "common-ingress-nginx-controller"
+    namespace = "kube-system"
+  }
+}
+
 data "aws_route53_zone" "root_domain" {
   name = var.root_domain
 }
