@@ -302,11 +302,11 @@ initContainers: []
 ## @param podLabels Extra labels for WordPress pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
-podLabels: ${podLabels}
+podLabels:
 ## @param podAnnotations Annotations for WordPress pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
-podAnnotations: ${podAnnotations}
+podAnnotations:
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
@@ -340,7 +340,7 @@ affinity: {}
 ## @param nodeSelector Node labels for pod assignment
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
-nodeSelector: ${nodeSelector}
+nodeSelector:
 ## @param tolerations Tolerations for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
@@ -698,7 +698,7 @@ persistence:
   dataSource: {}
   ## @param persistence.existingClaim The name of an existing PVC to use for persistence
   ##
-  existingClaim: ${PersistenceExistingClaim}
+  existingClaim:
   ## @param persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
   ## If set, the PVC can't have a PV dynamically provisioned for it
   ## E.g.
@@ -706,8 +706,7 @@ persistence:
   ##   matchLabels:
   ##     app: my-app
   ##
-  selector: ${PersistenceSelector}
-
+  selector:
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each node
 ##

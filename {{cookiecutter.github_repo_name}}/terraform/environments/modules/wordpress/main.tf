@@ -32,9 +32,6 @@ locals {
 
 
 
-data "template_file" "PersistenceSelector" {
-  template = file("${path.module}/config/persistence-selector.json")
-}
 
 data "template_file" "serviceAccountAnnotations" {
   template = file("${path.module}/config/service-account-annotations.json")
@@ -50,18 +47,6 @@ data "template_file" "extraVolumes" {
 
 data "template_file" "extraVolumeMounts" {
   template = file("${path.module}/config/extra-volume-mounts.json")
-}
-
-data "template_file" "podLabels" {
-  template = file("${path.module}/config/pod-labels.json")
-}
-
-data "template_file" "podAnnotations" {
-  template = file("${path.module}/config/pod-annotations.json")
-}
-
-data "template_file" "nodeSelector" {
-  template = file("${path.module}/config/node-selector.json")
 }
 
 data "template_file" "wordpressExtraConfigContent" {
@@ -82,11 +67,7 @@ data "template_file" "wordpress-values" {
     allowEmptyPassword                = true
     extraVolumes                      = data.template_file.extraVolumes.rendered
     extraVolumeMounts                 = data.template_file.extraVolumeMounts.rendered
-    podLabels                         = data.template_file.podLabels.rendered
-    podAnnotations                    = data.template_file.podAnnotations.rendered
-    nodeSelector                      = data.template_file.nodeSelector.rendered
     PersistenceExistingClaim          = ""
-    PersistenceSelector               = data.template_file.PersistenceSelector.rendered
     serviceAccountCreate              = true
     serviceAccountName                = local.serviceAccountName
     serviceAccountAnnotations         = data.template_file.serviceAccountAnnotations.rendered

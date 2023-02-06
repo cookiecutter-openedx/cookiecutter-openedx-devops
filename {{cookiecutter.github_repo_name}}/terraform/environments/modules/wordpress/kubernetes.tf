@@ -42,7 +42,7 @@ resource "kubernetes_namespace" "wordpress" {
   }
 }
 
-resource "kubernetes_secret" "wordpress" {
+resource "kubernetes_secret" "wordpress_db" {
   metadata {
     name      = "wordpress-db"
     namespace = var.wordpressConfig["Namespace"]
