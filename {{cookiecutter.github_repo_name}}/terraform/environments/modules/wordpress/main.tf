@@ -108,7 +108,7 @@ data "template_file" "wordpress-values" {
 
 resource "helm_release" "wordpress" {
   name             = local.wordpress
-  namespace        = var.wordpress_namespace
+  namespace        = var.wordpressConfig["Namespace"]
   create_namespace = false
 
   chart      = "wordpress"

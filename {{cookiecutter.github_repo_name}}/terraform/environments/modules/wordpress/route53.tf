@@ -28,7 +28,7 @@ data "aws_route53_zone" "environment_domain" {
 
 resource "aws_route53_record" "wordpress" {
   zone_id = data.aws_route53_zone.environment_domain.id
-  name    = var.wordpress_domain
+  name    = var.wordpressConfig["Domain"]
   type    = "A"
 
   alias {

@@ -21,6 +21,16 @@ locals {
   wordpress_domain          = "wp.${local.environment_domain}"
   wordpress_namespace       = replace("${local.wordpress_domain}", ".", "-")
 
+  wordpressConfig = {
+    Domain    = local.wordpress_domain,
+    Namespace = local.wordpress_namespace,
+    Username = "wordpress_admin",
+    Email    = "wordpress_admin@${local.root_domain}",
+    FirstName = "Lawrence",
+    LastName  = "McDaniel",
+    BlogName  = "Cookiecutter Wordpress Site"
+  }
+
   tags = merge(
     local.environment_vars.locals.tags,
     { Name = "${local.resource_name}" }
@@ -98,12 +108,11 @@ include {
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
   root_domain                   = local.root_domain
-  wordpress_domain              = local.wordpress_domain
-  wordpress_namespace           = local.wordpress_namespace
   shared_resource_namespace     = local.shared_resource_namespace
   environment_namespace         = local.environment_namespace
   environment_domain            = local.environment_domain
   environment_subdomain         = local.environment_subdomain
   aws_region                    = local.aws_region
+  wordpress_config              = local.wordpressConfig
   tags                          = local.tags
 }

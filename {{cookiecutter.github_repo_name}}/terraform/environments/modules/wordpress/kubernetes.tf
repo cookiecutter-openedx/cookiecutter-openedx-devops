@@ -47,7 +47,7 @@ resource "kubernetes_namespace" "wordpress_namespace" {
 resource "kubernetes_secret" "wordpress" {
   metadata {
     name      = local.wordpress
-    namespace = var.wordpress_namespace
+    namespace = var.wordpressConfig["Namespace"]
   }
   data = {
     wordpress-password  = random_password.wordpressAdminPassword.result

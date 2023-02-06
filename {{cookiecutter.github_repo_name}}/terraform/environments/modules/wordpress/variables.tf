@@ -28,7 +28,12 @@ variable "shared_resource_namespace" {
   type = string
 }
 
+variable "wordpressConfig" {
+  type = map(string)
+}
+
 variable "tags" {
+  type = map(string)
 }
 
 variable "aws_region" {

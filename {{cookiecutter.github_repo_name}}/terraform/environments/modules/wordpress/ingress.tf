@@ -10,8 +10,8 @@
 data "template_file" "ingress" {
   template = file("${path.module}/config/ingress-wordpress.yaml.tpl")
   vars = {
-    wordpress_namespace   = var.wordpress_namespace
-    wordpress_domain      = var.wordpress_domain
+    wordpress_namespace   = var.wordpressConfig["Namespace"]
+    wordpress_domain      = var.wordpressConfig["Domain"]
   }
 }
 
@@ -27,8 +27,8 @@ data "template_file" "cluster-issuer" {
   template = file("${path.module}/config/cluster-issuer.yml.tpl")
   vars = {
     root_domain         = var.root_domain
-    wordpress_domain    = var.wordpress_domain
-    namespace           = var.wordpress_namespace
+    wordpress_domain    = var.wordpressConfig["Domain"]
+    namespace           = var.wordpressConfig["Namespace"]
     aws_region          = var.aws_region
     hosted_zone_id      = data.aws_route53_zone.environment_domain.id
   }
