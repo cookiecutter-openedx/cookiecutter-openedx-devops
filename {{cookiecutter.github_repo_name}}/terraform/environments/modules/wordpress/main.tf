@@ -14,9 +14,12 @@
 #   helm repo update
 #   helm show all bitnami/wordpress
 #   helm show values bitnami/wordpress
+#
+# see: https://jmrobles.medium.com/launch-a-wordpress-site-on-kubernetes-in-just-1-minute-193914cb4902
 #-----------------------------------------------------------
 locals {
     wordpress                         = "wordpress"
+    wordpressDomain                   = var.wordpressConfig["Domain"]
     wordpressUsername                 = var.wordpressConfig["Username"]
     wordpressEmail                    = var.wordpressConfig["Email"]
     wordpressFirstName                = var.wordpressConfig["FirstName"]
@@ -57,6 +60,7 @@ data "template_file" "wordpressExtraConfigContent" {
 data "template_file" "wordpress-values" {
   template = file("${path.module}/config/wordpress-values.yaml.tpl")
   vars = {
+    wordpressDomain                   = local.wordpressDomain
     wordpressUsername                 = local.wordpressUsername
     wordpressEmail                    = local.wordpressEmail
     wordpressFirstName                = local.wordpressFirstName
