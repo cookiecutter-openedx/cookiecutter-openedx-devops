@@ -31,7 +31,7 @@ terraform {
       version = "{{ cookiecutter.terraform_provider_hashicorp_kubectl_version }}"
     }
     ssh = {
-      source = "loafoe/ssh"
+      source  = "loafoe/ssh"
       version = "~> 2.4"
     }
   }

@@ -48,14 +48,14 @@ resource "kubernetes_secret" "wordpress_db" {
     namespace = local.wordpressNamespace
   }
   data = {
-    mariadb-password    = random_password.externalDatabasePassword.result
-    MYSQL_HOST          = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
-    MYSQL_PORT          = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
-    MYSQL_DATABASE      = local.externalDatabaseDatabase
-    MYSQL_USERNAME      = local.externalDatabaseUser
-    MYSQL_PASSWORD      = random_password.externalDatabasePassword.result
-    REDIS_HOST          = data.kubernetes_secret.redis.data.REDIS_HOST
-    REDIS_PORT          = local.externalCachePort
+    mariadb-password = random_password.externalDatabasePassword.result
+    MYSQL_HOST       = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
+    MYSQL_PORT       = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
+    MYSQL_DATABASE   = local.externalDatabaseDatabase
+    MYSQL_USERNAME   = local.externalDatabaseUser
+    MYSQL_PASSWORD   = random_password.externalDatabasePassword.result
+    REDIS_HOST       = data.kubernetes_secret.redis.data.REDIS_HOST
+    REDIS_PORT       = local.externalCachePort
   }
 
   depends_on = [

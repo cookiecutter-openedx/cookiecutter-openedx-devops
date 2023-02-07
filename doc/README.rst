@@ -663,6 +663,98 @@ Open edX Deployment
   *default value: N*
 
 
+Wordpress Configuration Options
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- **wordpress_add_site:**
+
+  'Y' to install the current latest version of `Wordpress <https://wordpress.com/>`_.
+
+  *default value: N*
+
+- **wordpress_disk_volume_size:**
+
+  The AWS EBS volume size that will be created for the Kubernetes Persistent Volume Claim for Wordpress.
+
+  *default value: 10Gi*
+
+- **wordpress_helm_chart_version:**
+
+  The version of the Helm chart version used. For more information run:
+
+  .. code-block:: shell
+
+    $ helm repo add bitnami https://charts.bitnami.com/bitnami
+    $ helm install wordpress bitnami/wordpress
+    $ helm repo update
+    $ helm show all bitnami/wordpress
+
+  *value: {{ cookiecutter.wordpress_helm_chart_version }}*
+
+- **wordpress_hosted_zone_id:**
+
+  The AWS Route53 Hosted Zone from which your Wordpress site's DNS records will be managed.
+
+  *value: {{ cookiecutter.global_aws_route53_hosted_zone_id }}*
+
+- **wordpress_domain**
+
+  the base domain for your Wordpress site. Typically this is the root domain.
+
+  *value: {{ cookiecutter.global_root_domain }}*
+
+- **wordpress_subdomain**
+
+  the subdomain for your Wordpress site.
+
+  *default value: store*
+
+- **wordpress_namespace:**
+
+  The Kubernetes namespace in which your Wordpress site will be deployed.
+
+  *default value: wp-{{ cookiecutter.global_root_domain|lower|replace(' ', '-')|replace('.', '-')|replace('_', '-') }}*
+
+- **wordpress_username:**
+
+  The Wordpress admin account username that will be automatically created.
+
+  *default value: wordpress_admin*
+
+- **wordpress_email:**
+
+  The email address for the automatically-created admin account.
+
+  *default value: wordpress_admin@{{ cookiecutter.global_root_domain }}*
+
+- **wordpress_user_firstname:**
+
+  The first name for the automatically-created admin account.
+
+- **wordpress_user_lastname:**
+
+  The last name for the automatically-created admin account.
+
+- **wordpress_blog_name:**
+
+  The Wordpress site title.
+
+  *default value: Cookiecutter Wordpress Site*
+
+- **wordpress_database_user:**
+
+  The username for the Wordpress MySQL database admin account. The corresponding password is stored in
+  Kubernetes secret 'wordpress-db'
+
+  *default value: {{ cookiecutter.wordpress_namespace }}*
+
+- **wordpress_database:**
+
+  The name of the Wordpress MySQL database.
+
+  *default value: {{ cookiecutter.wordpress_namespace }}*
+
+
 Cookiecutter Github Actions Configuration Options
 -------------------------------------------------
 

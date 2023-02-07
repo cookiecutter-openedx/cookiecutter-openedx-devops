@@ -18,24 +18,24 @@
 # see: https://jmrobles.medium.com/launch-a-wordpress-site-on-kubernetes-in-just-1-minute-193914cb4902
 #-----------------------------------------------------------
 locals {
-    wordpress                         = "wordpress"
-    wordpressHostedZoneID             = var.wordpressConfig["HostedZoneID"]
-    wordpressRootDomain               = var.wordpressConfig["RootDomain"]
-    wordpressSubdomain                = var.wordpressConfig["Subdomain"]
-    wordpressDomain                   = var.wordpressConfig["Domain"]
-    wordpressNamespace                = var.wordpressConfig["Namespace"]
-    wordpressUsername                 = var.wordpressConfig["Username"]
-    wordpressEmail                    = var.wordpressConfig["Email"]
-    wordpressFirstName                = var.wordpressConfig["FirstName"]
-    wordpressLastName                 = var.wordpressConfig["LastName"]
-    wordpressBlogName                 = var.wordpressConfig["BlogName"]
-    externalDatabaseUser              = var.wordpressConfig["DatabaseUser"]
-    externalDatabaseDatabase          = var.wordpressConfig["Database"]
-    persistenceSize                   = var.wordpressConfig["DiskVolumeSize"]
-    serviceAccountName                = "local.wordpress"
-    HorizontalAutoscalingMinReplicas  = 1
-    HorizontalAutoscalingMaxReplicas  = 2
-    externalCachePort                 = "11211"
+  wordpress                        = "wordpress"
+  wordpressHostedZoneID            = var.wordpressConfig["HostedZoneID"]
+  wordpressRootDomain              = var.wordpressConfig["RootDomain"]
+  wordpressSubdomain               = var.wordpressConfig["Subdomain"]
+  wordpressDomain                  = var.wordpressConfig["Domain"]
+  wordpressNamespace               = var.wordpressConfig["Namespace"]
+  wordpressUsername                = var.wordpressConfig["Username"]
+  wordpressEmail                   = var.wordpressConfig["Email"]
+  wordpressFirstName               = var.wordpressConfig["FirstName"]
+  wordpressLastName                = var.wordpressConfig["LastName"]
+  wordpressBlogName                = var.wordpressConfig["BlogName"]
+  externalDatabaseUser             = var.wordpressConfig["DatabaseUser"]
+  externalDatabaseDatabase         = var.wordpressConfig["Database"]
+  persistenceSize                  = var.wordpressConfig["DiskVolumeSize"]
+  serviceAccountName               = "local.wordpress"
+  HorizontalAutoscalingMinReplicas = 1
+  HorizontalAutoscalingMaxReplicas = 2
+  externalCachePort                = "11211"
 }
 
 
@@ -62,35 +62,35 @@ data "template_file" "wordpressExtraConfigContent" {
 data "template_file" "wordpress-values" {
   template = file("${path.module}/config/wordpress-values.yaml.tpl")
   vars = {
-    wordpressDomain                   = local.wordpressDomain
-    wordpressUsername                 = local.wordpressUsername
-    wordpressEmail                    = local.wordpressEmail
-    wordpressFirstName                = local.wordpressFirstName
-    wordpressLastName                 = local.wordpressLastName
-    wordpressBlogName                 = local.wordpressBlogName
-    wordpressExtraConfigContent       = data.template_file.wordpressExtraConfigContent.rendered
-    wordpressConfigureCache           = false
-    wordpressPlugins                  = data.template_file.wordpressPlugins.rendered
-    allowEmptyPassword                = true
-    extraVolumes                      = data.template_file.extraVolumes.rendered
-    extraVolumeMounts                 = data.template_file.extraVolumeMounts.rendered
-    persistenceSize                   = local.persistenceSize
-    serviceAccountCreate              = true
-    serviceAccountName                = local.serviceAccountName
-    serviceAccountAnnotations         = data.template_file.serviceAccountAnnotations.rendered
-    PodDisruptionBudgetCreate         = true
-    HorizontalAutoscalingCreate       = true
-    HorizontalAutoscalingMinReplicas  = local.HorizontalAutoscalingMinReplicas
-    HorizontalAutoscalingMaxReplicas  = local.HorizontalAutoscalingMaxReplicas
-    externalDatabaseHost              = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
-    externalDatabasePort              = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
-    externalDatabaseUser              = local.externalDatabaseUser
-    externalDatabasePassword          = random_password.externalDatabasePassword.result
-    externalDatabaseDatabase          = local.externalDatabaseDatabase
-    externalDatabaseExistingSecret    = kubernetes_secret.wordpress_db.metadata[0].name
-    memcachedEnabled                  = false
-    externalCacheHost                 = data.kubernetes_secret.redis.data.REDIS_HOST
-    externalCachePort                 = local.externalCachePort
+    wordpressDomain                  = local.wordpressDomain
+    wordpressUsername                = local.wordpressUsername
+    wordpressEmail                   = local.wordpressEmail
+    wordpressFirstName               = local.wordpressFirstName
+    wordpressLastName                = local.wordpressLastName
+    wordpressBlogName                = local.wordpressBlogName
+    wordpressExtraConfigContent      = data.template_file.wordpressExtraConfigContent.rendered
+    wordpressConfigureCache          = false
+    wordpressPlugins                 = data.template_file.wordpressPlugins.rendered
+    allowEmptyPassword               = true
+    extraVolumes                     = data.template_file.extraVolumes.rendered
+    extraVolumeMounts                = data.template_file.extraVolumeMounts.rendered
+    persistenceSize                  = local.persistenceSize
+    serviceAccountCreate             = true
+    serviceAccountName               = local.serviceAccountName
+    serviceAccountAnnotations        = data.template_file.serviceAccountAnnotations.rendered
+    PodDisruptionBudgetCreate        = true
+    HorizontalAutoscalingCreate      = true
+    HorizontalAutoscalingMinReplicas = local.HorizontalAutoscalingMinReplicas
+    HorizontalAutoscalingMaxReplicas = local.HorizontalAutoscalingMaxReplicas
+    externalDatabaseHost             = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
+    externalDatabasePort             = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
+    externalDatabaseUser             = local.externalDatabaseUser
+    externalDatabasePassword         = random_password.externalDatabasePassword.result
+    externalDatabaseDatabase         = local.externalDatabaseDatabase
+    externalDatabaseExistingSecret   = kubernetes_secret.wordpress_db.metadata[0].name
+    memcachedEnabled                 = false
+    externalCacheHost                = data.kubernetes_secret.redis.data.REDIS_HOST
+    externalCachePort                = local.externalCachePort
   }
 }
 
