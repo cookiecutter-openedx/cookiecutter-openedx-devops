@@ -2,16 +2,9 @@
 # written by: Lawrence McDaniel
 #             https://lawrencemcdaniel.com
 
-# date: Jan-2023
+# date: Feb-2023
 #
-# usage: open-release olive.1 and newer include the url endpoint /api/mfe_config/v1
-#        that is implemented in edx-platform/lms/djangoapps/mfe_config_api.
-#
-#        we need to add a special ingress, just for this endpoint.
-#        note that this ingress requires an additional annotation to set the
-#        Host header in the request to the hostname of the lms.
-#
-# example: https://apps.${domain}/api/mfe_config/v1?mfe=authn
+# usage: Wordpress ingress deployed to common nginx controller
 #------------------------------------------------------------------------------
 apiVersion: networking.k8s.io/v1
 kind: Ingress

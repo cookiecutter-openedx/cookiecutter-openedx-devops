@@ -14,8 +14,8 @@ data "template_file" "mysql_config" {
     MYSQL_PORT                = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
     MYSQL_ROOT_USERNAME       = data.kubernetes_secret.mysql_root.data.MYSQL_ROOT_USERNAME
     MYSQL_ROOT_PASSWORD       = data.kubernetes_secret.mysql_root.data.MYSQL_ROOT_PASSWORD
-    WORDPRESS_MYSQL_DATABASE  = var.wordpressConfig["Database"]
-    WORDPRESS_MYSQL_USERNAME  = var.wordpressConfig["DatabaseUser"]
+    WORDPRESS_MYSQL_DATABASE  = local.externalDatabaseDatabase
+    WORDPRESS_MYSQL_USERNAME  = local.externalDatabaseUser
     WORDPRESS_MYSQL_PASSWORD  = random_password.externalDatabasePassword.result
   }
 }

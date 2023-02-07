@@ -10,11 +10,11 @@
 data "template_file" "cluster-issuer" {
   template = file("${path.module}/config/cluster-issuer.yml.tpl")
   vars = {
-    root_domain         = var.root_domain
-    wordpress_domain    = var.wordpressConfig["Domain"]
-    namespace           = var.wordpressConfig["Namespace"]
+    root_domain         = local.wordpressRootDomain
+    wordpress_domain    = local.wordpressDomain
+    namespace           = local.wordpressNamespace
     aws_region          = var.aws_region
-    hosted_zone_id      = data.aws_route53_zone.environment_domain.id
+    hosted_zone_id      = data.aws_route53_zone.wordpress_domain.id
   }
 }
 

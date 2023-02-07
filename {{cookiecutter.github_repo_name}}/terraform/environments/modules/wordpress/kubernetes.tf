@@ -38,14 +38,14 @@ data "kubernetes_secret" "redis" {
 
 resource "kubernetes_namespace" "wordpress" {
   metadata {
-    name = var.wordpressConfig["Namespace"]
+    name = local.wordpressNamespace
   }
 }
 
 resource "kubernetes_secret" "wordpress_db" {
   metadata {
     name      = "wordpress-db"
-    namespace = var.wordpressConfig["Namespace"]
+    namespace = local.wordpressNamespace
   }
   data = {
     mariadb-password    = random_password.externalDatabasePassword.result
