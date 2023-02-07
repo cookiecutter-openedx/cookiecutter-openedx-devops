@@ -150,5 +150,5 @@
     "wordpress_user_lastname": "Last Name",
     "wordpress_blog_name": "Cookiecutter Wordpress Site",
     "wordpress_database_user": "{{ cookiecutter.global_root_domain|lower|replace(' ', '')|replace('.', '')|replace('-', '')|replace('_', '') }}",
-    "wordpress_database": "{{ cookiecutter.global_root_domain }}"
+    "wordpress_database": "{{ cookiecutter.wordpress_database_user }}"
   }
