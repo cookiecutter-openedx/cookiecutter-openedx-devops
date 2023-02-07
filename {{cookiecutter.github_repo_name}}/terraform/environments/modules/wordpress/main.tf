@@ -64,7 +64,7 @@ data "template_file" "wordpress-values" {
     wordpressUsername                 = local.wordpressUsername
     wordpressEmail                    = local.wordpressEmail
     wordpressFirstName                = local.wordpressFirstName
-    wordpressLastName                 = local.wordpressFirstName
+    wordpressLastName                 = local.wordpressLastName
     wordpressBlogName                 = local.wordpressBlogName
     wordpressExtraConfigContent       = data.template_file.wordpressExtraConfigContent.rendered
     wordpressConfigureCache           = false
