@@ -99,7 +99,7 @@ resource "helm_release" "wordpress" {
 
   chart      = "wordpress"
   repository = "bitnami"
-  version    = "{{ cookiecutter.terraform_helm_wordpress_version }}"
+  version    = "{{ cookiecutter.wordpress_helm_chart_version }}"
 
   # https://github.com/bitnami/charts/blob/main/bitnami/wordpress/values.yaml
   # or

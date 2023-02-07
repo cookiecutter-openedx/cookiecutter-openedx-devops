@@ -7,8 +7,9 @@
 # usage: deploy a Wordpress site
 #------------------------------------------------------------------------------
 locals {
-  global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
-  environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
+  global_vars       = read_terragrunt_config(find_in_parent_folders("global.hcl"))
+  environment_vars  = read_terragrunt_config(find_in_parent_folders("env.hcl"))
+  client_vars       = read_terragrunt_config("client.hcl")
 
   aws_region                = local.global_vars.locals.aws_region
   root_domain               = local.global_vars.locals.root_domain
@@ -17,20 +18,18 @@ locals {
   environment_subdomain     = local.environment_vars.locals.environment_subdomain
   environment_namespace     = local.environment_vars.locals.environment_namespace
   resource_name             = local.environment_vars.locals.environment_namespace
-  wordpress_domain          = "wp.${local.environment_domain}"
-  wordpress_namespace       = replace("${local.wordpress_domain}", ".", "-")
 
   wordpressConfig = {
-    Domain         = local.wordpress_domain,
-    Namespace      = local.wordpress_namespace,
-    Username       = "wordpress_admin",
-    Email          = "wordpress_admin@${local.root_domain}",
-    FirstName      = "Lawrence",
-    LastName       = "McDaniel",
-    BlogName       = "Cookiecutter Wordpress Site",
-    DatabaseUser   = "lpm0073",
-    Database       = "lpm0073",
-    DiskVolumeSize = local.environment_vars.locals.wordpress_disk_volume_size
+    HostedZoneID   = local.client_vars.locals.wordpress_hosted_zone_id,
+    Namespace      = local.client_vars.locals.wordpress_namespace,
+    Username       = local.client_vars.locals.wordpress_username,
+    Email          = local.client_vars.locals.wordpress_email,
+    FirstName      = local.client_vars.locals.wordpress_user_firstname,
+    LastName       = local.client_vars.locals.wordpress_user_lastname,
+    BlogName       = local.client_vars.locals.wordpress_blog_name,
+    DatabaseUser   = local.client_vars.locals.wordpress_database_user,
+    Database       = local.client_vars.locals.wordpress_database,
+    DiskVolumeSize = local.client_vars.locals.wordpress_disk_volume_size
   }
 
   tags = merge(

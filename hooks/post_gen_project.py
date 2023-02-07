@@ -167,7 +167,7 @@ def main():
         remove_mongodb()
         remove_mongodb_volume
 
-    if "{{ cookiecutter.environment_add_wordpress }}".upper() != "Y":
+    if "{{ cookiecutter.wordpress_add_site }}".upper() != "Y":
         remove_wordpress()
 
     print(SUCCESS + "Your Open edX devops repo has been initialized." + TERMINATOR)
