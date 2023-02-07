@@ -19,22 +19,27 @@
 #-----------------------------------------------------------
 locals {
     wordpress                         = "wordpress"
+    wordpressHostedZoneID             = var.wordpressConfig["HostedZoneID"]
     wordpressDomain                   = var.wordpressConfig["Domain"]
+    wordpressSubdomain                = var.wordpressConfig["Subdomain"]
+    wordpressNamespace                = var.wordpressConfig["Namespace"]
     wordpressUsername                 = var.wordpressConfig["Username"]
     wordpressEmail                    = var.wordpressConfig["Email"]
     wordpressFirstName                = var.wordpressConfig["FirstName"]
     wordpressLastName                 = var.wordpressConfig["LastName"]
     wordpressBlogName                 = var.wordpressConfig["BlogName"]
-    persistenceSize                   = var.wordpressConfig["DiskVolumeSize"]
-    serviceAccountName                = local.wordpress
-    HorizontalAutoscalingMinReplicas  = 1
-    HorizontalAutoscalingMaxReplicas  = 2
     externalDatabaseUser              = var.wordpressConfig["DatabaseUser"]
     externalDatabaseDatabase          = var.wordpressConfig["Database"]
+    persistenceSize                   = var.wordpressConfig["DiskVolumeSize"]
+    serviceAccountName                = "local.wordpress"
+    HorizontalAutoscalingMinReplicas  = 1
+    HorizontalAutoscalingMaxReplicas  = 2
     externalCachePort                 = "11211"
 }
 
-
+data "aws_route53_zone" "wordpress" {
+  zone_id = local.wordpressHostedZoneID
+}
 
 
 data "template_file" "serviceAccountAnnotations" {
@@ -94,7 +99,7 @@ data "template_file" "wordpress-values" {
 
 resource "helm_release" "wordpress" {
   name             = local.wordpress
-  namespace        = var.wordpressConfig["Namespace"]
+  namespace        = local.wordpressNamespace
   create_namespace = false
 
   chart      = "wordpress"

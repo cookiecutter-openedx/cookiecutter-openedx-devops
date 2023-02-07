@@ -8,6 +8,8 @@
 #------------------------------------------------------------------------------
 locals {
   wordpress_hosted_zone_id   = "{{ cookiecutter.wordpress_hosted_zone_id }}"
+  wordpress_domain           = "{{ cookiecutter.wordpress_domain }}"
+  wordpress_subdomain        = "{{ cookiecutter.wordpress_subdomain }}"
   wordpress_namespace        = "{{ cookiecutter.wordpress_namespace }}"
   wordpress_username         = "{{ cookiecutter.wordpress_username }}"
   wordpress_email            = "{{ cookiecutter.wordpress_email }}"

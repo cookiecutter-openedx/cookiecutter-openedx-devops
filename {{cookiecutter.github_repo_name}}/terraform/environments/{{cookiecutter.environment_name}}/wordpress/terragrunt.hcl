@@ -21,6 +21,8 @@ locals {
 
   wordpressConfig = {
     HostedZoneID   = local.client_vars.locals.wordpress_hosted_zone_id,
+    Domain         = local.client_vars.locals.wordpress_domain,
+    Subdomain      = local.client_vars.locals.wordpress_subdomain,
     Namespace      = local.client_vars.locals.wordpress_namespace,
     Username       = local.client_vars.locals.wordpress_username,
     Email          = local.client_vars.locals.wordpress_email,
