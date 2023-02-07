@@ -86,7 +86,7 @@ output "wordpress_mysql_port" {
 }
 
 output "wordpress_mysql_database" {
-  value       = externalDatabaseDatabase
+  value       = local.externalDatabaseDatabase
 }
 
 output "wordpress_mysql_username" {
