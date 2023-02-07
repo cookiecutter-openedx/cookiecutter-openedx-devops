@@ -20,18 +20,19 @@ locals {
   resource_name             = local.environment_vars.locals.environment_namespace
 
   wordpressConfig = {
-    HostedZoneID   = local.client_vars.locals.wordpress_hosted_zone_id,
-    Domain         = local.client_vars.locals.wordpress_domain,
-    Subdomain      = local.client_vars.locals.wordpress_subdomain,
-    Namespace      = local.client_vars.locals.wordpress_namespace,
-    Username       = local.client_vars.locals.wordpress_username,
-    Email          = local.client_vars.locals.wordpress_email,
-    FirstName      = local.client_vars.locals.wordpress_user_firstname,
-    LastName       = local.client_vars.locals.wordpress_user_lastname,
-    BlogName       = local.client_vars.locals.wordpress_blog_name,
-    DatabaseUser   = local.client_vars.locals.wordpress_database_user,
-    Database       = local.client_vars.locals.wordpress_database,
-    DiskVolumeSize = local.client_vars.locals.wordpress_disk_volume_size
+    HostedZoneID   = local.client_vars.locals.wp_hosted_zone_id,
+    RootDomain     = local.client_vars.locals.wp_domain,
+    Domain         = "${local.client_vars.locals.wp_subdomain}.${local.client_vars.locals.wp_domain}",
+    Subdomain      = local.client_vars.locals.wp_subdomain,
+    Namespace      = local.client_vars.locals.wp_namespace,
+    Username       = local.client_vars.locals.wp_username,
+    Email          = local.client_vars.locals.wp_email,
+    FirstName      = local.client_vars.locals.wp_user_firstname,
+    LastName       = local.client_vars.locals.wp_user_lastname,
+    BlogName       = local.client_vars.locals.wp_blog_name,
+    DatabaseUser   = local.client_vars.locals.wp_database_user,
+    Database       = local.client_vars.locals.wp_database,
+    DiskVolumeSize = local.client_vars.locals.wp_disk_volume_size
   }
 
   tags = merge(

@@ -19,16 +19,14 @@ data "aws_route53_zone" "root_domain" {
   name = var.root_domain
 }
 
-data "aws_route53_zone" "environment_domain" {
-  name = var.environment_domain
-  tags = {
-    "cookiecutter/environment_namespace" = var.environment_namespace
-  }
+data "aws_route53_zone" "wordpress_domain" {
+  zone_id = local.wordpressHostedZoneID
 }
 
+
 resource "aws_route53_record" "wordpress" {
-  zone_id = data.aws_route53_zone.environment_domain.id
-  name    = var.wordpressConfig["Domain"]
+  zone_id = data.aws_route53_zone.wordpress_domain.id
+  name    = local.wordpressDomain
   type    = "A"
 
   alias {

@@ -19,16 +19,7 @@ containerPorts:
   http: 8080
   https: 8443
 ingress:
-  enabled: true
-  hostname: ${wordpressDomain}
-  path: /
-  annotations: {
-    "cert-manager.io/cluster-issuer": "${wordpressDomain}",
-    "nginx.ingress.kubernetes.io/proxy-buffer-size": "0",
-    "nginx.ingress.kubernetes.io/proxy-send-timeout": "600",
-    "nginx.ingress.kubernetes.io/proxy-read-timeout": "600"
-    }
-  tls: true
+  enabled: false
 persistence:
   size: ${persistenceSize}
 serviceAccount:

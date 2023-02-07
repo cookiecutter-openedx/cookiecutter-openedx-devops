@@ -20,8 +20,9 @@
 locals {
     wordpress                         = "wordpress"
     wordpressHostedZoneID             = var.wordpressConfig["HostedZoneID"]
-    wordpressDomain                   = var.wordpressConfig["Domain"]
+    wordpressRootDomain               = var.wordpressConfig["RootDomain"]
     wordpressSubdomain                = var.wordpressConfig["Subdomain"]
+    wordpressDomain                   = var.wordpressConfig["Domain"]
     wordpressNamespace                = var.wordpressConfig["Namespace"]
     wordpressUsername                 = var.wordpressConfig["Username"]
     wordpressEmail                    = var.wordpressConfig["Email"]
@@ -35,10 +36,6 @@ locals {
     HorizontalAutoscalingMinReplicas  = 1
     HorizontalAutoscalingMaxReplicas  = 2
     externalCachePort                 = "11211"
-}
-
-data "aws_route53_zone" "wordpress" {
-  zone_id = local.wordpressHostedZoneID
 }
 
 
