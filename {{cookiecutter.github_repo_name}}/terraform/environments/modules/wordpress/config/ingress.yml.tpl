@@ -38,4 +38,4 @@ spec:
           service:
             name: wordpress
             port:
-              number: 8080
+              number: 80

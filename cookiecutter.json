@@ -145,7 +145,7 @@
     "wordpress_hosted_zone_id": "{{ cookiecutter.global_aws_route53_hosted_zone_id }}",
     "wordpress_domain": "{{ cookiecutter.global_root_domain }}",
     "wordpress_subdomain": "store",
-    "wordpress_namespace": "wp_{{ cookiecutter.global_root_domain|lower|replace(' ', '')|replace('.', '')|replace('-', '')|replace('_', '') }}",
+    "wordpress_namespace": "wp-{{ cookiecutter.global_root_domain|lower|replace(' ', '-')|replace('.', '-')|replace('_', '-') }}",
     "wordpress_username": "wordpress_admin",
     "wordpress_email": "wordpress_admin@{{ cookiecutter.global_root_domain }}",
     "wordpress_user_firstname": "First Name",
