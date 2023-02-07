@@ -143,12 +143,12 @@
     "wordpress_disk_volume_size": "10Gi",
     "wordpress_helm_chart_version": "~> 15.2",
     "wordpress_hosted_zone_id": "{{ cookiecutter.global_aws_route53_hosted_zone_id }}",
-    "wordpress_namespace": "wordpress",
+    "wordpress_namespace": "wp_{{ cookiecutter.global_root_domain|lower|replace(' ', '')|replace('.', '')|replace('-', '')|replace('_', '') }}",
     "wordpress_username": "wordpress_admin",
     "wordpress_email": "wordpress_admin@{{ cookiecutter.global_root_domain }}",
     "wordpress_user_firstname": "First Name",
     "wordpress_user_lastname": "Last Name",
     "wordpress_blog_name": "Cookiecutter Wordpress Site",
-    "wordpress_database_user": "wp_{{ cookiecutter.global_root_domain|lower|replace(' ', '')|replace('.', '')|replace('-', '')|replace('_', '') }}",
-    "wordpress_database": "{{ cookiecutter.wordpress_database_user }}"
+    "wordpress_database_user": "{{ cookiecutter.wordpress_namespace }}",
+    "wordpress_database": "{{ cookiecutter.wordpress_namespace }}"
   }
