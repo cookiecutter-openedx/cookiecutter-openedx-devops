@@ -20,6 +20,7 @@ containerPorts:
   https: 8443
 ingress:
   enabled: true
+  hostname: ${wordpressDomain}
   path: /
   annotations: {
     "cert-manager.io/cluster-issuer": "${wordpressDomain}",
