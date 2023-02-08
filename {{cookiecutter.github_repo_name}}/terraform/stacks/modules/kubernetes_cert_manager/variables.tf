@@ -27,5 +27,5 @@ variable "services_subdomain" {
 }
 
 variable "cert_manager_image_version" {
-    type = string
+  type = string
 }

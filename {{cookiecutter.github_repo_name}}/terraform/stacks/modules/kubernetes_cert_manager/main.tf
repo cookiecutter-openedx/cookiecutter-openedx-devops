@@ -59,9 +59,9 @@ module "cert_manager_irsa" {
 data "template_file" "cert-manager-values" {
   template = file("${path.module}/manifests/cert-manager-values.yaml.tpl")
   vars = {
-    role_arn                    = module.cert_manager_irsa.iam_role_arn
-    namespace                   = var.cert_manager_namespace
-    cert_manager_image_version  = var.cert_manager_image_version
+    role_arn                   = module.cert_manager_irsa.iam_role_arn
+    namespace                  = var.cert_manager_namespace
+    cert_manager_image_version = var.cert_manager_image_version
   }
 }
 
@@ -109,11 +109,11 @@ resource "kubectl_manifest" "certificate" {
 data "template_file" "cluster-issuer" {
   template = file("${path.module}/manifests/cluster-issuer.yml.tpl")
   vars = {
-    root_domain         = var.root_domain
-    services_subdomain  = var.services_subdomain
-    namespace           = var.namespace
-    aws_region          = var.aws_region
-    hosted_zone_id      = data.aws_route53_zone.services_subdomain.id
+    root_domain        = var.root_domain
+    services_subdomain = var.services_subdomain
+    namespace          = var.namespace
+    aws_region         = var.aws_region
+    hosted_zone_id     = data.aws_route53_zone.services_subdomain.id
   }
 }
 

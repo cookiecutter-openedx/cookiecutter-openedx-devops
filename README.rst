@@ -79,6 +79,8 @@ This configuration scales automatically, reliably supporting anywhere from a few
 New Features
 ------------
 
+**RELEASE v1.0.21:** Add a Wordpress site to your installation.
+
 **RELEASE v1.0.19:** Out of the box support for all MFE's.
 
 **RELEASE v1.0.8:** `Kubernetes Dashboard <https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/>`_ and `Kubeapps <https://kubeapps.dev/>`_ web applications.
@@ -151,7 +153,7 @@ First, get Cookiecutter. Trust me, it's awesome:
 
 .. code-block:: shell
 
-    $ pip install "cookiecutter>=1.7.0"
+    $ pip install "cookiecutter>=2.1.1"
 
 Now run it against this repo, using the following example usage pattern:
 
@@ -173,7 +175,8 @@ Now run it against this repo, using the following example usage pattern:
                 global_root_domain=schoolofrock.edu \
                 global_aws_route53_hosted_zone_id=Z123456789ABCDEFGHIJK \
                 environment_name=prod \
-                environment_subdomain=courses
+                environment_subdomain=courses \
+                wordpress_add_site=Y \
 
 Alternatively, you can run Cookiecutter without providing any prompts, which will result in it generating a questionnaire that includes all of the 75 or so input parameters. You'll be prompted for some values. Provide them, then a complete git repository will be created for you, with Github Actions workflows to automate the build and deployment of your Tutor Open edX platform, and Terraform scripts to automate the build of your AWS backend.
 

@@ -52,6 +52,9 @@ Open edX Application Software Endpoints
 
 - LMS: https://{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
 - Course Management Studio: https://{{ cookiecutter.environment_studio_subdomain }}.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
+{% if cookiecutter.wordpress_add_site|upper == "Y" -%}
+- Wordpress: https://{{ cookiecutter.wordpress_subdomain }}.{{ cookiecutter.global_root_domain }}. WordPress is a free and open-source content management system written in php and paired with a MySQL database with supported HTTPS. Features include a plugin architecture and a template system, referred to within WordPress as "Themes"
+{% endif -%}
 - **Content Delivery Network (CDN)**: https://cdn.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }} linked to a public read-only S3 bucket named {{ cookiecutter.environment_subdomain }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-storage
 - **AWS S3 Backups**: {{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-backup.s3.amazonaws.com
 - **AWS S3 Storage**: {{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-storage.s3.amazonaws.com

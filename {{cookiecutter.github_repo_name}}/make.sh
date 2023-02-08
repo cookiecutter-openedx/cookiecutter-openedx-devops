@@ -54,6 +54,7 @@ cookiecutter --checkout $GITHUB_BRANCH \
             stack_add_remote_mysql={{ cookiecutter.stack_add_remote_mysql }} \
             stack_add_remote_mongodb={{ cookiecutter.stack_add_remote_mongodb }} \
             stack_add_remote_redis={{ cookiecutter.stack_add_remote_redis }} \
+            wordpress_add_site={{ cookiecutter.wordpress_add_site }} \
             {% if cookiecutter.stack_add_remote_mongodb == "Y" -%}
             mongodb_instance_type={{ cookiecutter.mongodb_instance_type }} \
             mongodb_allocated_storage={{ cookiecutter.mongodb_allocated_storage }} \

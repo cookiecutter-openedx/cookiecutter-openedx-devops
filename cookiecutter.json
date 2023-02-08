@@ -1,7 +1,7 @@
 {
     "github_account_name": "lpm0073",
     "github_repo_name": "openedx_devops",
-    "github_release": "v1.0.20",
+    "github_release": "v1.0.21",
     "environment_name": "prod",
     "environment_subdomain": "courses",
     "environment_studio_subdomain": "studio",
@@ -138,5 +138,20 @@
     "terraform_provider_hashicorp_local_version": "~> 2.2",
     "terraform_provider_hashicorp_random_version": "~> 3.4",
     "terraform_provider_hashicorp_kubectl_version": "~> 1.14",
-    "terraform_provider_hashicorp_helm_version": "~> 2.8"
-}
+    "terraform_provider_hashicorp_ssh_version": "~> 2.4",
+    "terraform_provider_hashicorp_helm_version": "~> 2.8",
+    "wordpress_add_site":  ["N", "Y"],
+    "wordpress_disk_volume_size": "10Gi",
+    "wordpress_helm_chart_version": "~> 15.2",
+    "wordpress_hosted_zone_id": "{{ cookiecutter.global_aws_route53_hosted_zone_id }}",
+    "wordpress_domain": "{{ cookiecutter.global_root_domain }}",
+    "wordpress_subdomain": "store",
+    "wordpress_namespace": "wp-{{ cookiecutter.global_root_domain|lower|replace(' ', '-')|replace('.', '-')|replace('_', '-') }}",
+    "wordpress_username": "wordpress_admin",
+    "wordpress_email": "wordpress_admin@{{ cookiecutter.global_root_domain }}",
+    "wordpress_user_firstname": "First Name",
+    "wordpress_user_lastname": "Last Name",
+    "wordpress_blog_name": "Cookiecutter Wordpress Site",
+    "wordpress_database_user": "{{ cookiecutter.wordpress_namespace }}",
+    "wordpress_database": "{{ cookiecutter.wordpress_namespace }}"
+  }
