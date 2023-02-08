@@ -4,7 +4,8 @@
 #
 # date: Feb-2023
 #
-# usage: Wordpress MySQL resources
+# usage: Wordpress MySQL resources.
+#        Login to the bastion EC2 instance and execute mysql-config.sh
 #------------------------------------------------------------------------------
 
 data "template_file" "mysql_config" {
@@ -20,7 +21,7 @@ data "template_file" "mysql_config" {
   }
 }
 
-# login to the bastion EC2 instance and execute mysql-config.sh
+
 resource "ssh_sensitive_resource" "mysql" {
   triggers = {
     always_run = "${timestamp()}"

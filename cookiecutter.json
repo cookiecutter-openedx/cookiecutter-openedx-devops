@@ -138,6 +138,7 @@
     "terraform_provider_hashicorp_local_version": "~> 2.2",
     "terraform_provider_hashicorp_random_version": "~> 3.4",
     "terraform_provider_hashicorp_kubectl_version": "~> 1.14",
+    "terraform_provider_hashicorp_ssh_version": "~> 2.4",
     "terraform_provider_hashicorp_helm_version": "~> 2.8",
     "wordpress_add_site":  ["N", "Y"],
     "wordpress_disk_volume_size": "10Gi",

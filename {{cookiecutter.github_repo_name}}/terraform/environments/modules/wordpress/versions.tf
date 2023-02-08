@@ -32,7 +32,7 @@ terraform {
     }
     ssh = {
       source  = "loafoe/ssh"
-      version = "~> 2.4"
+      version = "{{ cookiecutter.terraform_provider_hashicorp_ssh_version }}"
     }
   }
 }
