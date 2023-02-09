@@ -64,6 +64,7 @@ data "template_file" "wordpress-values" {
   vars = {
     wordpressDomain                  = local.wordpressDomain
     wordpressUsername                = local.wordpressUsername
+    wordpressExistingSecret          = kubernetes_secret.wordpress_config.metadata[0].name
     wordpressEmail                   = local.wordpressEmail
     wordpressFirstName               = local.wordpressFirstName
     wordpressLastName                = local.wordpressLastName
@@ -87,7 +88,7 @@ data "template_file" "wordpress-values" {
     externalDatabaseUser             = local.externalDatabaseUser
     externalDatabasePassword         = random_password.externalDatabasePassword.result
     externalDatabaseDatabase         = local.externalDatabaseDatabase
-    externalDatabaseExistingSecret   = kubernetes_secret.wordpress_db.metadata[0].name
+    externalDatabaseExistingSecret   = kubernetes_secret.wordpress_config.metadata[0].name
     memcachedEnabled                 = false
     externalCacheHost                = data.kubernetes_secret.redis.data.REDIS_HOST
     externalCachePort                = local.externalCachePort

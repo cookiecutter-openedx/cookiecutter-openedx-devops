@@ -71,12 +71,12 @@ output "aws_route53_record-wordpress-type" {
 
 output "kubernetes_secret-wordpress-id" {
   description = "The Wordpress Kubernetes secret id"
-  value       = kubernetes_secret.wordpress_db.id
+  value       = kubernetes_secret.wordpress_config.id
 }
 
 output "kubernetes_secret-wordpress-metadata" {
   description = "The Wordpress Kubernetes secret metadata"
-  value       = kubernetes_secret.wordpress_db.metadata
+  value       = kubernetes_secret.wordpress_config.metadata
 }
 
 output "wordpress_mysql_host" {

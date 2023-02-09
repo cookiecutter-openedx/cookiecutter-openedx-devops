@@ -1,4 +1,5 @@
 wordpressUsername: ${wordpressUsername}
+existingSecret: ${wordpressExistingSecret}
 wordpressEmail: ${wordpressEmail}
 wordpressFirstName: ${wordpressFirstName}
 wordpressLastName: ${wordpressLastName}
