@@ -8,16 +8,12 @@
 #------------------------------------------------------------------------------
 locals {
   global_vars       = read_terragrunt_config(find_in_parent_folders("global.hcl"))
-  environment_vars  = read_terragrunt_config(find_in_parent_folders("env.hcl"))
   client_vars       = read_terragrunt_config("client.hcl")
 
   aws_region                = local.global_vars.locals.aws_region
   root_domain               = local.global_vars.locals.root_domain
   shared_resource_namespace = local.global_vars.locals.shared_resource_namespace
-  environment_domain        = local.environment_vars.locals.environment_domain
-  environment_subdomain     = local.environment_vars.locals.environment_subdomain
-  environment_namespace     = local.environment_vars.locals.environment_namespace
-  resource_name             = local.environment_vars.locals.environment_namespace
+  resource_name             = local.client_vars.locals.wp_namespace
 
   wordpressConfig = {
     HostedZoneID   = local.client_vars.locals.wp_hosted_zone_id,
@@ -36,8 +32,15 @@ locals {
   }
 
   tags = merge(
-    local.environment_vars.locals.tags,
-    { Name = "${local.resource_name}" }
+    local.global_vars.locals.tags,
+    {
+      "cookiecutter/environment"                = local.resource_name
+      "cookiecutter/environment_subdomain"      = local.client_vars.locals.wp_subdomain
+      "cookiecutter/environment_domain"         = local.client_vars.locals.wp_domain
+      "cookiecutter/environment_namespace"      = local.client_vars.locals.wp_namespace
+      "cookiecutter/shared_resource_namespace"  = local.shared_resource_namespace
+    },
+    { Name = local.resource_name }
   )
 }
 
@@ -114,9 +117,6 @@ include {
 inputs = {
   root_domain                   = local.root_domain
   shared_resource_namespace     = local.shared_resource_namespace
-  environment_namespace         = local.environment_namespace
-  environment_domain            = local.environment_domain
-  environment_subdomain         = local.environment_subdomain
   aws_region                    = local.aws_region
   wordpressConfig               = local.wordpressConfig
   tags                          = local.tags

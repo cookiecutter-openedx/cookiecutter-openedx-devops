@@ -10,7 +10,7 @@
 data "template_file" "vpa_wordpress" {
   template = file("${path.module}/config/vpa-wordpress.yaml.tpl")
   vars = {
-    environment_namespace = local.wordpressNamespace
+    namespace = local.wordpressNamespace
   }
 }
 

@@ -10,6 +10,10 @@ output "wordpressConfig" {
   value = var.wordpressConfig
 }
 
+output "tags" {
+  value = var.tags
+}
+
 output "wordpress-id" {
   description = "The Wordpress helm id"
   value       = helm_release.wordpress.id
