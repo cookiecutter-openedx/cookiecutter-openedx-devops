@@ -21,8 +21,7 @@ def remove_wordpress():
                             "modules", "wordpress")
     rm_directory(dir_path)
 
-    dir_path = os.path.join("terraform", "environments",
-                            "{{ cookiecutter.environment_name }}", "wordpress")
+    dir_path = os.path.join("terraform", "environments", "wordpress")
     rm_directory(dir_path)
 
 
