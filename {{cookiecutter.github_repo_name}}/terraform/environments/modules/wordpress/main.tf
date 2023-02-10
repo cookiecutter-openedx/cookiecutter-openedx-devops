@@ -32,9 +32,9 @@ locals {
   externalDatabaseUser             = var.wordpressConfig["DatabaseUser"]
   externalDatabaseDatabase         = var.wordpressConfig["Database"]
   persistenceSize                  = var.wordpressConfig["DiskVolumeSize"]
-  serviceAccountName               = "local.wordpress"
+  serviceAccountName               = local.wordpressDomain
   HorizontalAutoscalingMinReplicas = 1
-  HorizontalAutoscalingMaxReplicas = 2
+  HorizontalAutoscalingMaxReplicas = 1
   externalCachePort                = "11211"
 }
 
@@ -79,8 +79,8 @@ data "template_file" "wordpress-values" {
     serviceAccountCreate             = true
     serviceAccountName               = local.serviceAccountName
     serviceAccountAnnotations        = data.template_file.serviceAccountAnnotations.rendered
-    PodDisruptionBudgetCreate        = true
-    HorizontalAutoscalingCreate      = true
+    PodDisruptionBudgetCreate        = false
+    HorizontalAutoscalingCreate      = false
     HorizontalAutoscalingMinReplicas = local.HorizontalAutoscalingMinReplicas
     HorizontalAutoscalingMaxReplicas = local.HorizontalAutoscalingMaxReplicas
     externalDatabaseHost             = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
@@ -113,6 +113,7 @@ resource "helm_release" "wordpress" {
 
   depends_on = [
     kubernetes_namespace.wordpress,
+    kubernetes_secret.wordpress_config,
     ssh_sensitive_resource.mysql
   ]
 }

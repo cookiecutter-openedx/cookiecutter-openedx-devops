@@ -183,3 +183,11 @@ resource "kubernetes_namespace" "namespace-shared" {
   }
   depends_on = [module.eks]
 }
+
+{% if cookiecutter.wordpress_add_site|upper == "Y" -%}
+resource "kubernetes_namespace" "wordpress" {
+  metadata {
+    name = "wordpress"
+  }
+  depends_on = [module.eks]
+}{% endif -%}

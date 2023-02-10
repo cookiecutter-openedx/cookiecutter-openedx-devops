@@ -8,14 +8,22 @@ wordpressExtraConfigContent: ${wordpressExtraConfigContent}
 wordpressConfigureCache: ${wordpressConfigureCache}
 wordpressPlugins: ${wordpressPlugins}
 allowEmptyPassword: ${allowEmptyPassword}
-htaccessPersistenceEnabled: false
+htaccessPersistenceEnabled: true
 extraVolumes: ${extraVolumes}
 extraVolumeMounts: ${extraVolumeMounts}
+readinessProbe:
+  enabled: false
+service:
+  type: ClusterIP
+  annotations: {}
 resources:
-  limits: {}
+  limits: {
+    memory: 512Mi,
+    cpu: 250m
+  }
   requests:
-    memory: 512Mi
-    cpu: 300m
+    memory: 128Mi
+    cpu: 12m
 containerPorts:
   http: 8080
   https: 8443
@@ -35,8 +43,8 @@ autoscaling:
   enabled: ${HorizontalAutoscalingCreate}
   minReplicas: ${HorizontalAutoscalingMinReplicas}
   maxReplicas: ${HorizontalAutoscalingMaxReplicas}
-  targetCPU: 50
-  targetMemory: 50
+  targetMemory: 512Mi
+  targetCPU: 250m
 metrics:
   enabled: true
   serviceMonitor:

@@ -10,7 +10,7 @@
 data "template_file" "ingress" {
   template = file("${path.module}/config/ingress.yml.tpl")
   vars = {
-    name           = local.wordpress
+    name           = local.wordpressDomain
     namespace      = local.wordpressNamespace
     cluster_issuer = local.wordpressDomain
     root_domain    = local.wordpressRootDomain
