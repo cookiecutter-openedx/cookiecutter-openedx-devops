@@ -27,13 +27,12 @@ service:
   type: ClusterIP
   annotations: {}
 resources:
-  limits: {
-    memory: 512Mi,
-    cpu: 250m
-  }
+  limits:
+    memory: "1000Mi"
+    cpu: "1000m"
   requests:
-    memory: 128Mi
-    cpu: 12m
+    memory: "128Mi"
+    cpu: "12m"
 containerPorts:
   http: 8080
   https: 8443

@@ -10,3 +10,13 @@ spec:
     name:       wordpress
   updatePolicy:
     updateMode: "Auto"
+  # see: https://www.kubecost.com/kubernetes-autoscaling/kubernetes-vpa/
+  resourcePolicy:
+    containerPolicies:
+    - containerName: "wordpress"
+      #minAllowed:
+      #  cpu: "10m"
+      #  memory: "50Mi"
+      maxAllowed:
+        cpu: "1000m"
+        memory: "1000Mi"
