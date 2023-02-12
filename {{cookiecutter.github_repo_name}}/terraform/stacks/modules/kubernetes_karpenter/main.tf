@@ -14,6 +14,7 @@
 #   helm repo add karpenter https://charts.karpenter.sh/
 #   helm repo update
 #   helm search repo karpenter
+#   helm show values karpenter/karpenter
 #
 # NOTE: run `helm repo update` prior to running this
 #       Terraform module.
