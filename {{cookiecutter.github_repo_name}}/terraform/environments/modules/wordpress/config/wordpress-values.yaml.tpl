@@ -7,6 +7,16 @@ wordpressBlogName: ${wordpressBlogName}
 wordpressExtraConfigContent: ${wordpressExtraConfigContent}
 wordpressConfigureCache: ${wordpressConfigureCache}
 wordpressPlugins: ${wordpressPlugins}
+customPostInitScripts:
+  writable-files.sh: |
+    #!/bin/bash
+    chmod 664 /bitnami/wordpress/wp-config.php
+    chmod 664 /bitnami/wordpress/.htaccess
+    cd /bitnami/wordpress/wp-content
+    chown -R 1001 .
+    chgrp -R 1001 .
+    find . -type d -exec chmod 755 {} \;
+    find . -type f -exec chmod 644 {} \;
 allowEmptyPassword: ${allowEmptyPassword}
 htaccessPersistenceEnabled: true
 extraVolumes: ${extraVolumes}

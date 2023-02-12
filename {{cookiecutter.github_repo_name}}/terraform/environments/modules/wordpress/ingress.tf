@@ -13,7 +13,6 @@ data "template_file" "ingress" {
     name           = local.wordpressDomain
     namespace      = local.wordpressNamespace
     cluster_issuer = local.wordpressDomain
-    root_domain    = local.wordpressRootDomain
     domain         = local.wordpressDomain
   }
 }
