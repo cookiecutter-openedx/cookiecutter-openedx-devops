@@ -26,9 +26,8 @@ metadata:
 spec:
   tls:
   - hosts:
-    - "${root_domain}"
-    - "*.${root_domain}"
-    secretName: ${root_domain}-tls
+    - "${domain}"
+    secretName: ${domain}-tls
   rules:
   - host: ${domain}
     http:
