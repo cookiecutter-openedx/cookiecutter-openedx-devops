@@ -98,6 +98,9 @@ module "eks" {
   )
 
   cluster_addons = {
+    vpc-cni = {
+      addon_version = "v1.12.2-eksbuild.1"
+    }
     coredns = {
       addon_version = "v1.8.7-eksbuild.3"
     }
