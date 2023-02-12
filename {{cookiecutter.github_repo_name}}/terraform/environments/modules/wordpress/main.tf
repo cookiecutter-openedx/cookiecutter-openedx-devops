@@ -72,7 +72,7 @@ data "template_file" "wordpress-values" {
     wordpressExtraConfigContent      = data.template_file.wordpressExtraConfigContent.rendered
     wordpressConfigureCache          = false
     wordpressPlugins                 = data.template_file.wordpressPlugins.rendered
-    allowEmptyPassword               = true
+    allowEmptyPassword               = false
     extraVolumes                     = data.template_file.extraVolumes.rendered
     extraVolumeMounts                = data.template_file.extraVolumeMounts.rendered
     persistenceSize                  = local.persistenceSize
@@ -89,7 +89,7 @@ data "template_file" "wordpress-values" {
     externalDatabasePassword         = random_password.externalDatabasePassword.result
     externalDatabaseDatabase         = local.externalDatabaseDatabase
     externalDatabaseExistingSecret   = kubernetes_secret.wordpress_config.metadata[0].name
-    memcachedEnabled                 = false
+    memcachedEnabled                 = true
     externalCacheHost                = data.kubernetes_secret.redis.data.REDIS_HOST
     externalCachePort                = local.externalCachePort
   }
