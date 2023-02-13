@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.22] (2023-2-13)
+
+- add phpMyAdmin as an optional Wordpress installation feature
+- tune Wordpress pod resource limits
+- add Varnish cache as a stack installation option
+- add VPC-CNI EKS Addon
+- remove wildcards from all certificate manifests and ingresses
+- consolidate all Wordpress config params into a single secret
+- add multi-site Wordpress environment
+
 ## [1.0.21] (2023-2-7)
 
 - adds an optional Wordpress site to environment
