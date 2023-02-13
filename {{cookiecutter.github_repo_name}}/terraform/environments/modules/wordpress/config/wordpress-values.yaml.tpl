@@ -36,6 +36,15 @@ resources:
   requests:
     memory: "128Mi"
     cpu: "12m"
+allowEmptyPassword: ${allowEmptyPassword}
+htaccessPersistenceEnabled: false
+extraVolumes: ${extraVolumes}
+extraVolumeMounts: ${extraVolumeMounts}
+resources:
+  limits: {}
+  requests:
+    memory: 512Mi
+    cpu: 300m
 containerPorts:
   http: 8080
   https: 8443

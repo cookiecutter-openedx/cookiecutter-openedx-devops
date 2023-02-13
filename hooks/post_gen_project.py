@@ -29,6 +29,10 @@ def remove_wordpress():
 
     dir_path = os.path.join(
         "terraform", "stacks", "{{ cookiecutter.global_platform_shared_resource_identifier }}", "varnish")
+
+    rm_directory(dir_path)
+    dir_path = os.path.join("terraform", "environments",
+                            "{{ cookiecutter.environment_name }}", "wordpress")
     rm_directory(dir_path)
 
 def remove_redis():

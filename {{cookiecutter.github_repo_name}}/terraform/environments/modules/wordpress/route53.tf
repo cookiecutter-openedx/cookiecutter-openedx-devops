@@ -40,7 +40,6 @@ resource "aws_route53_record" "wordpress" {
     helm_release.wordpress
   ]
 }
-
 resource "aws_route53_record" "phpmyadmin" {
   count = "${var.phpmyadmin == "Y" ? 1 : 0}"
   zone_id = data.aws_route53_zone.wordpress_domain.id
