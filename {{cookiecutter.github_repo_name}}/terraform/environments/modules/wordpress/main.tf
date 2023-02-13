@@ -4,6 +4,8 @@
 #
 # date: Feb-2023
 #
+# usage: install Wordpress its own namespace.
+#
 # NOTE: you must initialize a local helm repo in order to run
 # this script.
 #
@@ -32,9 +34,9 @@ locals {
   externalDatabaseUser             = var.wordpressConfig["DatabaseUser"]
   externalDatabaseDatabase         = var.wordpressConfig["Database"]
   persistenceSize                  = var.wordpressConfig["DiskVolumeSize"]
-  serviceAccountName               = "local.wordpress"
+  serviceAccountName               = local.wordpressDomain
   HorizontalAutoscalingMinReplicas = 1
-  HorizontalAutoscalingMaxReplicas = 2
+  HorizontalAutoscalingMaxReplicas = 1
   externalCachePort                = "11211"
 }
 
@@ -64,6 +66,7 @@ data "template_file" "wordpress-values" {
   vars = {
     wordpressDomain                  = local.wordpressDomain
     wordpressUsername                = local.wordpressUsername
+    wordpressExistingSecret          = kubernetes_secret.wordpress_config.metadata[0].name
     wordpressEmail                   = local.wordpressEmail
     wordpressFirstName               = local.wordpressFirstName
     wordpressLastName                = local.wordpressLastName
@@ -71,15 +74,15 @@ data "template_file" "wordpress-values" {
     wordpressExtraConfigContent      = data.template_file.wordpressExtraConfigContent.rendered
     wordpressConfigureCache          = false
     wordpressPlugins                 = data.template_file.wordpressPlugins.rendered
-    allowEmptyPassword               = true
+    allowEmptyPassword               = false
     extraVolumes                     = data.template_file.extraVolumes.rendered
     extraVolumeMounts                = data.template_file.extraVolumeMounts.rendered
     persistenceSize                  = local.persistenceSize
     serviceAccountCreate             = true
     serviceAccountName               = local.serviceAccountName
     serviceAccountAnnotations        = data.template_file.serviceAccountAnnotations.rendered
-    PodDisruptionBudgetCreate        = true
-    HorizontalAutoscalingCreate      = true
+    PodDisruptionBudgetCreate        = false
+    HorizontalAutoscalingCreate      = false
     HorizontalAutoscalingMinReplicas = local.HorizontalAutoscalingMinReplicas
     HorizontalAutoscalingMaxReplicas = local.HorizontalAutoscalingMaxReplicas
     externalDatabaseHost             = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
@@ -87,7 +90,7 @@ data "template_file" "wordpress-values" {
     externalDatabaseUser             = local.externalDatabaseUser
     externalDatabasePassword         = random_password.externalDatabasePassword.result
     externalDatabaseDatabase         = local.externalDatabaseDatabase
-    externalDatabaseExistingSecret   = kubernetes_secret.wordpress_db.metadata[0].name
+    externalDatabaseExistingSecret   = kubernetes_secret.wordpress_config.metadata[0].name
     memcachedEnabled                 = false
     externalCacheHost                = data.kubernetes_secret.redis.data.REDIS_HOST
     externalCachePort                = local.externalCachePort
@@ -112,6 +115,7 @@ resource "helm_release" "wordpress" {
 
   depends_on = [
     kubernetes_namespace.wordpress,
+    kubernetes_secret.wordpress_config,
     ssh_sensitive_resource.mysql
   ]
 }

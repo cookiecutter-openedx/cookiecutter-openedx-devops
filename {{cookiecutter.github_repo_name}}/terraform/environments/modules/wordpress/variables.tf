@@ -9,13 +9,6 @@
 variable "root_domain" {
   type = string
 }
-variable "environment_domain" {
-  type = string
-}
-
-variable "environment_namespace" {
-  type = string
-}
 
 variable "shared_resource_namespace" {
   type = string
@@ -31,4 +24,9 @@ variable "tags" {
 
 variable "aws_region" {
   type = string
+}
+
+variable "phpmyadmin" {
+  type = string
+  default = "N"
 }

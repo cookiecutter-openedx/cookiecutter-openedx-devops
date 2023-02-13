@@ -10,6 +10,10 @@ output "wordpressConfig" {
   value = var.wordpressConfig
 }
 
+output "tags" {
+  value = var.tags
+}
+
 output "wordpress-id" {
   description = "The Wordpress helm id"
   value       = helm_release.wordpress.id
@@ -50,6 +54,11 @@ output "aws_route53_record-wordpress-fqdn" {
   value       = aws_route53_record.wordpress.fqdn
 }
 
+output "aws_route53_record-phpmyadmin-fqdn" {
+  description = "The phpMyAdmin DNS fqdn"
+  value       = "${var.phpmyadmin == "Y" ? aws_route53_record.phpmyadmin[0].fqdn : ""}"
+}
+
 output "aws_route53_record-wordpress-name" {
   description = "The Wordpress DNS name"
   value       = aws_route53_record.wordpress.name
@@ -67,12 +76,12 @@ output "aws_route53_record-wordpress-type" {
 
 output "kubernetes_secret-wordpress-id" {
   description = "The Wordpress Kubernetes secret id"
-  value       = kubernetes_secret.wordpress_db.id
+  value       = kubernetes_secret.wordpress_config.id
 }
 
 output "kubernetes_secret-wordpress-metadata" {
   description = "The Wordpress Kubernetes secret metadata"
-  value       = kubernetes_secret.wordpress_db.metadata
+  value       = kubernetes_secret.wordpress_config.metadata
 }
 
 output "wordpress_mysql_host" {

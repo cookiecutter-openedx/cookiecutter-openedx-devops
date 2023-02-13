@@ -15,6 +15,15 @@ resource "random_password" "externalDatabasePassword" {
   }
 }
 
+resource "random_password" "wordpressPassword" {
+  length           = 16
+  special          = true
+  override_special = "_%@"
+  keepers = {
+    version = "1"
+  }
+}
+
 data "kubernetes_secret" "bastion" {
   metadata {
     name      = "bastion-ssh-key"
@@ -42,20 +51,22 @@ resource "kubernetes_namespace" "wordpress" {
   }
 }
 
-resource "kubernetes_secret" "wordpress_db" {
+resource "kubernetes_secret" "wordpress_config" {
   metadata {
-    name      = "wordpress-db"
+    name      = "wordpress-config"
     namespace = local.wordpressNamespace
   }
   data = {
-    mariadb-password = random_password.externalDatabasePassword.result
-    MYSQL_HOST       = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
-    MYSQL_PORT       = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
-    MYSQL_DATABASE   = local.externalDatabaseDatabase
-    MYSQL_USERNAME   = local.externalDatabaseUser
-    MYSQL_PASSWORD   = random_password.externalDatabasePassword.result
-    REDIS_HOST       = data.kubernetes_secret.redis.data.REDIS_HOST
-    REDIS_PORT       = local.externalCachePort
+    wordpress-username  = local.wordpressUsername
+    wordpress-password  = random_password.wordpressPassword.result
+    mariadb-password    = random_password.externalDatabasePassword.result
+    MYSQL_HOST          = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
+    MYSQL_PORT          = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
+    MYSQL_DATABASE      = local.externalDatabaseDatabase
+    MYSQL_USERNAME      = local.externalDatabaseUser
+    MYSQL_PASSWORD      = random_password.externalDatabasePassword.result
+    REDIS_HOST          = data.kubernetes_secret.redis.data.REDIS_HOST
+    REDIS_PORT          = local.externalCachePort
   }
 
   depends_on = [

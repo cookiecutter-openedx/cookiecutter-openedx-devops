@@ -143,6 +143,7 @@
     "wordpress_add_site":  ["N", "Y"],
     "wordpress_disk_volume_size": "10Gi",
     "wordpress_helm_chart_version": "~> 15.2",
+    "phpmyadmin_helm_chart_version": "~> 10.4",
     "wordpress_hosted_zone_id": "{{ cookiecutter.global_aws_route53_hosted_zone_id }}",
     "wordpress_domain": "{{ cookiecutter.global_root_domain }}",
     "wordpress_subdomain": "store",
