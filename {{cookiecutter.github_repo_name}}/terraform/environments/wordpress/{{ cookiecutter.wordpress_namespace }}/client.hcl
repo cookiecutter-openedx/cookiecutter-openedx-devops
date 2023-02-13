@@ -19,4 +19,5 @@ locals {
   wp_database_user    = "{{ cookiecutter.wordpress_database_user }}"
   wp_database         = "{{ cookiecutter.wordpress_database }}"
   wp_disk_volume_size = "{{ cookiecutter.wordpress_disk_volume_size }}"
+  phpmyadmin          = "Y"
 }

@@ -54,6 +54,11 @@ output "aws_route53_record-wordpress-fqdn" {
   value       = aws_route53_record.wordpress.fqdn
 }
 
+output "aws_route53_record-phpmyadmin-fqdn" {
+  description = "The phpMyAdmin DNS fqdn"
+  value       = "${var.phpmyadmin == "Y" ? aws_route53_record.phpmyadmin[0].fqdn : ""}"
+}
+
 output "aws_route53_record-wordpress-name" {
   description = "The Wordpress DNS name"
   value       = aws_route53_record.wordpress.name

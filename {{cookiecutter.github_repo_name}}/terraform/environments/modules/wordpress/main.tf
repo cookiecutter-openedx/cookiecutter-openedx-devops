@@ -4,6 +4,8 @@
 #
 # date: Feb-2023
 #
+# usage: install Wordpress its own namespace.
+#
 # NOTE: you must initialize a local helm repo in order to run
 # this script.
 #
@@ -89,7 +91,7 @@ data "template_file" "wordpress-values" {
     externalDatabasePassword         = random_password.externalDatabasePassword.result
     externalDatabaseDatabase         = local.externalDatabaseDatabase
     externalDatabaseExistingSecret   = kubernetes_secret.wordpress_config.metadata[0].name
-    memcachedEnabled                 = true
+    memcachedEnabled                 = false
     externalCacheHost                = data.kubernetes_secret.redis.data.REDIS_HOST
     externalCachePort                = local.externalCachePort
   }

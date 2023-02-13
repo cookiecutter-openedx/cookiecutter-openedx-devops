@@ -25,3 +25,8 @@ variable "tags" {
 variable "aws_region" {
   type = string
 }
+
+variable "phpmyadmin" {
+  type = string
+  default = "N"
+}

@@ -10,6 +10,9 @@ wordpressPlugins: ${wordpressPlugins}
 customPostInitScripts:
   writable-files.sh: |
     #!/bin/bash
+    touch /opt/bitnami/wordpress/wordfence-waf.php
+    touch /bitnami/wordpress/wp-config.php
+    touch /bitnami/wordpress/.htaccess
     chmod 664 /bitnami/wordpress/wp-config.php
     chmod 664 /bitnami/wordpress/.htaccess
     cd /bitnami/wordpress/wp-content
@@ -69,6 +72,6 @@ externalDatabase:
   existingSecret: ${externalDatabaseExistingSecret}
 memcached:
   enabled: ${memcachedEnabled}
-externalCache:
-  host: ${externalCacheHost}
-  port: ${externalCachePort}
+#externalCache:
+#  host: ${externalCacheHost}
+#  port: ${externalCachePort}

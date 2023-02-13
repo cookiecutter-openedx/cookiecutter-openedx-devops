@@ -14,6 +14,7 @@ locals {
   root_domain               = local.global_vars.locals.root_domain
   shared_resource_namespace = local.global_vars.locals.shared_resource_namespace
   resource_name             = local.client_vars.locals.wp_namespace
+  phpmyadmin                = local.client_vars.locals.phpmyadmin
 
   wordpressConfig = {
     HostedZoneID   = local.client_vars.locals.wp_hosted_zone_id,
@@ -119,5 +120,6 @@ inputs = {
   shared_resource_namespace     = local.shared_resource_namespace
   aws_region                    = local.aws_region
   wordpressConfig               = local.wordpressConfig
+  phpmyadmin                    = local.phpmyadmin
   tags                          = local.tags
 }
