@@ -90,6 +90,10 @@ These would result in environments like the following:
 New Features
 ------------
 
+**RELEASE v1.0.23:** `Kubecost <https://www.kubecost.com/>`_ and `phpMyAdmin <https://www.phpmyadmin.net/>`_ applications.
+
+**RELEASE v1.0.21:** Add a Wordpress site to your installation.
+
 **RELEASE v1.0.19:** Out of the box support for all MFE's.
 
 **RELEASE v1.0.8:** `Kubernetes Dashboard <https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/>`_ and `Kubeapps <https://kubeapps.dev/>`_ web applications.
