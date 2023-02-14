@@ -194,7 +194,7 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
   * - `Helm Kubernetes Dashboard <https://kubernetes.github.io/dashboard/>`_
     - {{ cookiecutter.terraform_helm_dashboard }}
   * - `Helm kubecost <https://kubecost.github.io/cost-analyzer/>`_
-    - {{ cookiecutter.terraform_helm_kubeapps }}
+    - {{ cookiecutter.terraform_helm_kubecost }}
   * - `Helm kubeapps <https://bitnami.com/stack/kubeapps/helm>`_
     - {{ cookiecutter.terraform_helm_kubeapps }}
   * - `Helm Karpenter <https://artifacthub.io/packages/helm/karpenter/karpenter>`_
