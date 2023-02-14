@@ -24,12 +24,12 @@
 data "template_file" "phpmyadmin-values" {
   template = file("${path.module}/config/phpmyadmin-values.yaml.tpl")
   vars = {
-    externalDatabaseHost             = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
-    externalDatabasePort             = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
-    externalDatabaseUser             = local.externalDatabaseUser
-    externalDatabasePassword         = random_password.externalDatabasePassword.result
-    externalDatabaseDatabase         = local.externalDatabaseDatabase
-    externalDatabaseExistingSecret   = kubernetes_secret.wordpress_config.metadata[0].name
+    externalDatabaseHost           = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
+    externalDatabasePort           = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
+    externalDatabaseUser           = local.externalDatabaseUser
+    externalDatabasePassword       = random_password.externalDatabasePassword.result
+    externalDatabaseDatabase       = local.externalDatabaseDatabase
+    externalDatabaseExistingSecret = kubernetes_secret.wordpress_config.metadata[0].name
   }
 }
 
@@ -37,7 +37,7 @@ resource "helm_release" "phpmyadmin" {
   name             = "phpmyadmin"
   namespace        = local.wordpressNamespace
   create_namespace = false
-  count = "${var.phpmyadmin == "Y" ? 1 : 0}"
+  count            = var.phpmyadmin == "Y" ? 1 : 0
 
   chart      = "phpmyadmin"
   repository = "bitnami"

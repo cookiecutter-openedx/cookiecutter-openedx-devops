@@ -56,7 +56,7 @@ output "aws_route53_record-wordpress-fqdn" {
 
 output "aws_route53_record-phpmyadmin-fqdn" {
   description = "The phpMyAdmin DNS fqdn"
-  value       = "${var.phpmyadmin == "Y" ? aws_route53_record.phpmyadmin[0].fqdn : ""}"
+  value       = var.phpmyadmin == "Y" ? aws_route53_record.phpmyadmin[0].fqdn : ""
 }
 
 output "aws_route53_record-wordpress-name" {
@@ -100,4 +100,14 @@ output "wordpress_mysql_database" {
 
 output "wordpress_mysql_username" {
   value = local.externalDatabaseUser
+}
+
+output "kubernetes_resource_quota_cpu" {
+  description = "The namespace resource limit for cpu"
+  value       = var.resource_quota == "Y" ? var.resource_quota_cpu : ""
+}
+
+output "kubernetes_resource_quota_memory" {
+  description = "The namespace resource limit for memory"
+  value       = var.resource_quota == "Y" ? var.resource_quota_memory : ""
 }

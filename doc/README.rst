@@ -162,6 +162,15 @@ Cookiecutter AWS Services Stack Installation Options
 
   *default value: Y*
 
+- **stack_add_k8s_kubecost:**
+
+  'Y' to install `Kubecost <https://www.kubecost.com/>`_
+  in the AWS EKS cluster and add an ingress, ssl-tls cert and url endpoint to global_services_subdomain.
+
+  Kubecost provides real-time cost visibility and insights for teams using Kubernetes, helping you continuously reduce your cloud costs.
+
+  *default value: Y*
+
 - **stack_add_k8s_kubeapps:**
 
   'Y' to install `VMWare Bitnami Kubeapps <https://kubeapps.dev/>`_
