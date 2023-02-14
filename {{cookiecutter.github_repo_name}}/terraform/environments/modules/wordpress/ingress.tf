@@ -38,7 +38,7 @@ data "template_file" "phpmyadmin_ingress" {
 }
 
 resource "kubectl_manifest" "phpmyadmin" {
-  count = "${var.phpmyadmin == "Y" ? 1 : 0}"
+  count     = var.phpmyadmin == "Y" ? 1 : 0
   yaml_body = data.template_file.phpmyadmin_ingress.rendered
 
   depends_on = [

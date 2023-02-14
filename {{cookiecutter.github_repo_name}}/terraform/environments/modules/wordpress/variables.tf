@@ -27,6 +27,21 @@ variable "aws_region" {
 }
 
 variable "phpmyadmin" {
-  type = string
+  type    = string
   default = "N"
+}
+
+variable "resource_quota" {
+  type = string
+  default = "Y"
+}
+
+variable "resource_quota_cpu" {
+  type    = string
+  default = "1"
+}
+
+variable "resource_quota_memory" {
+  type    = string
+  default = "1Gi"
 }
