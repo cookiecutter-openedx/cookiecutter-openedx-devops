@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.23] (2023-2-13)
+
+- Add Kubecost to stack
+- Add resource quota to Wordpress environment
+
 ## [1.0.22] (2023-2-13)
 
 - add phpMyAdmin as an optional Wordpress installation feature
