@@ -193,6 +193,8 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
     - {{ cookiecutter.terraform_helm_vertical_pod_autoscaler }}
   * - `Helm Kubernetes Dashboard <https://kubernetes.github.io/dashboard/>`_
     - {{ cookiecutter.terraform_helm_dashboard }}
+  * - `Helm kubecost <https://kubecost.github.io/cost-analyzer/>`_
+    - {{ cookiecutter.terraform_helm_kubeapps }}
   * - `Helm kubeapps <https://bitnami.com/stack/kubeapps/helm>`_
     - {{ cookiecutter.terraform_helm_kubeapps }}
   * - `Helm Karpenter <https://artifacthub.io/packages/helm/karpenter/karpenter>`_
@@ -201,6 +203,10 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
     - {{ cookiecutter.terraform_helm_metrics_server }}
   * - `Helm Prometheus <https://prometheus-community.github.io/helm-charts/>`_
     - {{ cookiecutter.terraform_helm_prometheus }}
+  * - `Helm Wordpress <https://charts.bitnami.com/bitnami/wordpress>`_
+    - {{ cookiecutter.wordpress_helm_chart_version }}
+  * - `Helm phpMyAdmin <https://charts.bitnami.com/bitnami/phpmyadmin>`_
+    - {{ cookiecutter.phpmyadmin_helm_chart_version }}
   * - `openedx-actions/tutor-k8s-init <https://github.com/marketplace/actions/open-edx-tutor-k8s-init>`_
     - {{ cookiecutter.ci_openedx_actions_tutor_k8s_init_version }}
   * - `openedx-actions/tutor-k8s-configure-edx-secret <https://github.com/openedx-actions/tutor-k8s-configure-edx-secret>`_
