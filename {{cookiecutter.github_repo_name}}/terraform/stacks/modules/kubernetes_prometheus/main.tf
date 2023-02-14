@@ -17,6 +17,7 @@
 #   helm repo add prometheus-community https://prometheus-community.github.io/helm-charts/
 #   helm repo update
 #   helm search repo prometheus-community
+#   helm show values prometheus-community/kube-prometheus-stack
 #
 #
 # NOTE: run `helm repo update` prior to running this

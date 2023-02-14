@@ -45,7 +45,7 @@ resource "kubernetes_namespace" "varnish_cluster" {
 data "template_file" "varnish_cluster" {
   template = file("${path.module}/config/varnish-cluster.yaml.tpl")
   vars = {
-    namespace        = "varnish-cluster"
+    namespace = "varnish-cluster"
   }
 }
 

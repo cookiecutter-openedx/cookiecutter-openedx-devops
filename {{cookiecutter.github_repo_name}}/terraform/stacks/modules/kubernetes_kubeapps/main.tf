@@ -14,6 +14,7 @@
 #   helm repo add bitnami https://charts.bitnami.com/bitnami
 #   helm repo update
 #   helm search repo bitnami/kubeapps
+#   helm show values bitnami/kubeapps
 #
 # NOTE: run `helm repo update` prior to running this
 #       Terraform module.

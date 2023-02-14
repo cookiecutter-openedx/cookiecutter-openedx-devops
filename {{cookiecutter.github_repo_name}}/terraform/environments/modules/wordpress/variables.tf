@@ -32,7 +32,7 @@ variable "phpmyadmin" {
 }
 
 variable "resource_quota" {
-  type = string
+  type    = string
   default = "Y"
 }
 
