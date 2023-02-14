@@ -1,0 +1,41 @@
+global:
+  # zone: cluster.local (use only if your DNS server doesn't live in the same zone as kubecost)
+  prometheus:
+    enabled: true # If false, Prometheus will not be installed -- please read this before disabling: https://github.com/kubecost/docs/blob/main/custom-prom.md
+    fqdn: http://cost-analyzer-prometheus-server.default.svc #example address of a prometheus to connect to. Include protocol (http:// or https://) Ignored if enabled: true
+    # insecureSkipVerify : false # If true, kubecost will not check the TLS cert of prometheus
+    # queryServiceBasicAuthSecretName: dbsecret # kubectl create secret generic dbsecret -n kubecost --from-file=USERNAME --from-file=PASSWORD
+    # queryServiceBearerTokenSecretName: mcdbsecret  # kubectl create secret generic mcdbsecret -n kubecost --from-file=TOKEN
+
+# generated at http://kubecost.com/install, used for alerts tracking and free trials
+kubecostToken: ${kubecostToken}
+
+persistentVolume:
+  size: 32Gi
+  dbSize: 32.0Gi
+  enabled: true # Note that setting this to false means configurations will be wiped out on pod restart.
+  # storageClass: "-" #
+  # existingClaim: kubecost-cost-analyzer # a claim in the same namespace as kubecost
+prometheus:
+  server:
+    # If clusterIDConfigmap is defined, instead use user-generated configmap with key CLUSTER_ID
+    # to use as unique cluster ID in kubecost cost-analyzer deployment.
+    # This overrides the cluster_id set in prometheus.server.global.external_labels.
+    # NOTE: This does not affect the external_labels set in prometheus config.
+    # clusterIDConfigmap: cluster-id-configmap
+    persistentVolume:
+      size: 32Gi
+      enabled: true
+    tolerations:
+      - effect: NoSchedule
+        key: role
+        operator: Equal
+        value: pvc-pods
+  # node-export must be disabled if there is an existing daemonset: https://guide.kubecost.com/hc/en-us/articles/4407601830679-Troubleshoot-Install#a-name-node-exporter-a-issue-failedscheduling-kubecost-prometheus-node-exporter
+  nodeExporter:
+    enabled: false
+  # kubecost emits pre-2.0 KSM metrics, KSM is enabled by default here for backwards compatibity, but can be disabled to save resources without concern to kubecost metrics
+  kubeStateMetrics:
+    enabled: false
+  kube-state-metrics:
+    disabled: true

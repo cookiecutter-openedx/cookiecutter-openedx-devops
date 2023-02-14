@@ -119,6 +119,15 @@ def remove_k8s_kubeapps():
         "terraform", "stacks", "{{ cookiecutter.global_platform_shared_resource_identifier }}", "kubernetes_kubeapps")
     rm_directory(dir_path)
 
+def remove_k8s_kubecost():
+    dir_path = os.path.join("terraform", "stacks",
+                            "modules", "kubernetes_kubecost")
+    rm_directory(dir_path)
+
+    dir_path = os.path.join(
+        "terraform", "stacks", "{{ cookiecutter.global_platform_shared_resource_identifier }}", "kubernetes_kubecost")
+    rm_directory(dir_path)
+
 
 def remove_k8s_karpenter():
     dir_path = os.path.join("terraform", "stacks",
@@ -159,6 +168,9 @@ def main():
 
     if "{{ cookiecutter.stack_add_k8s_kubeapps }}".upper() != "Y":
         remove_k8s_kubeapps()
+
+    if "{{ cookiecutter.stack_add_k8s_kubecost }}".upper() != "Y":
+        remove_k8s_kubecost()
 
     if "{{ cookiecutter.stack_add_k8s_karpenter }}".upper() != "Y":
         remove_k8s_karpenter()

@@ -72,6 +72,9 @@ Services Endpoints
 {% if cookiecutter.stack_add_k8s_kubeapps|upper == "Y" -%}
 - **Kubeapps**: https://kubeapps.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}. Kubeapps is an in-cluster web-based application that enables users with a one-time installation to deploy, manage, and upgrade applications on a Kubernetes cluster
 {% endif -%}
+{% if cookiecutter.stack_add_k8s_kubecost|upper == "Y" -%}
+- **Kubecost**: https://kubecost.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}. Kubecost provides real-time cost visibility and insights for teams using Kubernetes, helping you continuously reduce your cloud costs.
+{% endif -%}
 {% if cookiecutter.stack_add_k8s_prometheus|upper == "Y" -%}
 - **Grafana**: https://grafana.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}. Grafana is a multi-platform open source analytics and interactive visualization web application. It provides charts, graphs, and alerts for the web when connected to supported data sources.
 {% endif -%}

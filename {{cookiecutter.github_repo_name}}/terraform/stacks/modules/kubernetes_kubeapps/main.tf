@@ -35,8 +35,7 @@ resource "helm_release" "kubeapps" {
   name       = "kubeapps"
   repository = "https://charts.bitnami.com/bitnami"
   chart      = "kubeapps"
-  # FIX NOTE: what is the semantic version for this?
-  #version    = "{{ cookiecutter.terraform_helm_kubeapps }}"
+  version    = "{{ cookiecutter.terraform_helm_kubeapps }}"
 
   # see https://docs.bitnami.com/kubernetes/infrastructure/kubeapps/configuration/expose-service/
   set {
