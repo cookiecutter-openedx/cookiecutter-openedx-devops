@@ -53,12 +53,12 @@ cd ${WORKING_DIRECTORY}
 #------------------------------------------------------------------------------------------------------------------------
 echo "Backing up MySQL databases"
 echo "Reading MySQL database names..."
-mysql -h ${MYSQL_HOST} -uroot -p"$MYSQL_ROOT_PASSWORD" -ANe "SELECT schema_name FROM information_schema.schemata WHERE schema_name NOT IN ('innodb', 'tmp', 'mysql','sys','information_schema','performance_schema')" > /tmp/db.txt
+mysql -h ${MYSQL_HOST} -u ${MYSQL_ROOT_USERNAME} -p"$MYSQL_ROOT_PASSWORD" -ANe "SELECT schema_name FROM information_schema.schemata WHERE schema_name NOT IN ('innodb', 'tmp', 'mysql','sys','information_schema','performance_schema')" > /tmp/db.txt
 DBS="--databases $(cat /tmp/db.txt)"
 NOW="$(date +%Y%m%dT%H%M%S)"
 SQL_FILE="mysql-data-${NOW}.sql"
 echo "Dumping MySQL structures..."
-mysqldump --set-gtid-purged=OFF --column-statistics=0 -h ${MYSQL_HOST} -uroot -p"$MYSQL_ROOT_PASSWORD" --add-drop-database ${DBS} > ${SQL_FILE}
+mysqldump --set-gtid-purged=OFF --column-statistics=0 -h ${MYSQL_HOST} -u ${MYSQL_ROOT_USERNAME} -p"$MYSQL_ROOT_PASSWORD" --add-drop-database ${DBS} > ${SQL_FILE}
 echo "Done backing up MySQL"
 
 #Tarball our mysql backup file
