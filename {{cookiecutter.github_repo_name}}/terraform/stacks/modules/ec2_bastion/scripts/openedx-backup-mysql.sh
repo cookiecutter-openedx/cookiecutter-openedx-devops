@@ -15,7 +15,7 @@ S3_BUCKET="{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platfo
 
 BACKUPS_DIRECTORY="/home/ubuntu/backups/"
 WORKING_DIRECTORY="/home/ubuntu/backup-tmp/"
-NUMBER_OF_BACKUPS_TO_RETAIN="30"
+NUMBER_OF_BACKUPS_TO_RETAIN="{{ cookiecutter.environment_backup_retention_days }}"
 
 #------------------------------------------------------------------------------
 # retrieve the mysql root credentials from k8s secrets. Sets the following environment variables:
