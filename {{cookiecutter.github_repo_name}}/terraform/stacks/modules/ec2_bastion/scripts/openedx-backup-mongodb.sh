@@ -54,18 +54,18 @@ cd ${WORKING_DIRECTORY}
 # Begin Backup Mongo
 #------------------------------------------------------------------------------------------------------------------------
 
+# note: this dumps all mongo databases from all environments.
 echo "Backing up MongoDB"
-for db in edxapp cs_comment_service_development; do
-    echo "Dumping Mongo db ${db}..."
-    mongodump --host ${MONGODB_HOST}
-done
+mongodump --host ${MONGODB_HOST} --out mongo-dump-${NOW}
 echo "Done backing up MongoDB"
 
-#Tarball all of our backup files
+# Tarball all of our backup files
+# WARNING: there is a 8gb limitation on tarball archives. once your MongoDB exceeds 5gb you can no longer
+# rely on tgz format for archives.
 echo "Compressing backups into a single tarball archive"
 tar -czf ${BACKUPS_DIRECTORY}openedx-mongo-${NOW}.tgz mongo-dump-${NOW}
-sudo chown root ${BACKUPS_DIRECTORY}openedx-mongo-${NOW}.tgz
-sudo chgrp root ${BACKUPS_DIRECTORY}openedx-mongo-${NOW}.tgz
+sudo chown ubuntu ${BACKUPS_DIRECTORY}openedx-mongo-${NOW}.tgz
+sudo chgrp ubuntu ${BACKUPS_DIRECTORY}openedx-mongo-${NOW}.tgz
 echo "Created tarball of backup data openedx-mongo-${NOW}.tgz"
 # End Backup Mongo
 #------------------------------------------------------------------------------------------------------------------------
