@@ -17,9 +17,6 @@ locals {
   shared_resource_namespace = local.global_vars.locals.shared_resource_namespace
   db_prefix                 = replace(replace("${local.global_vars.locals.platform_name}_${local.environment}", ".", ""), "-", "")
 
-  # AWS instance sizing
-  redis_node_type      = "{{ cookiecutter.redis_node_type }}"
-
   tags = merge(
     local.global_vars.locals.tags,
     {
