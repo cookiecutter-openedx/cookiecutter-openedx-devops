@@ -35,7 +35,7 @@ resource "helm_release" "kubecost" {
 
   repository = "https://kubecost.github.io/cost-analyzer/"
   chart      = "cost-analyzer"
-  version    = "{{ cookiecutter.terraform_helm_kubeapps }}"
+  version    = "{{ cookiecutter.terraform_helm_kubecost }}"
 
   values = [
     data.template_file.kubecost-values.rendered
