@@ -17,7 +17,11 @@ S3_BUCKET="{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platfo
 
 BACKUPS_DIRECTORY="/home/ubuntu/backups/"
 WORKING_DIRECTORY="/home/ubuntu/backup-tmp/"
-NUMBER_OF_BACKUPS_TO_RETAIN="10"      #Note: this only regards local storage (ie on the ubuntu server). All backups are retained in the S3 bucket forever.
+NUMBER_OF_BACKUPS_TO_RETAIN="10"      # Note: this only regards local storage (ie on the ubuntu server).
+                                      # All backups are retained in the S3 bucket forever.
+                                      # BE AWARE: AWS S3 monthly costs will grow unbounded.
+                                      # You need to monitor the size of the S3 bucket and prune
+                                      # old backups as you deem appropriate.
 NOW="$(date +%Y%m%dT%H%M%S)"
 
 #------------------------------------------------------------------------------

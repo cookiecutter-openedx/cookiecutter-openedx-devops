@@ -15,8 +15,7 @@ S3_BUCKET="{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platfo
 
 BACKUPS_DIRECTORY="/home/ubuntu/backups/"
 WORKING_DIRECTORY="/home/ubuntu/backup-tmp/"
-NUMBER_OF_BACKUPS_TO_RETAIN="10"      # Note: this only regards local storage (ie on the ubuntu server).
-                                      # All backups are retained in the S3 bucket forever.
+NUMBER_OF_BACKUPS_TO_RETAIN="30"
 
 #------------------------------------------------------------------------------
 # retrieve the mysql root credentials from k8s secrets. Sets the following environment variables:
@@ -101,5 +100,5 @@ echo "Cleaning up"
 sudo rm -r ${WORKING_DIRECTORY}
 
 echo "Sync backup to AWS S3 backup folder"
-aws s3 sync ${BACKUPS_DIRECTORY} s3://${S3_BUCKET}/backups
+aws s3 sync --delete ${BACKUPS_DIRECTORY} s3://${S3_BUCKET}/backups
 echo "Done!"
