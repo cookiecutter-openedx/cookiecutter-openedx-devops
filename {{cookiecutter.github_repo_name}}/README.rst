@@ -93,10 +93,9 @@ These would result in environments like the following:
 Administration
 --------------
 
+- `System Administration Overview <./doc/SYSTEM_ADMINISTRATION.md>`_
 - `Passwords, Credentials and Sensitive Data Management <./doc/SECRETS_MANAGEMENT.md>`_
 - `Remote Data Backup & Restore <./doc/DATA_BACKUP.md>`_
-- `Security Concepts <./doc/SECURITY.md>`_
-- `Networking Concepts <./doc/NETWORKING.md>`_
 
 Quick Start
 -----------
