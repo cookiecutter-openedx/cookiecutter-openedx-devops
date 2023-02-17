@@ -5,8 +5,14 @@
 #             https://blog.lawrencemcdaniel.com
 #
 # date:       sep-2022
-# usage:      backup MongoDB data stores
-#             combine into a single tarball, store in "backups" folders in user directory
+# usage:      backup Open edX MongoDB databases.
+#             This is designed to run as a cron job but it also will run from the command line.
+#             - dump MongoDB databases
+#             - combine into a single tarball
+#             - store in "backups" folder in user directory
+#             - upload to an AWS S3 bucket
+#             - manage local backup retention policy
+#             - generate a log report and store in the home folder
 #
 # reference:  https://github.com/edx/edx-documentation/blob/master/en_us/install_operations/source/platform_releases/ginkgo.rst
 #
@@ -43,8 +49,8 @@ if [ ! -f ${OUTPUT_FILE} ]; then
 fi
 
 echo "-------------------------------------------------------------------------------" >> $OUTPUT_FILE
-echo "${NOW}"
-echo ""
+echo "${NOW}" >> $OUTPUT_FILE
+echo "" >> $OUTPUT_FILE
 
 #------------------------------------------------------------------------------
 # retrieve the mongo admin credentials from k8s secrets. Sets the following environment variables:

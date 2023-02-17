@@ -90,6 +90,8 @@ These would result in environments like the following:
 New Features
 ------------
 
+**RELEASE v1.0.24** preconfigured automated remote backup solutions for MySQL and MongoDB. See `doc/DATA_BACKUP.md <./doc/DATA_BACKUP.md>`_ for additional details.
+
 **RELEASE v1.0.23:** `Kubecost <https://www.kubecost.com/>`_ and `phpMyAdmin <https://www.phpmyadmin.net/>`_ applications.
 
 **RELEASE v1.0.21:** Add a Wordpress site to your installation.

@@ -5,8 +5,9 @@
 #             https://blog.lawrencemcdaniel.com
 #
 # date:       sep-2022
-# usage:      backup MySQL database
 #
+# usage:      backup Open edX MySQL databases.
+#             This is designed to run as a cron job but it also will run from the command line.
 #             - dump mysql databases
 #             - combine into a single tarball
 #             - store in "backups" folder in user directory
@@ -47,8 +48,8 @@ if [ ! -f ${OUTPUT_FILE} ]; then
 fi
 
 echo "-------------------------------------------------------------------------------" >> $OUTPUT_FILE
-echo "${NOW}"
-echo ""
+echo "${NOW}" >> $OUTPUT_FILE
+echo "" >> $OUTPUT_FILE
 
 
 #------------------------------------------------------------------------------
