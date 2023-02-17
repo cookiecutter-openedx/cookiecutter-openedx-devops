@@ -13,16 +13,16 @@ For each Open edX environment deployed to Kubernetes you'll find the following K
 We leverage kubectl on the Bash command line for both Github Actions workflows as well as automation scripts on the Bastion server. Using kubectl we can extract a Kubernetes secrets as per the following example:
 
 ```bash
-kubectl get secret mysql-openedx -n codlp-global-staging
+ubuntu@ip-192-168-3-193:~$ kubectl get secret mysql-openedx -n codlp-global-staging
 NAME            TYPE     DATA   AGE
 mysql-openedx   Opaque   5      162d
-ubuntu@ip-192-168-3-193:~/scripts$
+ubuntu@ip-192-168-3-193:$
 ```
 
 But with marginally more effort, along with help from a command-line utility named jq, we can actually extract, decode and parse the data contained in the Secret:
 
 ```bash
-kubectl get secret mysql-openedx -n codlp-global-staging  -o json | jq  '.data | map_values(@base64d)' |   jq -r 'keys[] as $k | "export \($k|ascii_upcase)=\(.[$k])"'
+ubuntu@ip-192-168-3-193:~$ kubectl get secret mysql-openedx -n codlp-global-staging  -o json | jq  '.data | map_values(@base64d)' |   jq -r 'keys[] as $k | "export \($k|ascii_upcase)=\(.[$k])"'
 ```
 
 ![K8S Secrets kubectl parsed](./k8s-secrets-kubectl-2.png)
@@ -44,7 +44,7 @@ See Bash source: [ksecret.sh](../terraform/stacks/modules/ec2_bastion/scripts/ks
 
 ## Usage in Github Actions
 
-If you inspect the [openedx-actions](https://github.com/openedx-actions) then you'll find that the same basic strategy is used from with Github Actions workflows to extract sensitive data for purposes of configuring Open edX software. For example, here is a code snippet that sets Tutor variables for MySQL.
+If you inspect the Github Actions [openedx-actions](https://github.com/openedx-actions) then you'll find that the same basic strategy is used from within Github Actions workflows to extract sensitive data for purposes of configuring Open edX software. For example, here is a code snippet that sets Tutor variables for MySQL.
 
 ![openedx-actions Configure MySQL](./openedx-actions-configure-mysql.png)
 

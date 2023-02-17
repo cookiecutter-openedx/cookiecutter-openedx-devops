@@ -87,6 +87,11 @@ These would result in environments like the following:
 - CDN at https://cdn.dev.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }} linked to an S3 bucket named dev-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-storage
 - daily data backups archived into an S3 bucket named dev-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-mongodb-backup
 
+Passwords, Credentials and Sensitive Data
+-----------------------------------------
+
+See: `Secrets Management <./doc/SECRETS_MANAGEMENT.md>`_
+
 New Features
 ------------
 
