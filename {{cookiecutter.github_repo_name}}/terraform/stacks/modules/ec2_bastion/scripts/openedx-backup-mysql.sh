@@ -12,6 +12,7 @@
 #------------------------------------------------------------------------------
 
 # ensure that cron can find our aws cli configuration
+PATH=/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/home/ubuntu/scripts:/home/ubuntu/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 AWS_CONFIG_FILE=/home/ubuntu/.aws/config
 AWS_REGION={{ cookiecutter.global_aws_region }}
 
