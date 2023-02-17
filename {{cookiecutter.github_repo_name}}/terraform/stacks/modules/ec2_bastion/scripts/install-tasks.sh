@@ -33,3 +33,6 @@ fi
 mkdir -p .kube
 touch .kube/config
 chmod 600 .kube/config
+
+# create cron jobs for mysql and mongodb backups
+(crontab -l && echo "0 0 * * * /home/ubuntu/scripts/openedx-backup-mysql.sh" && echo "0 2 * * * /home/ubuntu/scripts/openedx-backup-mongodb.sh") | crontab -
