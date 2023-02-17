@@ -13,10 +13,17 @@
 # mongo 'mongodb://${MONGODB_HOST}:27017'
 #---------------------------------------------------------
 
-S3_BUCKET="{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.environment_name }}-backup"
+# ensure that cron can find our aws cli configuration
+AWS_CONFIG_FILE=/home/ubuntu/.aws/config
+AWS_REGION={{ cookiecutter.global_aws_region }}
 
-BACKUPS_DIRECTORY="/home/ubuntu/backups/"
+# do not change these
+BASE_BACKUPS_DIRECTORY="/home/ubuntu/backups/"
+BACKUPS_DIRECTORY="${BASE_BACKUPS_DIRECTORY}/mongodb/"
 WORKING_DIRECTORY="/home/ubuntu/backup-tmp/"
+
+# AWS S3 Bucket for remote storage
+S3_BUCKET="{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.environment_name }}-backup"
 NUMBER_OF_BACKUPS_TO_RETAIN="10"      # Note: this only regards local storage (ie on the ubuntu server).
                                       # All backups are retained in the S3 bucket forever.
                                       # BE AWARE: AWS S3 monthly costs will grow unbounded.
@@ -46,7 +53,13 @@ if [ -f "$WORKING_DIRECTORY/*" ]; then
   sudo rm -r "$WORKING_DIRECTORY/*"
 fi
 
-#Check to see if a backups/ folder exists. if not, create it.
+#Check to see if a base backups/ folder exists. if not, create it.
+if [ ! -d ${BASE_BACKUPS_DIRECTORY} ]; then
+    mkdir ${BASE_BACKUPS_DIRECTORY}
+    echo "created backups folder ${BASE_BACKUPS_DIRECTORY}"
+fi
+
+#Check to see if a backups/mongodb/ folder exists. if not, create it.
 if [ ! -d ${BACKUPS_DIRECTORY} ]; then
     mkdir ${BACKUPS_DIRECTORY}
     echo "created backups folder ${BACKUPS_DIRECTORY}"
@@ -58,16 +71,15 @@ cd ${WORKING_DIRECTORY}
 # Begin Backup Mongo
 #------------------------------------------------------------------------------------------------------------------------
 
-# note: this dumps all mongo databases from all environments.
 echo "Backing up MongoDB"
 mongodump --host ${MONGODB_HOST} --out mongo-dump-${NOW}
 echo "Done backing up MongoDB"
 
-# Tarball all of our backup files
-# WARNING: there is a 8gb limitation on tarball archives. once your MongoDB exceeds 5gb you can no longer
-# rely on tgz format for archives.
+#Tarball all of our backup files
 echo "Compressing backups into a single tarball archive"
 tar -czf ${BACKUPS_DIRECTORY}openedx-mongo-${NOW}.tgz mongo-dump-${NOW}
+
+# ensure that ubuntu owns these files, regardless of who runs this script
 sudo chown ubuntu ${BACKUPS_DIRECTORY}openedx-mongo-${NOW}.tgz
 sudo chgrp ubuntu ${BACKUPS_DIRECTORY}openedx-mongo-${NOW}.tgz
 echo "Created tarball of backup data openedx-mongo-${NOW}.tgz"
@@ -86,5 +98,5 @@ echo "Cleaning up"
 sudo rm -r ${WORKING_DIRECTORY}
 
 echo "Sync backup to AWS S3 backup folder"
-aws s3 sync ${BACKUPS_DIRECTORY} s3://${S3_BUCKET}/backups
+aws s3 sync ${BASE_BACKUPS_DIRECTORY} s3://${S3_BUCKET}/backups
 echo "Done!"
