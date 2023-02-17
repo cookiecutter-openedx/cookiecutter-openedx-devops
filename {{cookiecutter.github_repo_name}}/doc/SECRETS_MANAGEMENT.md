@@ -1,4 +1,4 @@
-# Secrets Management Documentation
+# Passwords, Credentials and Sensitive Data Management
 
 All sensitive data, for Open edX software applications as well as for all AWS backend services and other resources, is stored in Kubernetes Secrets. All automation tools, including Github Actions as well as Bash scripts included in this repository, leverage kubectl to extract Kubernetes secrets data and then convert these data elements into Bash environment variables to be ingested on the command line. This is as effective a secrets strategy as it is generic. It works well for all situations, and helps to avoid the possibility of sensitive data leaking into console output and log data.
 

@@ -55,13 +55,16 @@ Open edX Application Software Endpoints
 {% if cookiecutter.wordpress_add_site|upper == "Y" -%}
 - Wordpress: https://{{ cookiecutter.wordpress_subdomain }}.{{ cookiecutter.global_root_domain }}. WordPress is a free and open-source content management system written in php and paired with a MySQL database with supported HTTPS. Features include a plugin architecture and a template system, referred to within WordPress as "Themes"
 {% endif -%}
-- **Content Delivery Network (CDN)**: https://cdn.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }} linked to a public read-only S3 bucket named {{ cookiecutter.environment_subdomain }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-storage
-- **AWS S3 Backups**: {{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-backup.s3.amazonaws.com
-- **AWS S3 Storage**: {{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-storage.s3.amazonaws.com
-- **AWS S3 Secrets**: {{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-secrets.s3.amazonaws.com
 
-Services Endpoints
-------------------
+Additional AWS Resources
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+- **Remote Data Backup**: {{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-backup.s3.amazonaws.com
+- **Open edX Application User Storage**: {{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-storage.s3.amazonaws.com
+- **Content Delivery Network (CDN)**: https://cdn.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }} linked to a public read-only S3 bucket named {{ cookiecutter.environment_subdomain }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-storage
+
+Backend Services Endpoints
+--------------------------
 
 - **Bastion**: bastion.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}:22. Public ssh access to a {{ cookiecutter.bastion_instance_type }} Ubuntu 20.04 LTS bastion EC2 instance that's preconfigure with all of the software that you'll need to adminster this stack.
 - **MySQL**: mysql.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}:3306. Private VPC access to your AWS RDS MySQL {{ cookiecutter.mysql_instance_class }} instance with allocated storage of {{ cookiecutter.mysql_allocated_storage }}.
@@ -87,199 +90,13 @@ These would result in environments like the following:
 - CDN at https://cdn.dev.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }} linked to an S3 bucket named dev-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-storage
 - daily data backups archived into an S3 bucket named dev-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-mongodb-backup
 
-Passwords, Credentials and Sensitive Data
------------------------------------------
+Administration
+--------------
 
-See: `Secrets Management <./doc/SECRETS_MANAGEMENT.md>`_
-
-New Features
-------------
-
-**RELEASE v1.0.24** preconfigured automated remote backup solutions for MySQL and MongoDB. See `doc/DATA_BACKUP.md <./doc/DATA_BACKUP.md>`_ for additional details.
-
-**RELEASE v1.0.23:** `Kubecost <https://www.kubecost.com/>`_ and `phpMyAdmin <https://www.phpmyadmin.net/>`_ applications.
-
-**RELEASE v1.0.21:** Add a Wordpress site to your installation.
-
-**RELEASE v1.0.19:** Out of the box support for all MFE's.
-
-**RELEASE v1.0.8:** `Kubernetes Dashboard <https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/>`_ and `Kubeapps <https://kubeapps.dev/>`_ web applications.
-
-**RELEASE v1.0.5:** Kubernetes upgrade to 1.24, plus a new adminstrative server with all of the preinstalled software that you'll need to administer your Open edX platform. Set cookiecutter.stack_add_bastion=Y to choose this option.
-
-**RELEASE v1.0.3:** an optional fully-configured remote MongoDB server running on an EC2 instance. Set cookiecutter.stack_add_remote_mongodb=Y to choose this option.
-
-**RELEASE v1.0.2: SPOT PRICING FOR EC2 INSTANCES** Save up to 75% off the cost of on-demand EC2 instances by using AWS' flexible `spot-pricing <https://aws.amazon.com/ec2/spot/pricing/>`_ .
-
-
-
-Cookiecutter Manifest
----------------------
-
-This repository was generated using `Cookiecutter <https://cookiecutter.readthedocs.io/>`_. Keep your repository up to date with the latest Terraform code and configuration versions of the Open edX application stack, AWS infrastructure services and api code libraries by occasionally re-generating the Cookiecutter template using this `make file <./make.sh>`_.
-
-.. list-table:: Cookiecutter Version Control
-  :widths: 75 20
-  :header-rows: 1
-
-  * - Software
-    - Version
-  * - `Open edX Named Release <https://edx.readthedocs.io/projects/edx-developer-docs/en/latest/named_releases.html>`_
-    - {{ cookiecutter.ci_deploy_open_edx_version }}
-  * - `MySQL Server <https://www.mysql.com/>`_
-    - {{ cookiecutter.mysql_engine_version }}
-  * - `Redis Cache <https://redis.io/>`_
-    - {{ cookiecutter.redis_engine_version }}
-  * - `Tutor Docker-based Open edX Installer <https://docs.tutor.overhang.io/>`_
-    - {{ cookiecutter.ci_build_tutor_version }}
-  * - `Tutor Plugin: Object storage for Open edX with S3 <https://github.com/hastexo/tutor-contrib-s3>`_
-    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_s3_version }}
-  {% if cookiecutter.ci_deploy_install_backup_plugin|upper == "Y" -%}
-  * - `Tutor Plugin: Backup & Restore <https://github.com/hastexo/tutor-contrib-backup>`_
-    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_build_backup_version }}
-  {% endif -%}
-  {% if cookiecutter.ci_deploy_install_credentials_server|upper == "Y" -%}
-  * - `Tutor Plugin: Credentials Application <https://github.com/lpm0073/tutor-contrib-credentials>`_
-    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_credentials_version }}
-  {% endif -%}
-  * - `Tutor Plugin: Discovery Service <https://github.com/overhangio/tutor-discovery>`_
-    - latest stable
-  * - `Tutor Plugin: Micro Front-end Service <https://github.com/overhangio/tutor-mfe>`_
-    - latest stable
-  {% if cookiecutter.ci_deploy_install_ecommerce_service|upper == "Y" -%}
-  * - `Tutor Plugin: Ecommerce Service <https://github.com/overhangio/tutor-ecommerce>`_
-    - latest stable
-  {% endif -%}
-  {% if cookiecutter.ci_deploy_install_xqueue_service|upper == "Y" -%}
-  * - `Tutor Plugin: Xqueue Service <https://github.com/overhangio/tutor-xqueue>`_
-    - latest stable
-  {% endif -%}
-  {% if cookiecutter.ci_deploy_install_notes_service|upper == "Y" -%}
-  * - `Tutor Plugin: Notes Service <https://github.com/overhangio/tutor-notes>`_
-    - latest stable
-  {% endif -%}
-  {% if cookiecutter.ci_deploy_install_forum_service|upper == "Y" -%}
-  * - `Tutor Plugin: Discussion Forum Service <https://github.com/overhangio/tutor-forum>`_
-    - latest stable
-  {% endif -%}
-  * - `Tutor Plugin: Android Application <https://github.com/overhangio/tutor-android>`_
-    - latest stable
-  * - `Kubernetes Cluster <https://kubernetes.io/>`_
-    - {{ cookiecutter.kubernetes_cluster_version }}
-  * - `Terraform <https://www.terraform.io/>`_
-    - {{ cookiecutter.terraform_required_version }}
-  * - Terraform Provider `Kubernetes <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs>`_
-    - {{ cookiecutter.terraform_provider_kubernetes_version }}
-  * - Terraform Provider `kubectl <https://registry.terraform.io/providers/gavinbunney/kubectl/latest/docs>`_
-    - {{ cookiecutter.terraform_provider_hashicorp_kubectl_version }}
-  * - Terraform Provider `helm <https://registry.terraform.io/providers/hashicorp/helm/latest/docs>`_
-    - {{ cookiecutter.terraform_provider_hashicorp_helm_version }}
-  * - Terraform Provider `AWS <https://registry.terraform.io/providers/hashicorp/aws/latest/docs>`_
-    - {{ cookiecutter.terraform_provider_hashicorp_aws_version }}
-  * - Terraform Provider `Local <https://registry.terraform.io/providers/hashicorp/local/latest/docs>`_
-    - {{ cookiecutter.terraform_provider_hashicorp_local_version }}
-  * - Terraform Provider `Random <https://registry.terraform.io/providers/hashicorp/random/latest/docs>`_
-    - {{ cookiecutter.terraform_provider_hashicorp_random_version }}
-  * - `terraform-aws-modules/acm <https://registry.terraform.io/modules/terraform-aws-modules/acm/aws/latest>`_
-    - {{ cookiecutter.terraform_aws_modules_acm }}
-  * - `terraform-aws-modules/cloudfront <https://registry.terraform.io/modules/terraform-aws-modules/cloudfront/aws/latest>`_
-    - {{ cookiecutter.terraform_aws_modules_cloudfront }}
-  * - `terraform-aws-modules/eks <https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest>`_
-    - {{ cookiecutter.terraform_aws_modules_eks }}
-  * - `terraform-aws-modules/iam <https://registry.terraform.io/modules/terraform-aws-modules/iam/aws/latest>`_
-    - {{ cookiecutter.terraform_aws_modules_iam }}
-  * - `terraform-aws-modules/rds <https://registry.terraform.io/modules/terraform-aws-modules/rds/aws/latest>`_
-    - {{ cookiecutter.terraform_aws_modules_rds }}
-  * - `terraform-aws-modules/s3-bucket <https://registry.terraform.io/modules/terraform-aws-modules/s3-bucket/aws/latest>`_
-    - {{ cookiecutter.terraform_aws_modules_s3 }}
-  * - `terraform-aws-modules/security-group <https://registry.terraform.io/modules/terraform-aws-modules/security-group/aws/latest>`_
-    - {{ cookiecutter.terraform_aws_modules_sg }}
-  * - `terraform-aws-modules/vpc <https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest>`_
-    - {{ cookiecutter.terraform_aws_modules_vpc }}
-  * - `Helm cert-manager <https://charts.jetstack.io>`_
-    - {{ cookiecutter.terraform_helm_cert_manager }}
-  * - `Helm Ingress Nginx Controller <https://kubernetes.github.io/ingress-nginx/>`_
-    - {{ cookiecutter.terraform_helm_ingress_nginx_controller }}
-  * - `Helm Vertical Pod Autoscaler <https://github.com/cowboysysop/charts/tree/master/charts/vertical-pod-autoscaler>`_
-    - {{ cookiecutter.terraform_helm_vertical_pod_autoscaler }}
-  * - `Helm Kubernetes Dashboard <https://kubernetes.github.io/dashboard/>`_
-    - {{ cookiecutter.terraform_helm_dashboard }}
-  * - `Helm kubecost <https://kubecost.github.io/cost-analyzer/>`_
-    - {{ cookiecutter.terraform_helm_kubecost }}
-  * - `Helm kubeapps <https://bitnami.com/stack/kubeapps/helm>`_
-    - {{ cookiecutter.terraform_helm_kubeapps }}
-  * - `Helm Karpenter <https://artifacthub.io/packages/helm/karpenter/karpenter>`_
-    - {{ cookiecutter.terraform_helm_karpenter }}
-  * - `Helm Metrics Server <https://kubernetes-sigs.github.io/metrics-server/>`_
-    - {{ cookiecutter.terraform_helm_metrics_server }}
-  * - `Helm Prometheus <https://prometheus-community.github.io/helm-charts/>`_
-    - {{ cookiecutter.terraform_helm_prometheus }}
-  * - `Helm Wordpress <https://charts.bitnami.com/bitnami/wordpress>`_
-    - {{ cookiecutter.wordpress_helm_chart_version }}
-  * - `Helm phpMyAdmin <https://charts.bitnami.com/bitnami/phpmyadmin>`_
-    - {{ cookiecutter.phpmyadmin_helm_chart_version }}
-  * - `openedx-actions/tutor-k8s-init <https://github.com/marketplace/actions/open-edx-tutor-k8s-init>`_
-    - {{ cookiecutter.ci_openedx_actions_tutor_k8s_init_version }}
-  * - `openedx-actions/tutor-k8s-configure-edx-secret <https://github.com/openedx-actions/tutor-k8s-configure-edx-secret>`_
-    - {{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_edx_secret_version }}
-  * - `openedx-actions/tutor-k8s-configure-edx-admin <https://github.com/openedx-actions/tutor-k8s-configure-edx-admin>`_
-    - {{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_edx_admin }}
-  * - `openedx-actions/tutor-k8s-configure-jwt <https://github.com/openedx-actions/tutor-k8s-configure-jwt>`_
-    - {{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_jwt_version }}
-  * - `openedx-actions/tutor-k8s-configure-mysql <https://github.com/openedx-actions/tutor-k8s-configure-mysql>`_
-    - {{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_mysql_version }}
-  * - `openedx-actions/tutor-k8s-configure-mongodb <https://github.com/openedx-actions/tutor-k8s-configure-mongodb>`_
-    - {{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_mongodb_version }}
-  * - `openedx-actions/tutor-k8s-configure-redis <https://github.com/openedx-actions/tutor-k8s-configure-redis>`_
-    - {{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_redis_version }}
-  * - `openedx-actions/tutor-k8s-configure-smtp <https://github.com/openedx-actions/tutor-k8s-configure-smtp>`_
-    - {{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_smtp_version }}
-  * - `openedx-actions/tutor-print-dump <https://github.com/openedx-actions/tutor-print-dump>`_
-    - {{ cookiecutter.ci_openedx_actions_tutor_print_dump }}
-  * - `openedx-actions/tutor-plugin-build-backup <https://github.com/openedx-actions/tutor-plugin-build-backup>`_
-    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_build_backup_version }}
-  * - `openedx-actions/tutor-plugin-build-credentials <https://github.com/openedx-actions/tutor-plugin-build-credentials>`_
-    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_build_credentials_version }}
-  * - `openedx-actions/tutor-plugin-build-license-manager <https://github.com/openedx-actions/tutor-plugin-build-license-manager>`_
-    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_build_license_manager_version }}
-  * - `openedx-actions/tutor-plugin-build-openedx <https://github.com/openedx-actions/tutor-plugin-build-openedx>`_
-    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_build_openedx_version }}
-  * - `openedx-actions/tutor-plugin-build-openedx-add-requirement <https://github.com/openedx-actions/tutor-plugin-build-openedx-add-requirement>`_
-    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_build_openedx_add_requirement_version }}
-  * - `openedx-actions/tutor-plugin-build-openedx-add-theme <https://github.com/openedx-actions/tutor-plugin-build-openedx-add-theme>`_
-    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_build_openedx_add_theme_version }}
-  * - `openedx-actions/tutor-plugin-enable-backup <https://github.com/openedx-actions/tutor-plugin-enable-backup>`_
-    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_backup_version }}
-  * - `openedx-actions/tutor-plugin-enable-credentials <https://github.com/openedx-actions/tutor-plugin-enable-credentials>`_
-    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_credentials_version }}
-  * - `openedx-actions/tutor-plugin-enable-discovery <https://github.com/openedx-actions/tutor-plugin-enable-discovery>`_
-    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_discovery_version }}
-  * - `openedx-actions/tutor-plugin-enable-ecommerce <https://github.com/openedx-actions/tutor-plugin-enable-ecommerce>`_
-    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_ecommerce_version }}
-  * - `openedx-actions/tutor-plugin-enable-forum <https://github.com/openedx-actions/tutor-plugin-enable-forum>`_
-    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_forum_version }}
-  * - `openedx-actions/tutor-plugin-enable-k8s-deploy-tasks <https://github.com/openedx-actions/tutor-plugin-enable-k8s-deploy-tasks>`_
-    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_k8s_deploy_tasks_version }}
-  * - `openedx-actions/tutor-enable-plugin-license-manager <https://github.com/openedx-actions/tutor-enable-plugin-license-manager>`_
-    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_license_manager_version }}
-  * - `openedx-actions/tutor-plugin-enable-notes <https://github.com/openedx-actions/tutor-plugin-enable-notes>`_
-    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_notes_version }}
-  * - `openedx-actions/tutor-plugin-enable-s3 <https://github.com/openedx-actions/tutor-plugin-enable-s3>`_
-    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_s3_version }}
-  * - `openedx-actions/tutor-plugin-enable-xqueue <https://github.com/openedx-actions/tutor-plugin-enable-xqueue>`_
-    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_xqueue_version }}
-
-
-Important Considerations
-------------------------
-
-- this code only works for AWS.
-- the root domain {{ cookiecutter.global_root_domain }} must be hosted in `AWS Route53 <https://console.aws.amazon.com/route53/v2/hostedzones#>`_. Terraform will create several DNS entries inside of this hosted zone, and it will optionally create additional hosted zones (one for each additional optional environment) that will be linked to the hosted zone of your root domain.
-- resources are deployed to this AWS region: ``{{ cookiecutter.global_aws_region }}``
-- the Github Actions workflows depend on secrets `located here <settings> (see 'secrets/actions' from the left menu bar) `_
-- the Github Actions use an AWS IAM key pair from `this manually-created user named *ci* <https://console.aws.amazon.com/iam/home#/users/ci?section=security_credentials>`_
-- the collection of resources created by these scripts **will generate AWS costs of around $0.41 USD per hour ($10.00 USD per day)** while the platform is in a mostly-idle pre-production state. This cost will grow proportionally to your production work loads. You can view your `AWS Billing dashboard here <https://console.aws.amazon.com/billing/home?region={{ cookiecutter.global_aws_region }}#/>`_
-- **BE ADVISED** that `MySQL RDS <https://{{ cookiecutter.global_aws_region }}.console.aws.amazon.com/rds/home?region={{ cookiecutter.global_aws_region }}#databases:>`_, `MongoDB <https://{{ cookiecutter.global_aws_region }}.console.aws.amazon.com/docdb/home?region={{ cookiecutter.global_aws_region }}#subnetGroups>`_ and `Redis ElastiCache <https://{{ cookiecutter.global_aws_region }}.console.aws.amazon.com/elasticache/home?region={{ cookiecutter.global_aws_region }}#redis:>`_ are vertically scaled **manually** and therefore require some insight and potential adjustments on your part. All of these services are defaulted to their minimum instance sizes which you can modify in the `environment configuration file <terraform/environments/{{ cookiecutter.environment_name }}/env.hcl>`_
+- `Passwords, Credentials and Sensitive Data Management <./doc/SECRETS_MANAGEMENT.md>`_
+- `Remote Data Backup & Restore <./doc/DATA_BACKUP.md>`_
+- `Security Concepts <./doc/SECURITY.md>`_
+- `Networking Concepts <./doc/NETWORKING.md>`_
 
 Quick Start
 -----------
@@ -512,6 +329,17 @@ Use `this automated Github Actions workflow <https://github.com/{{ cookiecutter.
 Open edX LMS and Studio configuration parameters are located `here <ci/tutor-deploy/environments/{{ cookiecutter.environment_name }}/settings_merge.json>`_.
 
 
+Important Considerations
+------------------------
+
+- this code only works for AWS.
+- the root domain {{ cookiecutter.global_root_domain }} must be hosted in `AWS Route53 <https://console.aws.amazon.com/route53/v2/hostedzones#>`_. Terraform will create several DNS entries inside of this hosted zone, and it will optionally create additional hosted zones (one for each additional optional environment) that will be linked to the hosted zone of your root domain.
+- resources are deployed to this AWS region: ``{{ cookiecutter.global_aws_region }}``
+- the Github Actions workflows depend on secrets `located here <settings> (see 'secrets/actions' from the left menu bar) `_
+- the Github Actions use an AWS IAM key pair from `this manually-created user named *ci* <https://console.aws.amazon.com/iam/home#/users/ci?section=security_credentials>`_
+- the collection of resources created by these scripts **will generate AWS costs of around $0.41 USD per hour ($10.00 USD per day)** while the platform is in a mostly-idle pre-production state. This cost will grow proportionally to your production work loads. You can view your `AWS Billing dashboard here <https://console.aws.amazon.com/billing/home?region={{ cookiecutter.global_aws_region }}#/>`_
+- **BE ADVISED** that `MySQL RDS <https://{{ cookiecutter.global_aws_region }}.console.aws.amazon.com/rds/home?region={{ cookiecutter.global_aws_region }}#databases:>`_, `MongoDB <https://{{ cookiecutter.global_aws_region }}.console.aws.amazon.com/docdb/home?region={{ cookiecutter.global_aws_region }}#subnetGroups>`_ and `Redis ElastiCache <https://{{ cookiecutter.global_aws_region }}.console.aws.amazon.com/elasticache/home?region={{ cookiecutter.global_aws_region }}#redis:>`_ are vertically scaled **manually** and therefore require some insight and potential adjustments on your part. All of these services are defaulted to their minimum instance sizes which you can modify in the `environment configuration file <terraform/environments/{{ cookiecutter.environment_name }}/env.hcl>`_
+
 About The Open edX Platform Back End
 ------------------------------------
 
@@ -588,3 +416,159 @@ Why Use Terragrunt?
 ~~~~~~~~~~~~~~~~~~~
 
 `Terragrunt <https://terragrunt.gruntwork.io/>`_ is a thin wrapper that provides extra tools for keeping your configurations DRY, working with multiple Terraform modules, and managing remote state. DRY means don't repeat yourself. That helped a lot with self-repeating modules we had to use in this architecture.
+
+Cookiecutter Manifest
+---------------------
+
+This repository was generated using `Cookiecutter <https://cookiecutter.readthedocs.io/>`_. Keep your repository up to date with the latest Terraform code and configuration versions of the Open edX application stack, AWS infrastructure services and api code libraries by occasionally re-generating the Cookiecutter template using this `make file <./make.sh>`_.
+
+.. list-table:: Cookiecutter Version Control
+  :widths: 75 20
+  :header-rows: 1
+
+  * - Software
+    - Version
+  * - `Open edX Named Release <https://edx.readthedocs.io/projects/edx-developer-docs/en/latest/named_releases.html>`_
+    - {{ cookiecutter.ci_deploy_open_edx_version }}
+  * - `MySQL Server <https://www.mysql.com/>`_
+    - {{ cookiecutter.mysql_engine_version }}
+  * - `Redis Cache <https://redis.io/>`_
+    - {{ cookiecutter.redis_engine_version }}
+  * - `Tutor Docker-based Open edX Installer <https://docs.tutor.overhang.io/>`_
+    - {{ cookiecutter.ci_build_tutor_version }}
+  * - `Tutor Plugin: Object storage for Open edX with S3 <https://github.com/hastexo/tutor-contrib-s3>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_s3_version }}
+  {% if cookiecutter.ci_deploy_install_backup_plugin|upper == "Y" -%}
+  * - `Tutor Plugin: Backup & Restore <https://github.com/hastexo/tutor-contrib-backup>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_build_backup_version }}
+  {% endif -%}
+  {% if cookiecutter.ci_deploy_install_credentials_server|upper == "Y" -%}
+  * - `Tutor Plugin: Credentials Application <https://github.com/lpm0073/tutor-contrib-credentials>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_credentials_version }}
+  {% endif -%}
+  * - `Tutor Plugin: Discovery Service <https://github.com/overhangio/tutor-discovery>`_
+    - latest stable
+  * - `Tutor Plugin: Micro Front-end Service <https://github.com/overhangio/tutor-mfe>`_
+    - latest stable
+  {% if cookiecutter.ci_deploy_install_ecommerce_service|upper == "Y" -%}
+  * - `Tutor Plugin: Ecommerce Service <https://github.com/overhangio/tutor-ecommerce>`_
+    - latest stable
+  {% endif -%}
+  {% if cookiecutter.ci_deploy_install_xqueue_service|upper == "Y" -%}
+  * - `Tutor Plugin: Xqueue Service <https://github.com/overhangio/tutor-xqueue>`_
+    - latest stable
+  {% endif -%}
+  {% if cookiecutter.ci_deploy_install_notes_service|upper == "Y" -%}
+  * - `Tutor Plugin: Notes Service <https://github.com/overhangio/tutor-notes>`_
+    - latest stable
+  {% endif -%}
+  {% if cookiecutter.ci_deploy_install_forum_service|upper == "Y" -%}
+  * - `Tutor Plugin: Discussion Forum Service <https://github.com/overhangio/tutor-forum>`_
+    - latest stable
+  {% endif -%}
+  * - `Tutor Plugin: Android Application <https://github.com/overhangio/tutor-android>`_
+    - latest stable
+  * - `Kubernetes Cluster <https://kubernetes.io/>`_
+    - {{ cookiecutter.kubernetes_cluster_version }}
+  * - `Terraform <https://www.terraform.io/>`_
+    - {{ cookiecutter.terraform_required_version }}
+  * - Terraform Provider `Kubernetes <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs>`_
+    - {{ cookiecutter.terraform_provider_kubernetes_version }}
+  * - Terraform Provider `kubectl <https://registry.terraform.io/providers/gavinbunney/kubectl/latest/docs>`_
+    - {{ cookiecutter.terraform_provider_hashicorp_kubectl_version }}
+  * - Terraform Provider `helm <https://registry.terraform.io/providers/hashicorp/helm/latest/docs>`_
+    - {{ cookiecutter.terraform_provider_hashicorp_helm_version }}
+  * - Terraform Provider `AWS <https://registry.terraform.io/providers/hashicorp/aws/latest/docs>`_
+    - {{ cookiecutter.terraform_provider_hashicorp_aws_version }}
+  * - Terraform Provider `Local <https://registry.terraform.io/providers/hashicorp/local/latest/docs>`_
+    - {{ cookiecutter.terraform_provider_hashicorp_local_version }}
+  * - Terraform Provider `Random <https://registry.terraform.io/providers/hashicorp/random/latest/docs>`_
+    - {{ cookiecutter.terraform_provider_hashicorp_random_version }}
+  * - `terraform-aws-modules/acm <https://registry.terraform.io/modules/terraform-aws-modules/acm/aws/latest>`_
+    - {{ cookiecutter.terraform_aws_modules_acm }}
+  * - `terraform-aws-modules/cloudfront <https://registry.terraform.io/modules/terraform-aws-modules/cloudfront/aws/latest>`_
+    - {{ cookiecutter.terraform_aws_modules_cloudfront }}
+  * - `terraform-aws-modules/eks <https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest>`_
+    - {{ cookiecutter.terraform_aws_modules_eks }}
+  * - `terraform-aws-modules/iam <https://registry.terraform.io/modules/terraform-aws-modules/iam/aws/latest>`_
+    - {{ cookiecutter.terraform_aws_modules_iam }}
+  * - `terraform-aws-modules/rds <https://registry.terraform.io/modules/terraform-aws-modules/rds/aws/latest>`_
+    - {{ cookiecutter.terraform_aws_modules_rds }}
+  * - `terraform-aws-modules/s3-bucket <https://registry.terraform.io/modules/terraform-aws-modules/s3-bucket/aws/latest>`_
+    - {{ cookiecutter.terraform_aws_modules_s3 }}
+  * - `terraform-aws-modules/security-group <https://registry.terraform.io/modules/terraform-aws-modules/security-group/aws/latest>`_
+    - {{ cookiecutter.terraform_aws_modules_sg }}
+  * - `terraform-aws-modules/vpc <https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest>`_
+    - {{ cookiecutter.terraform_aws_modules_vpc }}
+  * - `Helm cert-manager <https://charts.jetstack.io>`_
+    - {{ cookiecutter.terraform_helm_cert_manager }}
+  * - `Helm Ingress Nginx Controller <https://kubernetes.github.io/ingress-nginx/>`_
+    - {{ cookiecutter.terraform_helm_ingress_nginx_controller }}
+  * - `Helm Vertical Pod Autoscaler <https://github.com/cowboysysop/charts/tree/master/charts/vertical-pod-autoscaler>`_
+    - {{ cookiecutter.terraform_helm_vertical_pod_autoscaler }}
+  * - `Helm Kubernetes Dashboard <https://kubernetes.github.io/dashboard/>`_
+    - {{ cookiecutter.terraform_helm_dashboard }}
+  * - `Helm kubecost <https://kubecost.github.io/cost-analyzer/>`_
+    - {{ cookiecutter.terraform_helm_kubecost }}
+  * - `Helm kubeapps <https://bitnami.com/stack/kubeapps/helm>`_
+    - {{ cookiecutter.terraform_helm_kubeapps }}
+  * - `Helm Karpenter <https://artifacthub.io/packages/helm/karpenter/karpenter>`_
+    - {{ cookiecutter.terraform_helm_karpenter }}
+  * - `Helm Metrics Server <https://kubernetes-sigs.github.io/metrics-server/>`_
+    - {{ cookiecutter.terraform_helm_metrics_server }}
+  * - `Helm Prometheus <https://prometheus-community.github.io/helm-charts/>`_
+    - {{ cookiecutter.terraform_helm_prometheus }}
+  * - `Helm Wordpress <https://charts.bitnami.com/bitnami/wordpress>`_
+    - {{ cookiecutter.wordpress_helm_chart_version }}
+  * - `Helm phpMyAdmin <https://charts.bitnami.com/bitnami/phpmyadmin>`_
+    - {{ cookiecutter.phpmyadmin_helm_chart_version }}
+  * - `openedx-actions/tutor-k8s-init <https://github.com/marketplace/actions/open-edx-tutor-k8s-init>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_k8s_init_version }}
+  * - `openedx-actions/tutor-k8s-configure-edx-secret <https://github.com/openedx-actions/tutor-k8s-configure-edx-secret>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_edx_secret_version }}
+  * - `openedx-actions/tutor-k8s-configure-edx-admin <https://github.com/openedx-actions/tutor-k8s-configure-edx-admin>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_edx_admin }}
+  * - `openedx-actions/tutor-k8s-configure-jwt <https://github.com/openedx-actions/tutor-k8s-configure-jwt>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_jwt_version }}
+  * - `openedx-actions/tutor-k8s-configure-mysql <https://github.com/openedx-actions/tutor-k8s-configure-mysql>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_mysql_version }}
+  * - `openedx-actions/tutor-k8s-configure-mongodb <https://github.com/openedx-actions/tutor-k8s-configure-mongodb>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_mongodb_version }}
+  * - `openedx-actions/tutor-k8s-configure-redis <https://github.com/openedx-actions/tutor-k8s-configure-redis>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_redis_version }}
+  * - `openedx-actions/tutor-k8s-configure-smtp <https://github.com/openedx-actions/tutor-k8s-configure-smtp>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_smtp_version }}
+  * - `openedx-actions/tutor-print-dump <https://github.com/openedx-actions/tutor-print-dump>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_print_dump }}
+  * - `openedx-actions/tutor-plugin-build-backup <https://github.com/openedx-actions/tutor-plugin-build-backup>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_build_backup_version }}
+  * - `openedx-actions/tutor-plugin-build-credentials <https://github.com/openedx-actions/tutor-plugin-build-credentials>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_build_credentials_version }}
+  * - `openedx-actions/tutor-plugin-build-license-manager <https://github.com/openedx-actions/tutor-plugin-build-license-manager>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_build_license_manager_version }}
+  * - `openedx-actions/tutor-plugin-build-openedx <https://github.com/openedx-actions/tutor-plugin-build-openedx>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_build_openedx_version }}
+  * - `openedx-actions/tutor-plugin-build-openedx-add-requirement <https://github.com/openedx-actions/tutor-plugin-build-openedx-add-requirement>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_build_openedx_add_requirement_version }}
+  * - `openedx-actions/tutor-plugin-build-openedx-add-theme <https://github.com/openedx-actions/tutor-plugin-build-openedx-add-theme>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_build_openedx_add_theme_version }}
+  * - `openedx-actions/tutor-plugin-enable-backup <https://github.com/openedx-actions/tutor-plugin-enable-backup>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_backup_version }}
+  * - `openedx-actions/tutor-plugin-enable-credentials <https://github.com/openedx-actions/tutor-plugin-enable-credentials>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_credentials_version }}
+  * - `openedx-actions/tutor-plugin-enable-discovery <https://github.com/openedx-actions/tutor-plugin-enable-discovery>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_discovery_version }}
+  * - `openedx-actions/tutor-plugin-enable-ecommerce <https://github.com/openedx-actions/tutor-plugin-enable-ecommerce>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_ecommerce_version }}
+  * - `openedx-actions/tutor-plugin-enable-forum <https://github.com/openedx-actions/tutor-plugin-enable-forum>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_forum_version }}
+  * - `openedx-actions/tutor-plugin-enable-k8s-deploy-tasks <https://github.com/openedx-actions/tutor-plugin-enable-k8s-deploy-tasks>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_k8s_deploy_tasks_version }}
+  * - `openedx-actions/tutor-enable-plugin-license-manager <https://github.com/openedx-actions/tutor-enable-plugin-license-manager>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_license_manager_version }}
+  * - `openedx-actions/tutor-plugin-enable-notes <https://github.com/openedx-actions/tutor-plugin-enable-notes>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_notes_version }}
+  * - `openedx-actions/tutor-plugin-enable-s3 <https://github.com/openedx-actions/tutor-plugin-enable-s3>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_s3_version }}
+  * - `openedx-actions/tutor-plugin-enable-xqueue <https://github.com/openedx-actions/tutor-plugin-enable-xqueue>`_
+    - {{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_xqueue_version }}

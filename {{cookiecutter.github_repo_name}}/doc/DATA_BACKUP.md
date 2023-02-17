@@ -1,4 +1,4 @@
-# Automated Data Backup Documentation
+# Remote Data Backup & Restore
 
 The Cookiecutter automatically generates and configures several resources that bear on data backups, remote storage, and data retention policies. Backups are managed from the bastion server, bastion.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}, and are scheduled and executed using cron. The cron job itself is automatically generated for you. It runs as the ubuntu user and can be viewed and edited using the command ```crontab -e``` from the command line.
 
