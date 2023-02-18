@@ -2,95 +2,173 @@
 # written by: Lawrence McDaniel
 #             https://lawrencemcdaniel.com/
 #
-# date: Jan-2023
+# date: Feb-2023
 #
 # usage: installs Kubernetes Dashboard web application
 # see: https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/
-#      https://stackoverflow.com/questions/46664104/how-to-sign-in-kubernetes-dashboard
+#      https://blog.heptio.com/on-securing-the-kubernetes-dashboard-16b09b1b7aca
 #
-# requirements:
-#   helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard/
-#   helm repo update
+# to run:
+#   in a separate terminal window run:  kubectl proxy
+#   in a browser window run: http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+#
+#   The login page will ask for a token. To generate said token, run:
+#   kubectl -n kubernetes-dashboard create token kubernetes-dashboard
+#
 #-----------------------------------------------------------
-locals {
+
+data "template_file" "_01" {
+  template = file("${path.module}/yml/01_Namespace.yaml")
 }
 
-
-resource "kubernetes_namespace" "dashboard" {
-  metadata {
-    name = var.dashboard_namespace
-  }
+data "template_file" "_02" {
+  template = file("${path.module}/yml/02_ServiceAccount.yaml")
 }
 
-resource "helm_release" "kubernetes-dashboard" {
-  namespace        = var.dashboard_namespace
-  create_namespace = false
+data "template_file" "_03" {
+  template = file("${path.module}/yml/03_Service.yaml")
+}
 
-  # see https://artifacthub.io/packages/helm/k8s-dashboard/kubernetes-dashboard
-  name       = "kubernetes-dashboard"
-  repository = "https://kubernetes.github.io/dashboard/"
-  chart      = "kubernetes-dashboard"
-  version    = "{{ cookiecutter.terraform_helm_dashboard }}"
+data "template_file" "_04" {
+  template = file("${path.module}/yml/04_Secret.yaml")
+}
 
-  # see https://docs.bitnami.com/kubernetes/infrastructure/dashboard/configuration/expose-service/
-  set {
-    name  = "service.externalPort"
-    value = 80
-  }
+data "template_file" "_05" {
+  template = file("${path.module}/yml/05_Secret.yaml")
+}
 
-  set {
-    name  = "protocolHttp"
-    value = true
-  }
+data "template_file" "_06" {
+  template = file("${path.module}/yml/06_Secret.yaml")
+}
 
-  set {
-    name  = "serviceAccount.create"
-    value = false
-  }
+data "template_file" "_07" {
+  template = file("${path.module}/yml/07_ConfigMap.yaml")
+}
 
-  set {
-    name  = "serviceAccount.name"
-    value = var.dashboard_account_name
-  }
+data "template_file" "_08" {
+  template = file("${path.module}/yml/08_Role.yaml")
+}
 
-  set {
-    name  = "rbac.create"
-    value = false
-  }
+data "template_file" "_09" {
+  template = file("${path.module}/yml/09_ClusterRole.yaml")
+}
+
+data "template_file" "_10" {
+  template = file("${path.module}/yml/10_RoleBinding.yaml")
+}
+
+data "template_file" "_11" {
+  template = file("${path.module}/yml/11_ClusterRoleBinding.yaml")
+}
+
+data "template_file" "_12" {
+  template = file("${path.module}/yml/12_Deployment.yaml")
+}
+
+data "template_file" "_13" {
+  template = file("${path.module}/yml/13_Service.yaml")
+}
+
+data "template_file" "_14" {
+  template = file("${path.module}/yml/14_Deployment.yaml")
+}
+
+data "template_file" "_15" {
+  template = file("${path.module}/yml/15_APIToken.yaml")
+}
+
+resource "kubectl_manifest" "_01" {
+  yaml_body = data.template_file._01.rendered
+}
+
+resource "kubectl_manifest" "_02" {
+  yaml_body = data.template_file._02.rendered
 
   depends_on = [
-    kubernetes_namespace.dashboard
+    kubectl_manifest._01
   ]
 }
+resource "kubectl_manifest" "_03" {
+  yaml_body = data.template_file._03.rendered
 
-resource "kubernetes_service_account" "dashboard_admin" {
-  metadata {
-    name      = var.dashboard_account_name
-    namespace = var.dashboard_namespace
-  }
+  depends_on = [
+    kubectl_manifest._02
+  ]
 }
+resource "kubectl_manifest" "_04" {
+  yaml_body = data.template_file._04.rendered
 
-resource "kubernetes_cluster_role_binding" "dashboard_admin" {
-  metadata {
-    name = kubernetes_service_account.dashboard_admin.metadata.0.name
-  }
-  role_ref {
-    api_group = "rbac.authorization.k8s.io"
-    kind      = "ClusterRole"
-    name      = "cluster-admin"
-  }
-  subject {
-    kind      = "ServiceAccount"
-    name      = kubernetes_service_account.dashboard_admin.metadata.0.name
-    namespace = kubernetes_namespace.dashboard.metadata.0.name
-  }
-  subject {
-    kind      = "Group"
-    name      = "system:masters"
-    api_group = "rbac.authorization.k8s.io"
-  }
+  depends_on = [
+    kubectl_manifest._03
+  ]
 }
+resource "kubectl_manifest" "_05" {
+  yaml_body = data.template_file._05.rendered
 
-resource "kubectl_manifest" "ingress-dashboard" {
-  yaml_body = file("${path.module}/yml/ingress-dashboard.yml")
+  depends_on = [
+    kubectl_manifest._04
+  ]
+}
+resource "kubectl_manifest" "_06" {
+  yaml_body = data.template_file._06.rendered
+
+  depends_on = [
+    kubectl_manifest._05
+  ]
+}
+resource "kubectl_manifest" "_07" {
+  yaml_body = data.template_file._07.rendered
+
+  depends_on = [
+    kubectl_manifest._06
+  ]
+}
+resource "kubectl_manifest" "_08" {
+  yaml_body = data.template_file._08.rendered
+
+  depends_on = [
+    kubectl_manifest._07
+  ]
+}
+resource "kubectl_manifest" "_09" {
+  yaml_body = data.template_file._09.rendered
+
+  depends_on = [
+    kubectl_manifest._08
+  ]
+}
+resource "kubectl_manifest" "_10" {
+  yaml_body = data.template_file._10.rendered
+
+  depends_on = [
+    kubectl_manifest._09
+  ]
+}
+resource "kubectl_manifest" "_11" {
+  yaml_body = data.template_file._11.rendered
+
+  depends_on = [
+    kubectl_manifest._10
+  ]
+}
+resource "kubectl_manifest" "_12" {
+  yaml_body = data.template_file._12.rendered
+
+  depends_on = [
+    kubectl_manifest._11
+  ]
+}
+resource "kubectl_manifest" "_13" {
+  yaml_body = data.template_file._13.rendered
+
+  depends_on = [
+    kubectl_manifest._12
+  ]
+}
+resource "kubectl_manifest" "_14" {
+  yaml_body = data.template_file._14.rendered
+
+  depends_on = [
+    kubectl_manifest._13
+  ]
 }
