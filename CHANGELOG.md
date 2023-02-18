@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.24] (2023-2-17)
+
+- refactor MySQL and MongoDB remote backup solutions
+- add backup cron jobs to Bastion
+- add lifecycle retention policy to AWS S3 backup bucket
+- refactor Kubernetes Dashboard
+
 ## [1.0.23] (2023-2-13)
 
 - Add Kubecost to stack
