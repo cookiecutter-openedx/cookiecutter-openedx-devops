@@ -114,15 +114,6 @@ The Terraform scripts in your new repo will provide a 1-click means of creating 
 - public ssh access via a t2.micro Ubuntu 20.04 LTS bastion EC2 instance at bastion.courses.yourschool.edu
 - daily data backups archived into a private S3 bucket named courses-yourschool-virginia-mongodb-backup
 
-You can also optionally automatically create additional environments for say, dev and test and QA and so forth.
-These would result in environments like the following:
-
-- LMS at https://dev.courses.yourschool.edu
-- CMS at https://studio.dev.courses-yourschool.edu
-- CDN at https://cdn.dev.courses.yourschool.edu linked to an S3 bucket named dev-yourschool-virginia-storage
-- daily data backups archived into an S3 bucket named dev-yourschool-virginia-mongodb-backup
-
-
 Usage
 -----
 
