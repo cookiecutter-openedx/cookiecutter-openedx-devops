@@ -133,7 +133,7 @@ Enter the project and take a look around:
     cd openedx_devops/
     ls
 
-Create a git repo and push it there:
+Create a Github repo and push it there:
 
 .. code-block:: shell
 
@@ -147,15 +147,18 @@ Create a git repo and push it there:
 Now take a look at your repo. Don't forget to carefully look at the generated README. Awesome, right?
 
 
-Terraform-based AWS infrastructure management
----------------------------------------------
+Features and functionality
+--------------------------
+
+Automated AWS Infrastructure Management with Terraform
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Your new repository includes Terraform modules that have been optimized for running Open edX at scale on AWS EKS and RDS. The modules are organized to ease your implementation of additional environments for `dev`, `test` and `qa`.
 These modules will additionally configure all Open edX credentials (Django secret key, JWT, admin user, IAM keypairs, MySQL users and passwords, etcetera) on a per-environment basis, and will store these in Kubernetes Secrets.
 This configuration scales automatically, reliably supporting anywhere from a few hundred to as many as several hundred thousand learners. This Terraform configuration is also designed to support your additional external systems. Your custom legacy systems and microservices can safely deploy to this same Kubernetes cluster and RDS MySQL cluster.
 
-Scalable and Secure
--------------------
+Scalable and Secure Cloud Infrastructure
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Builds a fully functional Docker-based, horizontally-scaled Open edX installation running on AWS infrastructure.
 
@@ -164,7 +167,7 @@ Builds a fully functional Docker-based, horizontally-scaled Open edX installatio
   :alt: K9S Console Screenshot
 
 Complete Kubernetes Auto scaling
---------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Your new Kubernetes infrastructure platform leverages `Prometheus <https://prometheus.io/>`_ and `metrics-server <https://github.com/kubernetes-sigs/metrics-server>`_ to provide you with fully self-maintained auto-scaling features:
 
@@ -174,7 +177,7 @@ Your new Kubernetes infrastructure platform leverages `Prometheus <https://prome
 
 
 Kubernetes Management Tools
----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Your new Kubernetes cluster includes preconfigured, state of the art systems to help you keep things running securely, reliably and efficiently.
 
@@ -190,7 +193,7 @@ Your new Kubernetes cluster includes preconfigured, state of the art systems to 
 
 
 Github Workflows for Build and Deploy
--------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Your new repository will be preconfigured to accept a collection of Github secrets parameters for your AWS IAM keypair, SMTP email host credentials, and oAuth provider credentials.
 
@@ -202,243 +205,10 @@ Your new repository will be preconfigured to accept a collection of Github secre
     - Tutor plugins for all Open edX optional services: Discovery, Micro Front-end, Credentials, Xqueue, Ecommerce, Discussion Forums, Notes, SMTP email
     - Hastexo Tutor plugin for AWS S3 integration
 
-Quick Start (After running Cookiecutter)
-----------------------------------------
+Quick Start
+-----------
 
-I. Setup your local dev environment
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The following *should* work for macOS, Linux and Windows. Most of the code in this repository is Terraform or Terragrunt. However,
-running the Terraform modules will in turn invoke several other software packages; namely, the AWS Command Line Interface awscli, the Kubernetes
-Command Line Interface kubectl, and Helm. For best results, you should regularly update all of these packages.
-
-.. code-block:: shell
-
-    $ brew install awscli python@3.8 black helm jq k9s kubernetes-cli pre-commit pyyaml terraform terragrunt tflint yq
-
-    # add all Helm charts
-    $ helm repo add bitnami https://charts.bitnami.com/bitnami
-    $ helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
-    $ helm repo add karpenter https://charts.karpenter.sh/
-    $ helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-    $ helm repo add cowboysysop https://cowboysysop.github.io/charts/
-    $ helm repo add jetstack https://charts.jetstack.io
-    $ helm repo update
-
-
-II. Add Your Secret Credentials To Your New Repository
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The Github Actions workflows in your new repository will depend on several workflow secrets including two sets of AWS IAM keypairs, one for CI workflows and another for the AWS Simple Email Service.
-Additionally, they require a Github Personal Access Token (PAT) for a Github user account with all requisite privileges in your new repository as well as any other repositories that are cloned during any of the build / installation pipelines.
-
-.. image:: doc/repository-secrets.png
-  :width: 700
-  :alt: Github Repository Secrets
-
-III. Review The Configuration For Your Open edX Back End
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Review your global parameters. These will be pre-populated from your responses to the Cookiecutter command-line questionnaire.
-
-.. code-block:: hcl
-
-  locals {
-    platform_name    = "yourschool"
-    platform_region  = "virginia"
-    root_domain      = "yourschool.edu"
-    aws_region       = "us-east-1"
-    account_id       = "123456789012"
-  }
-
-
-Review your production environment parameters.
-
-.. code-block:: hcl
-
-  locals {
-
-  environment           = "courses"
-
-                          # defaults to this value
-  environment_domain    = "courses.yourschool.edu"
-
-                          # defaults to this value
-  environment_namespace = "courses-yourschool-virginia"
-
-
-  # AWS infrastructure default sizing
-
-                                    # 1 vCPU 2gb
-  mysql_instance_class            = "db.t2.small"
-
-                                    # 1 vCPU 1.55gb
-  redis_node_type                 = "cache.t2.small"
-
-                                    # 2 vCPU 8gb
-  eks_worker_group_instance_type  = "t3.large"
-
-                                      # 2 vCPU 8gb
-  eks_karpenter_group_instance_type = "t3.large"
-
-  }
-
-
-
-IV. Build Your Open edX Backend
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The backend build procedure is automated using `Terragrunt <https://terragrunt.gruntwork.io/>`_ for `Terraform <https://www.terraform.io/>`_.
-Installation instructions are avilable at both of these web sites.
-
-Terraform scripts rely on the `AWS CLI (Command Line Interface) Tools <https://aws.amazon.com/cli/>`_. Installation instructions for Windows, macOS and Linux are available on this site.
-We also recommend that you install `k9s <https://k9scli.io/>`_, a popular tool for adminstering a Kubernetes cluster.
-
-.. code-block:: shell
-
-  # -------------------------------------
-  # to manage an individual resource
-  # -------------------------------------
-  cd ./terraform/environments/prod/mysql
-  terragrunt init
-  terragrunt plan
-  terragrunt apply
-  terragrunt destroy
-
-  # -------------------------------------
-  # to build the entire backend
-  # -------------------------------------
-  cd ./terraform/environments/prod
-  terragrunt run-all init
-  terragrunt run-all apply
-
-
-V. Connect To Your new bastion server
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-v1.01 introduced a newly designed bastion server with a complete set of preinstalled and preconfigured software for adminstering your
-Open edX platform.
-
-.. image:: doc/ec2-bastion.png
-  :width: 100%
-  :alt: Bastion Welcome Screen
-
-
-VI. Connect To Your backend Services
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Terraform creates friendly subdomain names for any of the backend services which you are likely to connect: Cloudfront, MySQL, Mongo and Redis.
-Passwords for the root/admin accounts are accessible from Kubernetes Secrets. Note that each of MySQL, MongoDB and Redis reside in private subnets. These services can only be accessed on the command line from the Bastion.
-
-.. code-block:: shell
-
-  ssh bastion.service.yourschool.edu -i path/to/yourschool-ohio.pem
-
-  mysql -h mysql.service.yourschool.edu -u root -p
-
-  mongo --port 27017 --host mongo.service.yourschool.edu -u root -p
-
-  redis-cli -h redis.service.yourschool.edu -p 6379
-
-Specifically with regard to MySQL, several 3rd party analytics tools provide out-of-the-box connectivity to MySQL via a bastion server. Following is an example of how to connect to your MySQL environment using MySQL Workbench.
-
-.. image:: doc/mysql-workbench.png
-  :width: 700
-  :alt: Connecting to MySQL Workbench
-
-
-VII. Manage your new Kubernetes cluster
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Installs four of the most popular web applications for Kubernetes administration:
-
-- `k9s <https://k9scli.io/>`_, preinstalled in the optional EC2 Bastion server. K9s is an amazing retro styled, ascii-based UI for viewing and monitoring all aspects of your Kubernetes cluster. It looks and runs great from any ssh-connected terminal window.
-- `Kubernetes Dashboard <https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/>`_. Written by the same team that maintain Kubernetes, Kubernetes Dashboard provides an elegant web UI for monitoring and administering your kubernetes cluster.
-- `Kubeapps <https://kubeapps.dev/>`_. Maintained by VMWare Bitnami, Kubeapps is the easiest way to install popular open source software packages from MySQL and MongoDB to Wordpress and Drupal.
-- `Grafana <https://grafana.com/>`_. Provides an elegant web UI to view time series data gathered by prometheus and metrics-server.
-  - user: admin
-  - pwd: prom-operator
-
-
-VIII. Add more Kubernetes admins
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-By default your AWS IAM user account will be the only user who can view, interact with and manage your new Kubernetes cluster. Other IAM users with admin permissions will still need to be explicitly added to the list of Kluster admins.
-If you're new to Kubernetes then you'll find detailed technical how-to instructions in the AWS EKS documentation, `Enabling IAM user and role access to your cluster <https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html>`_.
-You'll need kubectl in order to modify the aws-auth configMap in your Kubernets cluster.
-
-.. code-block:: bash
-
-    kubectl edit -n kube-system configmap/aws-auth
-
-Following is an example aws-auth configMap with additional IAM user accounts added to the admin "masters" group.
-
-.. code-block:: yaml
-
-    # Please edit the object below. Lines beginning with a '#' will be ignored,
-    # and an empty file will abort the edit. If an error occurs while saving this file will be
-    # reopened with the relevant failures.
-    #
-    apiVersion: v1
-    data:
-      mapRoles: |
-        - groups:
-          - system:bootstrappers
-          - system:nodes
-          rolearn: arn:aws:iam::012345678942:role/default-eks-node-group-20220518182244174100000002
-          username: system:node:{% raw %}{{EC2PrivateDNSName}}{% endraw %}
-      mapUsers: |
-        - groups:
-          - system:masters
-          userarn: arn:aws:iam::012345678942:user/lawrence.mcdaniel
-          username: lawrence.mcdaniel
-        - groups:
-          - system:masters
-          userarn: arn:aws:iam::012345678942:user/ci
-          username: ci
-        - groups:
-          - system:masters
-          userarn: arn:aws:iam::012345678942:user/user
-          username: user
-    kind: ConfigMap
-    metadata:
-      creationTimestamp: "2022-05-18T18:38:29Z"
-      name: aws-auth
-      namespace: kube-system
-      resourceVersion: "499488"
-      uid: 52d6e7fd-01b7-4c80-b831-b971507e5228
-
-Note that by default, Kubernetes version 1.24 and newer encrypts all secrets data using `AWS Key Management Service (KMS) <https://aws.amazon.com/kms/>`_.
-The Cookiecutter automatically adds the IAM user for the bastion server.
-For any other IAM users you'll need to modify the following in terraform/stacks/modules/kubernetes/main.tf:
-
-.. code-block:: terraform
-
-    kms_key_owners = [
-      "arn:aws:iam::${var.account_id}:user/system/bastion-user/${var.namespace}-bastion",
-      "arn:aws:iam::${var.account_id}:user/system/user/your-iam-user"
-    ]
-
-Alternatively, you can disable encrypted Kubernetes secrets by setting Cookiecutter parameter eks_create_kms_key=N.
-
-
-Continuous Integration (CI)
----------------------------
-
-Both the Build as well as the Deploy workflows will be pre-configured based on your responses to the Cookiecutter questionnaire.
-
-
-I. Build your Tutor Docker Image(s)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The automated Github Actions workflow "Build openedx Image" in your new repository will build a customized Open edX Docker container based on the latest stable version of Open edX and
-your Open edX custom theme repository and Open edX plugin repository. Your new Docker image will be automatically uploaded to AWS Amazon Elastic Container Registry.
-
-
-II. Deploy your Docker Image to your Kubernetes Cluster
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The automated Github Actions workflow "prod Deploy to Kubernetes" in your new repository will deploy your customized Docker container to a Kubernetes Cluster. You can optionall run the Github Actions workflow "prod Deploy optional Open edX modules to Kubernetes" to install all optional modules and plugins as well as the base Open edX platform software.
+See: `Getting Started Guide <./{{cookiecutter.github_repo_name}}/doc>`_
 
 About The Open edX Platform Back End
 ------------------------------------
