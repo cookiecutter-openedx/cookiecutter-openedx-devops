@@ -50,6 +50,13 @@ Powered by `Cookiecutter <https://github.com/cookiecutter/cookiecutter>`_, Cooki
   :width: 100%
   :alt: Cookiecutter Workflow
 
+Terraform-based AWS infrastructure management
+---------------------------------------------
+
+Your new repository includes Terraform modules that have been optimized for running Open edX at scale on AWS EKS and RDS. The modules are organized to ease your implementation of additional environments for `dev`, `test` and `qa`.
+These modules will additionally configure all Open edX credentials (Django secret key, JWT, admin user, IAM keypairs, MySQL users and passwords, etcetera) on a per-environment basis, and will store these in Kubernetes Secrets.
+This configuration scales automatically, reliably supporting anywhere from a few hundred to as many as several hundred thousand learners. This Terraform configuration is also designed to support your additional external systems. Your custom legacy systems and microservices can safely deploy to this same Kubernetes cluster and RDS MySQL cluster.
+
 Scalable and Secure
 -------------------
 
@@ -69,29 +76,20 @@ Your new Kubernetes infrastructure platform leverages `Prometheus <https://prome
 - `Karpenter <https://karpenter.sh/>`_: automatically launches just the right number of AWS EC2 compute node (ie application server instance) resources to handle your cluster's applications. It is designed to let you take full advantage of the cloud with fast and simple compute provisioning for Kubernetes clusters.
 
 
-Terraform-based AWS infrastructure management
----------------------------------------------
+Kubernetes Management Tools
+---------------------------
 
-Your new repository includes Terraform modules that have been optimized for running Open edX at scale on AWS EKS and RDS. The modules are organized to ease your implementation of additional environments for `dev`, `test` and `qa`.
-These modules will additionally configure all Open edX credentials (Django secret key, JWT, admin user, IAM keypairs, MySQL users and passwords, etcetera) on a per-environment basis, and will store these in Kubernetes Secrets.
-This configuration scales automatically, reliably supporting anywhere from a few hundred to as many as several hundred thousand learners. This Terraform configuration is also designed to support your additional external systems. Your custom legacy systems and microservices can safely deploy to this same Kubernetes cluster and RDS MySQL cluster. Your new Kubernetes cluster includes preconfigured, state of the art systems to help you manage things, including `Metrics-Server <https://github.com/kubernetes-sigs/metrics-server>`_, `Promethius <https://prometheus.io/>`_, `Grafana <https://grafana.com/>`_ and `Karpenter <https://karpenter.sh/>`_.
+Your new Kubernetes cluster includes preconfigured, state of the art systems to help you keep things running securely, reliably and efficiently.
 
-New Features
-------------
+- `Nginx Ingress Controller <https://docs.nginx.com/nginx-ingress-controller/>`_
+- `cert-manager <https://cert-manager.io/>`_
+- `Metrics-Server <https://github.com/kubernetes-sigs/metrics-server>`_
+- `Promethius <https://prometheus.io/>`_, `Grafana <https://grafana.com/>`_
+- `Kubecost <https://www.kubecost.com/>`_
+- `phpMyAdmin <https://www.phpmyadmin.net/>`_
+- `Kubernetes Dashboard <https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/>`_
+- `https://kubeapps.dev/ <>`_
 
-**RELEASE v1.0.23:** `Kubecost <https://www.kubecost.com/>`_ and `phpMyAdmin <https://www.phpmyadmin.net/>`_ applications.
-
-**RELEASE v1.0.21:** Add a Wordpress site to your installation.
-
-**RELEASE v1.0.19:** Out of the box support for all MFE's.
-
-**RELEASE v1.0.8:** `Kubernetes Dashboard <https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/>`_ and `Kubeapps <https://kubeapps.dev/>`_ web applications.
-
-**RELEASE v1.0.5:** Kubernetes upgrade to 1.24, plus a new adminstrative server with all of the preinstalled software that you'll need to administer your Open edX platform. Set cookiecutter.stack_add_bastion=Y to choose this option.
-
-**RELEASE v1.0.3:** an optional fully-configured remote MongoDB server running on an EC2 instance. Set cookiecutter.stack_add_remote_mongodb=Y to choose this option.
-
-**RELEASE v1.0.2: SPOT PRICING FOR EC2 INSTANCES** Save up to 75% off the cost of on-demand EC2 instances by using AWS' flexible `spot-pricing <https://aws.amazon.com/ec2/spot/pricing/>`_ .
 
 Github Workflows for Build and Deploy
 -------------------------------------
@@ -133,18 +131,6 @@ These would result in environments like the following:
 - CDN at https://cdn.dev.courses.yourschool.edu linked to an S3 bucket named dev-yourschool-virginia-storage
 - daily data backups archived into an S3 bucket named dev-yourschool-virginia-mongodb-backup
 
-
-Important Considerations
-------------------------
-
-- this Cookiecutter can only generate a GitHub repository.
-- the Terraform code and Github Actions workflows in your new repository will only work for AWS.
-- the application domain for your Open edX installation (ie courses.yourschool.edu) must be hosted in `AWS Route53 <https://console.aws.amazon.com/route53/v2/hostedzones#>`_. Terraform will create several DNS entries inside of this hosted zone, and it will optionally create additional hosted zones (one for each additional optional environment) that will be linked to the hosted zone of your application domain.
-- the Github Actions workflows in your new repository will depend on secrets located in the repository settings page. Look for further instructions in the README of your new repository.
-- the Github Actions workflows in your new repository will use an AWS IAM key pair from an IAM user named *ci* that you must manually create.
-- the collection of resources created by these scripts **will generate AWS costs of around $0.41 USD per hour ($10.00 USD per day)** while the platform is in a mostly-idle pre-production state. This cost will grow proportionally to your production work loads.
-- **BE ADVISED** that MySQL RDS, MongoDB and Redis ElastiCache are vertically scaled **manually** and therefore require some insight and potential adjustments on your part. All of these services are defaulted to their minimum instance sizes which you can modify in the environment configuration file.
-- TO DO: `NSA Updated: Kubernetes Hardening Guide <https://www.cisa.gov/uscert/ncas/current-activity/2022/03/15/updated-kubernetes-hardening-guide>`_
 
 Usage
 -----
@@ -542,6 +528,19 @@ License
 -------
 
 The code in this repository is licensed under version 3 of the AGPL unless otherwise noted. Please see the `LICENSE <./LICENSE>`_ file for details.
+
+Important Considerations
+------------------------
+
+- this Cookiecutter can only generate a GitHub repository.
+- the Terraform code and Github Actions workflows in your new repository will only work for AWS.
+- the application domain for your Open edX installation (ie courses.yourschool.edu) must be hosted in `AWS Route53 <https://console.aws.amazon.com/route53/v2/hostedzones#>`_. Terraform will create several DNS entries inside of this hosted zone, and it will optionally create additional hosted zones (one for each additional optional environment) that will be linked to the hosted zone of your application domain.
+- the Github Actions workflows in your new repository will depend on secrets located in the repository settings page. Look for further instructions in the README of your new repository.
+- the Github Actions workflows in your new repository will use an AWS IAM key pair from an IAM user named *ci* that you must manually create.
+- the collection of resources created by these scripts **will generate AWS costs of around $0.41 USD per hour ($10.00 USD per day)** while the platform is in a mostly-idle pre-production state. This cost will grow proportionally to your production work loads.
+- **BE ADVISED** that MySQL RDS, MongoDB and Redis ElastiCache are vertically scaled **manually** and therefore require some insight and potential adjustments on your part. All of these services are defaulted to their minimum instance sizes which you can modify in the environment configuration file.
+- TO DO: `NSA Updated: Kubernetes Hardening Guide <https://www.cisa.gov/uscert/ncas/current-activity/2022/03/15/updated-kubernetes-hardening-guide>`_
+
 
 Get Involved!
 -------------
