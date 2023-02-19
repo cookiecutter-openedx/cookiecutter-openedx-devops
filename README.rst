@@ -83,12 +83,13 @@ Your new Kubernetes cluster includes preconfigured, state of the art systems to 
 
 - `Nginx Ingress Controller <https://docs.nginx.com/nginx-ingress-controller/>`_
 - `cert-manager <https://cert-manager.io/>`_
-- `Metrics-Server <https://github.com/kubernetes-sigs/metrics-server>`_
-- `Promethius <https://prometheus.io/>`_, `Grafana <https://grafana.com/>`_
 - `Kubecost <https://www.kubecost.com/>`_
 - `phpMyAdmin <https://www.phpmyadmin.net/>`_
 - `Kubernetes Dashboard <https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/>`_
-- `https://kubeapps.dev/ <>`_
+- `Kubeapps <https://kubeapps.dev/>`_
+- `Metrics-Server <https://github.com/kubernetes-sigs/metrics-server>`_
+- `Promethius <https://prometheus.io/>`_
+- `Grafana <https://grafana.com/>`_
 
 
 Github Workflows for Build and Deploy
@@ -99,20 +100,10 @@ Your new repository will be preconfigured to accept a collection of Github secre
 - CI workflows for building your customized Docker images for the Open edX platform and its optional modules.
 - Built entirely from reusable `Open edX Github Actions <https://github.com/openedx-actions>`_ community-supported components that are purpose designed to support Open edX software running on Kubernetes.
 - Deployment workflows for deploying your Open edX platform to your new AWS EKS Kubernetes cluster. The deployment workflow installs the latest stable versions of the following:
-    - Open edX LMS and CMS
-    - pre-scaffolded Open edX custom theme
-    - pre-scaffolded example Open edX plugin
-    - sample optional Xblock
-    - Tutor plugin to offload user files to AWS S3 storage bucket
-    - Tutor plugin to manage automated nightly MySQL and MongoDB backups
-    - Tutor plugin for Discovery service
-    - Tutor plugin for Micro Front-end service
-    - Tutor plugin for Credentials service
-    - Tutor plugin for Xqueue service
-    - Tutor plugin for Ecommerce service
-    - Tutor plugin for Discussion Forums
-    - Tutor plugin for Notes service
-    - add configuration hooks for enabling SMTP email
+    - Open edX LMS and Course Management Studio
+    - scaffolding to add Open edX custom themes, plugins, and Xblocks to your build
+    - Tutor plugins for all Open edX optional services: Discovery, Micro Front-end, Credentials, Xqueue, Ecommerce, Discussion Forums, Notes, SMTP email
+    - Hastexo Tutor plugin for AWS S3 integration
 
 
 The Terraform scripts in your new repo will provide a 1-click means of creating / updating / destroying the following for each environment:
