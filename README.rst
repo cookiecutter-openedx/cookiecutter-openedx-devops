@@ -50,70 +50,6 @@ Powered by `Cookiecutter <https://github.com/cookiecutter/cookiecutter>`_, Cooki
   :width: 100%
   :alt: Cookiecutter Workflow
 
-Terraform-based AWS infrastructure management
----------------------------------------------
-
-Your new repository includes Terraform modules that have been optimized for running Open edX at scale on AWS EKS and RDS. The modules are organized to ease your implementation of additional environments for `dev`, `test` and `qa`.
-These modules will additionally configure all Open edX credentials (Django secret key, JWT, admin user, IAM keypairs, MySQL users and passwords, etcetera) on a per-environment basis, and will store these in Kubernetes Secrets.
-This configuration scales automatically, reliably supporting anywhere from a few hundred to as many as several hundred thousand learners. This Terraform configuration is also designed to support your additional external systems. Your custom legacy systems and microservices can safely deploy to this same Kubernetes cluster and RDS MySQL cluster.
-
-Scalable and Secure
--------------------
-
-Builds a fully functional Docker-based, horizontally-scaled Open edX installation running on AWS infrastructure.
-
-.. image:: doc/k9s-console.png
-  :width: 100%
-  :alt: K9S Console Screenshot
-
-Complete Kubernetes Auto scaling
---------------------------------
-
-Your new Kubernetes infrastructure platform leverages `Prometheus <https://prometheus.io/>`_ and `metrics-server <https://github.com/kubernetes-sigs/metrics-server>`_ to provide you with fully self-maintained auto-scaling features:
-
-- `Vertical Pod Auto-scaling <https://github.com/kubernetes/autoscaler>`_: a set of Kubernetes components that automatically adjust the amount of CPU and memory requested by your running pods based on performance metrics collected real-time by prometheus and metrics-server.
-- `Horizontal Pod Auto-scaling <https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/>`_: a built-in Kubernetes feature that automatically updates the pod count of your application deployments with the aim of automatically scaling the workload to match demand.
-- `Karpenter <https://karpenter.sh/>`_: automatically launches just the right number of AWS EC2 compute node (ie application server instance) resources to handle your cluster's applications. It is designed to let you take full advantage of the cloud with fast and simple compute provisioning for Kubernetes clusters.
-
-
-Kubernetes Management Tools
----------------------------
-
-Your new Kubernetes cluster includes preconfigured, state of the art systems to help you keep things running securely, reliably and efficiently.
-
-- `Nginx Ingress Controller <https://docs.nginx.com/nginx-ingress-controller/>`_
-- `cert-manager <https://cert-manager.io/>`_
-- `Kubecost <https://www.kubecost.com/>`_
-- `phpMyAdmin <https://www.phpmyadmin.net/>`_
-- `Kubernetes Dashboard <https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/>`_
-- `Kubeapps <https://kubeapps.dev/>`_
-- `Metrics-Server <https://github.com/kubernetes-sigs/metrics-server>`_
-- `Promethius <https://prometheus.io/>`_
-- `Grafana <https://grafana.com/>`_
-
-
-Github Workflows for Build and Deploy
--------------------------------------
-
-Your new repository will be preconfigured to accept a collection of Github secrets parameters for your AWS IAM keypair, SMTP email host credentials, and oAuth provider credentials.
-
-- CI workflows for building your customized Docker images for the Open edX platform and its optional modules.
-- Built entirely from reusable `Open edX Github Actions <https://github.com/openedx-actions>`_ community-supported components that are purpose designed to support Open edX software running on Kubernetes.
-- Deployment workflows for deploying your Open edX platform to your new AWS EKS Kubernetes cluster. The deployment workflow installs the latest stable versions of the following:
-    - Open edX LMS and Course Management Studio
-    - scaffolding to add Open edX custom themes, plugins, and Xblocks to your build
-    - Tutor plugins for all Open edX optional services: Discovery, Micro Front-end, Credentials, Xqueue, Ecommerce, Discussion Forums, Notes, SMTP email
-    - Hastexo Tutor plugin for AWS S3 integration
-
-
-The Terraform scripts in your new repo will provide a 1-click means of creating / updating / destroying the following for each environment:
-
-- LMS at https://courses.yourschool.edu
-- CMS at https://studio.courses.yourschool.edu
-- CDN at https://cdn.courses.yourschool.edu linked to a public read-only S3 bucket named courses-yourschool-virginia-storage
-- public ssh access via a t2.micro Ubuntu 20.04 LTS bastion EC2 instance at bastion.courses.yourschool.edu
-- daily data backups archived into a private S3 bucket named courses-yourschool-virginia-mongodb-backup
-
 Usage
 -----
 
@@ -190,6 +126,62 @@ Create a git repo and push it there:
   git push -u origin main
 
 Now take a look at your repo. Don't forget to carefully look at the generated README. Awesome, right?
+
+
+Terraform-based AWS infrastructure management
+---------------------------------------------
+
+Your new repository includes Terraform modules that have been optimized for running Open edX at scale on AWS EKS and RDS. The modules are organized to ease your implementation of additional environments for `dev`, `test` and `qa`.
+These modules will additionally configure all Open edX credentials (Django secret key, JWT, admin user, IAM keypairs, MySQL users and passwords, etcetera) on a per-environment basis, and will store these in Kubernetes Secrets.
+This configuration scales automatically, reliably supporting anywhere from a few hundred to as many as several hundred thousand learners. This Terraform configuration is also designed to support your additional external systems. Your custom legacy systems and microservices can safely deploy to this same Kubernetes cluster and RDS MySQL cluster.
+
+Scalable and Secure
+-------------------
+
+Builds a fully functional Docker-based, horizontally-scaled Open edX installation running on AWS infrastructure.
+
+.. image:: doc/k9s-console.png
+  :width: 100%
+  :alt: K9S Console Screenshot
+
+Complete Kubernetes Auto scaling
+--------------------------------
+
+Your new Kubernetes infrastructure platform leverages `Prometheus <https://prometheus.io/>`_ and `metrics-server <https://github.com/kubernetes-sigs/metrics-server>`_ to provide you with fully self-maintained auto-scaling features:
+
+- `Vertical Pod Auto-scaling <https://github.com/kubernetes/autoscaler>`_: a set of Kubernetes components that automatically adjust the amount of CPU and memory requested by your running pods based on performance metrics collected real-time by prometheus and metrics-server.
+- `Horizontal Pod Auto-scaling <https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/>`_: a built-in Kubernetes feature that automatically updates the pod count of your application deployments with the aim of automatically scaling the workload to match demand.
+- `Karpenter <https://karpenter.sh/>`_: automatically launches just the right number of AWS EC2 compute node (ie application server instance) resources to handle your cluster's applications. It is designed to let you take full advantage of the cloud with fast and simple compute provisioning for Kubernetes clusters.
+
+
+Kubernetes Management Tools
+---------------------------
+
+Your new Kubernetes cluster includes preconfigured, state of the art systems to help you keep things running securely, reliably and efficiently.
+
+- `Nginx Ingress Controller <https://docs.nginx.com/nginx-ingress-controller/>`_
+- `cert-manager <https://cert-manager.io/>`_
+- `Kubecost <https://www.kubecost.com/>`_
+- `phpMyAdmin <https://www.phpmyadmin.net/>`_
+- `Kubernetes Dashboard <https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/>`_
+- `Kubeapps <https://kubeapps.dev/>`_
+- `Metrics-Server <https://github.com/kubernetes-sigs/metrics-server>`_
+- `Promethius <https://prometheus.io/>`_
+- `Grafana <https://grafana.com/>`_
+
+
+Github Workflows for Build and Deploy
+-------------------------------------
+
+Your new repository will be preconfigured to accept a collection of Github secrets parameters for your AWS IAM keypair, SMTP email host credentials, and oAuth provider credentials.
+
+- CI workflows for building your customized Docker images for the Open edX platform and its optional modules.
+- Built entirely from reusable `Open edX Github Actions <https://github.com/openedx-actions>`_ community-supported components that are purpose designed to support Open edX software running on Kubernetes.
+- Deployment workflows for deploying your Open edX platform to your new AWS EKS Kubernetes cluster. The deployment workflow installs the latest stable versions of the following:
+    - Open edX LMS and Course Management Studio
+    - scaffolding to add Open edX custom themes, plugins, and Xblocks to your build
+    - Tutor plugins for all Open edX optional services: Discovery, Micro Front-end, Credentials, Xqueue, Ecommerce, Discussion Forums, Notes, SMTP email
+    - Hastexo Tutor plugin for AWS S3 integration
 
 Quick Start (After running Cookiecutter)
 ----------------------------------------
