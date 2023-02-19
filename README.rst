@@ -82,11 +82,30 @@ Now run it against this repo, using the following example usage pattern:
                 global_aws_route53_hosted_zone_id=Z123456789ABCDEFGHIJK \
                 environment_name=prod \
                 environment_subdomain=courses \
-                wordpress_add_site=Y \
+                stack_add_remote_mysql=Y \
+                stack_add_remote_mongodb=Y \
+                stack_add_remote_redis=Y \
+                stack_add_bastion=Y \
+                stack_add_k8s_dashboard=Y \
+                stack_add_k8s_kubeapps=Y \
+                stack_add_k8s_kubecost=Y \
+                stack_add_k8s_karpenter=Y \
+                stack_add_k8s_prometheus=Y \
+                wordpress_add_site=N \
+                ci_deploy_open_edx_version=olive.1 \
+                ci_deploy_install_backup_plugin=N \
+                ci_deploy_install_credentials_server=N \
+                ci_deploy_install_discovery_service=N \
+                ci_deploy_enable_mfes=Y \
+                ci_deploy_install_notes_service=N \
+                ci_deploy_install_ecommerce_service=N \
+                ci_deploy_install_forum_service=Y \
+                ci_deploy_install_xqueue_service=N \
+                ci_deploy_install_license_manager_service=N \
 
-Alternatively, you can run Cookiecutter without providing any prompts, which will result in it generating a questionnaire that includes all of the 75 or so input parameters. You'll be prompted for some values. Provide them, then a complete git repository will be created for you, with Github Actions workflows to automate the build and deployment of your Tutor Open edX platform, and Terraform scripts to automate the build of your AWS backend.
+There are lots more Cookiecutter parameters `here <https://github.com/lpm0073/cookiecutter-openedx-devops/tree/main/doc>`_.
 
-Answer the prompts with your own desired options. For example:
+Alternatively, you can run Cookiecutter without providing any prompts, which will result in it generating a questionnaire that includes all of the 75 or so input parameters. You'll be prompted for some values. Provide them, then a complete git repository will be created for you, with Github Actions workflows to automate the build and deployment of your Tutor Open edX platform, and Terraform scripts to automate the build of your AWS backend. Answer the prompts with your own desired options. For example:
 
 .. code-block:: shell
 
