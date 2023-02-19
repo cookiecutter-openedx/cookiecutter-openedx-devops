@@ -208,7 +208,7 @@ Your new repository will be preconfigured to accept a collection of Github secre
 Quick Start
 -----------
 
-See: `Getting Started Guide <./{{cookiecutter.github_repo_name}}/doc>`_
+See: `Getting Started Guide <./{{cookiecutter.github_repo_name}}/doc/QUICKSTART.rst>`_
 
 About The Open edX Platform Back End
 ------------------------------------
