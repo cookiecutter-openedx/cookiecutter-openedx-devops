@@ -147,6 +147,24 @@ Create a Github repo and push it there:
 Now take a look at your repo. Don't forget to carefully look at the generated README. Awesome, right?
 
 
+Cookiecutter is Used By These Organizations
+-------------------------------------------
+
+.. list-table:: Title
+   :widths: 100 100
+   :header-rows: 1
+
+   * - Organization
+     - Organization
+   * - `UK Cabinet Office <https://www.gov.uk/government/organisations/cabinet-office>`_
+     - `Stepwise Math <https://stepwisemath.ai/>`_
+   * - `Turn The Bus <https://app.turnthebus.org/>`_
+     - `University of South Florida MUMA College of Business <https://www.usf.edu/business/>`_
+   * - `MRI Online <https://mrionline.com/>`_
+     - `University of British Columbia Learn ExL <https://www.ubc.ca/>`_
+   * - `blend-ed <https://blend-ed.com/>`_
+     - `YAM <https://yam-edu.com/>`_
+
 Features and functionality
 --------------------------
 
@@ -298,16 +316,3 @@ Special thanks go out to several folks in the open source community who've alrea
 - to `UK Cabinet Office <https://www.gov.uk/government/organisations/cabinet-office>`_, who created and still use the original version of this code base to manage their production Open edX environment.
 - to `Turn The Bus <https://turnthebus.org/>`_, for helping me with the requisite code refactoring that preceded publication of this Cookiecutter template.
 - to `University of South Florida MUMA College of Business <https://www.usf.edu/business/>`_, for supporting the continued development of this project.
-
-Early Adopters
-~~~~~~~~~~~~~~
-Several large-scale Open edX installations already use this code base to manage their platforms, including:
-
-- `UK Cabinet Office <https://www.gov.uk/government/organisations/cabinet-office>`_
-- `Stepwise Math <https://stepwisemath.ai/>`_
-- `Turn The Bus <https://app.turnthebus.org/>`_
-- `University of South Florida MUMA College of Business <https://www.usf.edu/business/>`_
-- `MRI Online <https://mrionline.com/>`_
-- `University of British Columbia Learn ExL <https://www.ubc.ca/>`_
-- `blend-ed <https://blend-ed.com/>`_
-- `YAM <https://yam-edu.com/>`_
