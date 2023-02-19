@@ -147,24 +147,6 @@ Create a Github repo and push it there:
 Now take a look at your repo. Don't forget to carefully look at the generated README. Awesome, right?
 
 
-Cookiecutter is Used By These Organizations
--------------------------------------------
-
-.. list-table:: Title
-   :widths: 100 100
-   :header-rows: 1
-
-   * - Organization
-     - Organization
-   * - `UK Cabinet Office <https://www.gov.uk/government/organisations/cabinet-office>`_
-     - `Stepwise Math <https://stepwisemath.ai/>`_
-   * - `Turn The Bus <https://app.turnthebus.org/>`_
-     - `University of South Florida MUMA College of Business <https://www.usf.edu/business/>`_
-   * - `MRI Online <https://mrionline.com/>`_
-     - `University of British Columbia Learn ExL <https://www.ubc.ca/>`_
-   * - `blend-ed <https://blend-ed.com/>`_
-     - `YAM <https://yam-edu.com/>`_
-
 Features and functionality
 --------------------------
 
@@ -279,6 +261,22 @@ Important Considerations
 
 Get Involved!
 -------------
+
+.. list-table:: Cookiecutter is Used By These Organizations
+   :widths: 100 100
+   :header-rows: 1
+
+   * - Organization
+     - Organization
+   * - `UK Cabinet Office <https://www.gov.uk/government/organisations/cabinet-office>`_
+     - `Stepwise Math <https://stepwisemath.ai/>`_
+   * - `Turn The Bus <https://app.turnthebus.org/>`_
+     - `University of South Florida MUMA College of Business <https://www.usf.edu/business/>`_
+   * - `MRI Online <https://mrionline.com/>`_
+     - `University of British Columbia Learn ExL <https://www.ubc.ca/>`_
+   * - `blend-ed <https://blend-ed.com/>`_
+     - `YAM <https://yam-edu.com/>`_
+
 
 Contributors are welcome. Contact me here: `lawrencemcdaniel.com <https://lawrencemcdaniel.com/contact>`_ if you're interested in becoming a contributor to this project.
 
