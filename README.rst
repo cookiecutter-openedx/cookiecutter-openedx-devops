@@ -205,8 +205,10 @@ Your new repository will be preconfigured to accept a collection of Github secre
     - Tutor plugins for all Open edX optional services: Discovery, Micro Front-end, Credentials, Xqueue, Ecommerce, Discussion Forums, Notes, SMTP email
     - Hastexo Tutor plugin for AWS S3 integration
 
-`Getting Started Guide <./{{cookiecutter.github_repo_name}}/doc/QUICKSTART.rst>`_
----------------------------------------------------------------------------------
+Quick Start
+-----------
+
+See: `Getting Started Guide <./{{cookiecutter.github_repo_name}}/doc/QUICKSTART.rst>`_
 
 About The Open edX Platform Back End
 ------------------------------------
@@ -233,8 +235,11 @@ The Terraform scripts in your new repository will allow you to automatically cre
 - **Network Design**. uses `Amazon Virtual Private Cloud (Amazon VPC) <https://aws.amazon.com/vpc/>`_ based on the AWS account number provided in the `global configuration file <terraform/environments/global.hcl>`_ to take a top-down approach to compartmentalize all cloud resources and to customize the operating enviroment for your Open edX resources. Terraform will create a new virtual private cloud into which all resource will be provisioned. It creates a sensible arrangment of private and public subnets, network security settings and security groups. See additional VPC documentation  `here <terraform/environments/{{ cookiecutter.environment_name }}/vpc>`_
 - **Proxy Access to Backend Services**. uses an `Amazon EC2 <https://aws.amazon.com/ec2/>`_ t2.micro Ubuntu instance publicly accessible via ssh as bastion.courses.yourschool.edu:22 using the ssh key specified in the `global configuration file <terraform/environments/global.hcl>`_.  For security as well as performance reasons all backend services like MySQL, Mongo, Redis and the Kubernetes cluster are deployed into their own private subnets, meaning that none of these are publicly accessible. See additional Bastion documentation  `here <terraform/environments/{{ cookiecutter.environment_name }}/bastion>`_. Terraform creates a t2.micro EC2 instance to which you can connect via ssh. In turn you can connect to services like MySQL via the bastion. Common configuration settings `are located here <terraform/environments/{{ cookiecutter.environment_name }}/bastion/terragrunt.hcl>`_. Note that if you are cost conscious then you could alternatively use `AWS Cloud9 <https://aws.amazon.com/cloud9/>`_ to gain access to all backend services.
 
-`FAQ <./FAQ.rst>`_
+FAQ
 ---
+
+See: `FAQ <./FAQ.rst>`_
+
 
 License
 -------
