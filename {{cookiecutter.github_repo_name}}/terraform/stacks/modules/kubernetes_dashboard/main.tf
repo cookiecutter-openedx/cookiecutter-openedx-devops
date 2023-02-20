@@ -73,10 +73,6 @@ data "template_file" "_14" {
   template = file("${path.module}/yml/14_Deployment.yaml")
 }
 
-data "template_file" "_15" {
-  template = file("${path.module}/yml/15_APIToken.yaml")
-}
-
 resource "kubectl_manifest" "_01" {
   yaml_body = data.template_file._01.rendered
 }
