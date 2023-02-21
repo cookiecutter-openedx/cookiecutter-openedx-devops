@@ -207,7 +207,7 @@ ingress:
   #    backend:
   #      service:
   #        name: >-
-  #          {{ include "kubernetes-dashboard.fullname" . }}
+  #          {% raw %}{{ include "kubernetes-dashboard.fullname" . }}{% endraw %}
   #        port:
   #          # Don't use string here, use only integer value!
   #          number: 443
