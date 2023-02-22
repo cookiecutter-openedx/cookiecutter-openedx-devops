@@ -631,7 +631,7 @@ alertmanager:
         - weight: 1
           preference:
             matchExpressions:
-            - key: application-group
+            - key: node-group
               operator: In
               values:
               - {{ cookiecutter.global_platform_shared_resource_identifier }}
@@ -1885,7 +1885,7 @@ prometheusOperator:
           - weight: 1
             preference:
               matchExpressions:
-              - key: application-group
+              - key: node-group
                 operator: In
                 values:
                 - {{ cookiecutter.global_platform_shared_resource_identifier }}
@@ -2120,7 +2120,7 @@ prometheusOperator:
         - weight: 1
           preference:
             matchExpressions:
-            - key: application-group
+            - key: node-group
               operator: In
               values:
               - {{ cookiecutter.global_platform_shared_resource_identifier }}
@@ -2935,7 +2935,7 @@ prometheus:
         - weight: 1
           preference:
             matchExpressions:
-            - key: application-group
+            - key: node-group
               operator: In
               values:
               - {{ cookiecutter.global_platform_shared_resource_identifier }}
@@ -3705,7 +3705,7 @@ thanosRuler:
         - weight: 1
           preference:
             matchExpressions:
-            - key: application-group
+            - key: node-group
               operator: In
               values:
               - {{ cookiecutter.global_platform_shared_resource_identifier }}

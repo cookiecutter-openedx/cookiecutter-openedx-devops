@@ -164,7 +164,7 @@ module "eks" {
       max_size          = var.eks_service_group_max_size
 
       labels = {
-        application-group = "{{ cookiecutter.global_platform_shared_resource_identifier }}"
+        node-group = "{{ cookiecutter.global_platform_shared_resource_identifier }}"
       }
 
       iam_role_additional_policies = {

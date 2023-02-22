@@ -71,7 +71,7 @@ affinity:
       - weight: 1
         preference:
           matchExpressions:
-          - key: application-group
+          - key: node-group
             operator: In
             values:
             - wordpress
