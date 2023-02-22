@@ -17,6 +17,11 @@
 #   helm show all bitnami/wordpress
 #   helm show values bitnami/wordpress
 #
+#   Trouble shooting an installation:
+#   helm ls --namespace my-wordpress-site
+#   helm history wordpress  --namespace my-wordpress-site
+#   helm rollback wordpress 4 --namespace my-wordpress-site
+#
 # see: https://jmrobles.medium.com/launch-a-wordpress-site-on-kubernetes-in-just-1-minute-193914cb4902
 #-----------------------------------------------------------
 locals {
@@ -34,6 +39,8 @@ locals {
   externalDatabaseUser             = var.wordpressConfig["DatabaseUser"]
   externalDatabaseDatabase         = var.wordpressConfig["Database"]
   persistenceSize                  = var.wordpressConfig["DiskVolumeSize"]
+  ebsVolumePreventDestroy          = var.wordpressConfig["DiskVolumePreventDestroy"]
+  aws_ebs_volume_id                = var.wordpressConfig["AWSEBSVolumeId"]
   serviceAccountName               = local.wordpressDomain
   HorizontalAutoscalingMinReplicas = 1
   HorizontalAutoscalingMaxReplicas = 1
@@ -78,6 +85,7 @@ data "template_file" "wordpress-values" {
     extraVolumes                     = data.template_file.extraVolumes.rendered
     extraVolumeMounts                = data.template_file.extraVolumeMounts.rendered
     persistenceSize                  = local.persistenceSize
+    pvcEbs_volume_id                 = local.aws_ebs_volume_id != "" ? local.aws_ebs_volume_id : aws_ebs_volume.wordpress.volume_id
     serviceAccountCreate             = true
     serviceAccountName               = local.serviceAccountName
     serviceAccountAnnotations        = data.template_file.serviceAccountAnnotations.rendered

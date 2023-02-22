@@ -20,7 +20,7 @@ locals {
 }
 
 data "template_file" "kubecost-values" {
-  template = file("${path.module}/config/values.yaml")
+  template = file("${path.module}/config/kubecost-values.yaml")
   vars = {
     # get a free Kubecost token here:
     # https://www.kubecost.com/install#show-instructions

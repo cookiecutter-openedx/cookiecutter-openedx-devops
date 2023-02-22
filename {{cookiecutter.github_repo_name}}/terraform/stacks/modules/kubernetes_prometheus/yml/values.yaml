@@ -634,7 +634,7 @@ alertmanager:
             - key: application-group
               operator: In
               values:
-              - service
+              - {{ cookiecutter.global_platform_shared_resource_identifier }}
     # nodeAffinity:
     #   requiredDuringSchedulingIgnoredDuringExecution:
     #     nodeSelectorTerms:
@@ -1888,7 +1888,7 @@ prometheusOperator:
               - key: application-group
                 operator: In
                 values:
-                - service
+                - {{ cookiecutter.global_platform_shared_resource_identifier }}
       tolerations: []
 
       ## SecurityContext holds pod-level security attributes and common container settings.
@@ -2123,7 +2123,7 @@ prometheusOperator:
             - key: application-group
               operator: In
               values:
-              - service
+              - {{ cookiecutter.global_platform_shared_resource_identifier }}
     # nodeAffinity:
     #   requiredDuringSchedulingIgnoredDuringExecution:
     #     nodeSelectorTerms:
@@ -2938,7 +2938,7 @@ prometheus:
             - key: application-group
               operator: In
               values:
-              - service
+              - {{ cookiecutter.global_platform_shared_resource_identifier }}
     # nodeAffinity:
     #   requiredDuringSchedulingIgnoredDuringExecution:
     #     nodeSelectorTerms:
@@ -3708,7 +3708,7 @@ thanosRuler:
             - key: application-group
               operator: In
               values:
-              - service
+              - {{ cookiecutter.global_platform_shared_resource_identifier }}
     # nodeAffinity:
     #   requiredDuringSchedulingIgnoredDuringExecution:
     #     nodeSelectorTerms:

@@ -10,7 +10,20 @@
 #
 # see:          https://github.com/kubernetes/ingress-nginx/issues/5593
 #               https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-class
+#
+# helm reference:
+#   brew install helm
+#
+#   helm repo add ingress-nginx https://github.com/kubernetes/ingress-nginx
+#   helm repo update
+#   helm show all ingress-nginx/ingress-nginx
+#   helm show values ingress-nginx/ingress-nginx
+
 #------------------------------------------------------------------------------
+
+data "template_file" "nginx-values" {
+  template = file("${path.module}/yml/nginx-values.yaml")
+}
 
 resource "helm_release" "ingress_nginx_controller" {
   name             = "common"
@@ -20,6 +33,10 @@ resource "helm_release" "ingress_nginx_controller" {
   chart      = "ingress-nginx"
   repository = "https://kubernetes.github.io/ingress-nginx"
   version    = "{{ cookiecutter.terraform_helm_ingress_nginx_controller }}"
+
+  values = [
+    data.template_file.nginx-values.rendered
+  ]
 
   set {
     name  = "service.type"

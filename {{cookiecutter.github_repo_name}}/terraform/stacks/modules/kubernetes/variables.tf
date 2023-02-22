@@ -65,15 +65,15 @@ variable "eks_karpenter_group_instance_type" {
   type = string
 }
 
-variable "eks_karpenter_group_min_size" {
+variable "eks_service_group_min_size" {
   type = number
 }
 
-variable "eks_karpenter_group_max_size" {
+variable "eks_service_group_max_size" {
   type = number
 }
 
-variable "eks_karpenter_group_desired_size" {
+variable "eks_service_group_desired_size" {
   type = number
 }
 

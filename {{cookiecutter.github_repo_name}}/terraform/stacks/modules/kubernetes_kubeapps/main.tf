@@ -29,6 +29,10 @@ locals {
 }
 
 
+data "template_file" "kubeapps-values" {
+  template = file("${path.module}/yml/kubeapps-values.yaml")
+}
+
 resource "helm_release" "kubeapps" {
   namespace        = local.kubeapps_namespace
   create_namespace = false

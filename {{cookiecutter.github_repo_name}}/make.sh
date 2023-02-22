@@ -40,9 +40,9 @@ cookiecutter --checkout $GITHUB_BRANCH \
             eks_worker_group_max_size={{ cookiecutter.eks_worker_group_max_size }} \
             eks_worker_group_desired_size={{ cookiecutter.eks_worker_group_desired_size }} \
             eks_karpenter_group_instance_type={{ cookiecutter.eks_karpenter_group_instance_type }} \
-            eks_karpenter_group_min_size={{ cookiecutter.eks_karpenter_group_min_size }} \
-            eks_karpenter_group_max_size={{ cookiecutter.eks_karpenter_group_max_size }} \
-            eks_karpenter_group_desired_size={{ cookiecutter.eks_karpenter_group_desired_size }} \
+            eks_service_group_min_size={{ cookiecutter.eks_service_group_min_size }} \
+            eks_service_group_max_size={{ cookiecutter.eks_service_group_max_size }} \
+            eks_service_group_desired_size={{ cookiecutter.eks_service_group_desired_size }} \
             mysql_instance_class={{ cookiecutter.mysql_instance_class }} \
             mysql_allocated_storage={{ cookiecutter.mysql_allocated_storage }} \
             redis_node_type={{ cookiecutter.redis_node_type }} \

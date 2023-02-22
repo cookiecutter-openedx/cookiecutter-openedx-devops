@@ -7,9 +7,13 @@
 # usage: Add tls certs for EKS cluster load balancer
 #        see https://cert-manager.io/docs/
 #
-# prequisites:
-#       helm repo add jetstack https://charts.jetstack.io
-#       helm repo update
+# helm reference:
+#   brew install helm
+#
+#   helm repo add jetstack https://charts.jetstack.io
+#   helm repo update
+#   helm show all jetstack/cert-manager
+#   helm show values jetstack/cert-manager
 #------------------------------------------------------------------------------
 data "aws_route53_zone" "services_subdomain" {
   name = var.services_subdomain
@@ -65,16 +69,10 @@ data "template_file" "cert-manager-values" {
   }
 }
 
-#-----------------------------------------------------------
-# NOTE: you must initialize a local helm repo in order to run
-# this script.
-#
-#   brew install helm
-#
-#   kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.10.1/cert-manager.crds.yaml
-#   helm repo add jetstack https://charts.jetstack.io
-#   helm repo update
-#-----------------------------------------------------------
+data "template_file" "cert-manager-values" {
+  template = file("${path.module}/manifests/cert-manager-values.yaml.tpl")
+  vars = {}
+}
 resource "helm_release" "cert-manager" {
   name             = "cert-manager"
   namespace        = var.cert_manager_namespace

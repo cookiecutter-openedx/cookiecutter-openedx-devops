@@ -35,12 +35,9 @@
 #   kubectl delete crd thanosrulers.monitoring.coreos.com
 #-----------------------------------------------------------
 
-resource "random_password" "grafana" {
-  length  = 16
-  special = false
-  keepers = {
-    version = "1"
-  }
+data "template_file" "prometheus-values" {
+  template = file("${path.module}/config/prometheus-values.yaml")
+  vars = {}
 }
 
 resource "helm_release" "prometheus" {
@@ -51,6 +48,10 @@ resource "helm_release" "prometheus" {
   repository = "https://prometheus-community.github.io/helm-charts"
   chart      = "kube-prometheus-stack"
   version    = "{{ cookiecutter.terraform_helm_prometheus }}"
+
+  values = [
+    data.template_file.prometheus-values.rendered
+  ]
 
   # changes the password (stored in k8s secret prometheus-grafana) from 'prom-operator'
   # to our own randomly generated 16-character strong password.
@@ -67,4 +68,15 @@ resource "helm_release" "prometheus" {
   #  "${file("${path.module}/yml/values.yaml")}"
   #]
 
+}
+
+#------------------------------------------------------------------------------
+#                               SUPPORTING RESOURCES
+#------------------------------------------------------------------------------
+resource "random_password" "grafana" {
+  length  = 16
+  special = false
+  keepers = {
+    version = "1"
+  }
 }

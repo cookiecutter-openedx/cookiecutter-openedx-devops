@@ -293,7 +293,7 @@ AWS data center.
 
   *default value: t3.large*
 
-- **eks_karpenter_group_min_size:**
+- **eks_service_group_min_size:**
 
   The minimum number of EC2 instance compute nodes to maintain inside the compute plane of your cluster. This value
   needs to be at least 1 in order for Karpenter to gather real-time load and performance metrics that it uses
@@ -303,7 +303,7 @@ AWS data center.
 
   *default value: 3*
 
-- **eks_karpenter_group_max_size:**
+- **eks_service_group_max_size:**
 
   The maximum number of EC2 instances that Karpenter is permitted to add to the Kubernetes compute plane
   regardless of real-time load metrics.
@@ -314,7 +314,7 @@ AWS data center.
 
   *default value:  10*
 
-- **eks_karpenter_group_desired_size:**
+- **eks_service_group_desired_size:**
 
   The initial setting that Karpenter will use when the EKS cluster is created and initialized.
   This value will poentially change (higher or lower) as soon as metrics-server and promethus

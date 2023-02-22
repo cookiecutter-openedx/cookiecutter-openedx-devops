@@ -49,9 +49,9 @@ locals {
   eks_worker_group_desired_size     = {{ cookiecutter.eks_worker_group_desired_size }}
 
   eks_karpenter_group_instance_type = "{{ cookiecutter.eks_karpenter_group_instance_type }}"
-  eks_karpenter_group_min_size      = {{ cookiecutter.eks_karpenter_group_min_size }}
-  eks_karpenter_group_max_size      =  {{ cookiecutter.eks_karpenter_group_max_size }}
-  eks_karpenter_group_desired_size  =  {{ cookiecutter.eks_karpenter_group_desired_size }}
+  eks_service_group_min_size      = {{ cookiecutter.eks_service_group_min_size }}
+  eks_service_group_max_size      =  {{ cookiecutter.eks_service_group_max_size }}
+  eks_service_group_desired_size  =  {{ cookiecutter.eks_service_group_desired_size }}
 
   tags = merge(
     local.global_vars.locals.tags,

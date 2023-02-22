@@ -27,9 +27,9 @@ locals {
   eks_worker_group_max_size       = local.stack_vars.locals.eks_worker_group_max_size
   eks_worker_group_desired_size   = local.stack_vars.locals.eks_worker_group_desired_size
   eks_karpenter_group_instance_type = local.stack_vars.locals.eks_karpenter_group_instance_type
-  eks_karpenter_group_min_size      = local.stack_vars.locals.eks_karpenter_group_min_size
-  eks_karpenter_group_max_size      =  local.stack_vars.locals.eks_karpenter_group_max_size
-  eks_karpenter_group_desired_size  =  local.stack_vars.locals.eks_karpenter_group_desired_size
+  eks_service_group_min_size      = local.stack_vars.locals.eks_service_group_min_size
+  eks_service_group_max_size      =  local.stack_vars.locals.eks_service_group_max_size
+  eks_service_group_desired_size  =  local.stack_vars.locals.eks_service_group_desired_size
 
   tags = merge(
     local.stack_vars.locals.tags,
@@ -80,9 +80,9 @@ inputs = {
   eks_worker_group_max_size = local.eks_worker_group_max_size
   eks_worker_group_desired_size = local.eks_worker_group_desired_size
   eks_karpenter_group_instance_type = local.eks_karpenter_group_instance_type
-  eks_karpenter_group_min_size      = local.eks_karpenter_group_min_size
-  eks_karpenter_group_max_size      =  local.eks_karpenter_group_max_size
-  eks_karpenter_group_desired_size  =  local.eks_karpenter_group_desired_size
+  eks_service_group_min_size      = local.eks_service_group_min_size
+  eks_service_group_max_size      =  local.eks_service_group_max_size
+  eks_service_group_desired_size  =  local.eks_service_group_desired_size
 
   tags = local.tags
   map_roles = []

@@ -102,6 +102,10 @@ ingress:
   enabled: false
 persistence:
   size: ${persistenceSize}
+  existingClaim:
+    selector:
+      matchLabels:
+        ebs_volume_id: ${pvcEbs_volume_id}
 serviceAccount:
   create: ${serviceAccountCreate}
   name: ${serviceAccountName}

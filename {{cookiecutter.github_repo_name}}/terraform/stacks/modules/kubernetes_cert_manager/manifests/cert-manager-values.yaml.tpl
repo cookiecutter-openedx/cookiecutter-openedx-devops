@@ -7,6 +7,16 @@ image:
 webhook:
   image:
     tag: ${cert_manager_image_version}
+affinity:
+  nodeAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 1
+      preference:
+        matchExpressions:
+        - key: application-group
+          operator: In
+          values:
+          - {{ cookiecutter.global_platform_shared_resource_identifier }}
 prometheus:
   enabled: false
 installCRDs: true

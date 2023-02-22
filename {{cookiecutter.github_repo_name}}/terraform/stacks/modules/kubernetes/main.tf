@@ -156,15 +156,15 @@ module "eks" {
     # (a few hours or less) as these are usually only instantiated during
     # bursts of user activity such as at the start of a scheduled lecture or
     # exam on a large mooc.
-    karpenter = {
+    {{ cookiecutter.global_platform_shared_resource_identifier }} = {
       capacity_type     = "SPOT"
       enable_monitoring = false
-      desired_size      = var.eks_karpenter_group_desired_size
-      min_size          = var.eks_karpenter_group_min_size
-      max_size          = var.eks_karpenter_group_max_size
+      desired_size      = var.eks_service_group_desired_size
+      min_size          = var.eks_service_group_min_size
+      max_size          = var.eks_service_group_max_size
 
       labels = {
-        application-group = "service"
+        application-group = "{{ cookiecutter.global_platform_shared_resource_identifier }}"
       }
 
       iam_role_additional_policies = {
@@ -178,7 +178,7 @@ module "eks" {
       instance_types = ["${var.eks_karpenter_group_instance_type}"]
       tags = merge(
         var.tags,
-        { Name = "eks-${var.shared_resource_identifier}-karpenter" }
+        { Name = "eks-${var.shared_resource_identifier}" }
       )
     }
 

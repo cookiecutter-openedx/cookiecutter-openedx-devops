@@ -26,6 +26,50 @@
 #
 # see: https://registry.terraform.io/modules/terraform-aws-modules/iam/aws/latest/submodules/iam-role-for-service-accounts-eks
 
+data "template_file" "karpenter-values" {
+  template = file("${path.module}/yml/karpenter-values.yaml")
+}
+
+
+resource "helm_release" "karpenter" {
+  namespace        = "karpenter"
+  create_namespace = true
+
+  name       = "karpenter"
+  repository = "https://charts.karpenter.sh"
+  chart      = "karpenter"
+
+  version = "{{ cookiecutter.terraform_helm_karpenter }}"
+
+  values = [
+    data.template_file.karpenter-values.rendered
+  ]
+
+  set {
+    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+    value = module.karpenter_controller_irsa_role.iam_role_arn
+  }
+
+  set {
+    name  = "clusterName"
+    value = var.stack_namespace
+  }
+
+  set {
+    name  = "clusterEndpoint"
+    value = data.aws_eks_cluster.eks.endpoint
+  }
+
+  set {
+    name  = "aws.defaultInstanceProfile"
+    value = aws_iam_instance_profile.karpenter.name
+  }
+
+}
+
+#------------------------------------------------------------------------------
+#                           SUPPORTING RESOURCES
+#------------------------------------------------------------------------------
 module "karpenter_controller_irsa_role" {
   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   # mcdaniel aug-2022: specifying an explicit version causes this module to create
@@ -52,38 +96,6 @@ module "karpenter_controller_irsa_role" {
 
 }
 
-
-resource "helm_release" "karpenter" {
-  namespace        = "karpenter"
-  create_namespace = true
-
-  name       = "karpenter"
-  repository = "https://charts.karpenter.sh"
-  chart      = "karpenter"
-
-  version = "{{ cookiecutter.terraform_helm_karpenter }}"
-
-  set {
-    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = module.karpenter_controller_irsa_role.iam_role_arn
-  }
-
-  set {
-    name  = "clusterName"
-    value = var.stack_namespace
-  }
-
-  set {
-    name  = "clusterEndpoint"
-    value = data.aws_eks_cluster.eks.endpoint
-  }
-
-  set {
-    name  = "aws.defaultInstanceProfile"
-    value = aws_iam_instance_profile.karpenter.name
-  }
-
-}
 
 resource "random_pet" "this" {
   length = 2
