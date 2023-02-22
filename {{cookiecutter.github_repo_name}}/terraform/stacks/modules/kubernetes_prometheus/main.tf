@@ -36,7 +36,7 @@
 #-----------------------------------------------------------
 
 data "template_file" "prometheus-values" {
-  template = file("${path.module}/config/prometheus-values.yaml")
+  template = file("${path.module}/yml/prometheus-values.yaml")
   vars     = {}
 }
 
