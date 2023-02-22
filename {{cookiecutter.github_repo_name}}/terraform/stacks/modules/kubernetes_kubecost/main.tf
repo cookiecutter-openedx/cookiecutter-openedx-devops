@@ -14,6 +14,12 @@
 #   helm repo update
 #   helm search repo cost-analyzer
 #   helm show values cost-analyzer/cost-analyzer
+#
+#   Trouble shooting an installation:
+#   helm ls --namespace kubecost
+#   helm history cost-analyzer  --namespace kubecost
+#   helm rollback cost-analyzer 4 --namespace kubecost
+
 #-----------------------------------------------------------
 locals {
   cost_analyzer = "cost-analyzer"
