@@ -62,6 +62,8 @@ dependency "vpc" {
   mock_outputs_allowed_terraform_commands = ["init", "validate"]
   mock_outputs = {
     vpc_id           = "fake-vpc-id"
+    public_subnets   = ["fake-subnetid-01", "fake-subnetid-02"]
+    private_subnets  = ["fake-subnetid-01", "fake-subnetid-02"]
     database_subnets = ["fake-subnetid-01", "fake-subnetid-02"]
     elasticache_subnets = ["fake-elasticache-subnet-01", "fake-elasticache-subnet-02"]
     vpc_cidr_block = "fake-cidr-block"
@@ -122,4 +124,5 @@ inputs = {
   wordpressConfig               = local.wordpressConfig
   phpmyadmin                    = local.phpmyadmin
   tags                          = local.tags
+  subnet_ids                    = dependency.vpc.outputs.private_subnets
 }
