@@ -19,7 +19,7 @@ locals {
 }
 
 resource "aws_security_group" "worker_group_mgmt" {
-  name_prefix = "${var.namespace}-eks_worker_group_mgmt"
+  name_prefix = "${var.namespace}-eks_hosting_group_mgmt"
   description = "openedx_devops: Ingress CLB worker group management"
   vpc_id      = var.vpc_id
 
@@ -175,10 +175,36 @@ module "eks" {
         AmazonEBSCSIDriverPolicy = data.aws_iam_policy.AmazonEBSCSIDriverPolicy.arn
       }
 
-      instance_types = ["${var.eks_karpenter_group_instance_type}"]
+      instance_types = ["${var.eks_service_group_instance_type}"]
       tags = merge(
         var.tags,
         { Name = "eks-${var.shared_resource_identifier}" }
+      )
+    }
+
+    hosting = {
+      capacity_type     = "SPOT"
+      enable_monitoring = false
+      desired_size      = var.eks_hosting_group_desired_size
+      min_size          = var.eks_hosting_group_min_size
+      max_size          = var.eks_hosting_group_max_size
+
+      labels = {
+        node-group = "{{ cookiecutter.global_platform_shared_resource_identifier }}"
+      }
+
+      iam_role_additional_policies = {
+        # Required by Karpenter
+        AmazonSSMManagedInstanceCore = "arn:${local.partition}:iam::aws:policy/AmazonSSMManagedInstanceCore"
+
+        # Required by EBS CSI Add-on
+        AmazonEBSCSIDriverPolicy = data.aws_iam_policy.AmazonEBSCSIDriverPolicy.arn
+      }
+
+      instance_types = ["${var.eks_hosting_group_instance_type}"]
+      tags = merge(
+        var.tags,
+        { Name = "eks-${var.shared_resource_identifier}-hosting" }
       )
     }
 

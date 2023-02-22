@@ -53,15 +53,15 @@ variable "eks_create_kms_key" {
   type = bool
 }
 
-variable "eks_worker_group_min_size" {
+variable "eks_hosting_group_min_size" {
   type = number
 }
 
-variable "eks_worker_group_max_size" {
+variable "eks_hosting_group_max_size" {
   type = number
 }
 
-variable "eks_karpenter_group_instance_type" {
+variable "eks_service_group_instance_type" {
   type = string
 }
 
@@ -77,11 +77,11 @@ variable "eks_service_group_desired_size" {
   type = number
 }
 
-variable "eks_worker_group_desired_size" {
+variable "eks_hosting_group_desired_size" {
   type = number
 }
 
-variable "eks_worker_group_instance_type" {
+variable "eks_hosting_group_instance_type" {
   type = string
 }
 

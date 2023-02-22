@@ -93,10 +93,10 @@ Review your production environment parameters.
   redis_node_type                 = "cache.t2.small"
 
                                     # 2 vCPU 8gb
-  eks_worker_group_instance_type  = "t3.large"
+  eks_hosting_group_instance_type  = "t3.large"
 
                                       # 2 vCPU 8gb
-  eks_karpenter_group_instance_type = "t3.large"
+  eks_service_group_instance_type = "t3.large"
 
   }
 

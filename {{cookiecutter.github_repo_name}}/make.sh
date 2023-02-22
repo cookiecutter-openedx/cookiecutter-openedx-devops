@@ -35,11 +35,11 @@ cookiecutter --checkout $GITHUB_BRANCH \
             environment_name={{ cookiecutter.environment_name }} \
             environment_subdomain={{ cookiecutter.environment_subdomain }} \
             eks_create_kms_key={{ cookiecutter.eks_create_kms_key }} \
-            eks_worker_group_instance_type={{ cookiecutter.eks_worker_group_instance_type }} \
-            eks_worker_group_min_size={{ cookiecutter.eks_worker_group_min_size }} \
-            eks_worker_group_max_size={{ cookiecutter.eks_worker_group_max_size }} \
-            eks_worker_group_desired_size={{ cookiecutter.eks_worker_group_desired_size }} \
-            eks_karpenter_group_instance_type={{ cookiecutter.eks_karpenter_group_instance_type }} \
+            eks_hosting_group_instance_type={{ cookiecutter.eks_hosting_group_instance_type }} \
+            eks_hosting_group_min_size={{ cookiecutter.eks_hosting_group_min_size }} \
+            eks_hosting_group_max_size={{ cookiecutter.eks_hosting_group_max_size }} \
+            eks_hosting_group_desired_size={{ cookiecutter.eks_hosting_group_desired_size }} \
+            eks_service_group_instance_type={{ cookiecutter.eks_service_group_instance_type }} \
             eks_service_group_min_size={{ cookiecutter.eks_service_group_min_size }} \
             eks_service_group_max_size={{ cookiecutter.eks_service_group_max_size }} \
             eks_service_group_desired_size={{ cookiecutter.eks_service_group_desired_size }} \

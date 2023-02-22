@@ -285,7 +285,7 @@ their rightful 'owner' and can be called back into service by the 'owner' at any
 for you, immediately replacing any node that is called back by its owner. This happens infrequently, with the exception of the eu-west-2 (London)
 AWS data center.
 
-- **eks_karpenter_group_instance_type:**
+- **eks_service_group_instance_type:**
 
   The *preferred* instance type that Karpenter will acquire on your behalf from the spot-price marketplace. Note
   that the Terraform scripts include several fallback options in the event that your preferred instance type is not
@@ -322,27 +322,27 @@ AWS data center.
 
   *default value: 3*
 
-eks_worker_group is an optional, supplemental EC2 node worker group that is included in the
+eks_hosting_group is an optional, supplemental EC2 node worker group that is included in the
 AWS EKS build. If you chose to install Karpenter then you can ignore these options.
 Nodes created in this group will use on-demand pricing, which will cost around 3x as compared
 to the Karpenter nodes, which use spot-pricing. However, availability of on-demand nodes is guaranteed by AWS.
 
-- **eks_worker_group_min_size:**
+- **eks_hosting_group_min_size:**
   The minimum allowed quanity of nodes for this group.
 
   *default value: 0*
 
-- **eks_worker_group_max_size:**
+- **eks_hosting_group_max_size:**
   The maximum allowed quanity of nodes for this group.
 
   *default value: 0*
 
-- **eks_worker_group_desired_size:**
+- **eks_hosting_group_desired_size:**
   The current run-time requested quanity of nodes for this group.
 
   *default value: 0*
 
-- **eks_worker_group_instance_type:**
+- **eks_hosting_group_instance_type:**
   The AWS EC2 instance type that will be created for all nodes in this group.
 
   *default value: t3.xlarge*
