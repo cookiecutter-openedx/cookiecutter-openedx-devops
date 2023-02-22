@@ -1,7 +1,3 @@
-global:
-  podSecurityPolicy:
-    enabled: true
-    useAppArmor: false
 image:
   tag: ${cert_manager_image_version}
 webhook:
@@ -17,11 +13,6 @@ affinity:
           operator: In
           values:
           - {{ cookiecutter.global_platform_shared_resource_identifier }}
-prometheus:
-  enabled: false
-installCRDs: true
-extraArgs:
-  - --issuer-ambient-credentials
 serviceAccount:
   annotations:
     eks.amazonaws.com/role-arn: ${role_arn}
