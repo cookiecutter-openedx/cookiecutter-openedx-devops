@@ -80,14 +80,16 @@ module "eks" {
   # this key is benign since Kubernetes secrets encryption
   # is not enabled by default.
   #
-  # AWS EKS KMS console: https://{{ cookiecutter.global_aws_region }}.console.aws.amazon.com/kms/home
+  # AWS EKS KMS console: https://us-east-2.console.aws.amazon.com/kms/home
   #
   # audit your AWS EKS KMS key access by running:
-  # aws kms get-key-policy --key-id ADD-YOUR-KEY-ID-HERE --region {{ cookiecutter.global_aws_region }} --policy-name default --output text
+  # aws kms get-key-policy --key-id ADD-YOUR-KEY-ID-HERE --region us-east-2 --policy-name default --output text
   create_kms_key = var.eks_create_kms_key
 
   # add more IAM users to the KMS key owners list
-  # kms_key_owners = ["arn:aws:iam::${var.account_id}:user/system/bastion-user/${var.namespace}-bastion"]
+  kms_key_owners = [
+    "arn:aws:iam::${var.account_id}:user/system/bastion-user/${var.namespace}-bastion"
+  ]
 
   tags = merge(
     var.tags,
@@ -160,6 +162,10 @@ module "eks" {
       desired_size      = var.eks_karpenter_group_desired_size
       min_size          = var.eks_karpenter_group_min_size
       max_size          = var.eks_karpenter_group_max_size
+
+      labels = {
+        application-group = "service"
+      }
 
       iam_role_additional_policies = {
         # Required by Karpenter
