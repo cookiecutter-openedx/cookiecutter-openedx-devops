@@ -25,7 +25,7 @@
 #------------------------------------------------------------------------------
 resource "kubernetes_persistent_volume_claim" "wordpress" {
   metadata {
-    name = local.wordpressDomain
+    name      = local.wordpressDomain
     namespace = local.wordpressNamespace
   }
 
@@ -40,7 +40,7 @@ resource "kubernetes_persistent_volume_claim" "wordpress" {
         storage = local.persistenceSize
       }
     }
-    volume_name = "${kubernetes_persistent_volume.wordpress.metadata.0.name}"
+    volume_name = kubernetes_persistent_volume.wordpress.metadata.0.name
   }
 
   depends_on = [
@@ -50,7 +50,7 @@ resource "kubernetes_persistent_volume_claim" "wordpress" {
 
 resource "kubernetes_persistent_volume" "wordpress" {
   metadata {
-    name = local.wordpressDomain
+    name      = local.wordpressDomain
     namespace = local.wordpressNamespace
   }
   spec {

@@ -24,7 +24,7 @@
 
 data "template_file" "metrics-server-values" {
   template = file("${path.module}/config/metrics-server-values.yaml")
-  vars = {}
+  vars     = {}
 }
 
 resource "helm_release" "metrics_server" {

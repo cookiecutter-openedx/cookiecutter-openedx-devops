@@ -71,7 +71,7 @@ data "template_file" "cert-manager-values" {
 
 data "template_file" "cert-manager-values" {
   template = file("${path.module}/manifests/cert-manager-values.yaml.tpl")
-  vars = {}
+  vars     = {}
 }
 resource "helm_release" "cert-manager" {
   name             = "cert-manager"

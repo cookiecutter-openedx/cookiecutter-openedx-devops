@@ -37,7 +37,7 @@
 
 data "template_file" "prometheus-values" {
   template = file("${path.module}/config/prometheus-values.yaml")
-  vars = {}
+  vars     = {}
 }
 
 resource "helm_release" "prometheus" {
