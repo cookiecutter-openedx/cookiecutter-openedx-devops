@@ -7,6 +7,9 @@ wordpressBlogName: ${wordpressBlogName}
 wordpressExtraConfigContent: ${wordpressExtraConfigContent}
 wordpressConfigureCache: ${wordpressConfigureCache}
 wordpressPlugins: ${wordpressPlugins}
+updateStrategy:
+  type: Recreate
+  rollingUpdate:
 customPostInitScripts:
   writable-files.sh: |
     #!/bin/bash
@@ -21,7 +24,11 @@ customPostInitScripts:
     find . -type d -exec chmod 755 {} \;
     find . -type f -exec chmod 644 {} \;
 allowEmptyPassword: ${allowEmptyPassword}
-htaccessPersistenceEnabled: true
+# -----------------------------------------------------------------------------
+# see https://github.com/bitnami/charts/issues/4255
+# pestebogdan commented on Jan 11, 2021
+# -----------------------------------------------------------------------------
+htaccessPersistenceEnabled: false
 extraVolumes: ${extraVolumes}
 extraVolumeMounts: ${extraVolumeMounts}
 readinessProbe:
@@ -58,7 +65,16 @@ nodeAffinityPreset:
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## NOTE: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
-affinity: {}
+affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 1
+        preference:
+          matchExpressions:
+          - key: application-group
+            operator: In
+            values:
+            - wordpress
 ## @param nodeSelector Node labels for pod assignment
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
@@ -66,11 +82,6 @@ nodeSelector: {}
 ## @param tolerations Tolerations for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
-tolerations:
-  - effect: NoSchedule
-    key: role
-    operator: Equal
-    value: pvc-pods
 ## WordPress containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## @param resources.limits The resources limits for the WordPress containers
