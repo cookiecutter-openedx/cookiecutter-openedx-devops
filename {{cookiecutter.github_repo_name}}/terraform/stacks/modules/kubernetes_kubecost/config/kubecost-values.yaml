@@ -10,7 +10,7 @@ global:
   # Durable storage option, product key required
   thanos:
     enabled: false
-    # queryService: http://kubecost-thanos-query-frontend-http.kubecost:{% raw %}{{ .Values.thanos.queryFrontend.http.port }}{% endraw %} # an address of the thanos query-frontend endpoint, if different from installed thanos
+    # queryService: http://kubecost-thanos-query-frontend-http.kubecost:{{ .Values.thanos.queryFrontend.http.port }} # an address of the thanos query-frontend endpoint, if different from installed thanos
     # queryServiceBasicAuthSecretName: mcdbsecret #  kubectl create secret generic mcdbsecret -n kubecost --from-file=USERNAME --from-file=PASSWORD <---enter basic auth credentials like that
     # queryServiceBearerTokenSecretName mcdbsecret # kubectl create secret generic mcdbsecret -n kubecost --from-file=TOKEN
     # queryOffset: 3h # The offset to apply to all thanos queries in order to achieve syncronization on all cluster block stores
@@ -282,8 +282,16 @@ kubecostMetrics:
     #    operator: "Equal|Exists"
     #    value: "value"
     #    effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
-    affinity: {}
-
+    affinity:
+      nodeAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+          preference:
+            matchExpressions:
+            - key: application-group
+              operator: In
+              values:
+              - service
     service:
       annotations: {}
 
@@ -400,8 +408,16 @@ tolerations: []
 #    value: "value"
 #    effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
 
-affinity: {}
-
+affinity:
+  nodeAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 1
+      preference:
+        matchExpressions:
+        - key: application-group
+          operator: In
+          values:
+          - service
 # If true, creates a PriorityClass to be used by the cost-analyzer pod
 priority:
   enabled: false
@@ -688,8 +704,16 @@ networkCosts:
   #    value: "value"
   #    effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
 
-  affinity: {}
-
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 1
+        preference:
+          matchExpressions:
+          - key: application-group
+            operator: In
+            values:
+            - service
   service:
     annotations: {}
     labels: {}
