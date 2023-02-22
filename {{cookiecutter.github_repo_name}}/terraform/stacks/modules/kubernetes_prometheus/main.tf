@@ -60,14 +60,6 @@ resource "helm_release" "prometheus" {
     value = random_password.grafana.result
   }
 
-  # un-comment to include a yaml manifest with configuration overrides.
-  # To generate a yaml file with all possible configuration options:
-  #     helm show values prometheus-community/kube-prometheus-stack > ./yml/values.yaml
-  #
-  #values = [
-  #  "${file("${path.module}/yml/values.yaml")}"
-  #]
-
 }
 
 #------------------------------------------------------------------------------
