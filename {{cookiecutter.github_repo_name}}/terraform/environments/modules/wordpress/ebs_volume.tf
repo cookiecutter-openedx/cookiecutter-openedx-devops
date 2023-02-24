@@ -27,17 +27,19 @@ resource "kubernetes_persistent_volume_claim" "wordpress" {
   metadata {
     name      = local.wordpressDomain
     namespace = local.wordpressNamespace
-  }
-
-  labels = {
-    ebs_volume_id = aws_ebs_volume.wordpress.volume_id
+    labels = {
+      "ebs_volume_id" = "${aws_ebs_volume.wordpress.id}"
+      "name"          = "${local.wordpressDomain}"
+      "namespace"     = "${local.wordpressNamespace}"
+    }
   }
 
   spec {
     access_modes = ["ReadWriteOnce"]
+    storage_class_name = "gp2"
     resources {
       requests = {
-        storage = local.persistenceSize
+        storage = "${local.persistenceSize / 2}Gi"
       }
     }
     volume_name = kubernetes_persistent_volume.wordpress.metadata.0.name
@@ -51,16 +53,43 @@ resource "kubernetes_persistent_volume_claim" "wordpress" {
 resource "kubernetes_persistent_volume" "wordpress" {
   metadata {
     name      = local.wordpressDomain
-    namespace = local.wordpressNamespace
+    labels = {
+      "topology.kubernetes.io/region" = "${var.aws_region}"
+      "topology.kubernetes.io/zone" = "${aws_ebs_volume.wordpress.availability_zone}"
+      "ebs_volume_id" = "${aws_ebs_volume.wordpress.id}"
+      "name"      = "${local.wordpressDomain}"
+      "namespace" = "${local.wordpressNamespace}"
+    }
+    annotations = {
+    }
   }
+
   spec {
     capacity = {
-      storage = local.persistenceSize
+        storage = "${local.persistenceSize}Gi"
     }
     access_modes = ["ReadWriteOnce"]
+    storage_class_name = "gp2"
     persistent_volume_source {
       aws_elastic_block_store {
-        volume_id = aws_ebs_volume.wordpress.volume_id
+        volume_id = aws_ebs_volume.wordpress.id
+        fs_type = "ext4"
+      }
+    }
+    node_affinity {
+      required {
+        node_selector_term {
+          match_expressions {
+            key = "topology.kubernetes.io/zone"
+            operator = "In"
+            values = ["${aws_ebs_volume.wordpress.availability_zone}"]
+          }
+          match_expressions {
+            key = "topology.kubernetes.io/region"
+            operator = "In"
+            values = ["${var.aws_region}"]
+          }
+        }
       }
     }
   }
@@ -83,11 +112,11 @@ resource "aws_ebs_volume" "wordpress" {
   # for anything other than an upper case 'N' we'll assume that
   # we should not destroy this resource.
   lifecycle {
-    prevent_destroy = local.ebsVolumePreventDestroy != "N" ? true : false
+    prevent_destroy = false
   }
 
   depends_on = [
-    data.private_subnet
+    data.aws_subnet.private_subnet
   ]
 }
 

@@ -130,7 +130,7 @@ output "wordpress_volume_availability_zone" {
 
 output "wordpress_volume_subnet_id" {
   description = "The availability zone index in which the EC2 EBS volume was created"
-  value       = data.aws_subnet.database_subnet.id
+  value       = data.aws_subnet.private_subnet.id
 }
 
 output "wordpress_volume_size" {

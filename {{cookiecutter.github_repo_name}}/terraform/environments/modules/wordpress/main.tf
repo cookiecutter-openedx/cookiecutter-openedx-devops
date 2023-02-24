@@ -84,8 +84,7 @@ data "template_file" "wordpress-values" {
     allowEmptyPassword               = false
     extraVolumes                     = data.template_file.extraVolumes.rendered
     extraVolumeMounts                = data.template_file.extraVolumeMounts.rendered
-    persistenceSize                  = local.persistenceSize
-    pvcEbs_volume_id                 = local.aws_ebs_volume_id != "" ? local.aws_ebs_volume_id : aws_ebs_volume.wordpress.volume_id
+    pvcEbs_volume_id                 = local.aws_ebs_volume_id != "" ? local.aws_ebs_volume_id : aws_ebs_volume.wordpress.id
     serviceAccountCreate             = true
     serviceAccountName               = local.serviceAccountName
     serviceAccountAnnotations        = data.template_file.serviceAccountAnnotations.rendered
