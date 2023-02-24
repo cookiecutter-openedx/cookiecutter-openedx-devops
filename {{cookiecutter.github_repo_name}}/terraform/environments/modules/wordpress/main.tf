@@ -126,3 +126,26 @@ resource "helm_release" "wordpress" {
     ssh_sensitive_resource.mysql
   ]
 }
+
+resource "null_resource" "wordpress_post_deployment" {
+
+  provisioner "local-exec" {
+    command = <<-EOT
+      # 1. Switch to namespace for this Wordpress deployment.
+      #    Find the name of the Wordpress pod using one of the Helm-generated labels
+      # ---------------------------------------
+      kubectl config set-context --current --namespace=lawrencemcdaniel-api
+      POD=$(kubectl get pod -l app.kubernetes.io/name=wordpress -o jsonpath="{.items[0].metadata.name}")
+
+      # 2. shell into the wordpress container of the deployed pod
+      #    and execute the post deployment ops
+      # ---------------------------------------
+      echo "running post deployments scripts on ${POD}"
+      kubectl exec -it $POD --container=wordpress -- /bin/bash -c "touch /opt/bitnami/wordpress/wordfence-waf.php"
+    EOT
+  }
+
+  depends_on = [
+    helm_release.wordfence
+  ]
+}
