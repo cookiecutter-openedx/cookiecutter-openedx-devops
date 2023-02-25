@@ -185,6 +185,12 @@ You can add more IAM users to the cluster admin list by modifying the `Terragrun
 
 .. code-block:: terraform
 
+    kms_key_owners = [
+      "${local.bastion_iam_arn}",
+      userarn  = "arn:aws:iam::${local.account_id}:user/mcdaniel",
+      userarn  = "arn:aws:iam::${local.account_id}:user/bob_marley",
+    ]
+
     map_users = [
       {
         userarn  = local.bastion_iam_arn
