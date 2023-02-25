@@ -1,4 +1,13 @@
+# generated at http://kubecost.com/install, used for alerts tracking and free trials
 kubecostToken: ${kubecostToken}
+prometheus:
+  nodeExporter:
+    enabled: false
+  # kubecost emits pre-2.0 KSM metrics, KSM is enabled by default here for backwards compatibity, but can be disabled to save resources without concern to kubecost metrics
+  kubeStateMetrics:
+    enabled: false
+  kube-state-metrics:
+    disabled: false
 affinity:
   nodeAffinity:
     preferredDuringSchedulingIgnoredDuringExecution:
