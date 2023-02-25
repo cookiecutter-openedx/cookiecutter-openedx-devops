@@ -194,8 +194,7 @@ resource "kubernetes_secret" "credentials" {
     MYSQL_PORT                 = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
   }
 }
-{% endif %}
-{% if cookiecutter.ci_deploy_install_license_manager_service|upper == "Y" -%}
+{% endif %}{% if cookiecutter.ci_deploy_install_license_manager_service|upper == "Y" -%}
 resource "random_password" "mysql_license_manager" {
   length           = 16
   special          = true
