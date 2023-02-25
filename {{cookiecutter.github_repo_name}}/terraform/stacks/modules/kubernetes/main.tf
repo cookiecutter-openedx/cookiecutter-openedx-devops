@@ -16,6 +16,9 @@
 locals {
   # Used by Karpenter config to determine correct partition (i.e. - `aws`, `aws-gov`, `aws-cn`, etc.)
   partition = data.aws_partition.current.partition
+  bastion_iam_arn = "arn:aws:iam::${var.account_id}:user/system/bastion-user/${var.namespace}-bastion"
+  bastion_iam_username = "${var.namespace}-bastion"
+
 }
 
 resource "aws_security_group" "worker_group_mgmt" {
@@ -88,7 +91,7 @@ module "eks" {
 
   # add more IAM users to the KMS key owners list
   kms_key_owners = [
-    "arn:aws:iam::${var.account_id}:user/system/bastion-user/${var.namespace}-bastion"
+    "${local.bastion_iam_arn}"
   ]
 
   tags = merge(
@@ -209,6 +212,17 @@ module "eks" {
     }
 
   }
+
+  # add the bastion IAM user to aws-auth.mapUsers so that
+  # kubectl and k9s work from inside the bastion server by default.
+  manage_aws_auth_configmap = true
+  aws_auth_users = [
+    {
+      userarn  = "${local.bastion_iam_arn}"
+      username = "${local.bastion_iam_username}"
+      groups   = ["system:masters"]
+    },
+  ]
 
 }
 
