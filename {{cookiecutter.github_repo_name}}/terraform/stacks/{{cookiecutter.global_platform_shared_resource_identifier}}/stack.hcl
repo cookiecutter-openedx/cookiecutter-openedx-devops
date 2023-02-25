@@ -15,7 +15,7 @@ locals {
 
   # AWS instance sizing
   mysql_instance_class      = "{{ cookiecutter.mysql_instance_class }}"
-  mysql_allocated_storage   ={{ cookiecutter.mysql_allocated_storage }}
+  mysql_allocated_storage   = {{ cookiecutter.mysql_allocated_storage }}
 
   redis_node_type           = "{{ cookiecutter.redis_node_type }}"
 
@@ -37,17 +37,17 @@ locals {
   #
   # see: https://aws.amazon.com/ec2/instance-types/
   #----------------------------------------------------------------------------
-  kubernetes_version                = "{{ cookiecutter.kubernetes_cluster_version }}"
+  kubernetes_version                 = "{{ cookiecutter.kubernetes_cluster_version }}"
   {% if cookiecutter.eks_create_kms_key|upper == "Y" -%}
-  eks_create_kms_key                = true
+  eks_create_kms_key                 = true
   {% else -%}
-  eks_create_kms_key                = false
+  eks_create_kms_key                 = false
   {% endif -%}
 
-  eks_service_group_instance_type = "{{ cookiecutter.eks_service_group_instance_type }}"
-  eks_service_group_min_size      = {{ cookiecutter.eks_service_group_min_size }}
-  eks_service_group_max_size      =  {{ cookiecutter.eks_service_group_max_size }}
-  eks_service_group_desired_size  =  {{ cookiecutter.eks_service_group_desired_size }}
+  eks_service_group_instance_type    = "{{ cookiecutter.eks_service_group_instance_type }}"
+  eks_service_group_min_size         = {{ cookiecutter.eks_service_group_min_size }}
+  eks_service_group_max_size         =  {{ cookiecutter.eks_service_group_max_size }}
+  eks_service_group_desired_size     =  {{ cookiecutter.eks_service_group_desired_size }}
 
   eks_hosting_group_instance_type    = "{{ cookiecutter.eks_hosting_group_instance_type }}"
   eks_hosting_group_min_size         = {{ cookiecutter.eks_hosting_group_min_size }}
