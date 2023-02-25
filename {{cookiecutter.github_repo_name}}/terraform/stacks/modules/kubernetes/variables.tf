@@ -104,3 +104,7 @@ variable "map_roles" {
   }))
   default = []
 }
+
+variable "bastion_iam_arn" {
+  type = string
+}

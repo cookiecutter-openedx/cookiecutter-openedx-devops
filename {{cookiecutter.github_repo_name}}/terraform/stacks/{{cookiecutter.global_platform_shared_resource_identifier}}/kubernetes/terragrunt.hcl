@@ -30,6 +30,8 @@ locals {
   eks_service_group_min_size      = local.stack_vars.locals.eks_service_group_min_size
   eks_service_group_max_size      =  local.stack_vars.locals.eks_service_group_max_size
   eks_service_group_desired_size  =  local.stack_vars.locals.eks_service_group_desired_size
+  bastion_iam_arn                 = "arn:aws:iam::${local.account_id}:user/system/bastion-user/${local.namespace}-bastion"
+  bastion_iam_username            = "${local.namespace}-bastion"
 
   tags = merge(
     local.stack_vars.locals.tags,
@@ -83,13 +85,13 @@ inputs = {
   eks_service_group_min_size      = local.eks_service_group_min_size
   eks_service_group_max_size      =  local.eks_service_group_max_size
   eks_service_group_desired_size  =  local.eks_service_group_desired_size
-
+  bastion_iam_arn                 = local.bastion_iam_arn
   tags = local.tags
   map_roles = []
   map_users = [
     {
-      userarn  = "arn:aws:iam::621672204142:user/ci"
-      username = "ci"
+      userarn  = local.bastion_iam_arn
+      username = local.bastion_iam_username
       groups   = ["system:masters"]
     }
   ]
