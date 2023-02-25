@@ -87,11 +87,6 @@ module "eks" {
   create_kms_key = var.eks_create_kms_key
   kms_key_owners = var.kms_key_owners
 
-  # add the bastion IAM user to aws-auth.mapUsers so that
-  # kubectl and k9s work from inside the bastion server by default.
-  manage_aws_auth_configmap = true
-  aws_auth_users = var.map_users
-
   tags = merge(
     var.tags,
     # Tag node group resources for Karpenter auto-discovery

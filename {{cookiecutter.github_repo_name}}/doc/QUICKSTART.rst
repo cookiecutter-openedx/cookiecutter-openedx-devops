@@ -93,10 +93,10 @@ Review your production environment parameters.
   redis_node_type                 = "cache.t2.small"
 
                                     # 2 vCPU 8gb
-  eks_hosting_group_instance_type  = "t3.large"
+  eks_worker_group_instance_type  = "t3.large"
 
                                       # 2 vCPU 8gb
-  eks_service_group_instance_type = "t3.large"
+  eks_karpenter_group_instance_type = "t3.large"
 
   }
 
@@ -258,6 +258,18 @@ Following is an example aws-auth configMap with additional IAM user accounts add
       resourceVersion: "499488"
       uid: 52d6e7fd-01b7-4c80-b831-b971507e5228
 
+Note that by default, Kubernetes version 1.24 and newer encrypts all secrets data using `AWS Key Management Service (KMS) <https://aws.amazon.com/kms/>`_.
+The Cookiecutter automatically adds the IAM user for the bastion server.
+For any other IAM users you'll need to modify the following in terraform/stacks/modules/kubernetes/main.tf:
+
+.. code-block:: terraform
+
+    kms_key_owners = [
+      "arn:aws:iam::${var.account_id}:user/system/bastion-user/${var.namespace}-bastion",
+      "arn:aws:iam::${var.account_id}:user/system/user/your-iam-user"
+    ]
+
+Alternatively, you can disable encrypted Kubernetes secrets by setting Cookiecutter parameter eks_create_kms_key=N.
 
 
 Continuous Integration (CI)
