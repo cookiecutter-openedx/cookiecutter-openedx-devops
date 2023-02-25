@@ -181,7 +181,7 @@ VIII. Add more Kubernetes admins
 --------------------------------
 
 By default, access to the Kubernetes cluster is limited to the cluster creator (presumably, you) and the IAM user for the bastion server.
-Also note that by default, Kubernetes version 1.25 and newer encrypts all secrets data using `AWS Key Management Service (KMS) <https://aws.amazon.com/kms/>`_.
+Also note that by default, Kubernetes version 1.24 and newer encrypts all secrets data using `AWS Key Management Service (KMS) <https://aws.amazon.com/kms/>`_.
 The Cookiecutter automatically adds the IAM user for the bastion server to these two lists, but you'll need to add other IAM users to these lists yourself.
 The encrypted secrets features is optional and can be disabled by setting Cookiecutter parameter eks_create_kms_key=N.
 
@@ -263,19 +263,6 @@ Following is an example aws-auth configMap with additional IAM user accounts add
       namespace: kube-system
       resourceVersion: "499488"
       uid: 52d6e7fd-01b7-4c80-b831-b971507e5228
-
-Note that by default, Kubernetes version 1.24 and newer encrypts all secrets data using `AWS Key Management Service (KMS) <https://aws.amazon.com/kms/>`_.
-The Cookiecutter automatically adds the IAM user for the bastion server.
-For any other IAM users you'll need to modify the following in terraform/stacks/modules/kubernetes/main.tf:
-
-.. code-block:: terraform
-
-    kms_key_owners = [
-      "arn:aws:iam::${var.account_id}:user/system/bastion-user/${var.namespace}-bastion",
-      "arn:aws:iam::${var.account_id}:user/system/user/your-iam-user"
-    ]
-
-Alternatively, you can disable encrypted Kubernetes secrets by setting Cookiecutter parameter eks_create_kms_key=N.
 
 
 Continuous Integration (CI)
