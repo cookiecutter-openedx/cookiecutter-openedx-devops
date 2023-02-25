@@ -21,7 +21,6 @@ data "template_file" "cert-manager-values" {
   vars = {
     role_arn                   = module.cert_manager_irsa.iam_role_arn
     namespace                  = var.cert_manager_namespace
-    cert_manager_image_version = var.cert_manager_image_version
   }
 }
 

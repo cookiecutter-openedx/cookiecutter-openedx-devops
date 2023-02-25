@@ -1,8 +1,3 @@
-image:
-  tag: ${cert_manager_image_version}
-webhook:
-  image:
-    tag: ${cert_manager_image_version}
 affinity:
   nodeAffinity:
     preferredDuringSchedulingIgnoredDuringExecution:

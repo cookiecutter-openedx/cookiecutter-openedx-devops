@@ -25,7 +25,3 @@ variable "aws_region" {
 variable "services_subdomain" {
   type = string
 }
-
-variable "cert_manager_image_version" {
-  type = string
-}
