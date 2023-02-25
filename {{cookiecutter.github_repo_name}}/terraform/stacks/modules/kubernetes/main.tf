@@ -85,11 +85,12 @@ module "eks" {
   # audit your AWS EKS KMS key access by running:
   # aws kms get-key-policy --key-id ADD-YOUR-KEY-ID-HERE --region us-east-2 --policy-name default --output text
   create_kms_key = var.eks_create_kms_key
+  kms_key_owners = var.kms_key_owners
 
-  # add more IAM users to the KMS key owners list
-  kms_key_owners = [
-    "${var.bastion_iam_arn}"
-  ]
+  # add the bastion IAM user to aws-auth.mapUsers so that
+  # kubectl and k9s work from inside the bastion server by default.
+  manage_aws_auth_configmap = true
+  aws_auth_users = var.map_users
 
   tags = merge(
     var.tags,
@@ -209,12 +210,6 @@ module "eks" {
     }
 
   }
-
-  # add the bastion IAM user to aws-auth.mapUsers so that
-  # kubectl and k9s work from inside the bastion server by default.
-  manage_aws_auth_configmap = true
-  aws_auth_users = var.map_users
-
 }
 
 resource "kubernetes_namespace" "namespace-shared" {

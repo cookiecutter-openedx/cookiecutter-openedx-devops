@@ -93,10 +93,10 @@ Review your production environment parameters.
   redis_node_type                 = "cache.t2.small"
 
                                     # 2 vCPU 8gb
-  eks_hosting_group_instance_type  = "t3.large"
+  eks_worker_group_instance_type  = "t3.large"
 
                                       # 2 vCPU 8gb
-  eks_service_group_instance_type = "t3.large"
+  eks_karpenter_group_instance_type = "t3.large"
 
   }
 
@@ -180,8 +180,40 @@ Installs four of the most popular web applications for Kubernetes administration
 VIII. Add more Kubernetes admins
 --------------------------------
 
-By default your AWS IAM user account will be the only user who can view, interact with and manage your new Kubernetes cluster. Other IAM users with admin permissions will still need to be explicitly added to the list of Kluster admins.
-If you're new to Kubernetes then you'll find detailed technical how-to instructions in the AWS EKS documentation, `Enabling IAM user and role access to your cluster <https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html>`_.
+By default, access to the Kubernetes cluster is limited to the cluster creator (presumably, you) and the IAM user for the bastion server.
+Also note that by default, Kubernetes version 1.25 and newer encrypts all secrets data using `AWS Key Management Service (KMS) <https://aws.amazon.com/kms/>`_.
+The Cookiecutter automatically adds the IAM user for the bastion server to these two lists, but you'll need to add other IAM users to these lists yourself.
+The encrypted secrets features is optional and can be disabled by setting Cookiecutter parameter eks_create_kms_key=N.
+
+You can add more IAM users to the cluster admin and AWS KMS key owner lists by modifying terraform/stacks/{{cookiecutter.global_platform_shared_resource_identifier}}/kubernetes/terragrunt.hcl, as follows:
+
+.. code-block:: terraform
+
+    kms_key_owners = [
+      "${local.bastion_iam_arn}",
+      userarn  = "arn:aws:iam::${local.account_id}:user/mcdaniel",
+      userarn  = "arn:aws:iam::${local.account_id}:user/bob_marley",
+    ]
+
+    map_users = [
+      {
+        userarn  = local.bastion_iam_arn
+        username = local.bastion_iam_username
+        groups   = ["system:masters"]
+      },
+      {
+        userarn  = "arn:aws:iam::${local.account_id}:user/mcdaniel"
+        username = "mcdaniel"
+        groups   = ["system:masters"]
+      },
+      {
+        userarn  = "arn:aws:iam::${local.account_id}:user/bob_marley"
+        username = "bob_marley"
+        groups   = ["system:masters"]
+      },
+    ]
+
+If you're new to Kubernetes then you can read more about cluster access in the AWS EKS documentation, `Enabling IAM user and role access to your cluster <https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html>`_.
 You'll need kubectl in order to modify the aws-auth configMap in your Kubernets cluster.
 
 .. code-block:: bash
@@ -202,21 +234,22 @@ Following is an example aws-auth configMap with additional IAM user accounts add
         - groups:
           - system:bootstrappers
           - system:nodes
-          rolearn: arn:aws:iam::012345678942:role/default-eks-node-group-20220518182244174100000002
+          rolearn: arn:aws:iam::012345678942:role/service-eks-node-group-20220518182244174100000002
+          username: system:node:{% raw %}{{EC2PrivateDNSName}}{% endraw %}
+        - groups:
+          - system:bootstrappers
+          - system:nodes
+          rolearn: arn:aws:iam::012345678942:role/hosting-eks-node-group-20220518182244174100000001
           username: system:node:{% raw %}{{EC2PrivateDNSName}}{% endraw %}
       mapUsers: |
         - groups:
           - system:masters
-          userarn: arn:aws:iam::012345678942:user/lawrence.mcdaniel
-          username: lawrence.mcdaniel
+          userarn: arn:aws:iam::012345678942:user/mcdaniel
+          username: mcdaniel
         - groups:
           - system:masters
-          userarn: arn:aws:iam::012345678942:user/ci
-          username: ci
-        - groups:
-          - system:masters
-          userarn: arn:aws:iam::012345678942:user/user
-          username: user
+          userarn: arn:aws:iam::012345678942:user/bob_marley
+          username: bob_marley
     kind: ConfigMap
     metadata:
       creationTimestamp: "2022-05-18T18:38:29Z"
@@ -225,7 +258,7 @@ Following is an example aws-auth configMap with additional IAM user accounts add
       resourceVersion: "499488"
       uid: 52d6e7fd-01b7-4c80-b831-b971507e5228
 
-Note that by default, Kubernetes version 1.25 and newer encrypts all secrets data using `AWS Key Management Service (KMS) <https://aws.amazon.com/kms/>`_.
+Note that by default, Kubernetes version 1.24 and newer encrypts all secrets data using `AWS Key Management Service (KMS) <https://aws.amazon.com/kms/>`_.
 The Cookiecutter automatically adds the IAM user for the bastion server.
 For any other IAM users you'll need to modify the following in terraform/stacks/modules/kubernetes/main.tf:
 
