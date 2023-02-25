@@ -180,8 +180,30 @@ Installs four of the most popular web applications for Kubernetes administration
 VIII. Add more Kubernetes admins
 --------------------------------
 
-By default your AWS IAM user account will be the only user who can view, interact with and manage your new Kubernetes cluster. Other IAM users with admin permissions will still need to be explicitly added to the list of Kluster admins.
-If you're new to Kubernetes then you'll find detailed technical how-to instructions in the AWS EKS documentation, `Enabling IAM user and role access to your cluster <https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html>`_.
+By default access to the Kubernetes cluster is limited to the cluster creator (presumably, you) and the IAM user for the bastion server.
+You can add more IAM users to the cluster admin list by modifying the `Terragrunt script for Kubernetes <../terraform/stacks/{{cookiecutter.global_platform_shared_resource_identifier}}/kubernetes/terragrunt.hcl`_, as follows:
+
+.. code-block:: terraform
+
+    map_users = [
+      {
+        userarn  = local.bastion_iam_arn
+        username = local.bastion_iam_username
+        groups   = ["system:masters"]
+      },
+      {
+        userarn  = "arn:aws:iam::${local.account_id}:user/mcdaniel"
+        username = "mcdaniel"
+        groups   = ["system:masters"]
+      },
+      {
+        userarn  = "arn:aws:iam::${local.account_id}:user/bob_marley"
+        username = "bob_marley"
+        groups   = ["system:masters"]
+      },
+    ]
+
+If you're new to Kubernetes then you can read more about cluster access in the AWS EKS documentation, `Enabling IAM user and role access to your cluster <https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html>`_.
 You'll need kubectl in order to modify the aws-auth configMap in your Kubernets cluster.
 
 .. code-block:: bash
@@ -202,21 +224,22 @@ Following is an example aws-auth configMap with additional IAM user accounts add
         - groups:
           - system:bootstrappers
           - system:nodes
-          rolearn: arn:aws:iam::012345678942:role/default-eks-node-group-20220518182244174100000002
+          rolearn: arn:aws:iam::012345678942:role/service-eks-node-group-20220518182244174100000002
+          username: system:node:{% raw %}{{EC2PrivateDNSName}}{% endraw %}
+        - groups:
+          - system:bootstrappers
+          - system:nodes
+          rolearn: arn:aws:iam::012345678942:role/hosting-eks-node-group-20220518182244174100000001
           username: system:node:{% raw %}{{EC2PrivateDNSName}}{% endraw %}
       mapUsers: |
         - groups:
           - system:masters
-          userarn: arn:aws:iam::012345678942:user/lawrence.mcdaniel
-          username: lawrence.mcdaniel
+          userarn: arn:aws:iam::012345678942:user/mcdaniel
+          username: mcdaniel
         - groups:
           - system:masters
-          userarn: arn:aws:iam::012345678942:user/ci
-          username: ci
-        - groups:
-          - system:masters
-          userarn: arn:aws:iam::012345678942:user/user
-          username: user
+          userarn: arn:aws:iam::012345678942:user/bob_marley
+          username: bob_marley
     kind: ConfigMap
     metadata:
       creationTimestamp: "2022-05-18T18:38:29Z"

@@ -89,14 +89,33 @@ inputs = {
   tags                            = local.tags
 
   map_roles = []
+  kms_key_owners = [
+    "${local.bastion_iam_arn}",
+    # -------------------------------------------------------------------------
+    # ADD MORE CLUSTER ADMIN USER IAM ACCOUNTS TO THE AWS KMS KEY OWNER LIST:
+    # -------------------------------------------------------------------------
+    #  userarn  = "arn:aws:iam::${local.account_id}:user/mcdaniel",
+    #  userarn  = "arn:aws:iam::${local.account_id}:user/bob_marley",
+  ]
   map_users = [
     {
       userarn  = local.bastion_iam_arn
       username = local.bastion_iam_username
       groups   = ["system:masters"]
-    }
-    # ADD MORE USER IAMS HERE FOR ANYONE WHO NEEDS ACCESS TO
-    # kubectl AND k9s.
+    },
+    # -------------------------------------------------------------------------
+    # ADD MORE CLUSTER ADMIN USER IAM ACCOUNTS HERE:
+    # -------------------------------------------------------------------------
+    #{
+    #  userarn  = "arn:aws:iam::${local.account_id}:user/mcdaniel"
+    #  username = "mcdaniel"
+    #  groups   = ["system:masters"]
+    #},
+    #{
+    #  userarn  = "arn:aws:iam::${local.account_id}:user/bob_marley"
+    #  username = "bob_marley"
+    #  groups   = ["system:masters"]
+    #},
   ]
 
 }
