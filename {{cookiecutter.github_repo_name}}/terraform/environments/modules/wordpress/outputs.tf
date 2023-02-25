@@ -111,3 +111,54 @@ output "kubernetes_resource_quota_memory" {
   description = "The namespace resource limit for memory"
   value       = var.resource_quota == "Y" ? var.resource_quota_memory : ""
 }
+
+# EBS Volume outputs
+output "wordpress_volume_id" {
+  description = "The id of the EC2 EBS volume"
+  value       = aws_ebs_volume.wordpress.id
+}
+
+output "wordpress_volume_arn" {
+  description = "The arn of the EC2 EBS volume"
+  value       = aws_ebs_volume.wordpress.arn
+}
+
+output "wordpress_volume_availability_zone" {
+  description = "The availability zone in which the EC2 EBS volume was created"
+  value       = aws_ebs_volume.wordpress.availability_zone
+}
+
+output "wordpress_volume_subnet_id" {
+  description = "The availability zone index in which the EC2 EBS volume was created"
+  value       = data.aws_subnet.private_subnet.id
+}
+
+output "wordpress_volume_size" {
+  description = "The allocated size of the EC2 EBS volume"
+  value       = aws_ebs_volume.wordpress.size
+}
+
+output "wordpress_volume_tags" {
+  description = "The resource tags of the EC2 EBS volume"
+  value       = aws_ebs_volume.wordpress.tags
+}
+
+output "wordpress_volume_multi_attach_enabled" {
+  description = "Boolean. whether wordpress_volume_multi_attach_enabled is enabled for the EC2 EBS volume"
+  value       = aws_ebs_volume.wordpress.multi_attach_enabled
+}
+
+output "wordpress_volume_iops" {
+  description = "The iops setting of the EC2 EBS volume"
+  value       = aws_ebs_volume.wordpress.iops
+}
+
+output "wordpress_volume_throughput" {
+  description = "The throughput setting of the EC2 EBS volume"
+  value       = aws_ebs_volume.wordpress.throughput
+}
+
+output "wordpress_volume_type" {
+  description = "The type of the EC2 EBS volume"
+  value       = aws_ebs_volume.wordpress.type
+}

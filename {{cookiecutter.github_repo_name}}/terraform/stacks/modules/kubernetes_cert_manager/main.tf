@@ -7,14 +7,39 @@
 # usage: Add tls certs for EKS cluster load balancer
 #        see https://cert-manager.io/docs/
 #
-# prequisites:
-#       helm repo add jetstack https://charts.jetstack.io
-#       helm repo update
+# helm reference:
+#   brew install helm
+#
+#   helm repo add jetstack https://charts.jetstack.io
+#   helm repo update
+#   helm show all jetstack/cert-manager
+#   helm show values jetstack/cert-manager
 #------------------------------------------------------------------------------
-data "aws_route53_zone" "services_subdomain" {
-  name = var.services_subdomain
+
+data "template_file" "cert-manager-values" {
+  template = file("${path.module}/manifests/cert-manager-values.yaml.tpl")
+  vars = {
+    role_arn                   = module.cert_manager_irsa.iam_role_arn
+    namespace                  = var.cert_manager_namespace
+  }
 }
 
+resource "helm_release" "cert-manager" {
+  name             = "cert-manager"
+  namespace        = var.cert_manager_namespace
+  create_namespace = true
+
+  chart      = "cert-manager"
+  repository = "jetstack"
+  version    = "{{ cookiecutter.terraform_helm_cert_manager }}"
+  values = [
+    data.template_file.cert-manager-values.rendered
+  ]
+}
+
+#------------------------------------------------------------------------------
+#                               SUPPORTING RESOURCES
+#------------------------------------------------------------------------------
 resource "aws_iam_policy" "cert_manager_policy" {
   name        = "${var.namespace}-cert-manager-policy"
   path        = "/"
@@ -54,77 +79,4 @@ module "cert_manager_irsa" {
   provider_url                  = replace(data.aws_eks_cluster.eks.identity[0].oidc[0].issuer, "https://", "")
   role_policy_arns              = [aws_iam_policy.cert_manager_policy.arn]
   oidc_fully_qualified_subjects = ["system:serviceaccount:${var.cert_manager_namespace}:cert-manager"]
-}
-
-data "template_file" "cert-manager-values" {
-  template = file("${path.module}/manifests/cert-manager-values.yaml.tpl")
-  vars = {
-    role_arn                   = module.cert_manager_irsa.iam_role_arn
-    namespace                  = var.cert_manager_namespace
-    cert_manager_image_version = var.cert_manager_image_version
-  }
-}
-
-#-----------------------------------------------------------
-# NOTE: you must initialize a local helm repo in order to run
-# this script.
-#
-#   brew install helm
-#
-#   kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.10.1/cert-manager.crds.yaml
-#   helm repo add jetstack https://charts.jetstack.io
-#   helm repo update
-#-----------------------------------------------------------
-resource "helm_release" "cert-manager" {
-  name             = "cert-manager"
-  namespace        = var.cert_manager_namespace
-  create_namespace = true
-
-  chart      = "cert-manager"
-  repository = "jetstack"
-  version    = "{{ cookiecutter.terraform_helm_cert_manager }}"
-  values = [
-    data.template_file.cert-manager-values.rendered
-  ]
-}
-
-data "template_file" "certificate" {
-  template = file("${path.module}/manifests/certificate.yml.tpl")
-  vars = {
-    services_subdomain = var.services_subdomain
-    namespace          = var.namespace
-  }
-}
-
-resource "kubectl_manifest" "certificate" {
-  yaml_body = data.template_file.certificate.rendered
-
-  depends_on = [
-    module.cert_manager_irsa,
-    helm_release.cert-manager,
-    aws_iam_policy.cert_manager_policy,
-  ]
-}
-
-data "template_file" "cluster-issuer" {
-  template = file("${path.module}/manifests/cluster-issuer.yml.tpl")
-  vars = {
-    root_domain        = var.root_domain
-    services_subdomain = var.services_subdomain
-    namespace          = var.namespace
-    aws_region         = var.aws_region
-    hosted_zone_id     = data.aws_route53_zone.services_subdomain.id
-  }
-}
-
-
-
-resource "kubectl_manifest" "cluster-issuer" {
-  yaml_body = data.template_file.cluster-issuer.rendered
-
-  depends_on = [
-    module.cert_manager_irsa,
-    helm_release.cert-manager,
-    aws_iam_policy.cert_manager_policy,
-  ]
 }

@@ -1,17 +1,13 @@
-global:
-  podSecurityPolicy:
-    enabled: true
-    useAppArmor: false
-image:
-  tag: ${cert_manager_image_version}
-webhook:
-  image:
-    tag: ${cert_manager_image_version}
-prometheus:
-  enabled: false
-installCRDs: true
-extraArgs:
-  - --issuer-ambient-credentials
+affinity:
+  nodeAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 1
+      preference:
+        matchExpressions:
+        - key: node-group
+          operator: In
+          values:
+          - {{ cookiecutter.global_platform_shared_resource_identifier }}
 serviceAccount:
   annotations:
     eks.amazonaws.com/role-arn: ${role_arn}

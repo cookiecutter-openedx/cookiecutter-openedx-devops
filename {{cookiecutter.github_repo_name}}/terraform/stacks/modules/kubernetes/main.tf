@@ -19,7 +19,7 @@ locals {
 }
 
 resource "aws_security_group" "worker_group_mgmt" {
-  name_prefix = "${var.namespace}-eks_worker_group_mgmt"
+  name_prefix = "${var.namespace}-eks_hosting_group_mgmt"
   description = "openedx_devops: Ingress CLB worker group management"
   vpc_id      = var.vpc_id
 
@@ -88,7 +88,7 @@ module "eks" {
 
   # add more IAM users to the KMS key owners list
   kms_key_owners = [
-    "arn:aws:iam::${var.account_id}:user/system/bastion-user/${var.namespace}-bastion"
+    "${var.bastion_iam_arn}"
   ]
 
   tags = merge(
@@ -101,13 +101,13 @@ module "eks" {
 
   cluster_addons = {
     vpc-cni = {
-      addon_version = "v1.12.2-eksbuild.1"
+      addon_version = "v1.12.5-eksbuild.1"
     }
     coredns = {
       addon_version = "v1.9.3-eksbuild.2"
     }
     kube-proxy = {
-      addon_version = "v1.24.9-eksbuild.1"
+      addon_version = "v1.25.6-eksbuild.1"
     }
     aws-ebs-csi-driver = {
       service_account_role_arn = aws_iam_role.AmazonEKS_EBS_CSI_DriverRole.arn
@@ -156,15 +156,15 @@ module "eks" {
     # (a few hours or less) as these are usually only instantiated during
     # bursts of user activity such as at the start of a scheduled lecture or
     # exam on a large mooc.
-    karpenter = {
+    {{ cookiecutter.global_platform_shared_resource_identifier }} = {
       capacity_type     = "SPOT"
       enable_monitoring = false
-      desired_size      = var.eks_karpenter_group_desired_size
-      min_size          = var.eks_karpenter_group_min_size
-      max_size          = var.eks_karpenter_group_max_size
+      desired_size      = var.eks_service_group_desired_size
+      min_size          = var.eks_service_group_min_size
+      max_size          = var.eks_service_group_max_size
 
       labels = {
-        application-group = "service"
+        node-group = "{{ cookiecutter.global_platform_shared_resource_identifier }}"
       }
 
       iam_role_additional_policies = {
@@ -175,14 +175,45 @@ module "eks" {
         AmazonEBSCSIDriverPolicy = data.aws_iam_policy.AmazonEBSCSIDriverPolicy.arn
       }
 
-      instance_types = ["${var.eks_karpenter_group_instance_type}"]
+      instance_types = ["${var.eks_service_group_instance_type}"]
       tags = merge(
         var.tags,
-        { Name = "eks-${var.shared_resource_identifier}-karpenter" }
+        { Name = "eks-${var.shared_resource_identifier}" }
+      )
+    }
+
+    hosting = {
+      capacity_type     = "SPOT"
+      enable_monitoring = false
+      desired_size      = var.eks_hosting_group_desired_size
+      min_size          = var.eks_hosting_group_min_size
+      max_size          = var.eks_hosting_group_max_size
+
+      labels = {
+        node-group = "{{ cookiecutter.global_platform_shared_resource_identifier }}"
+      }
+
+      iam_role_additional_policies = {
+        # Required by Karpenter
+        AmazonSSMManagedInstanceCore = "arn:${local.partition}:iam::aws:policy/AmazonSSMManagedInstanceCore"
+
+        # Required by EBS CSI Add-on
+        AmazonEBSCSIDriverPolicy = data.aws_iam_policy.AmazonEBSCSIDriverPolicy.arn
+      }
+
+      instance_types = ["${var.eks_hosting_group_instance_type}"]
+      tags = merge(
+        var.tags,
+        { Name = "eks-${var.shared_resource_identifier}-hosting" }
       )
     }
 
   }
+
+  # add the bastion IAM user to aws-auth.mapUsers so that
+  # kubectl and k9s work from inside the bastion server by default.
+  manage_aws_auth_configmap = true
+  aws_auth_users = var.map_users
 
 }
 

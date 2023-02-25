@@ -631,10 +631,10 @@ alertmanager:
         - weight: 1
           preference:
             matchExpressions:
-            - key: application-group
+            - key: node-group
               operator: In
               values:
-              - service
+              - {{ cookiecutter.global_platform_shared_resource_identifier }}
     # nodeAffinity:
     #   requiredDuringSchedulingIgnoredDuringExecution:
     #     nodeSelectorTerms:
@@ -1885,10 +1885,10 @@ prometheusOperator:
           - weight: 1
             preference:
               matchExpressions:
-              - key: application-group
+              - key: node-group
                 operator: In
                 values:
-                - service
+                - {{ cookiecutter.global_platform_shared_resource_identifier }}
       tolerations: []
 
       ## SecurityContext holds pod-level security attributes and common container settings.
@@ -2120,10 +2120,10 @@ prometheusOperator:
         - weight: 1
           preference:
             matchExpressions:
-            - key: application-group
+            - key: node-group
               operator: In
               values:
-              - service
+              - {{ cookiecutter.global_platform_shared_resource_identifier }}
     # nodeAffinity:
     #   requiredDuringSchedulingIgnoredDuringExecution:
     #     nodeSelectorTerms:
@@ -2935,10 +2935,10 @@ prometheus:
         - weight: 1
           preference:
             matchExpressions:
-            - key: application-group
+            - key: node-group
               operator: In
               values:
-              - service
+              - {{ cookiecutter.global_platform_shared_resource_identifier }}
     # nodeAffinity:
     #   requiredDuringSchedulingIgnoredDuringExecution:
     #     nodeSelectorTerms:
@@ -3705,10 +3705,10 @@ thanosRuler:
         - weight: 1
           preference:
             matchExpressions:
-            - key: application-group
+            - key: node-group
               operator: In
               values:
-              - service
+              - {{ cookiecutter.global_platform_shared_resource_identifier }}
     # nodeAffinity:
     #   requiredDuringSchedulingIgnoredDuringExecution:
     #     nodeSelectorTerms:

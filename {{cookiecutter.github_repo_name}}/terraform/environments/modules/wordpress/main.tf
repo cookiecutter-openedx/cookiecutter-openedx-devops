@@ -17,6 +17,11 @@
 #   helm show all bitnami/wordpress
 #   helm show values bitnami/wordpress
 #
+#   Trouble shooting an installation:
+#   helm ls --namespace my-wordpress-site
+#   helm history wordpress  --namespace my-wordpress-site
+#   helm rollback wordpress 4 --namespace my-wordpress-site
+#
 # see: https://jmrobles.medium.com/launch-a-wordpress-site-on-kubernetes-in-just-1-minute-193914cb4902
 #-----------------------------------------------------------
 locals {
@@ -34,6 +39,8 @@ locals {
   externalDatabaseUser             = var.wordpressConfig["DatabaseUser"]
   externalDatabaseDatabase         = var.wordpressConfig["Database"]
   persistenceSize                  = var.wordpressConfig["DiskVolumeSize"]
+  ebsVolumePreventDestroy          = var.wordpressConfig["DiskVolumePreventDestroy"]
+  aws_ebs_volume_id                = var.wordpressConfig["AWSEBSVolumeId"]
   serviceAccountName               = local.wordpressDomain
   HorizontalAutoscalingMinReplicas = 1
   HorizontalAutoscalingMaxReplicas = 1
@@ -77,7 +84,7 @@ data "template_file" "wordpress-values" {
     allowEmptyPassword               = false
     extraVolumes                     = data.template_file.extraVolumes.rendered
     extraVolumeMounts                = data.template_file.extraVolumeMounts.rendered
-    persistenceSize                  = local.persistenceSize
+    pvcEbs_volume_id                 = local.aws_ebs_volume_id != "" ? local.aws_ebs_volume_id : aws_ebs_volume.wordpress.id
     serviceAccountCreate             = true
     serviceAccountName               = local.serviceAccountName
     serviceAccountAnnotations        = data.template_file.serviceAccountAnnotations.rendered
@@ -117,5 +124,28 @@ resource "helm_release" "wordpress" {
     kubernetes_namespace.wordpress,
     kubernetes_secret.wordpress_config,
     ssh_sensitive_resource.mysql
+  ]
+}
+
+resource "null_resource" "wordpress_post_deployment" {
+
+  provisioner "local-exec" {
+    command = <<-EOT
+      # 1. Switch to namespace for this Wordpress deployment.
+      #    Find the name of the Wordpress pod using one of the Helm-generated labels
+      # ---------------------------------------
+      kubectl config set-context --current --namespace=lawrencemcdaniel-api
+      POD=$(kubectl get pod -l app.kubernetes.io/name=wordpress -o jsonpath="{.items[0].metadata.name}")
+
+      # 2. shell into the wordpress container of the deployed pod
+      #    and execute the post deployment ops
+      # ---------------------------------------
+      echo "running post deployments scripts on ${POD}"
+      kubectl exec -it $POD --container=wordpress -- /bin/bash -c "touch /opt/bitnami/wordpress/wordfence-waf.php"
+    EOT
+  }
+
+  depends_on = [
+    helm_release.wordfence
   ]
 }

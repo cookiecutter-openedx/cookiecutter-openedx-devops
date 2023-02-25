@@ -71,7 +71,7 @@ affinity:
       - weight: 1
         preference:
           matchExpressions:
-          - key: application-group
+          - key: node-group
             operator: In
             values:
             - wordpress
@@ -82,6 +82,11 @@ nodeSelector: {}
 ## @param tolerations Tolerations for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
+tolerations:
+  - effect: NoSchedule
+    key: role
+    operator: Equal
+    value: pvc-pods
 ## WordPress containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## @param resources.limits The resources limits for the WordPress containers
@@ -101,7 +106,7 @@ containerPorts:
 ingress:
   enabled: false
 persistence:
-  size: ${persistenceSize}
+  existingClaim: "${wordpressDomain}"
 serviceAccount:
   create: ${serviceAccountCreate}
   name: ${serviceAccountName}

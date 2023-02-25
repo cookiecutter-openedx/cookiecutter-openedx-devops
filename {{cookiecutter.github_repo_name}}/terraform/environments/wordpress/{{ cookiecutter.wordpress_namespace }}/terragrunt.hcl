@@ -30,6 +30,8 @@ locals {
     DatabaseUser   = local.client_vars.locals.wp_database_user,
     Database       = local.client_vars.locals.wp_database,
     DiskVolumeSize = local.client_vars.locals.wp_disk_volume_size
+    DiskVolumePreventDestroy = local.client_vars.locals.aws_ebs_volume_prevent_destroy
+    AWSEBSVolumeId = local.client_vars.locals.aws_ebs_volume_id
   }
 
   tags = merge(
@@ -121,5 +123,6 @@ inputs = {
   aws_region                    = local.aws_region
   wordpressConfig               = local.wordpressConfig
   phpmyadmin                    = local.phpmyadmin
+  subnet_ids                    = dependency.vpc.outputs.private_subnets
   tags                          = local.tags
 }

@@ -45,3 +45,7 @@ variable "resource_quota_memory" {
   type    = string
   default = "1Gi"
 }
+
+variable "subnet_ids" {
+  type = list(string)
+}

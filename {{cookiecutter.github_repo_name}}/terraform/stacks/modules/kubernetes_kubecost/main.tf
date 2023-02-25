@@ -14,13 +14,19 @@
 #   helm repo update
 #   helm search repo cost-analyzer
 #   helm show values cost-analyzer/cost-analyzer
+#
+#   Trouble shooting an installation:
+#   helm ls --namespace kubecost
+#   helm history cost-analyzer  --namespace kubecost
+#   helm rollback cost-analyzer 4 --namespace kubecost
+
 #-----------------------------------------------------------
 locals {
   cost_analyzer = "cost-analyzer"
 }
 
 data "template_file" "kubecost-values" {
-  template = file("${path.module}/config/values.yaml")
+  template = file("${path.module}/config/kubecost-values.yaml")
   vars = {
     # get a free Kubecost token here:
     # https://www.kubecost.com/install#show-instructions
