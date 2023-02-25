@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.25] (2023-2-25)
+
+- bump AWS EKS to release 1.25
+- bump AWS EKS Add-on versions
+- parameterize aws-auth.mapUsers
+- refactor AWS EKS Managed Node groups into two groups, service and hosting. Default the service group to 3 nodes and the hosting group to 0.
+- remove AWS EKS service node taints. replace these with node affinity for service pods to encourage isolation of these from nodes running mostly application software.
+- create AWS EBS volumes for Wordpress deployments so that we can control lifecycle, naming and drive volume attributes.
+
 ## [1.0.24] (2023-2-17)
 
 - refactor MySQL and MongoDB remote backup solutions
