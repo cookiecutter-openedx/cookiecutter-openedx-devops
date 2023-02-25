@@ -181,7 +181,7 @@ VIII. Add more Kubernetes admins
 --------------------------------
 
 By default, access to the Kubernetes cluster is limited to the cluster creator (presumably, you) and the IAM user for the bastion server.
-Also note that by default, Kubernetes version 1.24 and newer encrypts all secrets data using `AWS Key Management Service (KMS) <https://aws.amazon.com/kms/>`_.
+Also note that by default, AWS EKS release 1.24 and newer encrypts all secrets data using `AWS Key Management Service (KMS) <https://aws.amazon.com/kms/>`_.
 The Cookiecutter automatically adds the IAM user for the bastion server to these two lists, but you'll need to add other IAM users to these lists yourself.
 The encrypted secrets features is optional and can be disabled by setting Cookiecutter parameter eks_create_kms_key=N.
 
