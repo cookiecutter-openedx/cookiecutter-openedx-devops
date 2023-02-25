@@ -108,6 +108,7 @@ variable "map_roles" {
 variable "bastion_iam_arn" {
   type = string
 }
+
 variable "kms_key_owners" {
   type = list
   default = []
