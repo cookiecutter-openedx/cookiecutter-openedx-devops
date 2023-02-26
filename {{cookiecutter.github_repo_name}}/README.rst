@@ -96,6 +96,7 @@ Administration
 - `System Administration Overview <./doc/SYSTEM_ADMINISTRATION.md>`_
 - `Passwords, Credentials and Sensitive Data Management <./doc/SECRETS_MANAGEMENT.md>`_
 - `Remote Data Backup & Restore <./doc/DATA_BACKUP.md>`_
+- `Updating This Repository <./doc/UPGRADES.md>`_
 
 Quick Start
 -----------

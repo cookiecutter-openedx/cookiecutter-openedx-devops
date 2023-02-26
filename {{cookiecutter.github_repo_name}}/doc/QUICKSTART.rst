@@ -180,8 +180,8 @@ Installs four of the most popular web applications for Kubernetes administration
 VIII. Add more Kubernetes admins
 --------------------------------
 
-By default, access to the Kubernetes cluster is limited to the cluster creator (presumably, you) and the IAM user for the bastion server.
-Also note that by default, Kubernetes version 1.25 and newer encrypts all secrets data using `AWS Key Management Service (KMS) <https://aws.amazon.com/kms/>`_.
+If you're new to Kubernetes then you can read more about cluster access in the AWS EKS documentation, `Enabling IAM user and role access to your cluster <https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html>`_. By default, access to the Kubernetes cluster is limited to the cluster creator (presumably, you) and the IAM user for the bastion server.
+Also note that by default, AWS EKS release 1.24 and newer encrypts all secrets data using `AWS Key Management Service (KMS) <https://aws.amazon.com/kms/>`_.
 The Cookiecutter automatically adds the IAM user for the bastion server to these two lists, but you'll need to add other IAM users to these lists yourself.
 The encrypted secrets features is optional and can be disabled by setting Cookiecutter parameter eks_create_kms_key=N.
 
@@ -191,6 +191,9 @@ You can add more IAM users to the cluster admin and AWS KMS key owner lists by m
 
     kms_key_owners = [
       "${local.bastion_iam_arn}",
+      # -------------------------------------------------------------------------
+      # ADD MORE CLUSTER ADMIN USER IAM ACCOUNTS TO THE AWS KMS KEY OWNER LIST:
+      # -------------------------------------------------------------------------
       userarn  = "arn:aws:iam::${local.account_id}:user/mcdaniel",
       userarn  = "arn:aws:iam::${local.account_id}:user/bob_marley",
     ]
@@ -201,6 +204,9 @@ You can add more IAM users to the cluster admin and AWS KMS key owner lists by m
         username = local.bastion_iam_username
         groups   = ["system:masters"]
       },
+      # -------------------------------------------------------------------------
+      # ADD MORE CLUSTER ADMIN USER IAM ACCOUNTS HERE:
+      # -------------------------------------------------------------------------
       {
         userarn  = "arn:aws:iam::${local.account_id}:user/mcdaniel"
         username = "mcdaniel"
@@ -213,8 +219,7 @@ You can add more IAM users to the cluster admin and AWS KMS key owner lists by m
       },
     ]
 
-If you're new to Kubernetes then you can read more about cluster access in the AWS EKS documentation, `Enabling IAM user and role access to your cluster <https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html>`_.
-You'll need kubectl in order to modify the aws-auth configMap in your Kubernets cluster.
+You can use kubectl or k9s from the bastion server to verify the configuration of the aws-auth configMap.
 
 .. code-block:: bash
 
@@ -258,18 +263,12 @@ Following is an example aws-auth configMap with additional IAM user accounts add
       resourceVersion: "499488"
       uid: 52d6e7fd-01b7-4c80-b831-b971507e5228
 
-Note that by default, Kubernetes version 1.24 and newer encrypts all secrets data using `AWS Key Management Service (KMS) <https://aws.amazon.com/kms/>`_.
-The Cookiecutter automatically adds the IAM user for the bastion server.
-For any other IAM users you'll need to modify the following in terraform/stacks/modules/kubernetes/main.tf:
+You can verify the AWS KMS key owner list either by using the AWS console (https://console.aws.amazon.com/kms) or using the awscli, as follows:
 
-.. code-block:: terraform
+.. code-block:: bash
 
-    kms_key_owners = [
-      "arn:aws:iam::${var.account_id}:user/system/bastion-user/${var.namespace}-bastion",
-      "arn:aws:iam::${var.account_id}:user/system/user/your-iam-user"
-    ]
-
-Alternatively, you can disable encrypted Kubernetes secrets by setting Cookiecutter parameter eks_create_kms_key=N.
+    aws kms list-keys
+    aws kms get-key-policy --key-id 7d646c73-some-key-id-760gda80bfe2 --region us-east-2 --policy-name default --output text
 
 
 Continuous Integration (CI)

@@ -140,12 +140,12 @@ resource "null_resource" "wordpress_post_deployment" {
       # 2. shell into the wordpress container of the deployed pod
       #    and execute the post deployment ops
       # ---------------------------------------
-      echo "running post deployments scripts on ${POD}"
+      echo "running post deployments scripts on $POD"
       kubectl exec -it $POD --container=wordpress -- /bin/bash -c "touch /opt/bitnami/wordpress/wordfence-waf.php"
     EOT
   }
 
   depends_on = [
-    helm_release.wordfence
+    helm_release.wordpress
   ]
 }

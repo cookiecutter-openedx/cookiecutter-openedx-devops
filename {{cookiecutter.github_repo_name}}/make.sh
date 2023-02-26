@@ -12,6 +12,15 @@ GITHUB_REPO="gh:lpm0073/cookiecutter-openedx-devops"
 GITHUB_BRANCH="{{ cookiecutter.github_release }}"
 OUTPUT_FOLDER="../"
 
+if [ -d {{ cookiecutter.github_repo_name }} ]; then
+  read -p "Delete all existing Terraform modules in your repository? This is recommended (Y/n) " yn
+  case $yn in
+    [yY] ) sudo rm -r {{ cookiecutter.github_repo_name }}/terraform;
+      echo "removed the current set of Terraform folders in ./{{ cookiecutter.github_repo_name }}/terraform";
+      break;;
+  esac
+fi
+
 cookiecutter --checkout $GITHUB_BRANCH \
             --output-dir $OUTPUT_FOLDER \
             --overwrite-if-exists \
