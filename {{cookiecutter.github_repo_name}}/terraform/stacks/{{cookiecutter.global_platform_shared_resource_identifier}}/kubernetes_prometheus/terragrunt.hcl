@@ -53,8 +53,8 @@ dependency "kubernetes" {
   # module hasn't been applied yet.
   mock_outputs_allowed_terraform_commands = ["init", "validate", "plan"]
   mock_outputs = {
-    karpenter_node_group_iam_role_name = "fake-karpenter-node-group-iam-role-name"
-    karpenter_node_group_iam_role_arn  = "fake-karpenter-node-group-iam-role-arn"
+    service_node_group_iam_role_name = "fake-karpenter-node-group-iam-role-name"
+    service_node_group_iam_role_arn  = "fake-karpenter-node-group-iam-role-arn"
     oidc_provider_arn = "fake-oidc-provider-arn"
   }
 

@@ -82,7 +82,7 @@ module "karpenter_controller_irsa_role" {
 
   karpenter_controller_cluster_id = data.aws_eks_cluster.eks.name
   karpenter_controller_node_iam_role_arns = [
-    var.karpenter_node_group_iam_role_arn
+    var.service_node_group_iam_role_arn
   ]
 
   oidc_providers = {
@@ -103,7 +103,7 @@ resource "random_pet" "this" {
 
 resource "aws_iam_instance_profile" "karpenter" {
   name = "KarpenterNodeInstanceProfile-${var.stack_namespace}-${random_pet.this.id}"
-  role = var.karpenter_node_group_iam_role_name
+  role = var.service_node_group_iam_role_name
 }
 
 
