@@ -23,7 +23,7 @@ FACEBOOK_API_VERSION: v12.0
 FEATURES:
   ENABLE_CHANGE_USER_PASSWORD_ADMIN: true
   CERTIFICATES_HTML_VIEW: true
-  PREVIEW_LMS_BASE: "{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain  }}/"
+  PREVIEW_LMS_BASE: "preview.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain  }}"
   ENABLE_COURSEWARE_INDEX: true
   ENABLE_CSMH_EXTENDED: false
   ENABLE_LEARNER_RECORDS: true

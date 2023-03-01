@@ -10,11 +10,11 @@ variable "stack_namespace" {
   type = string
 }
 
-variable "karpenter_node_group_iam_role_name" {
+variable "service_node_group_iam_role_name" {
   type = string
 }
 
-variable "karpenter_node_group_iam_role_arn" {
+variable "service_node_group_iam_role_arn" {
   type = string
 }
 

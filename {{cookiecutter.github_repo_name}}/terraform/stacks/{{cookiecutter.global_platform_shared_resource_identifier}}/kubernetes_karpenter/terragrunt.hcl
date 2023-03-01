@@ -52,8 +52,8 @@ dependency "kubernetes" {
   # module hasn't been applied yet.
   mock_outputs_allowed_terraform_commands = ["init", "validate", "plan", "destroy"]
   mock_outputs = {
-    karpenter_node_group_iam_role_name = "fake-karpenter-node-group-iam-role-name"
-    karpenter_node_group_iam_role_arn  = "fake-karpenter-node-group-iam-role-arn"
+    service_node_group_iam_role_name = "fake-karpenter-node-group-iam-role-name"
+    service_node_group_iam_role_arn  = "fake-karpenter-node-group-iam-role-arn"
     oidc_provider_arn = "fakse-oidc-provider-arn"
   }
 
@@ -95,8 +95,8 @@ include {
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
   stack_namespace = local.stack_namespace
-  karpenter_node_group_iam_role_name = dependency.kubernetes.outputs.karpenter_node_group_iam_role_name
-  karpenter_node_group_iam_role_arn = dependency.kubernetes.outputs.karpenter_node_group_iam_role_arn
+  service_node_group_iam_role_name = dependency.kubernetes.outputs.service_node_group_iam_role_name
+  service_node_group_iam_role_arn = dependency.kubernetes.outputs.service_node_group_iam_role_arn
   oidc_provider_arn = dependency.kubernetes.outputs.oidc_provider_arn
   tags = local.tags
 }

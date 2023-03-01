@@ -41,6 +41,16 @@ spec:
             name: lms
             port:
               number: 8000
+  - host: "preview.${environment_domain}"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: lms
+            port:
+              number: 8000
   - host: ${studio_subdomain}.${environment_domain}
     http:
       paths:
