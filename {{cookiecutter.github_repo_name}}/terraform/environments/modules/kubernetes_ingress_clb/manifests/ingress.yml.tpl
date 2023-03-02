@@ -24,6 +24,15 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
     kubernetes.io/ingress.class: "nginx"
     cert-manager.io/cluster-issuer: ${environment_domain}
+
+    # mcdaniel mar-2023
+    # add sticky sessions
+    # ---------------------
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/session-cookie-name: "openedx_sticky_session"
+    nginx.ingress.kubernetes.io/session-cookie-expires: "172800"
+    nginx.ingress.kubernetes.io/session-cookie-max-age: "172800"
+
 spec:
   tls:
   - hosts:
