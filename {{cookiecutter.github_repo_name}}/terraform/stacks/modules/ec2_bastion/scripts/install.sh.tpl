@@ -45,7 +45,7 @@ sudo apt update && sudo apt upgrade -y
 sudo apt install jq mysql-client-8.0 libevent-dev libyaml-dev python3-pip build-essential -y
 sudo apt autoremove
 
-sudo snap install kubectl --channel=1.23/stable --classic
+sudo snap install kubectl --channel=1.25/stable --classic
 sudo snap install yq
 
 pip install --upgrade pyyaml
@@ -65,12 +65,6 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 # install more brew packages related to Open edX administration
 # -------------------------------------------------------------
 brew install awscli terraform terragrunt helm k9s
-
-# Alternate installation for k9s
-# install k9s
-# sudo wget -qO- https://github.com/derailed/k9s/releases/download/v0.24.1/k9s_Linux_x86_64.tar.gz | tar zxvf -  -C /tmp/
-# sudo mv /tmp/k9s /usr/local/bin
-
 
 # Configure kubectl
 # -------------------------------------------------------------
