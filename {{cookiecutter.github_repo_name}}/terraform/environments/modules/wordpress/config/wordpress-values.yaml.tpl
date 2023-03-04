@@ -7,6 +7,7 @@ wordpressBlogName: ${wordpressBlogName}
 wordpressExtraConfigContent: |
   define('WP_SITEURL', 'https://${wordpressDomain}');
   define('WP_HOME', 'https://${wordpressDomain}');
+  define('WP_AUTO_UPDATE_CORE', true );
 wordpressConfigureCache: ${wordpressConfigureCache}
 wordpressScheme: https
 updateStrategy:
