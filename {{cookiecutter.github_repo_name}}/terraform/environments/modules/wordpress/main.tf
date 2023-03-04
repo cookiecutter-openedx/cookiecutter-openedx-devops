@@ -48,26 +48,6 @@ locals {
 }
 
 
-data "template_file" "serviceAccountAnnotations" {
-  template = file("${path.module}/config/service-account-annotations.json")
-}
-
-data "template_file" "wordpressPlugins" {
-  template = file("${path.module}/config/wordpress-plugins.yaml")
-}
-
-data "template_file" "extraVolumes" {
-  template = file("${path.module}/config/extra-volumes.json")
-}
-
-data "template_file" "extraVolumeMounts" {
-  template = file("${path.module}/config/extra-volume-mounts.json")
-}
-
-data "template_file" "wordpressExtraConfigContent" {
-  template = file("${path.module}/config/wordpress-extra-config-content.php")
-}
-
 data "template_file" "wordpress-values" {
   template = file("${path.module}/config/wordpress-values.yaml.tpl")
   vars = {
@@ -78,16 +58,11 @@ data "template_file" "wordpress-values" {
     wordpressFirstName               = local.wordpressFirstName
     wordpressLastName                = local.wordpressLastName
     wordpressBlogName                = local.wordpressBlogName
-    wordpressExtraConfigContent      = data.template_file.wordpressExtraConfigContent.rendered
     wordpressConfigureCache          = false
-    wordpressPlugins                 = data.template_file.wordpressPlugins.rendered
     allowEmptyPassword               = false
-    extraVolumes                     = data.template_file.extraVolumes.rendered
-    extraVolumeMounts                = data.template_file.extraVolumeMounts.rendered
     pvcEbs_volume_id                 = local.aws_ebs_volume_id != "" ? local.aws_ebs_volume_id : aws_ebs_volume.wordpress.id
     serviceAccountCreate             = true
     serviceAccountName               = local.serviceAccountName
-    serviceAccountAnnotations        = data.template_file.serviceAccountAnnotations.rendered
     PodDisruptionBudgetCreate        = false
     HorizontalAutoscalingCreate      = false
     HorizontalAutoscalingMinReplicas = local.HorizontalAutoscalingMinReplicas

@@ -23,6 +23,20 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
     kubernetes.io/ingress.class: "nginx"
     cert-manager.io/cluster-issuer: ${cluster_issuer}
+
+    # mcdaniel mar-2023
+    # add sticky sessions
+    # ---------------------
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/session-cookie-name: "wordpress_sticky_session"
+    nginx.ingress.kubernetes.io/session-cookie-expires: "172800"
+    nginx.ingress.kubernetes.io/session-cookie-max-age: "172800"
+
+    # mcdaniel mar-2023
+    # force ssl redirect
+    # ---------------------
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
 spec:
   tls:
   - hosts:

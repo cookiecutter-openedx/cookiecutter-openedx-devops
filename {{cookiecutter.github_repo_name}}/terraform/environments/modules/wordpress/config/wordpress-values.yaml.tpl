@@ -4,9 +4,11 @@ wordpressEmail: ${wordpressEmail}
 wordpressFirstName: ${wordpressFirstName}
 wordpressLastName: ${wordpressLastName}
 wordpressBlogName: ${wordpressBlogName}
-wordpressExtraConfigContent: ${wordpressExtraConfigContent}
+wordpressExtraConfigContent: |
+  define('WP_SITEURL', 'https://${wordpressDomain}');
+  define('WP_HOME', 'https://${wordpressDomain}');
 wordpressConfigureCache: ${wordpressConfigureCache}
-wordpressPlugins: ${wordpressPlugins}
+wordpressScheme: https
 updateStrategy:
   type: Recreate
   rollingUpdate:
@@ -29,8 +31,6 @@ allowEmptyPassword: ${allowEmptyPassword}
 # pestebogdan commented on Jan 11, 2021
 # -----------------------------------------------------------------------------
 htaccessPersistenceEnabled: false
-extraVolumes: ${extraVolumes}
-extraVolumeMounts: ${extraVolumeMounts}
 readinessProbe:
   enabled: false
 service:
@@ -110,7 +110,6 @@ persistence:
 serviceAccount:
   create: ${serviceAccountCreate}
   name: ${serviceAccountName}
-  annotations: ${serviceAccountAnnotations}
 pdb:
   create: ${PodDisruptionBudgetCreate}
   minAvailable: 1
