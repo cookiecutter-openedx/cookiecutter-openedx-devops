@@ -57,13 +57,14 @@ inputs = {
   elasticache_subnets = ["192.168.10.0/24", "192.168.11.0/24"]
 
   enable_ipv6          = false
+  enable_dns_hostnames = true
+
 
   # NAT Gateway configuration
-  enable_nat_gateway   = true
-  single_nat_gateway   = true
-  one_nat_gateway_per_az = false
-
-  enable_dns_hostnames = true
+  # see: https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html
+  enable_nat_gateway      = true
+  single_nat_gateway      = false
+  one_nat_gateway_per_az  = true
 
   # a bit of foreshadowing:
   # AWS EKS uses tags for identifying resources which it interacts.
