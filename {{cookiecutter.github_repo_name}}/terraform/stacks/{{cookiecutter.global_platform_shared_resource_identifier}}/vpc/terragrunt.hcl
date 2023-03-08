@@ -8,12 +8,12 @@
 #------------------------------------------------------------------------------
 locals {
   # Automatically load stack-level variables
-  stack_vars = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
-  global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
+  stack_vars   = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
+  global_vars  = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
   root_domain           = local.global_vars.locals.root_domain
-  services_subdomain          = local.global_vars.locals.services_subdomain
+  services_subdomain    = local.global_vars.locals.services_subdomain
   platform_name         = local.global_vars.locals.platform_name
   platform_region       = local.global_vars.locals.platform_region
   aws_region            = local.global_vars.locals.aws_region
@@ -44,7 +44,7 @@ include {
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
   root_domain           = local.root_domain
-  services_subdomain          = local.services_subdomain
+  services_subdomain    = local.services_subdomain
   aws_region            = local.aws_region
   namespace             = local.namespace
   name                  = "${local.resource_name}"
@@ -62,6 +62,14 @@ inputs = {
 
   # NAT Gateway configuration
   # see: https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html
+  #      https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html
+  #
+  # Each NAT Gateway operates within a designated AZ and is built with redundancy in that zone only.
+  # As a result, if the NAT Gateway or AZ experiences failure, resources
+  # utilizing that NAT Gateway in other AZ(s) also get impacted. Additionally,
+  # routing traffic from one AZ to a NAT Gateway in a different AZ incurs
+  # additional inter-AZ data transfer charges. We recommend choosing a
+  # maintenance window for architecture changes in your Amazon VPC.
   enable_nat_gateway      = true
   single_nat_gateway      = false
   one_nat_gateway_per_az  = true
