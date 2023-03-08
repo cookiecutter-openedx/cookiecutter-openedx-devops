@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.26] (2023-3-8)
+
+- bug fix: settings_merge.yml PREVIEW_LMS_BASE
+- refactor MySQL and MongoDB backup scripts
+- add sticky sessions to openedx and wordpress ingresses
+- add annotation to redirect http to https in openedx and wordpress ingresses
+- bump deploy CI kubectl to 1.25/stable
+- create one NAT gateway per availability zone
+- set settings.ENABLE_HTTPS=true in deployment
+- add a CORS policy to to openedx storage S3 bucket
+
 ## [1.0.25] (2023-2-25)
 
 - bump AWS EKS to release 1.25
