@@ -243,12 +243,15 @@ jobs:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
       # -----------------------------------------------------------------------
-      # Add your custom configuration tasks here ....
+      # ENABLE_WEB_PROXY=false: to disable Caddy
+      # RUN_CADDY=false:
+      # ENABLE_HTTPS=true: to set HTTPS='on' in production.py
       # -----------------------------------------------------------------------
       - name: Disable Caddy web proxy service
         shell: bash
         run:  |-
           tutor config save --set ENABLE_WEB_PROXY=false \
+                            --set ENABLE_HTTPS=true \
                             --set RUN_CADDY=false
 
       # see: https://github.com/overhangio/tutor-mfe
