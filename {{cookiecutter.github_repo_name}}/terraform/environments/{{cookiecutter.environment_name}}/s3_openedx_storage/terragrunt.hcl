@@ -12,12 +12,14 @@ locals {
   environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
 
   # Extract out common variables for reuse
-  kubernetes_name       = local.environment_vars.locals.shared_resource_namespace
-  aws_region            = local.global_vars.locals.aws_region
-  resource_name_storage = "${local.environment_vars.locals.environment_namespace}-storage"
-  resource_name_backup = "${local.environment_vars.locals.environment_namespace}-backup"
-  resource_name_secrets = "${local.environment_vars.locals.environment_namespace}-secrets"
-  environment_namespace = local.environment_vars.locals.environment_namespace
+  kubernetes_name               = local.environment_vars.locals.shared_resource_namespace
+  aws_region                    = local.global_vars.locals.aws_region
+  resource_name_storage         = "${local.environment_vars.locals.environment_namespace}-storage"
+  resource_name_backup          = "${local.environment_vars.locals.environment_namespace}-backup"
+  resource_name_secrets         = "${local.environment_vars.locals.environment_namespace}-secrets"
+  environment_domain            = local.environment_vars.locals.environment_domain
+  environment_studio_domain     = "${local.environment_vars.locals.environment_studio_subdomain}.${local.environment_domain}"
+  environment_namespace         = local.environment_vars.locals.environment_namespace
 
   tags = merge(
     local.environment_vars.locals.tags,
@@ -87,13 +89,14 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  environment_namespace = local.environment_namespace
-  secret_name           = "s3-openedx-storage"
-  aws_region            = "${local.aws_region}"
-  resource_name_storage = local.resource_name_storage
-  resource_name_backup  = local.resource_name_backup
-  resource_name_secrets = local.resource_name_secrets
-  kubernetes_name       = local.kubernetes_name
-  tags                  = local.tags
-
+  environment_namespace     = local.environment_namespace
+  environment_domain        = local.environment_domain
+  environment_studio_domain = local.environment_studio_domain
+  secret_name               = "s3-openedx-storage"
+  aws_region                = "${local.aws_region}"
+  resource_name_storage     = local.resource_name_storage
+  resource_name_backup      = local.resource_name_backup
+  resource_name_secrets     = local.resource_name_secrets
+  kubernetes_name           = local.kubernetes_name
+  tags                      = local.tags
 }

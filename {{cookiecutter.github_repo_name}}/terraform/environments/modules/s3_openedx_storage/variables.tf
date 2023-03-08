@@ -21,6 +21,11 @@ variable "environment_domain" {
   type        = string
 }
 
+variable "environment_studio_domain" {
+  type = string
+}
+
+
 variable "environment_namespace" {
   type = string
 }

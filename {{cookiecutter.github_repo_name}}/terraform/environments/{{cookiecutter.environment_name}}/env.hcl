@@ -10,12 +10,13 @@
 locals {
   global_vars = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
-  environment               = "{{ cookiecutter.environment_name }}"
-  environment_subdomain     = "{{ cookiecutter.environment_subdomain }}"
-  environment_domain        = "${local.environment_subdomain}.${local.global_vars.locals.root_domain}"
-  environment_namespace     = "${local.global_vars.locals.platform_name}-${local.global_vars.locals.platform_region}-${local.environment}"
-  shared_resource_namespace = local.global_vars.locals.shared_resource_namespace
-  db_prefix                 = replace(replace("${local.global_vars.locals.platform_name}_${local.environment}", ".", ""), "-", "")
+  environment                   = "{{ cookiecutter.environment_name }}"
+  environment_subdomain         = "{{ cookiecutter.environment_subdomain }}"
+  environment_domain            = "${local.environment_subdomain}.${local.global_vars.locals.root_domain}"
+  environment_studio_subdomain  = "{{ cookiecutter.environment_studio_subdomain }}"
+  environment_namespace         = "${local.global_vars.locals.platform_name}-${local.global_vars.locals.platform_region}-${local.environment}"
+  shared_resource_namespace     = local.global_vars.locals.shared_resource_namespace
+  db_prefix                     = replace(replace("${local.global_vars.locals.platform_name}_${local.environment}", ".", ""), "-", "")
 
   tags = merge(
     local.global_vars.locals.tags,

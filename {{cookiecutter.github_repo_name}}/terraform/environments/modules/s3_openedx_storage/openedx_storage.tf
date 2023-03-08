@@ -20,6 +20,31 @@ module "openedx_storage" {
   attach_policy = true
   policy        = data.aws_iam_policy_document.bucket_policy.json
 
+  cors_rule = [
+    {
+      allowed_methods = ["GET", "POST", "PUT", "HEAD"]
+      allowed_origins = [
+        "https://${var.environment_domain}",
+        "https://apps.${var.environment_domain}",
+        "https://discovery.${var.environment_domain}",
+        "https://preview.${var.environment_domain}",
+        "https://${var.environment_studio_domain}",
+
+        "http://${var.environment_domain}",
+        "http://apps.${var.environment_domain}",
+        "http://discovery.${var.environment_domain}",
+        "http://preview.${var.environment_domain}",
+        "http://${var.environment_studio_domain}"
+      ]
+      allowed_headers = ["*"]
+      expose_headers  = [
+        "Access-Control-Allow-Origin",
+        "Access-Control-Allow-Method",
+        "Access-Control-Allow-Header"
+      ]
+      max_age_seconds = 3000
+      }
+  ]
   versioning = {
     enabled = false
   }
