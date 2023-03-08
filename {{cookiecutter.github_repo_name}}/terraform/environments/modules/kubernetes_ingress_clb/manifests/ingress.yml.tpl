@@ -33,6 +33,11 @@ metadata:
     nginx.ingress.kubernetes.io/session-cookie-expires: "172800"
     nginx.ingress.kubernetes.io/session-cookie-max-age: "172800"
 
+    # mcdaniel mar-2023
+    # force ssl redirect
+    # ---------------------
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
 spec:
   tls:
   - hosts:
