@@ -85,14 +85,3 @@ spec:
             name: discovery
             port:
               number: 8000
-
-  - host: apps.${environment_domain}
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: mfe
-            port:
-              number: 8002
