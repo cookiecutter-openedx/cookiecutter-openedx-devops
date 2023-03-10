@@ -28,7 +28,7 @@ resource "aws_instance" "bastion" {
   subnet_id         = var.subnet_ids[random_integer.subnet_id.result]
   monitoring        = false
   ebs_optimized     = false
-  tags              = var.tags
+  tags              = local.tags
 
   vpc_security_group_ids = [
     resource.aws_security_group.sg_bastion.id,

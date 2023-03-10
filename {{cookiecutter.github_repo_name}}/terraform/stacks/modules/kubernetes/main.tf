@@ -19,65 +19,6 @@ locals {
 
 }
 
-resource "aws_security_group" "worker_group_mgmt" {
-  name_prefix = "${var.namespace}-eks_hosting_group_mgmt"
-  description = "openedx_devops: Ingress CLB worker group management"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    description = "openedx_devops: Ingress CLB"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-
-    cidr_blocks = [
-      "10.0.0.0/8",
-    ]
-  }
-
-  tags = merge(
-    var.tags,
-    module.cookiecutter_meta.tags,
-    # Tag node group resources for Karpenter auto-discovery
-    # NOTE - if creating multiple security groups with this module, only tag the
-    # security group that Karpenter should utilize with the following tag
-    { Name = "eks-${var.shared_resource_identifier}-service" },
-    {
-      "cookiecutter/module/source"  = "terraform-aws-modules/eks/aws"
-      "cookiecutter/module/version" = "{{ cookiecutter.terraform_aws_modules_eks }}"
-    }
-  )
-}
-
-resource "aws_security_group" "all_worker_mgmt" {
-  name_prefix = "${var.namespace}-eks_all_worker_management"
-  description = "openedx_devops: Ingress CLB worker management"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    description = "openedx_devops: Ingress CLB"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-
-    cidr_blocks = [
-      "10.0.0.0/8",
-      "172.16.0.0/12",
-      "192.168.0.0/16",
-    ]
-  }
-
-  tags = merge(
-    var.tags,
-    module.cookiecutter_meta.tags,
-    {
-      "cookiecutter/module/source"  = "terraform-aws-modules/eks/aws"
-      "cookiecutter/module/version" = "{{ cookiecutter.terraform_aws_modules_eks }}"
-    }
-  )
-}
-
-
 module "eks" {
   source                          = "terraform-aws-modules/eks/aws"
   version                         = "~> {{ cookiecutter.terraform_aws_modules_eks }}"
@@ -239,7 +180,7 @@ module "eks" {
         # Tag node group resources for Karpenter auto-discovery
         # NOTE - if creating multiple security groups with this module, only tag the
         # security group that Karpenter should utilize with the following tag
-        { Name = "eks-${var.shared_resource_identifier}-hosting" }
+        { Name = "eks-${var.shared_resource_identifier}-hosting" },
         {
           "cookiecutter/module/source"  = "terraform-aws-modules/eks/aws"
           "cookiecutter/module/version" = "{{ cookiecutter.terraform_aws_modules_eks }}"
@@ -256,6 +197,66 @@ module "eks" {
 module "cookiecutter_meta" {
   source = "../../../../../../../common/cookiecutter_meta"
 }
+
+resource "aws_security_group" "worker_group_mgmt" {
+  name_prefix = "${var.namespace}-eks_hosting_group_mgmt"
+  description = "openedx_devops: Ingress CLB worker group management"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    description = "openedx_devops: Ingress CLB"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+
+    cidr_blocks = [
+      "10.0.0.0/8",
+    ]
+  }
+
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    # Tag node group resources for Karpenter auto-discovery
+    # NOTE - if creating multiple security groups with this module, only tag the
+    # security group that Karpenter should utilize with the following tag
+    { Name = "eks-${var.shared_resource_identifier}-service" },
+    {
+      "cookiecutter/module/source"  = "terraform-aws-modules/eks/aws"
+      "cookiecutter/module/version" = "{{ cookiecutter.terraform_aws_modules_eks }}"
+    }
+  )
+}
+
+resource "aws_security_group" "all_worker_mgmt" {
+  name_prefix = "${var.namespace}-eks_all_worker_management"
+  description = "openedx_devops: Ingress CLB worker management"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    description = "openedx_devops: Ingress CLB"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+
+    cidr_blocks = [
+      "10.0.0.0/8",
+      "172.16.0.0/12",
+      "192.168.0.0/16",
+    ]
+  }
+
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"  = "terraform-aws-modules/eks/aws"
+      "cookiecutter/module/version" = "{{ cookiecutter.terraform_aws_modules_eks }}"
+    }
+  )
+}
+
+
 
 resource "kubernetes_namespace" "namespace-shared" {
   metadata {
