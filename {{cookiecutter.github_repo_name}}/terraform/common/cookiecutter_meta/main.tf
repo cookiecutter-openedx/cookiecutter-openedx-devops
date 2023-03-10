@@ -154,69 +154,69 @@ resource "null_resource" "environment" {
 data "local_file" "cookiecutter_github_commit_date" {
   filename = "${path.module}/output/cookiecutter_github_commit_date.state"
   depends_on = [
-    null_resource.cookiecutter_github_commit_date
+    null_resource.environment
   ]
 }
 
 data "local_file" "cookiecutter_terraform_version" {
   filename = "${path.module}/output/cookiecutter_terraform_version.state"
   depends_on = [
-    null_resource.cookiecutter_terraform_version
+    null_resource.environment
   ]
 }
 
 data "local_file" "cookiecutter_timestamp" {
   filename = "${path.module}/output/cookiecutter_timestamp.state"
   depends_on = [
-    null_resource.cookiecutter_timestamp
+    null_resource.environment
   ]
 }
 
 data "local_file" "cookiecutter_os" {
   filename = "${path.module}/output/cookiecutter_os.state"
   depends_on = [
-    null_resource.cookiecutter_os
+    null_resource.environment
   ]
 }
 
 data "local_file" "cookiecutter_github_repository" {
   filename = "${path.module}/output/cookiecutter_github_repository.state"
   depends_on = [
-    null_resource.cookiecutter_github_repository
+    null_resource.environment
   ]
 }
 
 data "local_file" "cookiecutter_github_branch" {
   filename = "${path.module}/output/cookiecutter_github_branch.state"
   depends_on = [
-    null_resource.cookiecutter_github_branch
+    null_resource.environment
   ]
 }
 
 data "local_file" "cookiecutter_github_commit" {
   filename = "${path.module}/output/cookiecutter_github_commit.state"
   depends_on = [
-    null_resource.cookiecutter_github_commit
+    null_resource.environment
   ]
 }
 
 data "local_file" "cookiecutter_global_iam_arn" {
   filename = "${path.module}/output/cookiecutter_global_iam_arn.state"
   depends_on = [
-    null_resource.cookiecutter_global_iam_arn
+    null_resource.environment
   ]
 }
 
 data "local_file" "cookiecutter_kubectl_version" {
   filename = "${path.module}/output/cookiecutter_kubectl_version.state"
   depends_on = [
-    null_resource.cookiecutter_kubectl_version
+    null_resource.environment
   ]
 }
 
 data "local_file" "cookiecutter_awscli_version" {
   filename = "${path.module}/output/cookiecutter_awscli_version.state"
   depends_on = [
-    null_resource.cookiecutter_awscli_version
+    null_resource.environment
   ]
 }
