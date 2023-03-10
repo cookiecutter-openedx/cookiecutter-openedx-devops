@@ -17,6 +17,11 @@ locals {
   s3_bucket_name   = var.resource_name
   s3_bucket_domain = "${local.s3_bucket_name}.s3.${var.aws_region}.amazonaws.com"
   cdn_name         = "cdn.${var.environment_domain}"
+
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags
+  )
 }
 
 provider "aws" {
@@ -64,7 +69,7 @@ resource "aws_route53_record" "cdn_environment_domain" {
 
 module "cdn_environment_domain" {
   source  = "terraform-aws-modules/cloudfront/aws"
-  version = "{{cookiecutter.terraform_aws_modules_cloudfront}}"
+  version = "~> {{cookiecutter.terraform_aws_modules_cloudfront}}"
 
   aliases = [local.cdn_name]
 
@@ -108,4 +113,12 @@ module "cdn_environment_domain" {
     acm_certificate_arn = data.aws_acm_certificate.environment_domain.arn
     ssl_support_method  = "sni-only"
   }
+
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/module/source"  = "terraform-aws-modules/cloudfront/aws"
+      "cookiecutter/module/version" = "{{cookiecutter.terraform_aws_modules_cloudfront}}"
+    }
+  )
 }

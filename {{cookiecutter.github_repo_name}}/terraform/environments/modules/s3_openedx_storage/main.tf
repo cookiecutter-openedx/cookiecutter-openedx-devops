@@ -6,3 +6,19 @@
 #
 # usage: create an AWS S3 bucket to offload Open edX file storage.
 #------------------------------------------------------------------------------
+
+locals {
+
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"  = "terraform-aws-modules/s3-bucket/aws"
+      "cookiecutter/module/version" = "{{ cookiecutter.terraform_aws_modules_s3 }}"
+    }
+  )
+
+}
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
+}

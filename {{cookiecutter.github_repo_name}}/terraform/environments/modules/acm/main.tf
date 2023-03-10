@@ -7,6 +7,17 @@
 # usage: Add DNS records and tls certs to stack aws_region for ELB.
 # Also add certs to us-east-1 for Cloudfront distributions.
 #------------------------------------------------------------------------------
+locals {
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"  = "terraform-aws-modules/acm/aws"
+      "cookiecutter/module/version" = "{{ cookiecutter.terraform_aws_modules_acm }}"
+    }
+  )
+
+}
 provider "aws" {
   alias  = "environment_region"
   region = var.aws_region
@@ -23,7 +34,7 @@ data "aws_route53_zone" "environment_domain" {
 
 module "acm_root_domain_environment_region" {
   source  = "terraform-aws-modules/acm/aws"
-  version = "{{ cookiecutter.terraform_aws_modules_acm }}"
+  version = "~> {{ cookiecutter.terraform_aws_modules_acm }}"
 
   providers = {
     aws = aws.environment_region
@@ -35,9 +46,9 @@ module "acm_root_domain_environment_region" {
   subject_alternative_names = [
     "*.${var.root_domain}",
   ]
+  tags = local.tags
 
   wait_for_validation = true
-  tags                = var.tags
 }
 
 module "acm_environment_environment_region" {
@@ -54,7 +65,7 @@ module "acm_environment_environment_region" {
   subject_alternative_names = [
     "*.${var.environment_domain}",
   ]
+  tags = local.tags
 
   wait_for_validation = true
-  tags                = var.tags
 }

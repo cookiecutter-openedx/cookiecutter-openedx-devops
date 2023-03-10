@@ -9,10 +9,11 @@
 
 module "openedx_storage" {
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "{{ cookiecutter.terraform_aws_modules_s3 }}"
+  version = "~> {{ cookiecutter.terraform_aws_modules_s3 }}"
 
-  bucket = var.resource_name_storage
-  acl    = "private"
+  bucket  = var.resource_name_storage
+  acl     = "private"
+  tags    = local.tags
 
   control_object_ownership = true
   object_ownership         = "BucketOwnerPreferred"
