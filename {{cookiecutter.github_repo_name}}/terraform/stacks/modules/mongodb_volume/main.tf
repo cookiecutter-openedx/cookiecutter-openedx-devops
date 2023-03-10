@@ -12,7 +12,15 @@
 resource "aws_ebs_volume" "mongodb" {
   availability_zone = data.aws_subnet.database_subnet.availability_zone
   size              = var.allocated_storage
-  tags              = var.tags
+
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"  = "{{ cookiecutter.github_repo_name }}/terraform/stacks/mongodb_volume"
+      "cookiecutter/module/version" = ""
+    }
+  )
 
   # un-comment this block if you want to prevent Terraform from destroying the Mongodb volume.
   lifecycle {
@@ -36,4 +44,8 @@ data "aws_subnet" "database_subnet" {
 resource "random_integer" "subnet_id" {
   min = 0
   max = length(var.subnet_ids) - 1
+}
+
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
 }

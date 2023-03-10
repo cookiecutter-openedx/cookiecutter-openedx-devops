@@ -8,6 +8,16 @@
 #------------------------------------------------------------------------------
 locals {
   hostname = "bastion.${var.services_subdomain}"
+
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"  = "{{ cookiecutter.github_repo_name }}/terraform/stacks/ec2_bastion"
+      "cookiecutter/module/version" = ""
+    }
+  )
+
 }
 resource "aws_instance" "bastion" {
 
@@ -191,6 +201,9 @@ resource "aws_instance" "bastion" {
 #------------------------------------------------------------------------------
 #                        SUPPORTING RESOURCES
 #------------------------------------------------------------------------------
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
+}
 
 
 # Ubuntu 20.04 LTS AMI

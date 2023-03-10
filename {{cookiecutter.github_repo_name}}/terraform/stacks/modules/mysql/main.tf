@@ -7,46 +7,6 @@
 # usage: create an RDS MySQL instance.
 #------------------------------------------------------------------------------
 
-resource "aws_db_subnet_group" "mysql_subnet_group" {
-  name       = "mysql_subnet_group"
-  subnet_ids = var.subnet_ids
-  tags       = var.tags
-}
-
-module "security_group" {
-  source  = "terraform-aws-modules/security-group/aws"
-  version = "{{ cookiecutter.terraform_aws_modules_sg }}"
-
-  name        = "${var.resource_name}-mysql"
-  description = "openedx_devops: Allow access to MySQL"
-  vpc_id      = var.vpc_id
-
-  # ingress
-  ingress_with_cidr_blocks = [
-    {
-      from_port   = 3306
-      to_port     = 3306
-      protocol    = "tcp"
-      description = "openedx_devops: MySQL access from within VPC"
-      cidr_blocks = join(",", var.ingress_cidr_blocks)
-    },
-  ]
-
-  egress_with_cidr_blocks = [
-    {
-      description      = "openedx_devops: Node all egress"
-      protocol         = "-1"
-      from_port        = 0
-      to_port          = 0
-      type             = "egress"
-      cidr_blocks      = "0.0.0.0/0"
-      ipv6_cidr_blocks = "::/0"
-    },
-  ]
-  tags = var.tags
-}
-
-
 #------------------------------------------------------------------------------
 # RDS Module
 #
@@ -54,7 +14,7 @@ module "security_group" {
 #------------------------------------------------------------------------------
 module "db" {
   source  = "terraform-aws-modules/rds/aws"
-  version = "{{cookiecutter.terraform_aws_modules_rds}}"
+  version = "~> {{cookiecutter.terraform_aws_modules_rds}}"
 
   # required parameters (unless we like the default value)
   # ---------------------------------------------------------------------------
@@ -112,5 +72,56 @@ module "db" {
   create_monitoring_role                = var.create_monitoring_role
   monitoring_interval                   = var.monitoring_interval
   parameters                            = var.parameters
-  tags                                  = var.tags
+
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"  = "terraform-aws-modules/rds/aws"
+      "cookiecutter/module/version" = "{{cookiecutter.terraform_aws_modules_rds}}"
+    }
+  )
+}
+
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
+}
+
+resource "aws_db_subnet_group" "mysql_subnet_group" {
+  name       = "mysql_subnet_group"
+  subnet_ids = var.subnet_ids
+  tags       = var.tags
+}
+
+module "security_group" {
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "{{ cookiecutter.terraform_aws_modules_sg }}"
+
+  name        = "${var.resource_name}-mysql"
+  description = "openedx_devops: Allow access to MySQL"
+  vpc_id      = var.vpc_id
+
+  # ingress
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = 3306
+      to_port     = 3306
+      protocol    = "tcp"
+      description = "openedx_devops: MySQL access from within VPC"
+      cidr_blocks = join(",", var.ingress_cidr_blocks)
+    },
+  ]
+
+  egress_with_cidr_blocks = [
+    {
+      description      = "openedx_devops: Node all egress"
+      protocol         = "-1"
+      from_port        = 0
+      to_port          = 0
+      type             = "egress"
+      cidr_blocks      = "0.0.0.0/0"
+      ipv6_cidr_blocks = "::/0"
+    },
+  ]
+  tags = var.tags
 }

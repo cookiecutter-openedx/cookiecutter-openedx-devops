@@ -23,6 +23,16 @@
 locals {
   ssh_private_key_filename = "${var.stack_namespace}-mongodb.pem"
   host_name                = "mongodb.${var.services_subdomain}"
+
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"  = "{{ cookiecutter.github_repo_name }}/terraform/stacks/mongodb"
+      "cookiecutter/module/version" = ""
+    }
+  )
+
 }
 
 # create the MongoDB instance and install configuration files.
@@ -34,7 +44,7 @@ resource "aws_instance" "mongodb" {
   monitoring                  = false
   associate_public_ip_address = false
   ebs_optimized               = false
-  tags                        = var.tags
+  tags                        = local.tags
 
   vpc_security_group_ids = [
     aws_security_group.sg_mongodb.id,
@@ -45,7 +55,7 @@ resource "aws_instance" "mongodb" {
   root_block_device {
     delete_on_termination = true
     volume_size           = 8
-    tags                  = var.tags
+    tags                  = local.tags
   }
 
   provisioner "file" {
@@ -224,6 +234,9 @@ resource "null_resource" "install_script" {
 #------------------------------------------------------------------------------
 #                        SUPPORTING RESOURCES
 #------------------------------------------------------------------------------
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
+}
 
 data "aws_ebs_volume" "mongodb" {
   most_recent = true
@@ -324,7 +337,7 @@ resource "aws_security_group" "sg_mongodb" {
     ipv6_cidr_blocks = ["::/0"]
   }
 
-  tags = var.tags
+  tags = local.tags
 }
 
 
@@ -359,7 +372,7 @@ resource "random_password" "mongodb_admin" {
 resource "aws_iam_user" "aws_cli" {
   name = "${var.stack_namespace}-mongodb"
   path = "/system/mongodb-user/"
-  tags = var.tags
+  tags = local.tags
 }
 
 resource "aws_iam_access_key" "aws_cli" {

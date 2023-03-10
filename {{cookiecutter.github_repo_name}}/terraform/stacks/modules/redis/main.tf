@@ -12,10 +12,38 @@ locals {
   name = var.replication_group_description
 }
 
+module "redis" {
+  source = "./modules/elasticache"
+
+  description                = local.name
+  create_random_auth_token   = var.create_random_auth_token
+  subnet_ids                 = var.subnet_ids
+  engine                     = var.engine
+  engine_version             = var.engine_version
+  num_cache_clusters         = var.num_cache_clusters
+  port                       = var.port
+  vpc_security_group_ids     = [aws_security_group.redis.id]
+  transit_encryption_enabled = var.transit_encryption_enabled
+  family                     = var.family
+  node_type                  = var.node_type
+
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"  = "./modules/elasticache"
+      "cookiecutter/module/version" = "latest stable"
+    }
+  )
+}
 
 ################################################################################
 # Supporting Resources
 ################################################################################
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
+}
+
 resource "aws_security_group" "redis" {
   description = "openedx_devops: Redis"
   name_prefix = local.name
@@ -38,22 +66,4 @@ resource "aws_security_group" "redis" {
   }
 
   tags = var.tags
-}
-
-
-module "redis" {
-  source = "./modules/elasticache"
-
-  description                = local.name
-  create_random_auth_token   = var.create_random_auth_token
-  subnet_ids                 = var.subnet_ids
-  engine                     = var.engine
-  engine_version             = var.engine_version
-  num_cache_clusters         = var.num_cache_clusters
-  port                       = var.port
-  vpc_security_group_ids     = [aws_security_group.redis.id]
-  transit_encryption_enabled = var.transit_encryption_enabled
-  family                     = var.family
-  node_type                  = var.node_type
-  tags                       = var.tags
 }

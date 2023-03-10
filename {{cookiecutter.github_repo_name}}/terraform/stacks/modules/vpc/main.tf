@@ -13,10 +13,9 @@
 #        see https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest
 #------------------------------------------------------------------------------
 
-
 module "vpc" {
   source                 = "terraform-aws-modules/vpc/aws"
-  version                = "{{ cookiecutter.terraform_aws_modules_vpc }}"
+  version                = "~> {{ cookiecutter.terraform_aws_modules_vpc }}"
   create_vpc             = true
   name                   = var.name
   cidr                   = var.cidr
@@ -32,5 +31,17 @@ module "vpc" {
   one_nat_gateway_per_az = var.one_nat_gateway_per_az
   public_subnet_tags     = var.public_subnet_tags
   private_subnet_tags    = var.private_subnet_tags
-  tags                   = var.tags
+
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"  = "terraform-aws-modules/vpc/aws"
+      "cookiecutter/module/version" = "{{ cookiecutter.terraform_aws_modules_vpc }}"
+    }
+  )
+}
+
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
 }

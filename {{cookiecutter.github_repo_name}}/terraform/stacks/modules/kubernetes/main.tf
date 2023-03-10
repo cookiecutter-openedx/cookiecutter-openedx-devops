@@ -16,6 +16,16 @@
 locals {
   # Used by Karpenter config to determine correct partition (i.e. - `aws`, `aws-gov`, `aws-cn`, etc.)
   partition = data.aws_partition.current.partition
+
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"  = "terraform-aws-modules/eks/aws"
+      "cookiecutter/module/version" = "{{ cookiecutter.terraform_aws_modules_eks }}"
+    }
+  )
+
 }
 
 resource "aws_security_group" "worker_group_mgmt" {
@@ -34,7 +44,7 @@ resource "aws_security_group" "worker_group_mgmt" {
     ]
   }
 
-  tags = var.tags
+  tags = local.tags
 
 }
 
@@ -56,14 +66,14 @@ resource "aws_security_group" "all_worker_mgmt" {
     ]
   }
 
-  tags = var.tags
+  tags = local.tags
 
 }
 
 
 module "eks" {
   source                          = "terraform-aws-modules/eks/aws"
-  version                         = "{{ cookiecutter.terraform_aws_modules_eks }}"
+  version                         = "~> {{ cookiecutter.terraform_aws_modules_eks }}"
   cluster_name                    = var.namespace
   cluster_version                 = var.kubernetes_cluster_version
   cluster_endpoint_private_access = true
@@ -93,7 +103,7 @@ module "eks" {
   aws_auth_users = var.map_users
 
   tags = merge(
-    var.tags,
+    local.tags,
     # Tag node group resources for Karpenter auto-discovery
     # NOTE - if creating multiple security groups with this module, only tag the
     # security group that Karpenter should utilize with the following tag
@@ -178,7 +188,7 @@ module "eks" {
 
       instance_types = ["${var.eks_service_group_instance_type}"]
       tags = merge(
-        var.tags,
+        local.tags,
         { Name = "eks-${var.shared_resource_identifier}" }
       )
     }
@@ -204,7 +214,7 @@ module "eks" {
 
       instance_types = ["${var.eks_hosting_group_instance_type}"]
       tags = merge(
-        var.tags,
+        local.tags,
         { Name = "eks-${var.shared_resource_identifier}-hosting" }
       )
     }
