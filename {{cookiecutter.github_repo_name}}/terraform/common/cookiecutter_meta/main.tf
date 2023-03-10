@@ -4,11 +4,61 @@
 #
 # date: Mar-2023
 #
-# usage: gather environment variables and add to a tags dict
+# usage: gather environment variables and add to a tags dict. This is a
+#   hacky solution in that we use Bash to gather data elements, and meanwhile
+#   Terraform lacks a good interface to send bash results back to the thread
+#   of control.
+#   as a workaround, we get bash to write its results to a file in the "output"
+#   folder and then we use Terraform 'data' definitions to access each result.
+#
+#   But, it's worse than just that. Terraform also lacks a means of detecting
+#   state changes on the null_resource objects we declare here, as this would
+#   require that an 'apply' on each resource in order to run the bash code
+#   contained therein. thus, it's a chicken-and-egg problem.
+#
+#   our workaround is:
+#   1. always execute an "init" resource
+#   2. inside this we rewrite the contents of cookiecutter_github_commit.state
+#   3. we use a MD5 checksum of the file content of cookiecutter_github_commit.state
+#      as a taint for all resources that provide data to the tags output.
 #------------------------------------------------------------------------------
 
-data "template_file" "cookiecutter_version" {
-  template = file("${path.module}/../../../VERSION")
+
+resource "null_resource" "init" {
+  provisioner "local-exec" {
+    command = <<-EOT
+    # ensure that a state file exists for each element we track.
+    touch ${path.module}/output/cookiecutter_awscli_version.state
+    touch ${path.module}/output/cookiecutter_github_branch.state
+    touch ${path.module}/output/cookiecutter_github_commit_date.state
+    touch ${path.module}/output/cookiecutter_github_commit.state
+    touch ${path.module}/output/cookiecutter_github_repository.state
+    touch ${path.module}/output/cookiecutter_iam_arn.state
+    touch ${path.module}/output/cookiecutter_kubectl_version.state
+    touch ${path.module}/output/cookiecutter_os.state
+    touch ${path.module}/output/cookiecutter_terraform_version.state
+    touch ${path.module}/output/cookiecutter_timestamp.state
+    touch ${path.module}/output/cookiecutter_version.state
+
+    # rewrite the contents of cookiecutter_github_commit.state, which will
+    # taint our other resouces in the event that this changes the file
+    # contents.
+    GIT_PARENT_DIRECTORY=$(git rev-parse --show-toplevel)
+    cookiecutter_github_commit=$(git -C $GIT_PARENT_DIRECTORY rev-parse HEAD)
+    echo $cookiecutter_github_commit > ${path.module}/output/cookiecutter_github_commit.state
+    EOT
+  }
+  triggers = {
+    timestamp = "${timestamp()}"
+  }
+}
+
+data "local_file" "taint" {
+  filename = "${path.module}/output/cookiecutter_github_commit.state"
+}
+
+data "local_file" "cookiecutter_version" {
+  filename = "${path.module}/../../../VERSION"
 }
 
 
@@ -23,11 +73,14 @@ resource "null_resource" "cookiecutter_github_commit_date" {
     EOT
   }
   triggers = {
-    timestamp = "${timestamp()}"
+    last_commit = "${data.local_file.taint.content_md5}"
   }
+  depends_on = [
+    null_resource.init
+  ]
 }
-data "template_file" "cookiecutter_github_commit_date" {
-  template = file("${path.module}/output/cookiecutter_github_commit_date.state")
+data "local_file" "cookiecutter_github_commit_date" {
+  filename = "${path.module}/output/cookiecutter_github_commit_date.state"
   depends_on = [
     null_resource.cookiecutter_github_commit_date
   ]
@@ -46,9 +99,12 @@ resource "null_resource" "cookiecutter_terraform_version" {
   triggers = {
     timestamp = "${timestamp()}"
   }
+  depends_on = [
+    null_resource.init
+  ]
 }
-data "template_file" "cookiecutter_terraform_version" {
-  template = file("${path.module}/output/cookiecutter_terraform_version.state")
+data "local_file" "cookiecutter_terraform_version" {
+  filename = "${path.module}/output/cookiecutter_terraform_version.state"
   depends_on = [
     null_resource.cookiecutter_terraform_version
   ]
@@ -66,9 +122,12 @@ resource "null_resource" "cookiecutter_timestamp" {
   triggers = {
     timestamp = "${timestamp()}"
   }
+  depends_on = [
+    null_resource.init
+  ]
 }
-data "template_file" "cookiecutter_timestamp" {
-  template = file("${path.module}/output/cookiecutter_timestamp.state")
+data "local_file" "cookiecutter_timestamp" {
+  filename = "${path.module}/output/cookiecutter_timestamp.state"
   depends_on = [
     null_resource.cookiecutter_timestamp
   ]
@@ -85,9 +144,12 @@ resource "null_resource" "cookiecutter_os" {
   triggers = {
     timestamp = "${timestamp()}"
   }
+  depends_on = [
+    null_resource.init
+  ]
 }
-data "template_file" "cookiecutter_os" {
-  template = file("${path.module}/output/cookiecutter_os.state")
+data "local_file" "cookiecutter_os" {
+  filename = "${path.module}/output/cookiecutter_os.state"
   depends_on = [
     null_resource.cookiecutter_os
   ]
@@ -106,9 +168,12 @@ resource "null_resource" "cookiecutter_github_repository" {
   triggers = {
     timestamp = "${timestamp()}"
   }
+  depends_on = [
+    null_resource.init
+  ]
 }
-data "template_file" "cookiecutter_github_repository" {
-  template = file("${path.module}/output/cookiecutter_github_repository.state")
+data "local_file" "cookiecutter_github_repository" {
+  filename = "${path.module}/output/cookiecutter_github_repository.state"
   depends_on = [
     null_resource.cookiecutter_github_repository
   ]
@@ -127,9 +192,12 @@ resource "null_resource" "cookiecutter_github_branch" {
   triggers = {
     timestamp = "${timestamp()}"
   }
+  depends_on = [
+    null_resource.init
+  ]
 }
-data "template_file" "cookiecutter_github_branch" {
-  template = file("${path.module}/output/cookiecutter_github_branch.state")
+data "local_file" "cookiecutter_github_branch" {
+  filename = "${path.module}/output/cookiecutter_github_branch.state"
   depends_on = [
     null_resource.cookiecutter_github_branch
   ]
@@ -148,9 +216,12 @@ resource "null_resource" "cookiecutter_github_commit" {
   triggers = {
     timestamp = "${timestamp()}"
   }
+  depends_on = [
+    null_resource.init
+  ]
 }
-data "template_file" "cookiecutter_github_commit" {
-  template = file("${path.module}/output/cookiecutter_github_commit.state")
+data "local_file" "cookiecutter_github_commit" {
+  filename = "${path.module}/output/cookiecutter_github_commit.state"
   depends_on = [
     null_resource.cookiecutter_github_commit
   ]
@@ -168,9 +239,12 @@ resource "null_resource" "cookiecutter_global_iam_arn" {
   triggers = {
     timestamp = "${timestamp()}"
   }
+  depends_on = [
+    null_resource.init
+  ]
 }
-data "template_file" "cookiecutter_global_iam_arn" {
-  template = file("${path.module}/output/cookiecutter_global_iam_arn.state")
+data "local_file" "cookiecutter_global_iam_arn" {
+  filename = "${path.module}/output/cookiecutter_global_iam_arn.state"
   depends_on = [
     null_resource.cookiecutter_global_iam_arn
   ]
@@ -189,9 +263,12 @@ resource "null_resource" "cookiecutter_kubectl_version" {
   triggers = {
     timestamp = "${timestamp()}"
   }
+  depends_on = [
+    null_resource.init
+  ]
 }
-data "template_file" "cookiecutter_kubectl_version" {
-  template = file("${path.module}/output/cookiecutter_kubectl_version.state")
+data "local_file" "cookiecutter_kubectl_version" {
+  filename = "${path.module}/output/cookiecutter_kubectl_version.state"
   depends_on = [
     null_resource.cookiecutter_kubectl_version
   ]
@@ -211,9 +288,12 @@ resource "null_resource" "cookiecutter_awscli_version" {
   triggers = {
     timestamp = "${timestamp()}"
   }
+  depends_on = [
+    null_resource.init
+  ]
 }
-data "template_file" "cookiecutter_awscli_version" {
-  template = file("${path.module}/output/cookiecutter_awscli_version.state")
+data "local_file" "cookiecutter_awscli_version" {
+  filename = "${path.module}/output/cookiecutter_awscli_version.state"
   depends_on = [
     null_resource.cookiecutter_awscli_version
   ]
