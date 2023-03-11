@@ -13,4 +13,8 @@ output "tags" {
     "cookiecutter/meta/os"                             = replace(tostring(data.local_file.cookiecutter_os.content), "\n", "")
     "cookiecutter/meta/timestamp"                      = replace(tostring(data.local_file.cookiecutter_timestamp.content), "\n", "")
   }
+
+  depends_on = [
+    null_resource.environment
+  ]
 }

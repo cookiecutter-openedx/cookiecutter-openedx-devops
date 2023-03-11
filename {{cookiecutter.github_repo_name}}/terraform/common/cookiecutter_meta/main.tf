@@ -24,10 +24,10 @@
 #------------------------------------------------------------------------------
 
 
+# ensure that a state file exists for each element we track.
 resource "null_resource" "init" {
   provisioner "local-exec" {
     command = <<-EOT
-    # ensure that a state file exists for each element we track.
     touch ${path.module}/output/cookiecutter_awscli_version.state
     touch ${path.module}/output/cookiecutter_github_branch.state
     touch ${path.module}/output/cookiecutter_github_commit_date.state
@@ -39,10 +39,16 @@ resource "null_resource" "init" {
     touch ${path.module}/output/cookiecutter_terraform_version.state
     touch ${path.module}/output/cookiecutter_timestamp.state
     touch ${path.module}/output/cookiecutter_version.state
+    EOT
+  }
+}
 
-    # rewrite the contents of cookiecutter_github_commit.state, which will
-    # taint our other resouces in the event that this changes the file
-    # contents.
+# rewrite the contents of cookiecutter_github_commit.state, which will
+# taint our other resouces in the event that this changes the file
+# contents.
+resource "null_resource" "taint" {
+  provisioner "local-exec" {
+    command = <<-EOT
     GIT_PARENT_DIRECTORY=$(git rev-parse --show-toplevel)
     cookiecutter_github_commit=$(git -C $GIT_PARENT_DIRECTORY rev-parse HEAD)
     echo $cookiecutter_github_commit > ${path.module}/output/cookiecutter_github_commit.state
@@ -51,6 +57,12 @@ resource "null_resource" "init" {
   triggers = {
     timestamp = "${timestamp()}"
   }
+}
+data "local_file" "taint" {
+  filename = "${path.module}/output/cookiecutter_github_commit.state"
+  depends_on = [
+    null_resource.taint
+  ]
 }
 
 resource "null_resource" "environment" {
@@ -135,9 +147,13 @@ resource "null_resource" "environment" {
 
     EOT
   }
-  triggers = {
-    last_commit = "${data.local_file.cookiecutter_github_commit.content_md5}"
+
+  lifecycle {
+    replace_triggered_by = [
+      data.local_file.taint.id
+    ]
   }
+
   depends_on = [
     null_resource.init
   ]
