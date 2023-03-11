@@ -16,6 +16,17 @@
 #   helm show values jetstack/cert-manager
 #------------------------------------------------------------------------------
 
+locals {
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"  = "jetstack/cert-manager"
+      "cookiecutter/module/version" = "{{ cookiecutter.terraform_helm_cert_manager }}"
+    }
+  )
+
+}
 data "template_file" "cert-manager-values" {
   template = file("${path.module}/manifests/cert-manager-values.yaml.tpl")
   vars = {
@@ -31,7 +42,7 @@ resource "helm_release" "cert-manager" {
 
   chart      = "cert-manager"
   repository = "jetstack"
-  version    = "{{ cookiecutter.terraform_helm_cert_manager }}"
+  version    = "~> {{ cookiecutter.terraform_helm_cert_manager }}"
   values = [
     data.template_file.cert-manager-values.rendered
   ]
@@ -79,4 +90,21 @@ module "cert_manager_irsa" {
   provider_url                  = replace(data.aws_eks_cluster.eks.identity[0].oidc[0].issuer, "https://", "")
   role_policy_arns              = [aws_iam_policy.cert_manager_policy.arn]
   oidc_fully_qualified_subjects = ["system:serviceaccount:${var.cert_manager_namespace}:cert-manager"]
+}
+
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
+}
+
+resource "kubernetes_secret" "cookiecutter_meta" {
+  metadata {
+    name      = "cookiecutter-meta"
+    namespace = var.cert_manager_namespace
+  }
+
+  # https://stackoverflow.com/questions/64134699/terraform-map-to-string-value
+  data = {
+    "tags"                    = jsonencode({})
+    "cookiecutter_meta_tags"  = jsonencode(module.cookiecutter_meta.tags)
+  }
 }
