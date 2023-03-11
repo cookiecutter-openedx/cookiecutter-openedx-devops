@@ -25,14 +25,6 @@ locals {
       "cookiecutter/module/version" = "{{ cookiecutter.terraform_helm_cert_manager }}"
     }
   )
-
-}
-data "template_file" "cert-manager-values" {
-  template = file("${path.module}/manifests/cert-manager-values.yaml.tpl")
-  vars = {
-    role_arn                   = module.cert_manager_irsa.iam_role_arn
-    namespace                  = var.cert_manager_namespace
-  }
 }
 
 resource "helm_release" "cert-manager" {
@@ -51,6 +43,14 @@ resource "helm_release" "cert-manager" {
 #------------------------------------------------------------------------------
 #                               SUPPORTING RESOURCES
 #------------------------------------------------------------------------------
+data "template_file" "cert-manager-values" {
+  template = file("${path.module}/manifests/cert-manager-values.yaml.tpl")
+  vars = {
+    role_arn                   = module.cert_manager_irsa.iam_role_arn
+    namespace                  = var.cert_manager_namespace
+  }
+}
+
 resource "aws_iam_policy" "cert_manager_policy" {
   name        = "${var.namespace}-cert-manager-policy"
   path        = "/"
@@ -79,6 +79,8 @@ resource "aws_iam_policy" "cert_manager_policy" {
       }
     ]
   })
+
+  tags = local.tags
 }
 
 
@@ -96,14 +98,14 @@ module "cookiecutter_meta" {
   source = "../../../../../../../common/cookiecutter_meta"
 }
 
-resource "kubernetes_secret" "cookiecutter_meta" {
+resource "kubernetes_secret" "cookiecutter" {
   metadata {
-    name      = "cookiecutter-meta"
+    name      = "cookiecutter"
     namespace = var.cert_manager_namespace
   }
 
   # https://stackoverflow.com/questions/64134699/terraform-map-to-string-value
   data = {
-    "tags"                    = jsonencode(local.tags)
+    tags = jsonencode(local.tags)
   }
 }

@@ -18,7 +18,6 @@ locals {
   services_subdomain              = local.global_vars.locals.services_subdomain
 
   tags = merge(
-    local.global_vars.locals.tags,
     local.stack_vars.locals.tags,
   )
 
