@@ -104,7 +104,6 @@ resource "kubernetes_secret" "cookiecutter_meta" {
 
   # https://stackoverflow.com/questions/64134699/terraform-map-to-string-value
   data = {
-    "tags"                    = jsonencode({})
-    "cookiecutter_meta_tags"  = jsonencode(module.cookiecutter_meta.tags)
+    "tags"                    = jsonencode(local.tags)
   }
 }
