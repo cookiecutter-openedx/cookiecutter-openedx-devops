@@ -53,14 +53,6 @@ resource "null_resource" "init" {
   }
 }
 
-data "local_file" "taint" {
-  filename = "${path.module}/output/cookiecutter_github_commit.state"
-}
-
-data "local_file" "cookiecutter_version" {
-  filename = "${path.module}/../../../VERSION"
-}
-
 resource "null_resource" "environment" {
   provisioner "local-exec" {
     command = <<-EOT
@@ -144,48 +136,22 @@ resource "null_resource" "environment" {
     EOT
   }
   triggers = {
-    last_commit = "${data.local_file.taint.content_md5}"
+    last_commit = "${data.local_file.cookiecutter_github_commit.content_md5}"
   }
   depends_on = [
     null_resource.init
   ]
 }
 
-data "local_file" "cookiecutter_github_commit_date" {
-  filename = "${path.module}/output/cookiecutter_github_commit_date.state"
+# 1. cookiecutter_awscli_version
+data "local_file" "cookiecutter_awscli_version" {
+  filename = "${path.module}/output/cookiecutter_awscli_version.state"
   depends_on = [
     null_resource.environment
   ]
 }
 
-data "local_file" "cookiecutter_terraform_version" {
-  filename = "${path.module}/output/cookiecutter_terraform_version.state"
-  depends_on = [
-    null_resource.environment
-  ]
-}
-
-data "local_file" "cookiecutter_timestamp" {
-  filename = "${path.module}/output/cookiecutter_timestamp.state"
-  depends_on = [
-    null_resource.environment
-  ]
-}
-
-data "local_file" "cookiecutter_os" {
-  filename = "${path.module}/output/cookiecutter_os.state"
-  depends_on = [
-    null_resource.environment
-  ]
-}
-
-data "local_file" "cookiecutter_github_repository" {
-  filename = "${path.module}/output/cookiecutter_github_repository.state"
-  depends_on = [
-    null_resource.environment
-  ]
-}
-
+# 2. cookiecutter_github_branch
 data "local_file" "cookiecutter_github_branch" {
   filename = "${path.module}/output/cookiecutter_github_branch.state"
   depends_on = [
@@ -193,6 +159,15 @@ data "local_file" "cookiecutter_github_branch" {
   ]
 }
 
+# 3. cookiecutter_github_commit_date
+data "local_file" "cookiecutter_github_commit_date" {
+  filename = "${path.module}/output/cookiecutter_github_commit_date.state"
+  depends_on = [
+    null_resource.environment
+  ]
+}
+
+# 4. cookiecutter_github_commit
 data "local_file" "cookiecutter_github_commit" {
   filename = "${path.module}/output/cookiecutter_github_commit.state"
   depends_on = [
@@ -200,6 +175,15 @@ data "local_file" "cookiecutter_github_commit" {
   ]
 }
 
+# 5. cookiecutter_github_repository
+data "local_file" "cookiecutter_github_repository" {
+  filename = "${path.module}/output/cookiecutter_github_repository.state"
+  depends_on = [
+    null_resource.environment
+  ]
+}
+
+# 6. cookiecutter_global_iam_arn
 data "local_file" "cookiecutter_global_iam_arn" {
   filename = "${path.module}/output/cookiecutter_global_iam_arn.state"
   depends_on = [
@@ -207,6 +191,7 @@ data "local_file" "cookiecutter_global_iam_arn" {
   ]
 }
 
+# 7. cookiecutter_kubectl_version
 data "local_file" "cookiecutter_kubectl_version" {
   filename = "${path.module}/output/cookiecutter_kubectl_version.state"
   depends_on = [
@@ -214,9 +199,31 @@ data "local_file" "cookiecutter_kubectl_version" {
   ]
 }
 
-data "local_file" "cookiecutter_awscli_version" {
-  filename = "${path.module}/output/cookiecutter_awscli_version.state"
+# 8. cookiecutter_os
+data "local_file" "cookiecutter_os" {
+  filename = "${path.module}/output/cookiecutter_os.state"
   depends_on = [
     null_resource.environment
   ]
+}
+
+# 9. cookiecutter_terraform_version
+data "local_file" "cookiecutter_terraform_version" {
+  filename = "${path.module}/output/cookiecutter_terraform_version.state"
+  depends_on = [
+    null_resource.environment
+  ]
+}
+
+# 10. cookiecutter_timestamp
+data "local_file" "cookiecutter_timestamp" {
+  filename = "${path.module}/output/cookiecutter_timestamp.state"
+  depends_on = [
+    null_resource.environment
+  ]
+}
+
+# 11. cookiecutter_version
+data "local_file" "cookiecutter_version" {
+  filename = "${path.module}/../../../VERSION"
 }
