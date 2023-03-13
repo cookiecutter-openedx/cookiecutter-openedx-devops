@@ -39,6 +39,11 @@ jobs:
           aws-region: {% raw %}${{ env.AWS_REGION }}{% endraw %}
           tutor-version: "{{ cookiecutter.ci_build_tutor_version }}"
 
+      - name: Load additional environment specific settings
+        shell: bash
+        run: |-
+          echo "TUTOR_OPENEDX_COMMON_VERSION=open-release/{{ cookiecutter.ci_deploy_open_edx_version }}" >> $GITHUB_ENV
+
       #------------------------------------------------------------------------
       # Add a custom theme here.
       #------------------------------------------------------------------------
