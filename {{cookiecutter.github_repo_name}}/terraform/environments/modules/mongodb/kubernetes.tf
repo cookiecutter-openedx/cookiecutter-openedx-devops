@@ -46,17 +46,6 @@ resource "kubernetes_secret" "mongodb_admin" {
   }
 }
 
-resource "random_password" "mongodb_openedx" {
-  length           = 16
-  special          = true
-  override_special = "_%@"
-  keepers = {
-    version = "1"
-  }
-}
-
-# not currently using authentication for mongodb, which
-# is the same default treatment as with tutor.
 resource "kubernetes_secret" "openedx" {
   metadata {
     name      = "mongodb-openedx"
@@ -64,12 +53,27 @@ resource "kubernetes_secret" "openedx" {
   }
 
   data = {
-    MONGODB_DATABASE = substr("${var.db_prefix}_edx", -32, -1)
-    #MONGODB_USERNAME = substr("${var.db_prefix}_edx", -32, -1)
-    #MONGODB_PASSWORD = random_password.mongodb_openedx.result
-    MONGODB_USERNAME = ""
-    MONGODB_PASSWORD = ""
-    MONGODB_HOST     = data.kubernetes_secret.mongodb_admin.data.MONGODB_HOST
-    MONGODB_PORT     = data.kubernetes_secret.mongodb_admin.data.MONGODB_PORT
+    # see: https://docs.tutor.overhang.io/configuration.html
+    # -------------------------------------------------------------------------
+    MONGODB_DATABASE            = substr("${var.db_prefix}_edx", -32, -1)
+    MONGODB_HOST                = data.kubernetes_secret.mongodb_admin.data.MONGODB_HOST
+    MONGODB_USERNAME            = ""
+    MONGODB_PASSWORD            = ""
+    # you can harden security by adding auth
+    # credentials here
+    #MONGODB_USERNAME           = substr("${var.db_prefix}_edx", -32, -1)
+    #MONGODB_PASSWORD           = random_password.mongodb_openedx.result
+    MONGODB_PORT                = data.kubernetes_secret.mongodb_admin.data.MONGODB_PORT
+    MONGODB_USE_SSL             = "false"
+    MONGODB_REPLICA_SET         = ""
+    MONGODB_AUTH_MECHANISM      = ""
+    MONGODB_AUTH_SOURCE         = "admin"
+
+    # see: https://github.com/overhangio/tutor-forum
+    # -------------------------------------------------------------------------
+    FORUM_MONGODB_DATABASE      = substr("${var.db_prefix}_cs_comments", -32, -1)
+    FORUM_MONGODB_USE_SSL       = "false"
+    FORUM_MONGODB_AUTH_SOURCE   = ""
+    FORUM_MONGODB_AUTH_MECH     = ""
   }
 }
