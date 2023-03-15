@@ -18,10 +18,6 @@ variable "wordpressConfig" {
   type = map(string)
 }
 
-variable "tags" {
-  type = map(string)
-}
-
 variable "aws_region" {
   type = string
 }
@@ -48,4 +44,10 @@ variable "resource_quota_memory" {
 
 variable "subnet_ids" {
   type = list(string)
+}
+
+variable "tags" {
+  description = "collection of all tags to add to this resource. execting the combination of global + environment + resouce tags."
+  type        = map(string)
+  default     = {}
 }

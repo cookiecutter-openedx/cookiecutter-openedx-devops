@@ -12,8 +12,9 @@ locals {
     var.tags,
     module.cookiecutter_meta.tags,
     {
-      "cookiecutter/module/source"  = "terraform-aws-modules/acm/aws"
-      "cookiecutter/module/version" = "{{ cookiecutter.terraform_aws_modules_acm }}"
+      "cookiecutter/module/source"    = "{{ cookiecutter.github_repo_name }}/terraform/environments/modules/acm"
+      "cookiecutter/resource/source"  = "terraform-aws-modules/acm/aws"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_aws_modules_acm }}"
     }
   )
 
@@ -68,4 +69,11 @@ module "acm_environment_environment_region" {
   tags = local.tags
 
   wait_for_validation = true
+}
+
+#------------------------------------------------------------------------------
+#                               COOKIECUTTER META
+#------------------------------------------------------------------------------
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
 }

@@ -84,4 +84,5 @@ inputs = {
   stack_namespace = local.stack_namespace
   root_domain     = local.root_domain
   services_subdomain    = local.services_subdomain
+  tags = local.tags
 }

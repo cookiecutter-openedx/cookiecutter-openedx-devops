@@ -28,7 +28,7 @@ locals {
     var.tags,
     module.cookiecutter_meta.tags,
     {
-      "cookiecutter/module/source"    = "{{ cookiecutter.github_repo_name }}/terraform/stacks/kubernetes_vpa"
+      "cookiecutter/module/source"    = "{{ cookiecutter.github_repo_name }}/terraform/stacks/modules/kubernetes_vpa"
       "cookiecutter/resource/source"  = "cowboysysop.github.io/charts/vertical-pod-autoscaler"
       "cookiecutter/resource/version" = "{{ cookiecutter.terraform_helm_vertical_pod_autoscaler }}"
     }

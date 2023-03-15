@@ -21,7 +21,7 @@ locals {
     var.tags,
     module.cookiecutter_meta.tags,
     {
-      "cookiecutter/module/source"    = "{{ cookiecutter.github_repo_name }}/terraform/stacks/kubernetes_cert_manager"
+      "cookiecutter/module/source"    = "{{ cookiecutter.github_repo_name }}/terraform/stacks/modules/kubernetes_cert_manager"
       "cookiecutter/resource/source"  = "jetstack/cert-manager"
       "cookiecutter/resource/version" = "{{ cookiecutter.terraform_helm_cert_manager }}"
     }
@@ -81,7 +81,13 @@ resource "aws_iam_policy" "cert_manager_policy" {
     ]
   })
 
-  tags = local.tags
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "hashicorp/aws/aws_iam_policy"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+    }
+  )
 }
 
 

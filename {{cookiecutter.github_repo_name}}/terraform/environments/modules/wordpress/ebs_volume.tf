@@ -45,6 +45,14 @@ resource "kubernetes_persistent_volume_claim" "wordpress" {
     volume_name = kubernetes_persistent_volume.wordpress.metadata.0.name
   }
 
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "hashicorp/aws/aws_ebs_volume"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+    }
+  )
+
   depends_on = [
     kubernetes_persistent_volume.wordpress
   ]
@@ -106,7 +114,15 @@ resource "kubernetes_persistent_volume" "wordpress" {
 resource "aws_ebs_volume" "wordpress" {
   availability_zone = data.aws_subnet.private_subnet.availability_zone
   size              = local.persistenceSize
-  tags              = var.tags
+
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "hashicorp/aws/aws_ebs_volume"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+    }
+  )
+
 
   # local.ebsVolumePreventDestroy defaults to 'Y'
   # for anything other than an upper case 'N' we'll assume that

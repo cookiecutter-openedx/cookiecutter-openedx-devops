@@ -20,11 +20,7 @@ locals {
   environment_domain            = local.environment_vars.locals.environment_domain
   environment_studio_domain     = "${local.environment_vars.locals.environment_studio_subdomain}.${local.environment_domain}"
   environment_namespace         = local.environment_vars.locals.environment_namespace
-
-  tags = merge(
-    local.environment_vars.locals.tags,
-    { Name = "${local.environment_vars.locals.environment_namespace}" }
-  )
+  tags                          = local.environment_vars.locals.tags
 
 }
 

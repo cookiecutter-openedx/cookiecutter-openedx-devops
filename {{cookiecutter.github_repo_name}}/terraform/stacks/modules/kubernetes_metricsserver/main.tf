@@ -27,7 +27,7 @@ locals {
     var.tags,
     module.cookiecutter_meta.tags,
     {
-      "cookiecutter/module/source"    = "{{ cookiecutter.github_repo_name }}/terraform/stacks/kubernetes_metricsserver"
+      "cookiecutter/module/source"    = "{{ cookiecutter.github_repo_name }}/terraform/stacks/modules/kubernetes_metricsserver"
       "cookiecutter/resource/source"  = "kubernetes-sigs.github.io/metrics-server/"
       "cookiecutter/resource/version" = "{{ cookiecutter.terraform_helm_metrics_server }}"
     }

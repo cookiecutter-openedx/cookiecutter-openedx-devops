@@ -16,6 +16,11 @@ locals {
   environment_namespace     = local.environment_vars.locals.environment_namespace
   shared_resource_namespace = local.environment_vars.locals.shared_resource_namespace
   db_prefix                 = local.environment_vars.locals.db_prefix
+
+  tags = merge(
+    local.environment_vars.locals.tags,
+    { Name = "${local.resource_name}" }
+  )
 }
 
 dependencies {
@@ -99,4 +104,5 @@ inputs = {
   environment_domain        = local.environment_domain
   environment_namespace     = local.environment_namespace
   shared_resource_namespace = local.shared_resource_namespace
+  tags = local.tags
 }

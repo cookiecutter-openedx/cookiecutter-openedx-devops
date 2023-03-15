@@ -6,10 +6,6 @@
 #
 # usage: Add DNS records.
 #------------------------------------------------------------------------------
-module "cookiecutter_meta" {
-  source = "../../../../../../../common/cookiecutter_meta"
-}
-
 data "aws_route53_zone" "root_domain" {
   name = var.root_domain
 }
@@ -17,8 +13,11 @@ data "aws_route53_zone" "root_domain" {
 resource "aws_route53_zone" "environment_domain" {
   name = var.environment_domain
   tags = merge(
-    var.tags,
-    module.cookiecutter_meta.tags
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "hashicorp/aws/aws_route53_zone"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+    }
   )
 }
 

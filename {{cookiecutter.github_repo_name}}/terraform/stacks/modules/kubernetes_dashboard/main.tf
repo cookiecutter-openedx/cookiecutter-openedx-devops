@@ -30,7 +30,7 @@ locals {
     var.tags,
     module.cookiecutter_meta.tags,
     {
-      "cookiecutter/module/source"    = "{{ cookiecutter.github_repo_name }}/terraform/stacks/kubernetes_dashboard"
+      "cookiecutter/module/source"    = "{{ cookiecutter.github_repo_name }}/terraform/stacks/modules/kubernetes_dashboard"
       "cookiecutter/resource/source"  = "kubernetes.github.io/dashboard"
       "cookiecutter/resource/version" = "{{ cookiecutter.terraform_helm_dashboard }}"
     }

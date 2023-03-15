@@ -57,4 +57,5 @@ inputs = {
   allocated_storage     = local.mongodb_allocated_storage
   tags                  = local.tags
   subnet_ids            = dependency.vpc.outputs.database_subnets
+  tags = local.tags
 }

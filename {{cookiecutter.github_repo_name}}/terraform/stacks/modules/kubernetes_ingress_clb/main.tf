@@ -25,7 +25,7 @@ locals {
     var.tags,
     module.cookiecutter_meta.tags,
     {
-      "cookiecutter/module/source"    = "{{ cookiecutter.github_repo_name }}/terraform/stacks/kubernetes_ingress_clb"
+      "cookiecutter/module/source"    = "{{ cookiecutter.github_repo_name }}/terraform/stacks/modules/kubernetes_ingress_clb"
       "cookiecutter/resource/source"  = "kubernetes.github.io/ingress-nginx"
       "cookiecutter/resource/version" = "{{ cookiecutter.terraform_helm_ingress_nginx_controller }}"
     }

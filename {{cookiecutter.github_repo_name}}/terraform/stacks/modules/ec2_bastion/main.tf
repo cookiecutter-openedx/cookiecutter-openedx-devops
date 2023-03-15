@@ -13,7 +13,7 @@ locals {
     var.tags,
     module.cookiecutter_meta.tags,
     {
-      "cookiecutter/module/source"  = "{{ cookiecutter.github_repo_name }}/terraform/stacks/ec2_bastion"
+      "cookiecutter/module/source"  = "{{ cookiecutter.github_repo_name }}/terraform/stacks/modules/ec2_bastion"
       "cookiecutter/module/version" = ""
     }
   )
@@ -45,7 +45,13 @@ resource "aws_instance" "bastion" {
   root_block_device {
     delete_on_termination = true
     volume_size           = var.volume_size
-    tags                  = var.tags
+    tags                  = merge(
+      local.tags,
+      {
+        "cookiecutter/resource/source"  = "hashicorp/aws/aws_instance"
+        "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+      }
+    )
   }
 
   # aws cli configuration
@@ -208,9 +214,6 @@ resource "aws_instance" "bastion" {
 #------------------------------------------------------------------------------
 #                        SUPPORTING RESOURCES
 #------------------------------------------------------------------------------
-module "cookiecutter_meta" {
-  source = "../../../../../../../common/cookiecutter_meta"
-}
 
 
 # Ubuntu 20.04 LTS AMI
@@ -275,7 +278,13 @@ resource "aws_security_group" "sg_bastion" {
     ipv6_cidr_blocks = ["::/0"]
   }
 
-  tags = var.tags
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "hashicorp/aws/aws_security_group"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+    }
+  )
 }
 
 
@@ -283,7 +292,13 @@ resource "aws_security_group" "sg_bastion" {
 # add to the root domain.
 resource "aws_eip" "bastion" {
   instance = aws_instance.bastion.id
-  tags     = var.tags
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "hashicorp/aws/aws_eip"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+    }
+  )
 }
 
 
@@ -325,7 +340,13 @@ data "template_file" "update" {
 resource "aws_iam_user" "aws_cli" {
   name = "${var.resource_name}-bastion"
   path = "/system/bastion-user/"
-  tags = var.tags
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "hashicorp/aws/aws_iam_user"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+    }
+  )
 }
 
 resource "aws_iam_access_key" "aws_cli" {
@@ -378,4 +399,11 @@ data "template_file" "help_text" {
     services_subdomain = var.services_subdomain
     aws_region         = var.aws_region
   }
+}
+
+#------------------------------------------------------------------------------
+#                               COOKIECUTTER META
+#------------------------------------------------------------------------------
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
 }

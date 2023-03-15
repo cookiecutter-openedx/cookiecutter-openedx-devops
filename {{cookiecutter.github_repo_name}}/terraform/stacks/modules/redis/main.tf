@@ -14,7 +14,7 @@ locals {
     var.tags,
     module.cookiecutter_meta.tags,
     {
-      "cookiecutter/module/source"  = "{{ cookiecutter.github_repo_name }}/terraform/stacks/redis"
+      "cookiecutter/module/source"  = "{{ cookiecutter.github_repo_name }}/terraform/stacks/modules/redis"
     }
   )
 
@@ -38,7 +38,7 @@ module "redis" {
   tags = merge(
     local.tags,
     {
-      "cookiecutter/resource/source"  = "{{ cookiecutter.github_repo_name }}/terraform/stacks/redis/modules/elasticache"
+      "cookiecutter/resource/source"  = "{{ cookiecutter.github_repo_name }}/terraform/stacks/modules/redis/modules/elasticache"
       "cookiecutter/resource/version" = "latest"
     }
 

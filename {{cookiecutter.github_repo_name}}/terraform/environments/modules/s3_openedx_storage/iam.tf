@@ -31,6 +31,15 @@ resource "random_id" "id" {
 resource "aws_iam_user" "user" {
   name = "s3-openedx-user-${random_id.id.hex}"
   path = "/system/s3-bucket-user/"
+
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "hashicorp/aws/aws_iam_user"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+    }
+  )
+
 }
 
 data "aws_iam_policy_document" "user_policy" {

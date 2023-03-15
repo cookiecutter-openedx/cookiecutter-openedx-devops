@@ -7,21 +7,6 @@
 # usage: create environment connection resources for remote MongoDB instance.
 #        store the MongoDB credentials in Kubernetes Secrets
 #------------------------------------------------------------------------------
-data "aws_eks_cluster" "eks" {
-  name = var.resource_name
-}
-
-data "aws_eks_cluster_auth" "eks" {
-  name = var.resource_name
-}
-
-provider "kubernetes" {
-  host                   = data.aws_eks_cluster.eks.endpoint
-  cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
-  token                  = data.aws_eks_cluster_auth.eks.token
-}
-
-
 # Retrieve the mongodb_admin connection parameters from the shared resource namespace.
 # we'll refer to this data for the HOST and PORT assignments on all other MySQL
 # secrets.

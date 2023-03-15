@@ -28,7 +28,7 @@ locals {
     var.tags,
     module.cookiecutter_meta.tags,
     {
-      "cookiecutter/module/source"  = "{{ cookiecutter.github_repo_name }}/terraform/stacks/mongodb"
+      "cookiecutter/module/source"  = "{{ cookiecutter.github_repo_name }}/terraform/stacks/modules/mongodb"
     }
   )
 
@@ -61,7 +61,13 @@ resource "aws_instance" "mongodb" {
   root_block_device {
     delete_on_termination = true
     volume_size           = 8
-    tags                  = local.tags
+    tags                  = merge(
+      local.tags,
+      {
+        "cookiecutter/resource/source"  = "hashicorp/aws/aws_instance"
+        "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+      }
+    )
   }
 
   provisioner "file" {
@@ -339,7 +345,13 @@ resource "aws_security_group" "sg_mongodb" {
     ipv6_cidr_blocks = ["::/0"]
   }
 
-  tags = local.tags
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "hashicorp/aws/aws_security_group"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+    }
+  )
 }
 
 
@@ -374,7 +386,13 @@ resource "random_password" "mongodb_admin" {
 resource "aws_iam_user" "aws_cli" {
   name = "${var.stack_namespace}-mongodb"
   path = "/system/mongodb-user/"
-  tags = local.tags
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "hashicorp/aws/aws_iam_user"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+    }
+  )
 }
 
 resource "aws_iam_access_key" "aws_cli" {

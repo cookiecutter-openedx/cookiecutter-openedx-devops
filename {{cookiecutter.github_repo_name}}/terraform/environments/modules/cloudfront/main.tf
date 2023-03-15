@@ -20,15 +20,12 @@ locals {
 
   tags = merge(
     var.tags,
-    module.cookiecutter_meta.tags
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"    = "{{ cookiecutter.github_repo_name }}/terraform/environments/modules/cloudfront"
+    }
   )
 }
-
-provider "aws" {
-  alias  = "us-east-1"
-  region = "us-east-1"
-}
-
 
 data "aws_route53_zone" "environment_domain" {
   name = var.environment_domain
@@ -117,8 +114,15 @@ module "cdn_environment_domain" {
   tags = merge(
     local.tags,
     {
-      "cookiecutter/module/source"  = "terraform-aws-modules/cloudfront/aws"
-      "cookiecutter/module/version" = "{{cookiecutter.terraform_aws_modules_cloudfront}}"
+      "cookiecutter/resource/source"  = "terraform-aws-modules/cloudfront/aws"
+      "cookiecutter/resource/version" = "{{cookiecutter.terraform_aws_modules_cloudfront}}"
     }
   )
+}
+
+#------------------------------------------------------------------------------
+#                               COOKIECUTTER META
+#------------------------------------------------------------------------------
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
 }

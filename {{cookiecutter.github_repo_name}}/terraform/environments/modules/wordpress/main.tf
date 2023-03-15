@@ -45,6 +45,16 @@ locals {
   HorizontalAutoscalingMinReplicas = 1
   HorizontalAutoscalingMaxReplicas = 1
   externalCachePort                = "11211"
+
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"    = "{{ cookiecutter.github_repo_name }}/terraform/environments/modules/wordpress"
+      "cookiecutter/resource/source"  = "bitnami/wordpress"
+      "cookiecutter/resource/version" = "{{ cookiecutter.wordpress_helm_chart_version }}"
+    }
+  )
 }
 
 
@@ -123,4 +133,23 @@ resource "null_resource" "wordpress_post_deployment" {
   depends_on = [
     helm_release.wordpress
   ]
+}
+
+#------------------------------------------------------------------------------
+#                               COOKIECUTTER META
+#------------------------------------------------------------------------------
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
+}
+
+resource "kubernetes_secret" "cookiecutter" {
+  metadata {
+    name      = "cookiecutter"
+    namespace = var.cert_manager_namespace
+  }
+
+  # https://stackoverflow.com/questions/64134699/terraform-map-to-string-value
+  data = {
+    tags = jsonencode(local.tags)
+  }
 }

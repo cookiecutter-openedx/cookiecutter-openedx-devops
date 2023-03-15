@@ -13,7 +13,14 @@ module "openedx_storage" {
 
   bucket  = var.resource_name_storage
   acl     = "private"
-  tags    = local.tags
+
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "terraform-aws-modules/s3-bucket/aws"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_aws_modules_s3 }}"
+    }
+  )
 
   control_object_ownership = true
   object_ownership         = "BucketOwnerPreferred"

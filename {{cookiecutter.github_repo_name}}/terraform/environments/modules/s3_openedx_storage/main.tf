@@ -13,12 +13,12 @@ locals {
     var.tags,
     module.cookiecutter_meta.tags,
     {
-      "cookiecutter/module/source"  = "terraform-aws-modules/s3-bucket/aws"
-      "cookiecutter/module/version" = "{{ cookiecutter.terraform_aws_modules_s3 }}"
+      "cookiecutter/module/source"    = "{{ cookiecutter.github_repo_name }}/terraform/environments/modules/s3_openedx_storage"
     }
   )
 
 }
+
 module "cookiecutter_meta" {
   source = "../../../../../../../common/cookiecutter_meta"
 }

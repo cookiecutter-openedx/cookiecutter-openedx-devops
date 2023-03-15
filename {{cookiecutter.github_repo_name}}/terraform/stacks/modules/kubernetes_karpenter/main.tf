@@ -30,7 +30,7 @@ locals {
     var.tags,
     module.cookiecutter_meta.tags,
     {
-      "cookiecutter/module/source"  = "{{ cookiecutter.github_repo_name }}/terraform/stacks/kubernetes_karpenter"
+      "cookiecutter/module/source"  = "{{ cookiecutter.github_repo_name }}/terraform/stacks/modules/kubernetes_karpenter"
       "cookiecutter/resource/source"  = "charts.karpenter.sh"
       "cookiecutter/resource/version" = "{{ cookiecutter.terraform_helm_karpenter }}"
     }
@@ -103,7 +103,13 @@ module "karpenter_controller_irsa_role" {
     }
   }
 
-  tags = var.tags
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+      "cookiecutter/resource/version" = "latest"
+    }
+  )
 
 }
 
@@ -174,7 +180,13 @@ resource "aws_iam_role" "ec2_spot_fleet_tagging_role" {
     ]
   })
 
-  tags = var.tags
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "hashicorp/aws/aws_iam_role"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+    }
+  )
 }
 
 resource "aws_iam_role_policy_attachment" "ec2_spot_fleet_tagging" {

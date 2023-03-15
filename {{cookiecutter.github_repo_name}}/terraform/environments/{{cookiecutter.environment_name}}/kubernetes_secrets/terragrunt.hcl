@@ -15,6 +15,11 @@ locals {
   environment           = local.environment_vars.locals.environment
   resource_name         = local.environment_vars.locals.shared_resource_namespace
   root_domain           = local.global_vars.locals.root_domain
+
+  tags = merge(
+    local.environment_vars.locals.tags,
+    { Name = "${local.resource_name}" }
+  )
 }
 
 
@@ -85,4 +90,5 @@ inputs = {
   resource_name = local.resource_name
   environment_namespace     = local.environment_namespace
   root_domain   = local.root_domain
+  tags = local.tags
 }

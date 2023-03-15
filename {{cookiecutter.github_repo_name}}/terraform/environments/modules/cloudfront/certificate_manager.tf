@@ -43,8 +43,8 @@ module "acm_environment_domain" {
     local.tags,
     { Usage = "Cloudfront" },
     {
-      "cookiecutter/module/source"  = "terraform-aws-modules/acm/aws"
-      "cookiecutter/module/version" = "{{ cookiecutter.terraform_aws_modules_acm }}"
+      "cookiecutter/resource/source"  = "terraform-aws-modules/acm/aws"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_aws_modules_acm }}"
     }
   )
 

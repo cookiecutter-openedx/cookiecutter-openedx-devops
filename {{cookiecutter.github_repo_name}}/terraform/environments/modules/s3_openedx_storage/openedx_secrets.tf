@@ -13,7 +13,14 @@ module "openedx_secrets" {
 
   bucket  = var.resource_name_secrets
   acl     = "private"
-  tags    = local.tags
+
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "terraform-aws-modules/s3-bucket/aws"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_aws_modules_s3 }}"
+    }
+  )
 
   block_public_acls   = true
   block_public_policy = true
