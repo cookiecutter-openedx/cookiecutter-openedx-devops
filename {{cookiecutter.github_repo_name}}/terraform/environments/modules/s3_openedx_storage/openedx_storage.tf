@@ -11,8 +11,8 @@ module "openedx_storage" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "~> {{ cookiecutter.terraform_aws_modules_s3 }}"
 
-  bucket  = var.resource_name_storage
-  acl     = "private"
+  bucket = var.resource_name_storage
+  acl    = "private"
 
   tags = merge(
     local.tags,
@@ -45,13 +45,13 @@ module "openedx_storage" {
         "http://${var.environment_studio_domain}"
       ]
       allowed_headers = ["*"]
-      expose_headers  = [
+      expose_headers = [
         "Access-Control-Allow-Origin",
         "Access-Control-Allow-Method",
         "Access-Control-Allow-Header"
       ]
       max_age_seconds = 3000
-      }
+    }
   ]
   versioning = {
     enabled = false

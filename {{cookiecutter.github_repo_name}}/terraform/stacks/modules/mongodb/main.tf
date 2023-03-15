@@ -28,7 +28,7 @@ locals {
     var.tags,
     module.cookiecutter_meta.tags,
     {
-      "cookiecutter/module/source"  = "{{ cookiecutter.github_repo_name }}/terraform/stacks/modules/mongodb"
+      "cookiecutter/module/source" = "{{ cookiecutter.github_repo_name }}/terraform/stacks/modules/mongodb"
     }
   )
 
@@ -61,7 +61,7 @@ resource "aws_instance" "mongodb" {
   root_block_device {
     delete_on_termination = true
     volume_size           = 8
-    tags                  = merge(
+    tags = merge(
       local.tags,
       {
         "cookiecutter/resource/source"  = "hashicorp/aws/aws_instance"

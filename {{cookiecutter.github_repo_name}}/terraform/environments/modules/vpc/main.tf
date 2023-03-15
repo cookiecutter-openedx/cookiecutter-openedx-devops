@@ -7,7 +7,7 @@ locals {
     var.tags,
     module.cookiecutter_meta.tags,
     {
-      "cookiecutter/module/source"    = "{{ cookiecutter.github_repo_name }}/terraform/environments/modules/vpn"
+      "cookiecutter/module/source" = "{{ cookiecutter.github_repo_name }}/terraform/environments/modules/vpn"
     }
   )
 }

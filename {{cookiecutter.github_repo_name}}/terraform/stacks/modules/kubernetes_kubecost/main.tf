@@ -28,7 +28,7 @@ locals {
     var.tags,
     module.cookiecutter_meta.tags,
     {
-      "cookiecutter/module/source"  = "{{ cookiecutter.github_repo_name }}/terraform/stacks/modules/kubernetes_kubecost"
+      "cookiecutter/module/source"    = "{{ cookiecutter.github_repo_name }}/terraform/stacks/modules/kubernetes_kubecost"
       "cookiecutter/resource/source"  = "kubecost.github.io/cost-analyzer/"
       "cookiecutter/resource/version" = "{{ cookiecutter.terraform_helm_kubecost }}"
     }

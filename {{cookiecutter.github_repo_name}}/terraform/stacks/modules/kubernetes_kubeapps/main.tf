@@ -31,7 +31,7 @@ locals {
     var.tags,
     module.cookiecutter_meta.tags,
     {
-      "cookiecutter/module/source"  = "{{ cookiecutter.github_repo_name }}/terraform/stacks/modules/kubernetes_kubeapps"
+      "cookiecutter/module/source"    = "{{ cookiecutter.github_repo_name }}/terraform/stacks/modules/kubernetes_kubeapps"
       "cookiecutter/resource/source"  = "charts.bitnami.com/bitnami/kubeapps"
       "cookiecutter/resource/version" = "{{ cookiecutter.terraform_helm_kubeapps }}"
     }

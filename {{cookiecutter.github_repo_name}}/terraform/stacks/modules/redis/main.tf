@@ -14,7 +14,7 @@ locals {
     var.tags,
     module.cookiecutter_meta.tags,
     {
-      "cookiecutter/module/source"  = "{{ cookiecutter.github_repo_name }}/terraform/stacks/modules/redis"
+      "cookiecutter/module/source" = "{{ cookiecutter.github_repo_name }}/terraform/stacks/modules/redis"
     }
   )
 

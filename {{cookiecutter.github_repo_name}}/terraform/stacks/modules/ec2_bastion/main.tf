@@ -45,7 +45,7 @@ resource "aws_instance" "bastion" {
   root_block_device {
     delete_on_termination = true
     volume_size           = var.volume_size
-    tags                  = merge(
+    tags = merge(
       local.tags,
       {
         "cookiecutter/resource/source"  = "hashicorp/aws/aws_instance"

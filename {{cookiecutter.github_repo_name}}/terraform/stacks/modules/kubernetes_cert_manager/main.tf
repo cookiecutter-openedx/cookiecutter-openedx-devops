@@ -47,8 +47,8 @@ resource "helm_release" "cert-manager" {
 data "template_file" "cert-manager-values" {
   template = file("${path.module}/manifests/cert-manager-values.yaml.tpl")
   vars = {
-    role_arn                   = module.cert_manager_irsa.iam_role_arn
-    namespace                  = var.cert_manager_namespace
+    role_arn  = module.cert_manager_irsa.iam_role_arn
+    namespace = var.cert_manager_namespace
   }
 }
 

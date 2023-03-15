@@ -23,7 +23,7 @@
 #-----------------------------------------------------------
 locals {
 
-    tags = merge(
+  tags = merge(
     var.tags,
     module.cookiecutter_meta.tags,
     {
