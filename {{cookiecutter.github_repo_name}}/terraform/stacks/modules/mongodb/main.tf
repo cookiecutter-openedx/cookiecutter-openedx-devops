@@ -29,7 +29,6 @@ locals {
     module.cookiecutter_meta.tags,
     {
       "cookiecutter/module/source"  = "{{ cookiecutter.github_repo_name }}/terraform/stacks/mongodb"
-      "cookiecutter/module/version" = ""
     }
   )
 
@@ -44,7 +43,14 @@ resource "aws_instance" "mongodb" {
   monitoring                  = false
   associate_public_ip_address = false
   ebs_optimized               = false
-  tags                        = local.tags
+
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "hashicorp/aws/aws_instance"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+    }
+  )
 
   vpc_security_group_ids = [
     aws_security_group.sg_mongodb.id,
@@ -234,10 +240,6 @@ resource "null_resource" "install_script" {
 #------------------------------------------------------------------------------
 #                        SUPPORTING RESOURCES
 #------------------------------------------------------------------------------
-module "cookiecutter_meta" {
-  source = "../../../../../../../common/cookiecutter_meta"
-}
-
 data "aws_ebs_volume" "mongodb" {
   most_recent = true
 
@@ -451,4 +453,11 @@ data "template_file" "welcome_banner" {
   vars = {
     platform_name = var.platform_name
   }
+}
+
+#------------------------------------------------------------------------------
+#                               COOKIECUTTER META
+#------------------------------------------------------------------------------
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
 }

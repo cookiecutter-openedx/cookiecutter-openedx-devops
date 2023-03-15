@@ -17,8 +17,7 @@ locals {
 
   tags = merge(
     local.stack_vars.locals.tags,
-    local.global_vars.locals.tags,
-    { Name = "${local.stack_namespace}-eks" }
+    { Name = "${local.stack_namespace}-kubecost" }
   )
 }
 

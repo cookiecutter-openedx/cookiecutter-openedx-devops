@@ -12,7 +12,16 @@
 #        There are a LOT of options in this module.
 #        see https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest
 #------------------------------------------------------------------------------
+locals {
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"  = "{{ cookiecutter.github_repo_name }}/terraform/stacks/mysql"
+    }
+  )
 
+}
 module "vpc" {
   source                 = "terraform-aws-modules/vpc/aws"
   version                = "~> {{ cookiecutter.terraform_aws_modules_vpc }}"
@@ -33,11 +42,10 @@ module "vpc" {
   private_subnet_tags    = var.private_subnet_tags
 
   tags = merge(
-    var.tags,
-    module.cookiecutter_meta.tags,
+    local.tags,
     {
-      "cookiecutter/module/source"  = "terraform-aws-modules/vpc/aws"
-      "cookiecutter/module/version" = "{{ cookiecutter.terraform_aws_modules_vpc }}"
+      "cookiecutter/resource/source"  = "terraform-aws-modules/vpc/aws"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_aws_modules_vpc }}"
     }
   )
 }

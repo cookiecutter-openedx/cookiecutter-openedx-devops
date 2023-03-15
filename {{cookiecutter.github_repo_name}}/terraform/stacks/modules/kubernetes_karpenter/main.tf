@@ -25,6 +25,17 @@
 # FIXED. but see note below about version.
 #
 # see: https://registry.terraform.io/modules/terraform-aws-modules/iam/aws/latest/submodules/iam-role-for-service-accounts-eks
+locals {
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"  = "{{ cookiecutter.github_repo_name }}/terraform/stacks/kubernetes_karpenter"
+      "cookiecutter/resource/source"  = "charts.karpenter.sh"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_helm_karpenter }}"
+    }
+  )
+}
 
 data "template_file" "karpenter-values" {
   template = file("${path.module}/yml/karpenter-values.yaml")
@@ -39,7 +50,7 @@ resource "helm_release" "karpenter" {
   repository = "https://charts.karpenter.sh"
   chart      = "karpenter"
 
-  version = "{{ cookiecutter.terraform_helm_karpenter }}"
+  version = "~> {{ cookiecutter.terraform_helm_karpenter }}"
 
   values = [
     data.template_file.karpenter-values.rendered
@@ -177,4 +188,23 @@ resource "kubectl_manifest" "vpa-karpenter" {
   depends_on = [
     helm_release.karpenter
   ]
+}
+
+#------------------------------------------------------------------------------
+#                               COOKIECUTTER META
+#------------------------------------------------------------------------------
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
+}
+
+resource "kubernetes_secret" "cookiecutter" {
+  metadata {
+    name      = "cookiecutter"
+    namespace = var.cert_manager_namespace
+  }
+
+  # https://stackoverflow.com/questions/64134699/terraform-map-to-string-value
+  data = {
+    tags = jsonencode(local.tags)
+  }
 }

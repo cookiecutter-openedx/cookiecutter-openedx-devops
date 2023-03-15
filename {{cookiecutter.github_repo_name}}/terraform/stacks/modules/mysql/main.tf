@@ -12,6 +12,18 @@
 #
 # see: https://stackoverflow.com/questions/53386811/terraform-the-db-instance-and-ec2-security-group-are-in-different-vpcs
 #------------------------------------------------------------------------------
+locals {
+
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"  = "{{ cookiecutter.github_repo_name }}/terraform/stacks/mysql"
+    }
+  )
+
+}
+
 module "db" {
   source  = "terraform-aws-modules/rds/aws"
   version = "~> {{cookiecutter.terraform_aws_modules_rds}}"
@@ -74,28 +86,33 @@ module "db" {
   parameters                            = var.parameters
 
   tags = merge(
-    var.tags,
-    module.cookiecutter_meta.tags,
+    local.tags,
     {
-      "cookiecutter/module/source"  = "terraform-aws-modules/rds/aws"
-      "cookiecutter/module/version" = "{{cookiecutter.terraform_aws_modules_rds}}"
+      "cookiecutter/resource/source"  = "terraform-aws-modules/rds/aws"
+      "cookiecutter/resource/version" = "{{cookiecutter.terraform_aws_modules_rds}}"
     }
   )
 }
 
-module "cookiecutter_meta" {
-  source = "../../../../../../../common/cookiecutter_meta"
-}
+#------------------------------------------------------------------------------
+#                        SUPPORTING RESOURCES
+#------------------------------------------------------------------------------
 
 resource "aws_db_subnet_group" "mysql_subnet_group" {
   name       = "mysql_subnet_group"
   subnet_ids = var.subnet_ids
-  tags       = var.tags
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "hashicorp/aws/aws_db_subnet_group"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+    }
+  )
 }
 
 module "security_group" {
   source  = "terraform-aws-modules/security-group/aws"
-  version = "{{ cookiecutter.terraform_aws_modules_sg }}"
+  version = "~> {{ cookiecutter.terraform_aws_modules_sg }}"
 
   name        = "${var.resource_name}-mysql"
   description = "openedx_devops: Allow access to MySQL"
@@ -123,5 +140,19 @@ module "security_group" {
       ipv6_cidr_blocks = "::/0"
     },
   ]
-  tags = var.tags
+
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "terraform-aws-modules/security-group/aws"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_aws_modules_sg }}"
+    }
+  )
+}
+
+#------------------------------------------------------------------------------
+#                               COOKIECUTTER META
+#------------------------------------------------------------------------------
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
 }

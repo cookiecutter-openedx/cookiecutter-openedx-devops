@@ -17,6 +17,14 @@ locals {
   # Used by Karpenter config to determine correct partition (i.e. - `aws`, `aws-gov`, `aws-cn`, etc.)
   partition = data.aws_partition.current.partition
 
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"  = "{{ cookiecutter.github_repo_name }}/terraform/stacks/kubernetes_cert_manager"
+    }
+  )
+
 }
 
 module "eks" {
@@ -51,15 +59,14 @@ module "eks" {
   aws_auth_users = var.map_users
 
   tags = merge(
-    var.tags,
-    module.cookiecutter_meta.tags,
+    local.tags,
     # Tag node group resources for Karpenter auto-discovery
     # NOTE - if creating multiple security groups with this module, only tag the
     # security group that Karpenter should utilize with the following tag
     { "karpenter.sh/discovery" = var.namespace },
     {
-      "cookiecutter/module/source"  = "terraform-aws-modules/eks/aws"
-      "cookiecutter/module/version" = "{{ cookiecutter.terraform_aws_modules_eks }}"
+      "cookiecutter/resource/source"  = "terraform-aws-modules/eks/aws"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_aws_modules_eks }}"
     }
   )
 
@@ -141,15 +148,15 @@ module "eks" {
 
       instance_types = ["${var.eks_service_group_instance_type}"]
       tags = merge(
-        var.tags,
+        local.tags,
         module.cookiecutter_meta.tags,
         # Tag node group resources for Karpenter auto-discovery
         # NOTE - if creating multiple security groups with this module, only tag the
         # security group that Karpenter should utilize with the following tag
         { Name = "eks-${var.shared_resource_identifier}-{{ cookiecutter.global_platform_shared_resource_identifier }}" },
         {
-          "cookiecutter/module/source"  = "terraform-aws-modules/eks/aws"
-          "cookiecutter/module/version" = "{{ cookiecutter.terraform_aws_modules_eks }}"
+          "cookiecutter/resource/source"  = "terraform-aws-modules/eks/aws"
+          "cookiecutter/resource/version" = "{{ cookiecutter.terraform_aws_modules_eks }}"
         }
       )
     }
@@ -175,15 +182,15 @@ module "eks" {
 
       instance_types = ["${var.eks_hosting_group_instance_type}"]
       tags = merge(
-        var.tags,
+        local.tags,
         module.cookiecutter_meta.tags,
         # Tag node group resources for Karpenter auto-discovery
         # NOTE - if creating multiple security groups with this module, only tag the
         # security group that Karpenter should utilize with the following tag
         { Name = "eks-${var.shared_resource_identifier}-hosting" },
         {
-          "cookiecutter/module/source"  = "terraform-aws-modules/eks/aws"
-          "cookiecutter/module/version" = "{{ cookiecutter.terraform_aws_modules_eks }}"
+          "cookiecutter/resource/source"  = "terraform-aws-modules/eks/aws"
+          "cookiecutter/resource/version" = "{{ cookiecutter.terraform_aws_modules_eks }}"
         }
       )
     }
@@ -194,9 +201,6 @@ module "eks" {
 #==============================================================================
 #                             SUPPORTING RESOURCES
 #==============================================================================
-module "cookiecutter_meta" {
-  source = "../../../../../../../common/cookiecutter_meta"
-}
 
 resource "aws_security_group" "worker_group_mgmt" {
   name_prefix = "${var.namespace}-eks_hosting_group_mgmt"
@@ -215,15 +219,11 @@ resource "aws_security_group" "worker_group_mgmt" {
   }
 
   tags = merge(
-    var.tags,
-    module.cookiecutter_meta.tags,
-    # Tag node group resources for Karpenter auto-discovery
-    # NOTE - if creating multiple security groups with this module, only tag the
-    # security group that Karpenter should utilize with the following tag
-    { Name = "eks-${var.shared_resource_identifier}-service" },
+    local.tags,
+    { Name = "eks-${var.shared_resource_identifier}-worker_group_mgmt" },
     {
-      "cookiecutter/module/source"  = "terraform-aws-modules/eks/aws"
-      "cookiecutter/module/version" = "{{ cookiecutter.terraform_aws_modules_eks }}"
+      "cookiecutter/resource/source"  = "hashicorp/aws/aws_security_group"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
     }
   )
 }
@@ -247,11 +247,11 @@ resource "aws_security_group" "all_worker_mgmt" {
   }
 
   tags = merge(
-    var.tags,
-    module.cookiecutter_meta.tags,
+    local.tags,
+    { Name = "eks-${var.shared_resource_identifier}-all_worker_mgmt" },
     {
-      "cookiecutter/module/source"  = "terraform-aws-modules/eks/aws"
-      "cookiecutter/module/version" = "{{ cookiecutter.terraform_aws_modules_eks }}"
+      "cookiecutter/resource/source"  = "hashicorp/aws/aws_security_group"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
     }
   )
 }
@@ -272,3 +272,10 @@ resource "kubernetes_namespace" "wordpress" {
   }
   depends_on = [module.eks]
 }{% endif -%}
+
+#------------------------------------------------------------------------------
+#                               COOKIECUTTER META
+#------------------------------------------------------------------------------
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
+}

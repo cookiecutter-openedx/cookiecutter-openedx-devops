@@ -28,7 +28,14 @@ resource "aws_instance" "bastion" {
   subnet_id         = var.subnet_ids[random_integer.subnet_id.result]
   monitoring        = false
   ebs_optimized     = false
-  tags              = local.tags
+
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "hashicorp/aws/aws_instance"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+    }
+  )
 
   vpc_security_group_ids = [
     resource.aws_security_group.sg_bastion.id,

@@ -20,6 +20,17 @@
 #   helm show values ingress-nginx/ingress-nginx
 
 #------------------------------------------------------------------------------
+locals {
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"    = "{{ cookiecutter.github_repo_name }}/terraform/stacks/kubernetes_ingress_clb"
+      "cookiecutter/resource/source"  = "kubernetes.github.io/ingress-nginx"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_helm_ingress_nginx_controller }}"
+    }
+  )
+}
 
 data "template_file" "nginx-values" {
   template = file("${path.module}/yml/nginx-values.yaml")
@@ -32,7 +43,7 @@ resource "helm_release" "ingress_nginx_controller" {
 
   chart      = "ingress-nginx"
   repository = "https://kubernetes.github.io/ingress-nginx"
-  version    = "{{ cookiecutter.terraform_helm_ingress_nginx_controller }}"
+  version    = "~> {{ cookiecutter.terraform_helm_ingress_nginx_controller }}"
 
   values = [
     data.template_file.nginx-values.rendered
@@ -66,4 +77,23 @@ resource "helm_release" "ingress_nginx_controller" {
     type  = "string"
   }
 
+}
+
+#------------------------------------------------------------------------------
+#                               COOKIECUTTER META
+#------------------------------------------------------------------------------
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
+}
+
+resource "kubernetes_secret" "cookiecutter" {
+  metadata {
+    name      = "cookiecutter"
+    namespace = var.cert_manager_namespace
+  }
+
+  # https://stackoverflow.com/questions/64134699/terraform-map-to-string-value
+  data = {
+    tags = jsonencode(local.tags)
+  }
 }

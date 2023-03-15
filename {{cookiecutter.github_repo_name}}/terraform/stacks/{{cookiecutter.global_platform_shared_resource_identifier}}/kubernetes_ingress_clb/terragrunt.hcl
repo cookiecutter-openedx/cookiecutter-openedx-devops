@@ -15,6 +15,11 @@ locals {
   namespace       = "kube-system"
   root_domain     = local.global_vars.locals.root_domain
   services_subdomain    = local.global_vars.locals.services_subdomain
+
+  tags = merge(
+    local.stack_vars.locals.tags,
+    { Name = "${local.stack_namespace}-ingress-controller" }
+  )
 }
 
 dependencies {

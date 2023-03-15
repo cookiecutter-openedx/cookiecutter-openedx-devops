@@ -18,7 +18,7 @@ terraform {
 
     aws = {
       source  = "hashicorp/aws"
-      version = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+      version = "~> {{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
     }
     kubectl = {
       source  = "gavinbunney/kubectl"

@@ -10,6 +10,14 @@
 #------------------------------------------------------------------------------
 locals {
   name = var.replication_group_description
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"  = "{{ cookiecutter.github_repo_name }}/terraform/stacks/redis"
+    }
+  )
+
 }
 
 module "redis" {
@@ -28,22 +36,18 @@ module "redis" {
   node_type                  = var.node_type
 
   tags = merge(
-    var.tags,
-    module.cookiecutter_meta.tags,
+    local.tags,
     {
-      "cookiecutter/module/source"  = "./modules/elasticache"
-      "cookiecutter/module/version" = "latest stable"
+      "cookiecutter/resource/source"  = "{{ cookiecutter.github_repo_name }}/terraform/stacks/redis/modules/elasticache"
+      "cookiecutter/resource/version" = "latest"
     }
+
   )
 }
 
-################################################################################
-# Supporting Resources
-################################################################################
-module "cookiecutter_meta" {
-  source = "../../../../../../../common/cookiecutter_meta"
-}
-
+#------------------------------------------------------------------------------
+#                        SUPPORTING RESOURCES
+#------------------------------------------------------------------------------
 resource "aws_security_group" "redis" {
   description = "openedx_devops: Redis"
   name_prefix = local.name
@@ -65,5 +69,19 @@ resource "aws_security_group" "redis" {
     ipv6_cidr_blocks = ["::/0"]
   }
 
-  tags = var.tags
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "hashicorp/aws/aws_security_group"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+    }
+
+  )
+}
+
+#------------------------------------------------------------------------------
+#                               COOKIECUTTER META
+#------------------------------------------------------------------------------
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
 }

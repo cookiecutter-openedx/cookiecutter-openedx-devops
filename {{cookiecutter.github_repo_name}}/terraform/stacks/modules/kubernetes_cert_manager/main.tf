@@ -21,8 +21,9 @@ locals {
     var.tags,
     module.cookiecutter_meta.tags,
     {
-      "cookiecutter/module/source"  = "jetstack/cert-manager"
-      "cookiecutter/module/version" = "{{ cookiecutter.terraform_helm_cert_manager }}"
+      "cookiecutter/module/source"    = "{{ cookiecutter.github_repo_name }}/terraform/stacks/kubernetes_cert_manager"
+      "cookiecutter/resource/source"  = "jetstack/cert-manager"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_helm_cert_manager }}"
     }
   )
 }
@@ -86,7 +87,7 @@ resource "aws_iam_policy" "cert_manager_policy" {
 
 module "cert_manager_irsa" {
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "{{ cookiecutter.terraform_aws_modules_iam_assumable_role_with_oidc }}"
+  version                       = "~> {{ cookiecutter.terraform_aws_modules_iam_assumable_role_with_oidc }}"
   create_role                   = true
   role_name                     = "${var.namespace}-cert_manager-irsa"
   provider_url                  = replace(data.aws_eks_cluster.eks.identity[0].oidc[0].issuer, "https://", "")
@@ -94,6 +95,9 @@ module "cert_manager_irsa" {
   oidc_fully_qualified_subjects = ["system:serviceaccount:${var.cert_manager_namespace}:cert-manager"]
 }
 
+#------------------------------------------------------------------------------
+#                               COOKIECUTTER META
+#------------------------------------------------------------------------------
 module "cookiecutter_meta" {
   source = "../../../../../../../common/cookiecutter_meta"
 }

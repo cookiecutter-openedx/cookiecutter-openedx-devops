@@ -7,6 +7,17 @@
 # usage: create a detachable EBS volume to be used as the primary storage
 #        volume for MongoDB.
 #------------------------------------------------------------------------------
+locals {
+
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"  = "{{ cookiecutter.github_repo_name }}/terraform/stacks/mongodb_volume"
+    }
+  )
+
+}
 
 # create a detachable EBS volume for the Mongodb databases
 resource "aws_ebs_volume" "mongodb" {
@@ -14,11 +25,10 @@ resource "aws_ebs_volume" "mongodb" {
   size              = var.allocated_storage
 
   tags = merge(
-    var.tags,
-    module.cookiecutter_meta.tags,
+    local.tags,
     {
-      "cookiecutter/module/source"  = "{{ cookiecutter.github_repo_name }}/terraform/stacks/mongodb_volume"
-      "cookiecutter/module/version" = ""
+      "cookiecutter/resource/source"  = "hashicorp/aws/aws_ebs_volume"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
     }
   )
 
@@ -46,6 +56,9 @@ resource "random_integer" "subnet_id" {
   max = length(var.subnet_ids) - 1
 }
 
+#------------------------------------------------------------------------------
+#                               COOKIECUTTER META
+#------------------------------------------------------------------------------
 module "cookiecutter_meta" {
   source = "../../../../../../../common/cookiecutter_meta"
 }

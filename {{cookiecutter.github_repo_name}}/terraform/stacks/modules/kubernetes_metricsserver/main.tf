@@ -21,7 +21,19 @@
 #   helm search repo metrics-server
 #   helm show values metrics-server/metrics-server
 #-----------------------------------------------------------
+locals {
 
+    tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"    = "{{ cookiecutter.github_repo_name }}/terraform/stacks/kubernetes_metricsserver"
+      "cookiecutter/resource/source"  = "kubernetes-sigs.github.io/metrics-server/"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_helm_metrics_server }}"
+    }
+  )
+
+}
 data "template_file" "metrics-server-values" {
   template = file("${path.module}/config/metrics-server-values.yaml")
   vars     = {}
@@ -34,10 +46,29 @@ resource "helm_release" "metrics_server" {
   name       = "metrics-server"
   repository = "https://kubernetes-sigs.github.io/metrics-server/"
   chart      = "metrics-server"
-  version    = "{{ cookiecutter.terraform_helm_metrics_server }}"
+  version    = "~> {{ cookiecutter.terraform_helm_metrics_server }}"
 
   values = [
     data.template_file.metrics-server-values.rendered
   ]
 
+}
+
+#------------------------------------------------------------------------------
+#                               COOKIECUTTER META
+#------------------------------------------------------------------------------
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
+}
+
+resource "kubernetes_secret" "cookiecutter" {
+  metadata {
+    name      = "cookiecutter"
+    namespace = var.cert_manager_namespace
+  }
+
+  # https://stackoverflow.com/questions/64134699/terraform-map-to-string-value
+  data = {
+    tags = jsonencode(local.tags)
+  }
 }

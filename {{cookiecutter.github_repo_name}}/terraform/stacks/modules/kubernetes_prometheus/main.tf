@@ -34,6 +34,19 @@
 #   kubectl delete crd servicemonitors.monitoring.coreos.com
 #   kubectl delete crd thanosrulers.monitoring.coreos.com
 #-----------------------------------------------------------
+locals {
+  cost_analyzer = "cost-analyzer"
+
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"    = "{{ cookiecutter.github_repo_name }}/terraform/stacks/kubernetes_prometheus"
+      "cookiecutter/resource/source"  = "prometheus-community.github.io/helm-charts/kube-prometheus-stack"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_helm_prometheus }}"
+    }
+  )
+}
 
 data "template_file" "prometheus-values" {
   template = file("${path.module}/yml/prometheus-values.yaml")
@@ -70,5 +83,24 @@ resource "random_password" "grafana" {
   special = false
   keepers = {
     version = "1"
+  }
+}
+
+#------------------------------------------------------------------------------
+#                               COOKIECUTTER META
+#------------------------------------------------------------------------------
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
+}
+
+resource "kubernetes_secret" "cookiecutter" {
+  metadata {
+    name      = "cookiecutter"
+    namespace = var.cert_manager_namespace
+  }
+
+  # https://stackoverflow.com/questions/64134699/terraform-map-to-string-value
+  data = {
+    tags = jsonencode(local.tags)
   }
 }
