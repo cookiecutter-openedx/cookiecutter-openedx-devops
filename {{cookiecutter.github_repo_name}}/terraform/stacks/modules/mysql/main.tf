@@ -115,7 +115,7 @@ module "security_group" {
   version = "~> {{ cookiecutter.terraform_aws_modules_sg }}"
 
   name        = "${var.resource_name}-mysql"
-  description = "openedx_devops: Allow access to MySQL"
+  description = "cookiecutter: Allow access to MySQL"
   vpc_id      = var.vpc_id
 
   # ingress
@@ -124,14 +124,14 @@ module "security_group" {
       from_port   = 3306
       to_port     = 3306
       protocol    = "tcp"
-      description = "openedx_devops: MySQL access from within VPC"
+      description = "cookiecutter: MySQL access from within VPC"
       cidr_blocks = join(",", var.ingress_cidr_blocks)
     },
   ]
 
   egress_with_cidr_blocks = [
     {
-      description      = "openedx_devops: Node all egress"
+      description      = "cookiecutter: Node all egress"
       protocol         = "-1"
       from_port        = 0
       to_port          = 0

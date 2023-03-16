@@ -61,15 +61,3 @@ resource "helm_release" "vpa" {
 module "cookiecutter_meta" {
   source = "../../../../../../../common/cookiecutter_meta"
 }
-
-resource "kubernetes_secret" "cookiecutter" {
-  metadata {
-    name      = "cookiecutter"
-    namespace = var.cert_manager_namespace
-  }
-
-  # https://stackoverflow.com/questions/64134699/terraform-map-to-string-value
-  data = {
-    tags = jsonencode(local.tags)
-  }
-}

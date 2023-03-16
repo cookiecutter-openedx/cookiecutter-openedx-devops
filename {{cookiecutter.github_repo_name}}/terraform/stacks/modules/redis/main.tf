@@ -49,19 +49,19 @@ module "redis" {
 #                        SUPPORTING RESOURCES
 #------------------------------------------------------------------------------
 resource "aws_security_group" "redis" {
-  description = "openedx_devops: Redis"
-  name_prefix = local.name
+  description = "cookiecutter: Redis"
+  name_prefix = "${local.name}-redis"
   vpc_id      = var.vpc_id
 
   ingress {
-    description = "openedx_devops: Redis access from within VPC"
+    description = "cookiecutter: Redis access from within VPC"
     from_port   = var.port
     to_port     = var.port
     protocol    = "tcp"
     cidr_blocks = var.ingress_cidr_blocks
   }
   egress {
-    description      = "openedx_devops: Redis out to anywhere"
+    description      = "cookiecutter: Redis out to anywhere"
     from_port        = 0
     to_port          = 0
     protocol         = "-1"

@@ -88,7 +88,7 @@ module "eks" {
 
   node_security_group_additional_rules = {
     ingress_self_all = {
-      description = "openedx_devops: Node to node all ports/protocols"
+      description = "cookiecutter: Node to node all ports/protocols"
       protocol    = "-1"
       from_port   = 0
       to_port     = 0
@@ -99,7 +99,7 @@ module "eks" {
       ]
     }
     port_8443 = {
-      description                = "openedx_devops: open port 8443 to vpc"
+      description                = "cookiecutter: open port 8443 to vpc"
       protocol                   = "-1"
       from_port                  = 8443
       to_port                    = 8443
@@ -107,7 +107,7 @@ module "eks" {
       source_node_security_group = true
     }
     egress_all = {
-      description      = "openedx_devops: Node all egress"
+      description      = "cookiecutter: Node all egress"
       protocol         = "-1"
       from_port        = 0
       to_port          = 0
@@ -204,11 +204,11 @@ module "eks" {
 
 resource "aws_security_group" "worker_group_mgmt" {
   name_prefix = "${var.namespace}-eks_hosting_group_mgmt"
-  description = "openedx_devops: Ingress CLB worker group management"
+  description = "cookiecutter: Ingress CLB worker group management"
   vpc_id      = var.vpc_id
 
   ingress {
-    description = "openedx_devops: Ingress CLB"
+    description = "cookiecutter: Ingress CLB"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
@@ -230,11 +230,11 @@ resource "aws_security_group" "worker_group_mgmt" {
 
 resource "aws_security_group" "all_worker_mgmt" {
   name_prefix = "${var.namespace}-eks_all_worker_management"
-  description = "openedx_devops: Ingress CLB worker management"
+  description = "cookiecutter: Ingress CLB worker management"
   vpc_id      = var.vpc_id
 
   ingress {
-    description = "openedx_devops: Ingress CLB"
+    description = "cookiecutter: Ingress CLB"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"

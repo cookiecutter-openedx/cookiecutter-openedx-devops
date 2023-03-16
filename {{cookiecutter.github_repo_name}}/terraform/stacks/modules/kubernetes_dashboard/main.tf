@@ -43,7 +43,7 @@ data "template_file" "dashboard-values" {
 
 resource "helm_release" "dashboard" {
   name             = "common"
-  namespace        = "kubernetes-dashboard"
+  namespace        = var.dashboard_namespace
   create_namespace = true
 
   chart      = "kubernetes-dashboard"
@@ -64,8 +64,8 @@ module "cookiecutter_meta" {
 
 resource "kubernetes_secret" "cookiecutter" {
   metadata {
-    name      = "cookiecutter"
-    namespace = var.cert_manager_namespace
+    name      = "cookiecutter-terraform"
+    namespace = var.dashboard_namespace
   }
 
   # https://stackoverflow.com/questions/64134699/terraform-map-to-string-value

@@ -55,7 +55,7 @@ data "template_file" "cert-manager-values" {
 resource "aws_iam_policy" "cert_manager_policy" {
   name        = "${var.namespace}-cert-manager-policy"
   path        = "/"
-  description = "openedx_devops: Policy, which allows CertManager to create Route53 records"
+  description = "cookiecutter: Policy, which allows CertManager to create Route53 records"
 
   policy = jsonencode({
     "Version" : "2012-10-17",
@@ -110,7 +110,7 @@ module "cookiecutter_meta" {
 
 resource "kubernetes_secret" "cookiecutter" {
   metadata {
-    name      = "cookiecutter"
+    name      = "cookiecutter-terraform"
     namespace = var.cert_manager_namespace
   }
 

@@ -5,7 +5,7 @@
 #
 # date:       aug-2022
 #
-# usage:      print the login banner for openedx_devops cookiecutter.
+# usage:      print the login banner
 #------------------------------------------------------------------------------
 COLUMNS=78
 title="Welcome to the Bastion Server for ${platform_name}"

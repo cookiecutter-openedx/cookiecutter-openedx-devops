@@ -23,6 +23,7 @@
 #-----------------------------------------------------------
 locals {
   cost_analyzer = "cost-analyzer"
+  kubecost = "kubecost"
 
   tags = merge(
     var.tags,
@@ -46,7 +47,7 @@ data "template_file" "kubecost-values" {
 
 resource "helm_release" "kubecost" {
   name             = local.cost_analyzer
-  namespace        = "kubecost"
+  namespace        = local.kubecost
   create_namespace = true
 
   repository = "https://kubecost.github.io/cost-analyzer/"
@@ -68,8 +69,8 @@ module "cookiecutter_meta" {
 
 resource "kubernetes_secret" "cookiecutter" {
   metadata {
-    name      = "cookiecutter"
-    namespace = var.cert_manager_namespace
+    name      = "cookiecutter-terraform"
+    namespace = local.kubecost
   }
 
   # https://stackoverflow.com/questions/64134699/terraform-map-to-string-value

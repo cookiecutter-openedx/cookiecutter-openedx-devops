@@ -26,6 +26,8 @@
 #
 # see: https://registry.terraform.io/modules/terraform-aws-modules/iam/aws/latest/submodules/iam-role-for-service-accounts-eks
 locals {
+  karpenter_namespace = "karpenter"
+
   tags = merge(
     var.tags,
     module.cookiecutter_meta.tags,
@@ -43,7 +45,7 @@ data "template_file" "karpenter-values" {
 
 
 resource "helm_release" "karpenter" {
-  namespace        = "karpenter"
+  namespace        = local.karpenter_namespace
   create_namespace = true
 
   name       = "karpenter"
@@ -211,8 +213,8 @@ module "cookiecutter_meta" {
 
 resource "kubernetes_secret" "cookiecutter" {
   metadata {
-    name      = "cookiecutter"
-    namespace = var.cert_manager_namespace
+    name      = "cookiecutter-terraform"
+    namespace = local.karpenter_namespace
   }
 
   # https://stackoverflow.com/questions/64134699/terraform-map-to-string-value

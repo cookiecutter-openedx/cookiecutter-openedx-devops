@@ -5,7 +5,7 @@
 #
 # date:       aug-2022
 #
-# usage:      print the login help menu for openedx_devops cookiecutter.
+# usage:      print the login help menu
 #------------------------------------------------------------------------------
 
 printf " Installed Applications\n"

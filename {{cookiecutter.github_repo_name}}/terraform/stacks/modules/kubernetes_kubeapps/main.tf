@@ -72,8 +72,8 @@ module "cookiecutter_meta" {
 
 resource "kubernetes_secret" "cookiecutter" {
   metadata {
-    name      = "cookiecutter"
-    namespace = var.cert_manager_namespace
+    name      = "cookiecutter-terraform"
+    namespace = local.kubeapps_namespace
   }
 
   # https://stackoverflow.com/questions/64134699/terraform-map-to-string-value

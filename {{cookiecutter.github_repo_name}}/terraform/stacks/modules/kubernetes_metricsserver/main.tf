@@ -22,7 +22,7 @@
 #   helm show values metrics-server/metrics-server
 #-----------------------------------------------------------
 locals {
-
+  metrics_server = "metrics-server"
   tags = merge(
     var.tags,
     module.cookiecutter_meta.tags,
@@ -40,7 +40,7 @@ data "template_file" "metrics-server-values" {
 }
 
 resource "helm_release" "metrics_server" {
-  namespace        = "metrics-server"
+  namespace        = local.metrics_server
   create_namespace = true
 
   name       = "metrics-server"
@@ -63,8 +63,8 @@ module "cookiecutter_meta" {
 
 resource "kubernetes_secret" "cookiecutter" {
   metadata {
-    name      = "cookiecutter"
-    namespace = var.cert_manager_namespace
+    name      = "cookiecutter-terraform"
+    namespace = local.metrics_server
   }
 
   # https://stackoverflow.com/questions/64134699/terraform-map-to-string-value
