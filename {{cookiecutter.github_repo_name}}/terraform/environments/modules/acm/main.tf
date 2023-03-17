@@ -1,12 +1,3 @@
-#------------------------------------------------------------------------------
-# written by: Lawrence McDaniel
-#             https://lawrencemcdaniel.com/
-#
-# date: Apr-2022
-#
-# usage: Add DNS records and tls certs to stack aws_region for ELB.
-# Also add certs to us-east-1 for Cloudfront distributions.
-#------------------------------------------------------------------------------
 locals {
   tags = merge(
     var.tags,
