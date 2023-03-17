@@ -1,11 +1,15 @@
-## Terragrunt Environments
+# Environments
 
-Terraform environments give you the ability to create multiple, distinct AWS VPC clouds for prod, development, QA and so on. That is, you would be create distinct RDS instances, MongoDB instances, Kubernetes Cluster instances and so on; one for each additional environment.
+Cookiecutter environments give you the ability to create multiple, segregated operating environments for your Open edX installation, saving you time and effort in creating and maintaining environments for `prod`, `dev`, `test`, `qa`, `mcdaniel`, etcetera. Cookiecutter environments run on a [backend stack](../stacks/).
 
-The envisioned implementations of additional environments would consist of environments like: `prod`, `dev`, `test`, `qa`, `mcdaniel`, etcetera.
+Cookiecutter environments are logically separated, using their own sets of:
 
-These additional environments will run on shared infrastructure, named `{{ cookiecutter.global_platform_shared_resource_identifier }}` by default, unless you have specified otherwise. However, each environment has its own data and its own Kubernetes namespace.
-
-The general strategy is that a common set of parameters are defined in [terraform/environments/global.hcl](./global.hcl) that each environment uses, plus, each environment maintains its own set of parameters for environment-specific settings like domain names and resource instances sizes for example.
-
-The difference between these two methodologies is that the former creates an entire VPC per environment, increasing your monthly AWS bill by multiples, whereas the latter simply adds additional domain records, S3 buckets, and logical databases as necessary to support the additional environments.
+- cloud storage and data backup locations
+- logical MySQL databases and MongoDB contentstores
+- Redis cache keys
+- application credentials and service accounts
+- domain name and DNS entries
+- ssl certificates
+- ingresses
+- Kubernetes namespaces and resource monitoring configurations
+- Github Action build-deploy workflows
