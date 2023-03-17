@@ -1,17 +1,15 @@
-#------------------------------------------------------------------------------
-# written by: Lawrence McDaniel
-#             https://lawrencemcdaniel.com/
-#
-# date: Apr-2022
-#
-# usage: Add DNS records and tls certs to stack aws_region for ELB.
-# Also add certs to us-east-1 for Cloudfront distributions.
-#------------------------------------------------------------------------------
-provider "aws" {
-  alias  = "environment_region"
-  region = var.aws_region
-}
+locals {
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"    = "{{ cookiecutter.github_repo_name }}/terraform/environments/modules/acm"
+      "cookiecutter/resource/source"  = "terraform-aws-modules/acm/aws"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_aws_modules_acm }}"
+    }
+  )
 
+}
 data "aws_route53_zone" "root_domain" {
   name = var.root_domain
 }
@@ -23,7 +21,7 @@ data "aws_route53_zone" "environment_domain" {
 
 module "acm_root_domain_environment_region" {
   source  = "terraform-aws-modules/acm/aws"
-  version = "{{ cookiecutter.terraform_aws_modules_acm }}"
+  version = "~> {{ cookiecutter.terraform_aws_modules_acm }}"
 
   providers = {
     aws = aws.environment_region
@@ -35,9 +33,9 @@ module "acm_root_domain_environment_region" {
   subject_alternative_names = [
     "*.${var.root_domain}",
   ]
+  tags = local.tags
 
   wait_for_validation = true
-  tags                = var.tags
 }
 
 module "acm_environment_environment_region" {
@@ -54,7 +52,14 @@ module "acm_environment_environment_region" {
   subject_alternative_names = [
     "*.${var.environment_domain}",
   ]
+  tags = local.tags
 
   wait_for_validation = true
-  tags                = var.tags
+}
+
+#------------------------------------------------------------------------------
+#                               COOKIECUTTER META
+#------------------------------------------------------------------------------
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
 }

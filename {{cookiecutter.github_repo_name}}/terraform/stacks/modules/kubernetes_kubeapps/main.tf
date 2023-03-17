@@ -26,6 +26,16 @@ locals {
   kubeapps_namespace        = "kubeapps"
   kubeapps_account_name     = "kubeapps-admin"
   kubeapps_ingress_hostname = "${local.kubeapps_namespace}.${var.services_subdomain}"
+
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"    = "{{ cookiecutter.github_repo_name }}/terraform/stacks/modules/kubernetes_kubeapps"
+      "cookiecutter/resource/source"  = "charts.bitnami.com/bitnami/kubeapps"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_helm_kubeapps }}"
+    }
+  )
 }
 
 
@@ -40,7 +50,7 @@ resource "helm_release" "kubeapps" {
   name       = "kubeapps"
   repository = "https://charts.bitnami.com/bitnami"
   chart      = "kubeapps"
-  version    = "{{ cookiecutter.terraform_helm_kubeapps }}"
+  version    = "~> {{ cookiecutter.terraform_helm_kubeapps }}"
 
   # see https://docs.bitnami.com/kubernetes/infrastructure/kubeapps/configuration/expose-service/
   set {
@@ -51,4 +61,23 @@ resource "helm_release" "kubeapps" {
   depends_on = [
     kubernetes_namespace.kubeapps
   ]
+}
+
+#------------------------------------------------------------------------------
+#                               COOKIECUTTER META
+#------------------------------------------------------------------------------
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
+}
+
+resource "kubernetes_secret" "cookiecutter" {
+  metadata {
+    name      = "cookiecutter-terraform"
+    namespace = local.kubeapps_namespace
+  }
+
+  # https://stackoverflow.com/questions/64134699/terraform-map-to-string-value
+  data = {
+    tags = jsonencode(local.tags)
+  }
 }

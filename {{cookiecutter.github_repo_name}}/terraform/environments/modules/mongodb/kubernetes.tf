@@ -7,21 +7,6 @@
 # usage: create environment connection resources for remote MongoDB instance.
 #        store the MongoDB credentials in Kubernetes Secrets
 #------------------------------------------------------------------------------
-data "aws_eks_cluster" "eks" {
-  name = var.resource_name
-}
-
-data "aws_eks_cluster_auth" "eks" {
-  name = var.resource_name
-}
-
-provider "kubernetes" {
-  host                   = data.aws_eks_cluster.eks.endpoint
-  cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
-  token                  = data.aws_eks_cluster_auth.eks.token
-}
-
-
 # Retrieve the mongodb_admin connection parameters from the shared resource namespace.
 # we'll refer to this data for the HOST and PORT assignments on all other MySQL
 # secrets.
@@ -55,25 +40,25 @@ resource "kubernetes_secret" "openedx" {
   data = {
     # see: https://docs.tutor.overhang.io/configuration.html
     # -------------------------------------------------------------------------
-    MONGODB_DATABASE            = substr("${var.db_prefix}_edx", -32, -1)
-    MONGODB_HOST                = data.kubernetes_secret.mongodb_admin.data.MONGODB_HOST
-    MONGODB_USERNAME            = ""
-    MONGODB_PASSWORD            = ""
+    MONGODB_DATABASE = substr("${var.db_prefix}_edx", -32, -1)
+    MONGODB_HOST     = data.kubernetes_secret.mongodb_admin.data.MONGODB_HOST
+    MONGODB_USERNAME = ""
+    MONGODB_PASSWORD = ""
     # you can harden security by adding auth
     # credentials here
     #MONGODB_USERNAME           = substr("${var.db_prefix}_edx", -32, -1)
     #MONGODB_PASSWORD           = random_password.mongodb_openedx.result
-    MONGODB_PORT                = data.kubernetes_secret.mongodb_admin.data.MONGODB_PORT
-    MONGODB_USE_SSL             = "false"
-    MONGODB_REPLICA_SET         = ""
-    MONGODB_AUTH_MECHANISM      = ""
-    MONGODB_AUTH_SOURCE         = "admin"
+    MONGODB_PORT           = data.kubernetes_secret.mongodb_admin.data.MONGODB_PORT
+    MONGODB_USE_SSL        = "false"
+    MONGODB_REPLICA_SET    = ""
+    MONGODB_AUTH_MECHANISM = ""
+    MONGODB_AUTH_SOURCE    = "admin"
 
     # see: https://github.com/overhangio/tutor-forum
     # -------------------------------------------------------------------------
-    FORUM_MONGODB_DATABASE      = substr("${var.db_prefix}_cs_comments", -32, -1)
-    FORUM_MONGODB_USE_SSL       = "false"
-    FORUM_MONGODB_AUTH_SOURCE   = ""
-    FORUM_MONGODB_AUTH_MECH     = ""
+    FORUM_MONGODB_DATABASE    = substr("${var.db_prefix}_cs_comments", -32, -1)
+    FORUM_MONGODB_USE_SSL     = "false"
+    FORUM_MONGODB_AUTH_SOURCE = ""
+    FORUM_MONGODB_AUTH_MECH   = ""
   }
 }

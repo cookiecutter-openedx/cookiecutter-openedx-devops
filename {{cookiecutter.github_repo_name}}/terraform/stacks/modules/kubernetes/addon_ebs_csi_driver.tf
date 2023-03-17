@@ -39,7 +39,13 @@ resource "aws_iam_role" "AmazonEKS_EBS_CSI_DriverRole" {
       }
     ]
   })
-  tags = var.tags
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "hashicorp/aws/aws_iam_role"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+    }
+  )
 }
 
 # 3. Attach the required AWS managed policy to the role

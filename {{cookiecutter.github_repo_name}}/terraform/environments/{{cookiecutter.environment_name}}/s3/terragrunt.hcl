@@ -14,17 +14,13 @@ locals {
   # Extract out common variables for reuse
   kubernetes_name               = local.environment_vars.locals.shared_resource_namespace
   aws_region                    = local.global_vars.locals.aws_region
-  resource_name_storage         = "${local.environment_vars.locals.environment_namespace}-storage"
-  resource_name_backup          = "${local.environment_vars.locals.environment_namespace}-backup"
-  resource_name_secrets         = "${local.environment_vars.locals.environment_namespace}-secrets"
+  resource_name_storage         = local.environment_vars.locals.s3_bucket_storage
+  resource_name_backup          = local.environment_vars.locals.s3_bucket_backup
+  resource_name_secrets         = local.environment_vars.locals.s3_bucket_secrets
   environment_domain            = local.environment_vars.locals.environment_domain
   environment_studio_domain     = "${local.environment_vars.locals.environment_studio_subdomain}.${local.environment_domain}"
   environment_namespace         = local.environment_vars.locals.environment_namespace
-
-  tags = merge(
-    local.environment_vars.locals.tags,
-    { Name = "${local.environment_vars.locals.environment_namespace}" }
-  )
+  tags                          = local.environment_vars.locals.tags
 
 }
 
@@ -79,7 +75,7 @@ dependency "kubernetes" {
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
-  source = "../../modules//s3_openedx_storage"
+  source = "../../modules//s3"
 }
 
 # Include all settings from the root terragrunt.hcl file

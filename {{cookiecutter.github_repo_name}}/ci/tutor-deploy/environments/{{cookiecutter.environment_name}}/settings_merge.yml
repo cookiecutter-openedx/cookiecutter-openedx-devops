@@ -1,73 +1,117 @@
 ---
+ACTIVATION_EMAIL_SUPPORT_LINK: https://{{ cookiecutter.global_root_domain }}/support/
+AUTH_PASSWORD_VALIDATORS:
+-   NAME: django.contrib.auth.password_validation.UserAttributeSimilarityValidator
+-   NAME: common.djangoapps.util.password_policy_validators.MinimumLengthValidator
+    OPTIONS:
+        min_length: 8
+-   NAME: common.djangoapps.util.password_policy_validators.MaximumLengthValidator
+    OPTIONS:
+        max_length: 75
+AWS_SES_REGION_ENDPOINT: email.{{ cookiecutter.global_aws_region }}.amazonaws.com
+AWS_SES_REGION_NAME: "{{ cookiecutter.global_aws_region }}"
 CORS_ORIGIN_ALLOW_ALL: true
 CORS_ORIGIN_WHITELIST:
 - https://{{ cookiecutter.global_root_domain }}
 - https://{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
 - https://{{ cookiecutter.environment_studio_subdomain }}.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
 - https://apps.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
+COURSE_ABOUT_VISIBILITY_PERMISSION: see_about_page
+COURSE_CATALOG_VISIBILITY_PERMISSION: see_in_catalog
+CREDIT_HELP_LINK_URL: https://{{ cookiecutter.global_root_domain }}/support/
 CROSS_DOMAIN_CSRF_COOKIE_DOMAIN: "{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}"
 CROSS_DOMAIN_CSRF_COOKIE_NAME: native-csrf-cookie
 CSRF_COOKIE_SECURE: true
-CSRF_TRUSTED_ORIGINS: []
+CSRF_TRUSTED_ORIGINS:
+- https://apps.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
 DCS_SESSION_COOKIE_SAMESITE: lax
 DCS_SESSION_COOKIE_SAMESITE_FORCE_ALL: true
-ACTIVATION_EMAIL_SUPPORT_LINK: https://{{ cookiecutter.global_root_domain }}/support/
-AWS_SES_REGION_ENDPOINT: email.{{ cookiecutter.global_aws_region }}.amazonaws.com
-AWS_SES_REGION_NAME: "{{ cookiecutter.global_aws_region }}"
-CREDIT_HELP_LINK_URL: https://{{ cookiecutter.global_root_domain }}/support/
 DEFAULT_MOBILE_AVAILABLE: false
 DEFAULT_EMAIL_LOGO_URL: https://cdn.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
 ENTERPRISE_SUPPORT_URL: https://{{ cookiecutter.global_root_domain }}/support/
 ENTERPRISE_TAGLINE: "{{ cookiecutter.global_platform_name }}"
 FACEBOOK_API_VERSION: v12.0
 FEATURES:
-  ENABLE_CHANGE_USER_PASSWORD_ADMIN: true
-  CERTIFICATES_HTML_VIEW: true
-  PREVIEW_LMS_BASE: "preview.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain  }}"
-  ENABLE_COURSEWARE_INDEX: true
-  ENABLE_CSMH_EXTENDED: false
-  ENABLE_LEARNER_RECORDS: true
-  ENABLE_LIBRARY_INDEX: true
-  MILESTONES_APP: true
-  ENABLE_PREREQUISITE_COURSES: true
-  ENABLE_DASHBOARD_SEARCH: false
+  ALLOW_ALL_ADVANCED_COMPONENTS: true
+  ALLOW_HIDING_DISCUSSION_TAB: true
   AUTH_USE_OPENID_PROVIDER: false
+  AUTH_USE_OPENID: false
   AUTOMATIC_AUTH_FOR_TESTING: false
+  CERTIFICATES_ENABLED: true
+  CERTIFICATES_HTML_VIEW: true
+  CUSTOM_CERTIFICATE_TEMPLATES_ENABLED: true
   CUSTOM_COURSES_EDX: false
+  ENABLE_ACCOUNT_DELETION: true
   ENABLE_BULK_ENROLLMENT_VIEW: true
+  ENABLE_CHANGE_USER_PASSWORD_ADMIN: true
   ENABLE_COMBINED_LOGIN_REGISTRATION: true
   ENABLE_CORS_HEADERS: true
   ENABLE_COUNTRY_ACCESS: false
+  ENABLE_COURSEWARE_INDEX: true
+  ENABLE_COURSEWARE_MICROFRONTEND: false
   ENABLE_CREDIT_API: false
   ENABLE_CREDIT_ELIGIBILITY: false
   ENABLE_CROSS_DOMAIN_CSRF_COOKIE: true
-  ENABLE_DISCUSSION_HOME_PANEL: false
-  ENABLE_DISCUSSION_SERVICE: false
+  ENABLE_CSMH_EXTENDED: false
+  ENABLE_DASHBOARD_SEARCH: true
+  ENABLE_DISCUSSION_EMAIL_DIGEST: true
+  ENABLE_DISCUSSION_HOME_PANEL: true
+  ENABLE_DISCUSSION_SERVICE: true
+  ENABLE_DJANGO_ADMIN_SITE: true
   ENABLE_EDXNOTES: true
   ENABLE_ENROLLMENT_RESET: true
   ENABLE_EXPORT_GIT: false
   ENABLE_GRADE_DOWNLOADS: true
   ENABLE_INSTRUCTOR_ANALYTICS: true
+  ENABLE_INSTRUCTOR_EMAIL: true
+  ENABLE_LEARNER_RECORDS: true
+  ENABLE_LIBRARY_INDEX: true
   ENABLE_LTI_PROVIDER: false
   ENABLE_MKTG_SITE: false
   ENABLE_MOBILE_REST_API: true
   ENABLE_OAUTH2_PROVIDER: true
+  ENABLE_PEARSON_HACK_TEST: false
+  ENABLE_PREREQUISITE_COURSES: true
   ENABLE_PUBLISHER: false
   ENABLE_READING_FROM_MULTIPLE_HISTORY_TABLES: false
   ENABLE_SPECIAL_EXAMS: false
   ENABLE_SYSADMIN_DASHBOARD: true
   ENABLE_THIRD_PARTY_AUTH: true
   ENABLE_VIDEO_UPLOAD_PIPELINE: false
+  ENABLE_XBLOCK_VIEW_ENDPOINT: true
+  MILESTONES_APP: true
+  ORGANIZATIONS_APP: true
+  PREVENT_CONCURRENT_LOGINS: true
+  PREVIEW_LMS_BASE: preview.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain  }}
   SHOW_FOOTER_LANGUAGE_SELECTOR: false
   SHOW_HEADER_LANGUAGE_SELECTOR: false
+GOOGLE_ANALYTICS_ACCOUNT: {{ cookiecutter.global_google_analytics_account }}
+HEARTBEAT_EXTENDED_CHECKS:
+- openedx.core.djangoapps.heartbeat.default_checks.check_celery
+- openedx.core.djangoapps.django_comment_common.comment_client.utils.check_forum_heartbeat
 ID_VERIFICATION_SUPPORT_LINK: https://{{ cookiecutter.global_root_domain }}/support/
-LANGUAGE_CODE: en
+LANGUAGE_CODE: {{ cookiecutter.global_language_code }}
 LANGUAGE_COOKIE: openedx-language-preference
+LOGIN_REDIRECT_WHITELIST:
+- https://{{ cookiecutter.environment_studio_subdomain }}.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
+- https://apps.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
 LOGO_URL_PNG: "https://cdn.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}"
+MKTG_URL_OVERRIDES:
+  ABOUT: '#'
+  BLOG: '#'
+  DONATE: '#'
+  PRIVACY: '#'
+  TOS: '#'
+PARENTAL_CONSENT_AGE_LIMIT: 13
 PLATFORM_DESCRIPTION: "{{ cookiecutter.global_platform_description }}"
 PLATFORM_FACEBOOK_ACCOUNT: http://www.facebook.com/
 PLATFORM_NAME: "{{ cookiecutter.global_platform_name }}"
 PLATFORM_TWITTER_ACCOUNT: ''
+PROFILE_IMAGE_SIZES_MAP:
+    full: 500
+    large: 120
+    medium: 50
+    small: 30
 REGISTRATION_EXTRA_FIELDS:
   city: hidden
   confirm_email: hidden
@@ -93,7 +137,13 @@ SUPPORT_SITE_LINK: https://{{ cookiecutter.global_root_domain }}/support/
 TIME_ZONE: America/New_York
 THIRD_PARTY_AUTH_BACKENDS:
 - social_core.backends.google.GoogleOAuth2
+- social_core.backends.linkedin.LinkedinOAuth2
 - social_core.backends.facebook.FacebookOAuth2
+- social_core.backends.azuread.AzureADOAuth2
+- common.djangoapps.third_party_auth.appleid.AppleIdAuth
+- common.djangoapps.third_party_auth.identityserver3.IdentityServer3
+- common.djangoapps.third_party_auth.saml.SAMLAuthBackend
+- common.djangoapps.third_party_auth.lti.LTIAuthBackend
 WIKI_ENABLED: false
 API_ACCESS_FROM_EMAIL: api-requests@{{ cookiecutter.global_root_domain }}
 API_ACCESS_MANAGER_EMAIL: api-access@{{ cookiecutter.global_root_domain }}

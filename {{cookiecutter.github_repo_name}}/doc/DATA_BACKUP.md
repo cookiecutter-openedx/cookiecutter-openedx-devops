@@ -35,7 +35,7 @@ MongoDB script source: [openedx-backup-mongodb.sh](../terraform/stacks/modules/e
 
 Terraform creates a dedicated AWS S3 bucket, {{ cookiecutter.environment_name }}-{{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-backup.s3.amazonaws.com, for archiving backups. This bucket does not provide public access. Note that it is preconfigured with a lifecycle policy to retain large files (greater than 1Gb) for 30 days.
 
-See Terraform source code: [openedx_backups.tf](../terraform/environments/modules/s3_openedx_storage/openedx_backups.tf)
+See Terraform source code: [openedx_backups.tf](../terraform/environments/modules/s3/openedx_backups.tf)
 
 ## Local storage
 

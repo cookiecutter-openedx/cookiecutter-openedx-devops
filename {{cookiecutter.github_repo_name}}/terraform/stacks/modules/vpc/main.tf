@@ -12,11 +12,19 @@
 #        There are a LOT of options in this module.
 #        see https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest
 #------------------------------------------------------------------------------
+locals {
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source" = "{{ cookiecutter.github_repo_name }}/terraform/stacks/modules/mysql"
+    }
+  )
 
-
+}
 module "vpc" {
   source                 = "terraform-aws-modules/vpc/aws"
-  version                = "{{ cookiecutter.terraform_aws_modules_vpc }}"
+  version                = "~> {{ cookiecutter.terraform_aws_modules_vpc }}"
   create_vpc             = true
   name                   = var.name
   cidr                   = var.cidr
@@ -32,5 +40,16 @@ module "vpc" {
   one_nat_gateway_per_az = var.one_nat_gateway_per_az
   public_subnet_tags     = var.public_subnet_tags
   private_subnet_tags    = var.private_subnet_tags
-  tags                   = var.tags
+
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "terraform-aws-modules/vpc/aws"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_aws_modules_vpc }}"
+    }
+  )
+}
+
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
 }

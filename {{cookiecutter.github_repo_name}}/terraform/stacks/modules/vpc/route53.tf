@@ -4,7 +4,13 @@ data "aws_route53_zone" "root_domain" {
 
 resource "aws_route53_zone" "services_subdomain" {
   name = var.services_subdomain
-  tags = var.tags
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "hashicorp/aws/aws_route53_zone"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+    }
+  )
 }
 
 

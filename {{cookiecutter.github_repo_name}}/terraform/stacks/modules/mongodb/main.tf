@@ -23,6 +23,15 @@
 locals {
   ssh_private_key_filename = "${var.stack_namespace}-mongodb.pem"
   host_name                = "mongodb.${var.services_subdomain}"
+
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source" = "{{ cookiecutter.github_repo_name }}/terraform/stacks/modules/mongodb"
+    }
+  )
+
 }
 
 # create the MongoDB instance and install configuration files.
@@ -34,7 +43,14 @@ resource "aws_instance" "mongodb" {
   monitoring                  = false
   associate_public_ip_address = false
   ebs_optimized               = false
-  tags                        = var.tags
+
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "hashicorp/aws/aws_instance"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+    }
+  )
 
   vpc_security_group_ids = [
     aws_security_group.sg_mongodb.id,
@@ -45,7 +61,13 @@ resource "aws_instance" "mongodb" {
   root_block_device {
     delete_on_termination = true
     volume_size           = 8
-    tags                  = var.tags
+    tags = merge(
+      local.tags,
+      {
+        "cookiecutter/resource/source"  = "hashicorp/aws/aws_instance"
+        "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+      }
+    )
   }
 
   provisioner "file" {
@@ -85,7 +107,7 @@ resource "aws_instance" "mongodb" {
     }
 
     content     = data.template_file.welcome_banner.rendered
-    destination = "/tmp/openedx_devops/mongodb/etc/09-welcome-banner"
+    destination = "/tmp/cookiecutter/mongodb/etc/09-welcome-banner"
   }
 
   provisioner "file" {
@@ -97,7 +119,7 @@ resource "aws_instance" "mongodb" {
     }
 
     source      = "${path.module}/etc/update-motd.d/10-help-text"
-    destination = "/tmp/openedx_devops/mongodb/etc/10-help-text"
+    destination = "/tmp/cookiecutter/mongodb/etc/10-help-text"
   }
 
 
@@ -110,7 +132,7 @@ resource "aws_instance" "mongodb" {
     }
 
     content     = data.template_file.aws_config.rendered
-    destination = "/tmp/openedx_devops/mongodb/.aws/config"
+    destination = "/tmp/cookiecutter/mongodb/.aws/config"
   }
 
   provisioner "file" {
@@ -122,7 +144,7 @@ resource "aws_instance" "mongodb" {
     }
 
     content     = data.template_file.aws_credentials.rendered
-    destination = "/tmp/openedx_devops/mongodb/.aws/credentials"
+    destination = "/tmp/cookiecutter/mongodb/.aws/credentials"
   }
 
   # installation bootstrapper script
@@ -135,7 +157,7 @@ resource "aws_instance" "mongodb" {
     }
 
     source      = "${path.module}/scripts/"
-    destination = "/tmp/openedx_devops/mongodb/scripts/"
+    destination = "/tmp/cookiecutter/mongodb/scripts/"
   }
 
   # add ssh key to the bastion
@@ -185,7 +207,7 @@ resource "null_resource" "install_script" {
     }
 
     content     = data.template_file.mongod_conf.rendered
-    destination = "/tmp/openedx_devops/mongodb/etc/mongod.conf"
+    destination = "/tmp/cookiecutter/mongodb/etc/mongod.conf"
   }
 
   provisioner "file" {
@@ -224,7 +246,6 @@ resource "null_resource" "install_script" {
 #------------------------------------------------------------------------------
 #                        SUPPORTING RESOURCES
 #------------------------------------------------------------------------------
-
 data "aws_ebs_volume" "mongodb" {
   most_recent = true
 
@@ -296,11 +317,11 @@ data "aws_security_group" "stack-namespace-node" {
 # only allows inbound traffice to port 27017.
 resource "aws_security_group" "sg_mongodb" {
   name_prefix = "${var.stack_namespace}-mongodb"
-  description = "openedx_devops: MongoDB access from within VPC"
+  description = "cookiecutter: MongoDB access from within VPC"
   vpc_id      = var.vpc_id
 
   ingress {
-    description = "openedx_devops: MongoDB access from within VPC"
+    description = "cookiecutter: MongoDB access from within VPC"
     from_port   = 27017
     to_port     = 27017
     protocol    = "tcp"
@@ -308,7 +329,7 @@ resource "aws_security_group" "sg_mongodb" {
   }
 
   ingress {
-    description = "openedx_devops: ssh access to MongoDB from within VPC"
+    description = "cookiecutter: ssh access to MongoDB from within VPC"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
@@ -316,7 +337,7 @@ resource "aws_security_group" "sg_mongodb" {
   }
 
   egress {
-    description      = "openedx_devops: public MongoDB out to anywhere"
+    description      = "cookiecutter: public MongoDB out to anywhere"
     from_port        = 0
     to_port          = 0
     protocol         = "-1"
@@ -324,7 +345,13 @@ resource "aws_security_group" "sg_mongodb" {
     ipv6_cidr_blocks = ["::/0"]
   }
 
-  tags = var.tags
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "hashicorp/aws/aws_security_group"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+    }
+  )
 }
 
 
@@ -359,7 +386,13 @@ resource "random_password" "mongodb_admin" {
 resource "aws_iam_user" "aws_cli" {
   name = "${var.stack_namespace}-mongodb"
   path = "/system/mongodb-user/"
-  tags = var.tags
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "hashicorp/aws/aws_iam_user"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+    }
+  )
 }
 
 resource "aws_iam_access_key" "aws_cli" {
@@ -438,4 +471,11 @@ data "template_file" "welcome_banner" {
   vars = {
     platform_name = var.platform_name
   }
+}
+
+#------------------------------------------------------------------------------
+#                               COOKIECUTTER META
+#------------------------------------------------------------------------------
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
 }

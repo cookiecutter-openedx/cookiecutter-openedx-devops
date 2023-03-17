@@ -7,32 +7,41 @@
 # usage: create an RDS MySQL instance.
 #        store the MySQL credentials in Kubernetes Secrets
 #------------------------------------------------------------------------------
-data "aws_eks_cluster" "eks" {
-  name = var.resource_name
-}
-
-data "aws_eks_cluster_auth" "eks" {
-  name = var.resource_name
-}
-
-provider "kubernetes" {
-  host                   = data.aws_eks_cluster.eks.endpoint
-  cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
-  token                  = data.aws_eks_cluster_auth.eks.token
-}
-
-provider "kubectl" {
-  host                   = data.aws_eks_cluster.eks.endpoint
-  cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority.0.data)
-  token                  = data.aws_eks_cluster_auth.eks.token
-}
-
 #------------------------------------------------------------------------------
 # Tutor deploys into this namespace, bc of a namesapce command-line argument
 # that we pass inside of GitHub Actions deploy workflow
 #------------------------------------------------------------------------------
+locals {
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source" = "{{ cookiecutter.github_repo_name }}/terraform/environments/modules/kubernetes"
+    }
+  )
+}
+
 resource "kubernetes_namespace" "environment_namespace" {
   metadata {
     name = var.environment_namespace
+  }
+}
+
+#------------------------------------------------------------------------------
+#                               COOKIECUTTER META
+#------------------------------------------------------------------------------
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
+}
+
+resource "kubernetes_secret" "cookiecutter" {
+  metadata {
+    name      = "cookiecutter"
+    namespace = var.environment_namespace
+  }
+
+  # https://stackoverflow.com/questions/64134699/terraform-map-to-string-value
+  data = {
+    tags = jsonencode(local.tags)
   }
 }

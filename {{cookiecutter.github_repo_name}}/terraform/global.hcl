@@ -19,12 +19,13 @@ locals {
   studio_subdomain           = "{{ cookiecutter.environment_studio_subdomain }}"
 
   tags = {
-    "cookiecutter/platform_name"                = local.platform_name
-    "cookiecutter/platform_region"              = local.platform_region
-    "cookiecutter/shared_resource_identifier"   = local.shared_resource_identifier
-    "cookiecutter/root_domain"                  = local.root_domain
-    "cookiecutter/services_subdomain"           = local.services_subdomain
-    "cookiecutter/terraform"                    = "true"
+    "cookiecutter/global/platform_name"                = local.platform_name
+    "cookiecutter/global/platform_region"              = local.platform_region
+    "cookiecutter/global/shared_resource_identifier"   = local.shared_resource_identifier
+    "cookiecutter/global/shared_resource_namespace"    = local.shared_resource_namespace
+    "cookiecutter/global/root_domain"                  = local.root_domain
+    "cookiecutter/global/services_subdomain"           = local.services_subdomain
+    "cookiecutter/global/aws_region"                   = local.aws_region
   }
 
 }

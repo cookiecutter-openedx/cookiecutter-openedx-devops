@@ -8,6 +8,16 @@
 #------------------------------------------------------------------------------
 locals {
   hostname = "bastion.${var.services_subdomain}"
+
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"  = "{{ cookiecutter.github_repo_name }}/terraform/stacks/modules/ec2_bastion"
+      "cookiecutter/module/version" = ""
+    }
+  )
+
 }
 resource "aws_instance" "bastion" {
 
@@ -18,7 +28,14 @@ resource "aws_instance" "bastion" {
   subnet_id         = var.subnet_ids[random_integer.subnet_id.result]
   monitoring        = false
   ebs_optimized     = false
-  tags              = var.tags
+
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "hashicorp/aws/aws_instance"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+    }
+  )
 
   vpc_security_group_ids = [
     resource.aws_security_group.sg_bastion.id,
@@ -28,7 +45,13 @@ resource "aws_instance" "bastion" {
   root_block_device {
     delete_on_termination = true
     volume_size           = var.volume_size
-    tags                  = var.tags
+    tags = merge(
+      local.tags,
+      {
+        "cookiecutter/resource/source"  = "hashicorp/aws/aws_instance"
+        "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+      }
+    )
   }
 
   # aws cli configuration
@@ -43,13 +66,13 @@ resource "aws_instance" "bastion" {
     inline = [
       "mkdir ~/.aws",
       "mkdir ~/scripts",
-      "rm -rf /tmp/openedx_devops",
-      "mkdir /tmp/openedx_devops",
-      "mkdir /tmp/openedx_devops/etc/",
+      "rm -rf /tmp/cookiecutter",
+      "mkdir /tmp/cookiecutter",
+      "mkdir /tmp/cookiecutter/etc/",
       "echo PATH='$HOME/scripts:$PATH' >> ~/.profile",
 
       # report what we've done so far
-      "echo created folder /tmp/openedx_devops",
+      "echo created folder /tmp/cookiecutter",
       "echo created folder ~/.aws",
       "echo created folder ~/scripts",
       "echo added ~/scripts to path",
@@ -91,7 +114,7 @@ resource "aws_instance" "bastion" {
     }
 
     content     = data.template_file.welcome_banner.rendered
-    destination = "/tmp/openedx_devops/etc/09-welcome-banner"
+    destination = "/tmp/cookiecutter/etc/09-welcome-banner"
   }
 
   provisioner "file" {
@@ -103,7 +126,7 @@ resource "aws_instance" "bastion" {
     }
 
     content     = data.template_file.help_text.rendered
-    destination = "/tmp/openedx_devops/etc/10-help-text"
+    destination = "/tmp/cookiecutter/etc/10-help-text"
   }
 
   # installation bootstrapper script
@@ -171,7 +194,7 @@ resource "aws_instance" "bastion" {
       #  "/home/ubuntu/scripts/install.sh",
 
       # 3.) clean up
-      "rm -rf /tmp/openedx_devops",
+      "rm -rf /tmp/cookiecutter",
     ]
   }
 
@@ -235,11 +258,11 @@ data "aws_security_group" "stack-namespace-node" {
 # only allows public ssh access.
 resource "aws_security_group" "sg_bastion" {
   name_prefix = "${var.resource_name}-bastion"
-  description = "openedx_devops: Public ssh access"
+  description = "cookiecutter: Public ssh access"
   vpc_id      = var.vpc_id
 
   ingress {
-    description = "openedx_devops: public ssh from anywhere"
+    description = "cookiecutter: public ssh from anywhere"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
@@ -247,7 +270,7 @@ resource "aws_security_group" "sg_bastion" {
   }
 
   egress {
-    description      = "openedx_devops: public ssh out to anywhere"
+    description      = "cookiecutter: public ssh out to anywhere"
     from_port        = 0
     to_port          = 0
     protocol         = "-1"
@@ -255,7 +278,13 @@ resource "aws_security_group" "sg_bastion" {
     ipv6_cidr_blocks = ["::/0"]
   }
 
-  tags = var.tags
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "hashicorp/aws/aws_security_group"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+    }
+  )
 }
 
 
@@ -263,7 +292,13 @@ resource "aws_security_group" "sg_bastion" {
 # add to the root domain.
 resource "aws_eip" "bastion" {
   instance = aws_instance.bastion.id
-  tags     = var.tags
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "hashicorp/aws/aws_eip"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+    }
+  )
 }
 
 
@@ -305,7 +340,13 @@ data "template_file" "update" {
 resource "aws_iam_user" "aws_cli" {
   name = "${var.resource_name}-bastion"
   path = "/system/bastion-user/"
-  tags = var.tags
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "hashicorp/aws/aws_iam_user"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+    }
+  )
 }
 
 resource "aws_iam_access_key" "aws_cli" {
@@ -358,4 +399,11 @@ data "template_file" "help_text" {
     services_subdomain = var.services_subdomain
     aws_region         = var.aws_region
   }
+}
+
+#------------------------------------------------------------------------------
+#                               COOKIECUTTER META
+#------------------------------------------------------------------------------
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
 }

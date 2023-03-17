@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.1.0] (2023-3-17)
+
+Lots of new functionality added related to gathering and storing meta data about the exact environment that was used to create AWS resources via Terraform. Also added functionality to gather and persist as much information as possible about build and deploy CI work flows.
+
+- add module to gather environment state data of current user
+- add cookiecutter meta tags for AWS resources
+- revert to installing nutmeg.2 by default
+- gather and persist CI build and deploy meta data in new k8s secrets
+- add scorm proxy service to backend file storage based on eduNEXT prototype
+
 ## [1.0.26] (2023-3-8)
 
 - bug fix: settings_merge.yml PREVIEW_LMS_BASE
@@ -272,7 +282,7 @@ General production release
 - resolved deprecation warnings in all modules
 - restructured terraform folders
 - fixed a bug that was causing multiple SSL/TLS certificates to be created in both us-east-1 as well as the environment region
-- added the text 'openedx_devops' to the descriptions of all security groups, IAM roles, and IAM policies resources that are explicitly created by this repository
+- added the text 'cookiecutter' to the descriptions of all security groups, IAM roles, and IAM policies resources that are explicitly created by this repository
 
 
 ## [0.0.3] - 2022-03-20

@@ -18,7 +18,7 @@ rm /home/ubuntu/scripts/*.sh.tpl
 
 # for diagnostics: dump the tmp contents. These files were
 # added by provisioner directives in aws_instance in main.tf
-ls /tmp/openedx_devops/mongodb/ -lha
+ls /tmp/cookiecutter/mongodb/ -lha
 
 # set aws-mandated permissions on the mongodb private key
 echo setting permission on ~/.ssh/$PRIVATE_KEY_PEM
@@ -31,16 +31,16 @@ ssh-keyscan $PRIVATE_IPV4 >> $HOME/.ssh/known_hosts
 echo copying files from bastion tmp folder to $PRIVATE_IPV4
 
 # prep mongodb config files, then copy to the mongodb instance
-chmod +x /tmp/openedx_devops/mongodb/scripts/*.sh
+chmod +x /tmp/cookiecutter/mongodb/scripts/*.sh
 echo copying scripts to home folder on $PRIVATE_IPV4
-scp -i ~/.ssh/$PRIVATE_KEY_PEM -r /tmp/openedx_devops/mongodb/scripts/ ubuntu@$PRIVATE_IPV4:/home/ubuntu/
+scp -i ~/.ssh/$PRIVATE_KEY_PEM -r /tmp/cookiecutter/mongodb/scripts/ ubuntu@$PRIVATE_IPV4:/home/ubuntu/
 echo copying aws cli config to home folder on $PRIVATE_IPV4
-scp -i ~/.ssh/$PRIVATE_KEY_PEM -r /tmp/openedx_devops/mongodb/.aws/ ubuntu@$PRIVATE_IPV4:/home/ubuntu/
+scp -i ~/.ssh/$PRIVATE_KEY_PEM -r /tmp/cookiecutter/mongodb/.aws/ ubuntu@$PRIVATE_IPV4:/home/ubuntu/
 
 # configure the login banner, copy login banner files from bastion tmp folder to the mongodb tmp folder
-chmod 755 /tmp/openedx_devops/mongodb/etc/*
+chmod 755 /tmp/cookiecutter/mongodb/etc/*
 echo copying login banner files to mongodb tmp folder on $PRIVATE_IPV4
-scp -i ~/.ssh/$PRIVATE_KEY_PEM -r /tmp/openedx_devops/mongodb/etc/ ubuntu@$PRIVATE_IPV4:/tmp/
+scp -i ~/.ssh/$PRIVATE_KEY_PEM -r /tmp/cookiecutter/mongodb/etc/ ubuntu@$PRIVATE_IPV4:/tmp/
 
 # copy banner files from mongodb tmp folder to /etc/update-motd.d/
 echo installing login banners on $PRIVATE_IPV4
@@ -60,11 +60,11 @@ ssh ubuntu@$PRIVATE_IPV4 -i ~/.ssh/$PRIVATE_KEY_PEM sudo chmod 644 /etc/update-m
 
 # cleanup
 # FIX NOTE: un-comment me
-# "rm -rf /tmp/openedx_devops/mongodb",
+# "rm -rf /tmp/cookiecutter/mongodb",
 
 # create an ssh shortcut inside the bastion .ssh folder for the mongodb instance
 # FIX NOTE: I DO NOT WORK :(
-#"grep -qxF 'Host mongodb' ~/.ssh/config || cat /tmp/openedx_devops/mongodb/ssh_config >> ~/.ssh/config && echo added ssh key and config to bastion.",
+#"grep -qxF 'Host mongodb' ~/.ssh/config || cat /tmp/cookiecutter/mongodb/ssh_config >> ~/.ssh/config && echo added ssh key and config to bastion.",
 
 echo configuring .ssh/config on bastion
 rm -f ~/.ssh/config

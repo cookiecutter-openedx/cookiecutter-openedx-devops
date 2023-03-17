@@ -5,8 +5,7 @@
 #
 # date:       aug-2022
 #
-# usage: print the login banner for openedx_devops
-#        cookiecutter.
+# usage: print the login banner
 #------------------------------------------------------------------------------
 
 

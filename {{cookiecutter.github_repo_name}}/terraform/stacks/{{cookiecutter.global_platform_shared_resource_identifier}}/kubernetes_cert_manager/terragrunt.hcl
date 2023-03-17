@@ -7,8 +7,8 @@
 # usage: build an EKS with EC2 worker nodes and ALB
 #------------------------------------------------------------------------------
 locals {
-  stack_vars = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
-  global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
+  stack_vars  = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
+  global_vars = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
   root_domain                     = local.global_vars.locals.root_domain
@@ -16,6 +16,11 @@ locals {
   aws_region                      = local.global_vars.locals.aws_region
   cert_manager_namespace          = "cert-manager"
   services_subdomain              = local.global_vars.locals.services_subdomain
+
+  tags = merge(
+    local.stack_vars.locals.tags,
+  )
+
 }
 
 dependencies {
@@ -80,4 +85,5 @@ inputs = {
   cert_manager_namespace      = local.cert_manager_namespace
   namespace                   = local.shared_resource_namespace
   services_subdomain          = local.services_subdomain
+  tags                        = local.tags
 }

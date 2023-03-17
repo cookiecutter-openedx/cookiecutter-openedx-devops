@@ -25,6 +25,17 @@
 #   echo https://127.0.0.1:8443/
 #   kubectl -n default port-forward $POD_NAME 8443:8443
 #-----------------------------------------------------------
+locals {
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"    = "{{ cookiecutter.github_repo_name }}/terraform/stacks/modules/kubernetes_dashboard"
+      "cookiecutter/resource/source"  = "kubernetes.github.io/dashboard"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_helm_dashboard }}"
+    }
+  )
+}
 
 data "template_file" "dashboard-values" {
   template = file("${path.module}/yml/values.yaml")
@@ -32,14 +43,33 @@ data "template_file" "dashboard-values" {
 
 resource "helm_release" "dashboard" {
   name             = "common"
-  namespace        = "kubernetes-dashboard"
+  namespace        = var.dashboard_namespace
   create_namespace = true
 
   chart      = "kubernetes-dashboard"
   repository = "https://kubernetes.github.io/dashboard/"
-  version    = "~> 6.0"
+  version    = "~> {{ cookiecutter.terraform_helm_dashboard }}"
 
   values = [
     data.template_file.dashboard-values.rendered
   ]
+}
+
+#------------------------------------------------------------------------------
+#                               COOKIECUTTER META
+#------------------------------------------------------------------------------
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
+}
+
+resource "kubernetes_secret" "cookiecutter" {
+  metadata {
+    name      = "cookiecutter-terraform"
+    namespace = var.dashboard_namespace
+  }
+
+  # https://stackoverflow.com/questions/64134699/terraform-map-to-string-value
+  data = {
+    tags = jsonencode(local.tags)
+  }
 }

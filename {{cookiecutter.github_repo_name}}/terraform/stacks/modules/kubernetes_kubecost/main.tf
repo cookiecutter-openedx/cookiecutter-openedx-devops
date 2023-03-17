@@ -23,6 +23,17 @@
 #-----------------------------------------------------------
 locals {
   cost_analyzer = "cost-analyzer"
+  kubecost      = "kubecost"
+
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"    = "{{ cookiecutter.github_repo_name }}/terraform/stacks/modules/kubernetes_kubecost"
+      "cookiecutter/resource/source"  = "kubecost.github.io/cost-analyzer/"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_helm_kubecost }}"
+    }
+  )
 }
 
 data "template_file" "kubecost-values" {
@@ -36,15 +47,34 @@ data "template_file" "kubecost-values" {
 
 resource "helm_release" "kubecost" {
   name             = local.cost_analyzer
-  namespace        = "kubecost"
+  namespace        = local.kubecost
   create_namespace = true
 
   repository = "https://kubecost.github.io/cost-analyzer/"
   chart      = "cost-analyzer"
-  version    = "{{ cookiecutter.terraform_helm_kubecost }}"
+  version    = "~> {{ cookiecutter.terraform_helm_kubecost }}"
 
   values = [
     data.template_file.kubecost-values.rendered
   ]
 
+}
+
+#------------------------------------------------------------------------------
+#                               COOKIECUTTER META
+#------------------------------------------------------------------------------
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
+}
+
+resource "kubernetes_secret" "cookiecutter" {
+  metadata {
+    name      = "cookiecutter-terraform"
+    namespace = local.kubecost
+  }
+
+  # https://stackoverflow.com/questions/64134699/terraform-map-to-string-value
+  data = {
+    tags = jsonencode(local.tags)
+  }
 }

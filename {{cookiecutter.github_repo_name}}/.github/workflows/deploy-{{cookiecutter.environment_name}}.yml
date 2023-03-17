@@ -130,7 +130,7 @@ jobs:
           echo "TUTOR_LMS_HOST=$LMS_HOSTNAME" >> $GITHUB_ENV
           echo "TUTOR_CMS_HOST=$CMS_HOSTNAME" >> $GITHUB_ENV
           echo "TUTOR_DOCKER_IMAGE_OPENEDX=${AWS_ECR_REPOSITORY_OPENEDX}" >> $GITHUB_ENV
-          echo "OPENEDX_COMMON_VERSION=open-release/{{ cookiecutter.ci_deploy_open_edx_version }}" >> $GITHUB_ENV
+          echo "TUTOR_OPENEDX_COMMON_VERSION=open-release/{{ cookiecutter.ci_deploy_open_edx_version }}" >> $GITHUB_ENV
 
       # ---------------------------------------------------------------------------------
       # Configure optional tutor plugins
@@ -319,6 +319,9 @@ jobs:
 
       - name: Dump tutor config
         uses: openedx-actions/tutor-print-dump@{{ cookiecutter.ci_openedx_actions_tutor_print_dump }}
+        with:
+          namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
+          action: deploy
 
       # -----------------------------------------------------------------------
       # Deploy

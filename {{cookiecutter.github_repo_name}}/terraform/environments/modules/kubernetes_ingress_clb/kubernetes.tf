@@ -32,3 +32,24 @@ resource "kubectl_manifest" "ingress_mfe" {
     aws_route53_record.wildcard,
   ]
 }
+
+data "aws_s3_bucket" "storage" {
+  id = var.s3_bucket_storage
+}
+
+data "template_file" "proxy_service" {
+  template = file("${path.module}/manifests/proxy-service.yml.tpl")
+  vars = {
+    environment_domain    = var.environment_domain
+    environment_namespace = var.environment_namespace
+    bucket_uri            = data.aws_s3_bucket.bucket_domain_name
+  }
+}
+resource "kubectl_manifest" "proxy_service" {
+  yaml_body = data.template_file.proxy_service.rendered
+
+  depends_on = [
+    aws_route53_record.naked,
+    aws_route53_record.wildcard,
+  ]
+}

@@ -11,7 +11,7 @@ output "wordpressConfig" {
 }
 
 output "tags" {
-  value = var.tags
+  value = local.tags
 }
 
 output "wordpress-id" {

@@ -14,7 +14,7 @@ locals {
   # Extract out common variables for reuse
   shared_resource_namespace       = local.global_vars.locals.shared_resource_namespace
   root_domain                     = local.global_vars.locals.root_domain
-  services_subdomain                    = local.global_vars.locals.services_subdomain
+  services_subdomain              = local.global_vars.locals.services_subdomain
   platform_name                   = local.global_vars.locals.platform_name
   platform_region                 = local.global_vars.locals.platform_region
   account_id                      = local.global_vars.locals.account_id
@@ -22,6 +22,7 @@ locals {
   environment_namespace           = local.environment_vars.locals.environment_namespace
   environment_domain              = local.environment_vars.locals.environment_domain
   studio_subdomain                = local.global_vars.locals.studio_subdomain
+  s3_bucket_storage               = local.environment_vars.locals.s3_bucket_storage
 
   tags = merge(
     local.environment_vars.locals.tags,
@@ -92,11 +93,12 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  aws_region = local.aws_region
-  environment_domain = local.environment_domain
-  environment_namespace = local.environment_namespace
-  studio_subdomain = local.studio_subdomain
-  shared_resource_namespace = local.shared_resource_namespace
-  root_domain = local.root_domain
-  tags = local.tags
+  aws_region                  = local.aws_region
+  environment_domain          = local.environment_domain
+  environment_namespace       = local.environment_namespace
+  studio_subdomain            = local.studio_subdomain
+  shared_resource_namespace   = local.shared_resource_namespace
+  root_domain                 = local.root_domain
+  s3_bucket_storage           = local.s3_bucket_storage
+  tags                        = local.tags
 }

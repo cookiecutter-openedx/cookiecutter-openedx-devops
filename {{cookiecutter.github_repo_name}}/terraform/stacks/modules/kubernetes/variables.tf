@@ -110,6 +110,6 @@ variable "bastion_iam_arn" {
 }
 
 variable "kms_key_owners" {
-  type = list
+  type    = list(any)
   default = []
 }

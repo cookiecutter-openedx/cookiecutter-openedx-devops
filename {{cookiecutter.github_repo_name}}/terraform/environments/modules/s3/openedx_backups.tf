@@ -9,10 +9,18 @@
 
 module "openedx_backup" {
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "{{ cookiecutter.terraform_aws_modules_s3 }}"
+  version = "~> {{ cookiecutter.terraform_aws_modules_s3 }}"
 
   bucket = var.resource_name_backup
   acl    = "private"
+
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "terraform-aws-modules/s3-bucket/aws"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_aws_modules_s3 }}"
+    }
+  )
 
   versioning = {
     enabled = true

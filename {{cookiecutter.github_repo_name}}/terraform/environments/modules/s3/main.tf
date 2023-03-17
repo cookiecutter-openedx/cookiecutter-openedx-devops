@@ -7,14 +7,18 @@
 # usage: create an AWS S3 bucket to offload Open edX file storage.
 #------------------------------------------------------------------------------
 
-module "openedx_secrets" {
-  source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "{{ cookiecutter.terraform_aws_modules_s3 }}"
+locals {
 
-  bucket = var.resource_name_secrets
-  acl    = "private"
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source" = "{{ cookiecutter.github_repo_name }}/terraform/environments/modules/s3"
+    }
+  )
 
-  block_public_acls   = true
-  block_public_policy = true
+}
 
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
 }

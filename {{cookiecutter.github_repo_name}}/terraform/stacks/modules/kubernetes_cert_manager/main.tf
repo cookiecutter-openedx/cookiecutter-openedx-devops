@@ -16,12 +16,16 @@
 #   helm show values jetstack/cert-manager
 #------------------------------------------------------------------------------
 
-data "template_file" "cert-manager-values" {
-  template = file("${path.module}/manifests/cert-manager-values.yaml.tpl")
-  vars = {
-    role_arn                   = module.cert_manager_irsa.iam_role_arn
-    namespace                  = var.cert_manager_namespace
-  }
+locals {
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"    = "{{ cookiecutter.github_repo_name }}/terraform/stacks/modules/kubernetes_cert_manager"
+      "cookiecutter/resource/source"  = "jetstack/cert-manager"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_helm_cert_manager }}"
+    }
+  )
 }
 
 resource "helm_release" "cert-manager" {
@@ -31,7 +35,7 @@ resource "helm_release" "cert-manager" {
 
   chart      = "cert-manager"
   repository = "jetstack"
-  version    = "{{ cookiecutter.terraform_helm_cert_manager }}"
+  version    = "~> {{ cookiecutter.terraform_helm_cert_manager }}"
   values = [
     data.template_file.cert-manager-values.rendered
   ]
@@ -40,10 +44,18 @@ resource "helm_release" "cert-manager" {
 #------------------------------------------------------------------------------
 #                               SUPPORTING RESOURCES
 #------------------------------------------------------------------------------
+data "template_file" "cert-manager-values" {
+  template = file("${path.module}/manifests/cert-manager-values.yaml.tpl")
+  vars = {
+    role_arn  = module.cert_manager_irsa.iam_role_arn
+    namespace = var.cert_manager_namespace
+  }
+}
+
 resource "aws_iam_policy" "cert_manager_policy" {
   name        = "${var.namespace}-cert-manager-policy"
   path        = "/"
-  description = "openedx_devops: Policy, which allows CertManager to create Route53 records"
+  description = "cookiecutter: Policy, which allows CertManager to create Route53 records"
 
   policy = jsonencode({
     "Version" : "2012-10-17",
@@ -68,15 +80,42 @@ resource "aws_iam_policy" "cert_manager_policy" {
       }
     ]
   })
+
+  tags = merge(
+    local.tags,
+    {
+      "cookiecutter/resource/source"  = "hashicorp/aws/aws_iam_policy"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+    }
+  )
 }
 
 
 module "cert_manager_irsa" {
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "{{ cookiecutter.terraform_aws_modules_iam_assumable_role_with_oidc }}"
+  version                       = "~> {{ cookiecutter.terraform_aws_modules_iam_assumable_role_with_oidc }}"
   create_role                   = true
   role_name                     = "${var.namespace}-cert_manager-irsa"
   provider_url                  = replace(data.aws_eks_cluster.eks.identity[0].oidc[0].issuer, "https://", "")
   role_policy_arns              = [aws_iam_policy.cert_manager_policy.arn]
   oidc_fully_qualified_subjects = ["system:serviceaccount:${var.cert_manager_namespace}:cert-manager"]
+}
+
+#------------------------------------------------------------------------------
+#                               COOKIECUTTER META
+#------------------------------------------------------------------------------
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
+}
+
+resource "kubernetes_secret" "cookiecutter" {
+  metadata {
+    name      = "cookiecutter-terraform"
+    namespace = var.cert_manager_namespace
+  }
+
+  # https://stackoverflow.com/questions/64134699/terraform-map-to-string-value
+  data = {
+    tags = jsonencode(local.tags)
+  }
 }

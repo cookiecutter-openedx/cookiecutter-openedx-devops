@@ -17,6 +17,7 @@ locals {
   redis_node_type           = local.stack_vars.locals.redis_node_type
 
   tags = merge(
+    local.global_vars.locals.tags,
     local.stack_vars.locals.tags,
     {
       "cookiecutter/name" = "${local.resource_name}"

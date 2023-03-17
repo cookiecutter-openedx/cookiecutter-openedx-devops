@@ -141,7 +141,7 @@ Create a Github repo and push it there:
   git add .
   git commit -m "first commit"
   git branch -M main
-  git remote add origin https://github.com/lpm0073/openedx_devops.git
+  git remote add origin https://github.com/youraccount/{{ cookiecutter.github_repo_name }}.git
   git push -u origin main
 
 Now take a look at your repo. Don't forget to carefully look at the generated README. Awesome, right?

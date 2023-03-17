@@ -11,12 +11,12 @@
 #--------------------------------------------------------
 
 
-if [ -d "/tmp/openedx_devops/etc" ]
+if [ -d "/tmp/cookiecutter/etc" ]
 then
-    sudo cp /tmp/openedx_devops/etc/09-welcome-banner /etc/update-motd.d/09-welcome-banner
+    sudo cp /tmp/cookiecutter/etc/09-welcome-banner /etc/update-motd.d/09-welcome-banner
     sudo chmod 755 /etc/update-motd.d/09-welcome-banner
 
-    sudo cp /tmp/openedx_devops/etc/10-help-text /etc/update-motd.d/10-help-text
+    sudo cp /tmp/cookiecutter/etc/10-help-text /etc/update-motd.d/10-help-text
     sudo chmod 755 /etc/update-motd.d/10-help-text
 
     # set execute permissions for only the banner components
@@ -26,7 +26,7 @@ then
     sudo chmod 644 /etc/update-motd.d/85-fwupd
     sudo chmod 644 /etc/update-motd.d/88-esm-announce
 
-    echo "added openedx_devops login banner"
+    echo "added cookiecutter login banner"
 fi
 
 # setup a .kube/config file w correct permissions

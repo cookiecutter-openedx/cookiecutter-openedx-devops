@@ -22,7 +22,19 @@
 # NOTE: run `helm repo update` prior to running this
 #       Terraform module.
 #-----------------------------------------------------------
+locals {
 
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"    = "{{ cookiecutter.github_repo_name }}/terraform/stacks/modules/kubernetes_vpa"
+      "cookiecutter/resource/source"  = "cowboysysop.github.io/charts/vertical-pod-autoscaler"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_helm_vertical_pod_autoscaler }}"
+    }
+  )
+
+}
 data "template_file" "vertical-pod-autoscaler-values" {
   template = file("${path.module}/yml/vertical-pod-autoscaler-values.yaml")
   vars     = {}
@@ -35,10 +47,17 @@ resource "helm_release" "vpa" {
   name       = "vertical-pod-autoscaler"
   repository = "https://cowboysysop.github.io/charts/"
   chart      = "vertical-pod-autoscaler"
-  version    = "{{ cookiecutter.terraform_helm_vertical_pod_autoscaler }}"
+  version    = "~> {{ cookiecutter.terraform_helm_vertical_pod_autoscaler }}"
 
   values = [
     data.template_file.vertical-pod-autoscaler-values.rendered
   ]
 
+}
+
+#------------------------------------------------------------------------------
+#                               COOKIECUTTER META
+#------------------------------------------------------------------------------
+module "cookiecutter_meta" {
+  source = "../../../../../../../common/cookiecutter_meta"
 }
