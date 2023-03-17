@@ -19,11 +19,6 @@ locals {
   )
 
 }
-provider "aws" {
-  alias  = "environment_region"
-  region = var.aws_region
-}
-
 data "aws_route53_zone" "root_domain" {
   name = var.root_domain
 }

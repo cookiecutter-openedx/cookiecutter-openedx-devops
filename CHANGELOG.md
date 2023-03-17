@@ -272,7 +272,7 @@ General production release
 - resolved deprecation warnings in all modules
 - restructured terraform folders
 - fixed a bug that was causing multiple SSL/TLS certificates to be created in both us-east-1 as well as the environment region
-- added the text 'openedx_devops' to the descriptions of all security groups, IAM roles, and IAM policies resources that are explicitly created by this repository
+- added the text 'cookiecutter' to the descriptions of all security groups, IAM roles, and IAM policies resources that are explicitly created by this repository
 
 
 ## [0.0.3] - 2022-03-20
