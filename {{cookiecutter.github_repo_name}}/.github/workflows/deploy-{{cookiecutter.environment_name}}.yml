@@ -320,7 +320,8 @@ jobs:
       - name: Dump tutor config
         uses: openedx-actions/tutor-print-dump@{{ cookiecutter.ci_openedx_actions_tutor_print_dump }}
         with:
-          eks-namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
+          namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
+          action: deploy
 
       # -----------------------------------------------------------------------
       # Deploy
