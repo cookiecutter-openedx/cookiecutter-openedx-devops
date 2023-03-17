@@ -22,7 +22,7 @@ locals {
   environment_namespace           = local.environment_vars.locals.environment_namespace
   environment_domain              = local.environment_vars.locals.environment_domain
   studio_subdomain                = local.global_vars.locals.studio_subdomain
-  s3_bucket_storage               = "${local.environment_vars.locals.environment_namespace}-storage"
+  s3_bucket_storage               = local.environment_vars.locals.s3_bucket_storage
 
   tags = merge(
     local.environment_vars.locals.tags,
