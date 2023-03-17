@@ -23,7 +23,7 @@
 #-----------------------------------------------------------
 locals {
   cost_analyzer = "cost-analyzer"
-  kubecost = "kubecost"
+  kubecost      = "kubecost"
 
   tags = merge(
     var.tags,
