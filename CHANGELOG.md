@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [1.1.0] (2023-3-17)
 
+### Meta Data
+
 Lots of new functionality added related to gathering and storing meta data about the exact environment that was used to create AWS resources via Terraform. Also added functionality to gather and persist as much information as possible about build and deploy CI work flows.
 
 - add module to gather environment state data of current user
@@ -14,6 +16,23 @@ Lots of new functionality added related to gathering and storing meta data about
 - revert to installing nutmeg.2 by default
 - gather and persist CI build and deploy meta data in new k8s secrets
 - add scorm proxy service to backend file storage based on eduNEXT prototype
+
+### Platform Defaults
+
+Added lots of settings to settings_merge.yml in order to smooth out deployment hurdles as well as to expose as many of the easily-configurable features of Open edX as possible. These include:
+
+- AUTH_PASSWORD_VALIDATORS
+- COURSE_ABOUT_VISIBILITY_PERMISSION
+- COURSE_CATALOG_VISIBILITY_PERMISSION
+- CSRF_TRUSTED_ORIGINS
+- Lots of additions to the FEATURES list
+- HEARTBEAT_EXTENDED_CHECKS
+- LANGUAGE_CODE
+- LOGIN_REDIRECT_WHITELIST
+- MKTG_URL_OVERRIDES
+- PARENTAL_CONSENT_AGE_LIMIT
+- PROFILE_IMAGE_SIZES_MAP
+- THIRD_PARTY_AUTH_BACKENDS
 
 ## [1.0.26] (2023-3-8)
 
