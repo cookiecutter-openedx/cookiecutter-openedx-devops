@@ -19,7 +19,7 @@ locals {
   db_prefix                     = replace(replace("${local.global_vars.locals.platform_name}_${local.environment}", ".", ""), "-", "")
   s3_bucket_storage             = "${local.environment_namespace}-storage"
   s3_bucket_backup              = "${local.environment_namespace}-backup"
-  s3_bucket_secrets             = "${local.environment_namespace}-storage"
+  s3_bucket_secrets             = "${local.environment_namespace}-secrets"
 
   tags = merge(
     local.global_vars.locals.tags,

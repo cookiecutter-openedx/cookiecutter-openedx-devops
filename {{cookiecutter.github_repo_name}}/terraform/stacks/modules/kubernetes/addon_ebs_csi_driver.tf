@@ -60,7 +60,7 @@ resource "null_resource" "annotate-ebs-csi-controller" {
 
   provisioner "local-exec" {
     command = <<-EOT
-      # 1. conifugre kubeconfig locally with the credentials data of the just-created
+      # 1. configure kubeconfig locally with the credentials data of the just-created
       # kubernetes cluster.
       # ---------------------------------------
       aws eks --region ${var.aws_region} update-kubeconfig --name ${var.namespace} --alias ${var.namespace}

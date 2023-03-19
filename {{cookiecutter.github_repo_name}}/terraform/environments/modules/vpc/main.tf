@@ -1,6 +1,4 @@
 locals {
-  s3_bucket_name   = var.resource_name
-  s3_bucket_domain = "${local.s3_bucket_name}.s3.${var.aws_region}.amazonaws.com"
   cdn_name         = "cdn.${var.environment_domain}"
 
   tags = merge(

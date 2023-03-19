@@ -34,7 +34,7 @@ resource "kubectl_manifest" "ingress_mfe" {
 }
 
 data "aws_s3_bucket" "storage" {
-  id = var.s3_bucket_storage
+  bucket = var.s3_bucket_storage
 }
 
 data "template_file" "proxy_service" {
@@ -42,7 +42,7 @@ data "template_file" "proxy_service" {
   vars = {
     environment_domain    = var.environment_domain
     environment_namespace = var.environment_namespace
-    bucket_uri            = data.aws_s3_bucket.bucket_domain_name
+    bucket_uri            = data.aws_s3_bucket.storage.bucket_domain_name
   }
 }
 resource "kubectl_manifest" "proxy_service" {

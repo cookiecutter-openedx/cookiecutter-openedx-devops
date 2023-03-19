@@ -5,7 +5,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: scorm-proxy-service
-  namespace: ${naenvironment_namespacemespace}
+  namespace: ${environment_namespace}
 spec:
   type: ExternalName
   externalName: ${bucket_uri}
