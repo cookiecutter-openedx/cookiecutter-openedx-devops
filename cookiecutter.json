@@ -1,7 +1,7 @@
 {
     "github_account_name": "lpm0073",
     "github_repo_name": "openedx_devops",
-    "github_release": "v1.0.21",
+    "github_release": "main",
     "environment_name": "prod",
     "environment_subdomain": "courses",
     "environment_studio_subdomain": "studio",
