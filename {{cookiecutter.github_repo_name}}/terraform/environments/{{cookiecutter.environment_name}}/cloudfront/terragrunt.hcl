@@ -29,7 +29,7 @@ locals {
 dependencies {
   paths = [
     "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/vpc",
-    "../s3",
+    "../s3_openedx_storage",
     "../vpc",
     "../acm"
     ]
@@ -51,7 +51,7 @@ dependency "vpc" {
 }
 
 dependency "s3" {
-  config_path = "../s3"
+  config_path = "../s3_openedx_storage"
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
