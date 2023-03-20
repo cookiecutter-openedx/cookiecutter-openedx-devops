@@ -114,16 +114,24 @@ We also recommend that you install `k9s <https://k9scli.io/>`_, a popular tool f
 .. code-block:: shell
 
   # -------------------------------------
-  # to manage an individual resource
+  # do this once
+  # -------------------------------------
+  cd ./terraform/common/cookiecutter_meta
+  terraform init
+  terraform apply
+
+  # -------------------------------------
+  # manage an individual resource
   # -------------------------------------
   cd ./terraform/environments/prod/mysql
   terragrunt init
   terragrunt plan
+  terragrunt apply -target module.cookiecutter_meta
   terragrunt apply
   terragrunt destroy
 
   # -------------------------------------
-  # to build the entire backend
+  # or, build an entire backend all at once
   # -------------------------------------
   cd ./terraform/environments/prod
   terragrunt run-all init
