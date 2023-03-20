@@ -39,24 +39,6 @@ metadata:
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
 
-    # mcdaniel mar-2023
-    # duplicate eduNEXT scorm Xblock proxy configuration
-    # -------------------------------------------------------------------------
-    # see (better): https://github.com/kubernetes/ingress-nginx/issues/6165#issuecomment-692684553
-    # see: https://github.com/kubernetes/ingress-nginx/issues/4280
-    #
-    # how it works in Caddy:
-    # ----------------------
-    #  @scorm_matcher {
-    #    path /scorm-proxy/*
-    #  }
-    #  route @scorm_matcher {
-    #    uri /scorm-proxy/* strip_prefix /scorm-proxy
-    #    reverse_proxy https://codlp-global-pre-staging-storage.s3.amazonaws.com {
-    #      header_up Host codlp-global-pre-staging-storage.s3.amazonaws.com
-    #    }
-    #  }
-
 spec:
   tls:
   - hosts:
@@ -72,13 +54,6 @@ spec:
         backend:
           service:
             name: lms
-            port:
-              number: 8000
-      - path: /scorm-proxy/
-        pathType: Prefix
-        backend:
-          service:
-            name: scorm-proxy-service
             port:
               number: 8000
   - host: "preview.${environment_domain}"
@@ -99,13 +74,6 @@ spec:
         backend:
           service:
             name: cms
-            port:
-              number: 8000
-      - path: /scorm-proxy/
-        pathType: Prefix
-        backend:
-          service:
-            name: scorm-proxy-service
             port:
               number: 8000
   - host: discovery.${environment_domain}

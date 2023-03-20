@@ -9,3 +9,4 @@ metadata:
 spec:
   type: ExternalName
   externalName: ${bucket_uri}
+selector: {}
