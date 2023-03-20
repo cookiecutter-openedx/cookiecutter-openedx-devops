@@ -13,6 +13,12 @@ metadata:
   name: ${environment_namespace}-scorm-proxy-service
   namespace: ${environment_namespace}
   annotations:
+    # add sticky sessions
+    # ---------------------
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/session-cookie-name: "openedx_sticky_session"
+    nginx.ingress.kubernetes.io/session-cookie-expires: "172800"
+    nginx.ingress.kubernetes.io/session-cookie-max-age: "172800"
 
     # scorm proxy service settings
     # -------------------------------------------------------------------------
