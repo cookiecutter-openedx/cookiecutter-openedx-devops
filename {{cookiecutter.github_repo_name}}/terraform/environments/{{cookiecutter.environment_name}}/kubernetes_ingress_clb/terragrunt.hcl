@@ -34,7 +34,8 @@ dependencies {
   paths = [
     "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/vpc",
     "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/kubernetes",
-    "../kubernetes"
+    "../kubernetes",
+    "../s3_openedx_storage",
     ]
 }
 
