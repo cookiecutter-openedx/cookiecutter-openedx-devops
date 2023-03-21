@@ -39,10 +39,17 @@ jobs:
           aws-region: {% raw %}${{ env.AWS_REGION }}{% endraw %}
           tutor-version: "{{ cookiecutter.ci_build_tutor_version }}"
 
-      - name: Load additional environment specific settings
-        shell: bash
-        run: |-
-          echo "TUTOR_OPENEDX_COMMON_VERSION=open-release/{{ cookiecutter.ci_deploy_open_edx_version }}" >> $GITHUB_ENV
+      #------------------------------------------------------------------------
+      # un-comment this to pin your build to a specific open edx release.
+      #
+      # a word of caution: usually you're better off choosing a version of tutor
+      # and then letting tutor make decisions of this nature.
+      # see: https://discuss.openedx.org/t/how-to-move-through-tutor-versions-part-ii/9574
+      #------------------------------------------------------------------------
+      #- name: Load additional environment specific settings
+      #  shell: bash
+      #  run: |-
+      #    echo "TUTOR_OPENEDX_COMMON_VERSION=open-release/{{ cookiecutter.ci_deploy_open_edx_version }}" >> $GITHUB_ENV
 
       #------------------------------------------------------------------------
       # Add a custom theme here.
