@@ -159,8 +159,6 @@ Connect via ssh:
   # 3.) connect to the bastion server via ssh
   ssh bastion.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }} -i ~/.ssh/bastion.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}.pem
 
-The bastion home screen provides
-
 .. image:: ./ec2-bastion.png
   :width: 100%
   :alt: Bastion Welcome Screen
