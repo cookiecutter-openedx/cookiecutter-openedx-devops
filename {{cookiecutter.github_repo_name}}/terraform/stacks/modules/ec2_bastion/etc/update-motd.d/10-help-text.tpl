@@ -7,6 +7,10 @@
 #
 # usage:      print the login help menu
 #------------------------------------------------------------------------------
+AWS_CONFIG_FILE=/home/ubuntu/.aws/config
+AWS_SHARED_CREDENTIALS_FILE="/home/ubuntu/.aws/credentials"
+AWS_REGION=${aws_region}
+
 AWSCLI_VERSION=$(/home/linuxbrew/.linuxbrew/bin/aws --version)
 KUBECTL_VERSION=$(/snap/bin/kubectl version --output=json | jq -r '.["clientVersion"].gitVersion as $v | "\($v)"')
 HELM_VERSION=$(/home/linuxbrew/.linuxbrew/bin/helm version --short)
@@ -22,6 +26,14 @@ TERRAFORM_VERSION=$(cd /home/linuxbrew/.linuxbrew/Cellar/terraform && ls -d *)
 TERRAGRUNT_VERSION=$(cd /home/linuxbrew/.linuxbrew/Cellar/terragrunt && ls -d *)
 K9S_VERSION=$(cd /home/linuxbrew/.linuxbrew/Cellar/k9s && ls -d *)
 
+AWS_IAM_USER=$(sudo -H -u ubuntu /home/ubuntu/scripts/aws-iam-user.sh)
+
+# scaffolding for future use
+# --------------------------
+# EC2_SPOT_PRICE=$(TIMESTAMP=`date -Is` && aws ec2 describe-spot-price-history --instance-types t3.large --product-description Linux/UNIX --start-time ${TIMESTAMP})
+# EC2_SPOT_PRICE=$(echo "$EC2_SPOT_PRICE" | jq '."SpotPriceHistory"[0].SpotPrice')
+# echo "$EC2_SPOT_PRICE"
+
 printf " Quickstart:\n"
 printf "   run install.sh to install preconfigured software packages\n"
 printf "   run kconfig.sh ${stack_namespace} ${aws_region} to configure .kube access for k9s\n"
@@ -29,9 +41,9 @@ printf " \n"
 printf " Open edX Installed Packages\n"
 printf '   Python:                  %s\n' "$PYTHON_VERSION"
 printf '   pip:                     %s\n' "$PIP_VERSION"
-printf "   edx-platform github repository \n"
-printf "   Open edX system packages for Open edX development \n"
-printf "   All Open edX python requirements for production and development \n"
+printf "   * edx-platform github repository \n"
+printf "   * Open edX system packages for Open edX development \n"
+printf "   * All Open edX python requirements for production and development \n"
 printf " \n"
 printf " Kubernetes\n"
 printf '   kubectl:                  %s\n' "$KUBECTL_VERSION"
@@ -55,26 +67,25 @@ printf "   server connection:        ssh mongodb \n"
 printf "   client connection:        mongo 'mongodb://mongodb.${services_subdomain}:27017' \n"
 printf "   openedx-backup-mongodb.sh dump the MongoDB databases to the Ubuntu file system \n"
 printf "                             and archive to an AWS S3 bucket \n"
-printf " \n"
 printf " tutor\n"
 printf '   version:                  %s\n' "$TUTOR_VERSION"
 printf "   tutor                     run tutor on the command line \n"
 printf "   tutor-developer-build.sh  builds a local development environment \n"
 printf "   tutor-reset.sh            completely reinitialize your local Tutor environment \n"
 printf " \n"
-printf " Other Help: \n"
-printf "   aws                       preconfigured AWS command-line interface \n"
+printf " AWS Infrastructure Management\n"
+printf '   AWS IAM User:             %s\n' "$AWS_IAM_USER"
+printf '   aws-cli:                  %s\n' "$AWSCLI_VERSION"
 printf "   aws-ec2-spot-prices.sh    view pricing for AWS EC2 Spot instances \n"
 printf "   aws-route53-dns.sh        query DNS record entries from AWS Route53 \n"
+printf '   Terraform:                %s\n' "$TERRAFORM_VERSION"
+printf '   Terragrunt:               %s\n' "$TERRAGRUNT_VERSION"
+printf " \n"
+printf " Other: \n"
+printf '   Homebrew:                 %s\n' "$BREW_VERSION"
+printf '   Docker CE:                %s\n' "$DOCKER_VERSION"
 printf "   helm_update.sh            update the local helm charts repo \n"
 printf "   install.sh                install preconfigured software packages \n"
 printf "   openedx-install-venv.sh   install edx-platform and all requirements for prod and dev \n"
 printf "   update.sh                 update all preconfigured software packages \n"
-printf " \n"
-printf " Other Installed Applications\n"
-printf '   aws-cli:                 %s\n' "$AWSCLI_VERSION"
-printf '   Homebrew:                %s\n' "$BREW_VERSION"
-printf '   Docker CE:               %s\n' "$DOCKER_VERSION"
-printf '   Terraform:               %s\n' "$TERRAFORM_VERSION"
-printf '   Terragrunt:              %s\n' "$TERRAGRUNT_VERSION"
 printf " \n"
