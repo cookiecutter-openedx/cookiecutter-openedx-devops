@@ -28,7 +28,7 @@
     "stack_add_remote_mysql":  ["Y", "N"],
     "stack_add_remote_mongodb": ["Y", "N"],
     "stack_add_remote_redis":  ["Y", "N"],
-    "ci_build_tutor_version": "14.2.4",
+    "ci_build_tutor_version": "14.2.3",
     "ci_build_kubectl_version": "1.25/stable",
     "kubernetes_cluster_version": "1.25",
     "ci_build_theme_repository": "edx-theme-example",
