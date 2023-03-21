@@ -46,7 +46,7 @@ jobs:
       # and then letting tutor make decisions of this nature.
       # see: https://discuss.openedx.org/t/how-to-move-through-tutor-versions-part-ii/9574
       #------------------------------------------------------------------------
-      #- name: Load additional environment specific settings
+      #- name: Set OPENEDX_COMMON_VERSION
       #  shell: bash
       #  run: |-
       #    echo "TUTOR_OPENEDX_COMMON_VERSION=open-release/{{ cookiecutter.ci_deploy_open_edx_version }}" >> $GITHUB_ENV
