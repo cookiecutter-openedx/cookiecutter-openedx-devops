@@ -313,6 +313,15 @@ jobs:
       # which in the case of k8s deployments will result in the browser blocking content due to "Mixed content".
       # This plugin overrides the results of tutor-mfe openedx-lms-production-settings, replacing protocol produced
       # by logic relying on ENABLE_HTTPS (assumed to result in 'http') with the hard-coded value 'https'.
+      #
+      # 5. Xblock storage configuration. creates a custom storage configuration like the following
+      #      S3Boto3Storage(
+      #        bucket=AWS_STORAGE_BUCKET_NAME,
+      #        access_key=AWS_ACCESS_KEY_ID,
+      #        secret_key=AWS_SECRET_ACCESS_KEY,
+      #        querystring_expire=86400,
+      #        custom_domain=f"{domain}/scorm-proxy"
+      #      )
       # ---------------------------------------------------------------------------------
       - name: Add tutor k8s-specific deployment tasks
         uses: openedx-actions/tutor-plugin-enable-k8s-deploy-tasks@{{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_k8s_deploy_tasks_version }}
