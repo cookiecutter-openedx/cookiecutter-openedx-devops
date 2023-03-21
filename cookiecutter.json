@@ -40,7 +40,7 @@
     "ci_build_xblock_org": "openedx",
     "ci_build_xblock_repository": "edx-ora2",
     "ci_build_xblock_ref": "master",
-    "ci_deploy_open_edx_version": "nutmeg.2",
+    "ci_deploy_open_edx_version": "nutmeg.3",
     "ci_deploy_install_backup_plugin": ["N", "Y"],
     "ci_deploy_install_credentials_server": ["N", "Y"],
     "ci_deploy_install_discovery_service": ["Y", "N"],
