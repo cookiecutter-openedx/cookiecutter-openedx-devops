@@ -141,8 +141,25 @@ We also recommend that you install `k9s <https://k9scli.io/>`_, a popular tool f
 V. Connect To Your new bastion server
 -------------------------------------
 
-v1.01 introduced a newly designed bastion server with a complete set of preinstalled and preconfigured software for adminstering your
-Open edX platform.
+The bastion server comes with a complete set of preinstalled and preconfigured software for adminstering your
+Open edX platform and the AWS cloud resources on which it runs. Cookiecutter ensures that all software versions
+installed on your bastion server are consistent with those used by tutor, Terraform and Github Actions workflows.
+
+Connect via ssh:
+
+.. code-block:: shell
+
+  # 1.) retrieve the ssh private key from Kubernetes secrets.
+  kubectl get secret bastion-ssh-key -n {{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.environment_name }}  -o json | jq  '.data | map_values(@base64d)' |   jq -r 'keys[] as $k | "export \($k|ascii_upcase)=\(.[$k])"'
+
+  # 2.) save the private key to a file on your local dev machine and set permissions as required by AWS
+  vim ~/.ssh/bastion.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}.pem
+  sudo chmod 400 ~/.ssh/bastion.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}.pem
+
+  # 3.) connect to the bastion server via ssh
+  ssh bastion.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }} -i ~/.ssh/bastion.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}.pem
+
+The bastion home screen provides
 
 .. image:: ./ec2-bastion.png
   :width: 100%
@@ -157,13 +174,11 @@ Passwords for the root/admin accounts are accessible from Kubernetes Secrets. No
 
 .. code-block:: shell
 
-  ssh bastion.service.yourschool.edu -i path/to/yourschool-ohio.pem
+  mysql -h mysql.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }} -u root -p
 
-  mysql -h mysql.service.yourschool.edu -u root -p
+  mongo --port 27017 --host mongo.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }}
 
-  mongo --port 27017 --host mongo.service.yourschool.edu -u root -p
-
-  redis-cli -h redis.service.yourschool.edu -p 6379
+  redis-cli -h redis.{{ cookiecutter.global_services_subdomain }}.{{ cookiecutter.global_root_domain }} -p 6379
 
 Specifically with regard to MySQL, several 3rd party analytics tools provide out-of-the-box connectivity to MySQL via a bastion server. Following is an example of how to connect to your MySQL environment using MySQL Workbench.
 

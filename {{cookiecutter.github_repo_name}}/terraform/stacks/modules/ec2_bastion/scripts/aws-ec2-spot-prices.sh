@@ -16,6 +16,14 @@
 # Ubuntu format
 TIMESTAMP=`date -Is`
 
+# for welcome screen output
+if [ $# == 2 ]; then
+    EC2_SPOT_PRICE=$(/home/linuxbrew/.linuxbrew/bin/aws ec2 describe-spot-price-history --instance-types $1 --product-description Linux/UNIX --start-time ${TIMESTAMP})
+    EC2_SPOT_PRICE=$(echo "$EC2_SPOT_PRICE" | jq -r '."SpotPriceHistory"[0].SpotPrice')
+    echo "$EC2_SPOT_PRICE"
+    exit 0
+fi
+
 if [ $# == 1 ]; then
     echo "probing for spot prices for EC2 instance type $1 in your default AWS region"
     aws ec2 describe-spot-price-history --instance-types $1 --product-description Linux/UNIX --start-time ${TIMESTAMP}

@@ -27,12 +27,7 @@ TERRAGRUNT_VERSION=$(cd /home/linuxbrew/.linuxbrew/Cellar/terragrunt && ls -d *)
 K9S_VERSION=$(cd /home/linuxbrew/.linuxbrew/Cellar/k9s && ls -d *)
 
 AWS_IAM_USER=$(sudo -H -u ubuntu /home/ubuntu/scripts/aws-iam-user.sh)
-
-# scaffolding for future use
-# --------------------------
-# EC2_SPOT_PRICE=$(TIMESTAMP=`date -Is` && aws ec2 describe-spot-price-history --instance-types t3.large --product-description Linux/UNIX --start-time ${TIMESTAMP})
-# EC2_SPOT_PRICE=$(echo "$EC2_SPOT_PRICE" | jq '."SpotPriceHistory"[0].SpotPrice')
-# echo "$EC2_SPOT_PRICE"
+AWS_EC2_SPOT_PRICE=$(sudo -H -u ubuntu /home/ubuntu/scripts/aws-ec2-spot-prices.sh t3.large report)
 
 printf " Quickstart:\n"
 printf "   run install.sh to install preconfigured software packages\n"
@@ -74,10 +69,9 @@ printf "   tutor-developer-build.sh  builds a local development environment \n"
 printf "   tutor-reset.sh            completely reinitialize your local Tutor environment \n"
 printf " \n"
 printf " AWS Infrastructure Management\n"
-printf '   AWS IAM User:             %s\n' "$AWS_IAM_USER"
 printf '   aws-cli:                  %s\n' "$AWSCLI_VERSION"
-printf "   aws-ec2-spot-prices.sh    view pricing for AWS EC2 Spot instances \n"
-printf "   aws-route53-dns.sh        query DNS record entries from AWS Route53 \n"
+printf '   AWS IAM User:             %s\n' "$AWS_IAM_USER"
+printf '   AWS EC2 spot price (USD): $%s\n' "$AWS_EC2_SPOT_PRICE"
 printf '   Terraform:                %s\n' "$TERRAFORM_VERSION"
 printf '   Terragrunt:               %s\n' "$TERRAGRUNT_VERSION"
 printf " \n"
