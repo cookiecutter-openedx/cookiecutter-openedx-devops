@@ -16,6 +16,7 @@ CORS_ORIGIN_WHITELIST:
 - https://{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
 - https://{{ cookiecutter.environment_studio_subdomain }}.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
 - https://apps.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
+- https://preview.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
 COURSE_ABOUT_VISIBILITY_PERMISSION: see_about_page
 COURSE_CATALOG_VISIBILITY_PERMISSION: see_in_catalog
 CREDIT_HELP_LINK_URL: https://{{ cookiecutter.global_root_domain }}/support/
