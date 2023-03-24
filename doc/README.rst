@@ -773,7 +773,7 @@ Run-time Environment Options
 - **ci_actions_setup_build_action_version:** v2.2.1
 - **ci_actions_amazon_ecr_login_version:** v1.5.3
 - **ci_actions_checkout_version:** v3.2.0
-- **ci_actions_configure_aws_credentials_version:** v1.7.0
+- **ci_actions_configure_aws_credentials_version:** v2.0.0
 
 Kubernetes Secrets for Open edX
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
