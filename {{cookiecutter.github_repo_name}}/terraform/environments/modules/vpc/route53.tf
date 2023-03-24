@@ -25,6 +25,6 @@ resource "aws_route53_record" "environment_domain-ns" {
   zone_id = data.aws_route53_zone.root_domain.zone_id
   name    = aws_route53_zone.environment_domain.name
   type    = "NS"
-  ttl     = "30"
+  ttl     = "600"
   records = aws_route53_zone.environment_domain.name_servers
 }
