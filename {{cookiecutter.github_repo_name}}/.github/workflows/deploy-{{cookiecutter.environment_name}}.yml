@@ -208,30 +208,31 @@ jobs:
           host: subscriptions.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
           lms_host: {{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
 
-      # ---------------------------------------------------------------------------------
+      # ***********************************************************************
       # Configure backend services
+      # ***********************************************************************
+
+
       # ---------------------------------------------------------------------------------
-      - name: enable tutor SMTP plugin
-        uses: openedx-actions/tutor-k8s-configure-smtp@{{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_smtp_version }}
+      # fetch the following
+      #
+      #  SMTP_HOST=email-smtp.ca-central-1.amazonaws.com \
+      #  SMTP_PORT=587 \
+      #  SMTP_USE_SSL=false  \
+      #  SMTP_USE_TLS=true \
+      #  SMTP_USERNAME=AWS_IAM_USERNAME_KEY \
+      #  SMTP_PASSWORD=AWS_IAM_USERNAME_SECRET
+      # ---------------------------------------------------------------------------------
+      - name: fetch AWS SES SMTP configuration from Kubernetes secrets
+        uses: openedx-actions/tutor-k8s-get-secret@v1.0.0
         with:
-          aws-ses-iam-key: {% raw %}${{ secrets.AWS_SES_IAM_KEY }}{% endraw %}
-          aws-ses-iam-secret: {% raw %}${{ secrets.AWS_SES_IAM_SECRET }}{% endraw %}
-          aws-region: {% raw %}${{ env.AWS_REGION }}{% endraw %}
+          eks-namespace: ${{ env.NAMESPACE }}
+          eks-secret-name: aws-ses-config
 
-      - name: Configure SMTP Django settings
+      - name: Disable tutor's default SMTP service
         shell: bash
         run: |-
-          echo "TUTOR_EMAIL_HOST=localhost" >> $GITHUB_ENV
-          echo "TUTOR_EMAIL_HOST_PASSWORD=''" >> $GITHUB_ENV
-          echo "TUTOR_EMAIL_HOST_USER=''" >> $GITHUB_ENV
-          echo "TUTOR_EMAIL_HOST_PORT=25" >> $GITHUB_ENV
-          echo "TUTOR_EMAIL_HOST_USER_TLS=false" >> $GITHUB_ENV
-
-      - name: Configure SMTP Host Password
-        shell: bash
-        continue-on-error: true
-        run: |-
-          echo "TUTOR_EMAIL_HOST_PASSWORD='${{ secrets.TUTOR_EMAIL_HOST_PASSWORD }}'" >> $GITHUB_ENV
+          tutor config save --set RUN_SMTP=false
 
       - name: Configure Redis
         uses: openedx-actions/tutor-k8s-configure-redis@{{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_redis_version }}
