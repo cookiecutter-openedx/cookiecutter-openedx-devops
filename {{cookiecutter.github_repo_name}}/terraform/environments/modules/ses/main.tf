@@ -19,6 +19,14 @@ data "aws_iam_policy_document" "ses_sender" {
   }
 }
 
+resource "aws_ses_domain_identity" "environment_domain" {
+  domain = var.environment_domain
+}
+
+resource "aws_ses_domain_dkim" "environment_domain" {
+  domain = aws_ses_domain_identity.environment_domain.domain
+}
+
 resource "aws_iam_user" "smtp_user" {
   name = "${var.environment_namespace}_smtp_user"
   tags = local.tags
