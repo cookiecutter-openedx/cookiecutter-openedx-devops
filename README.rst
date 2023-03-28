@@ -4,7 +4,7 @@ Cookiecutter Open edX Devops Tools
   :target: https://lawrencemcdaniel.com
   :alt: Hack.d Lawrence McDaniel
 
-.. image:: https://img.shields.io/static/v1?logo=discourse&label=Forums&style=flat-square&color=ff0080&message=discuss.overhang.io
+.. image:: https://img.shields.io/static/v1?logo=discourse&label=Forums&style=flat-square&color=ff0080&message=discuss.openedx.org
   :alt: Forums
   :target: https://discuss.openedx.org/
 
