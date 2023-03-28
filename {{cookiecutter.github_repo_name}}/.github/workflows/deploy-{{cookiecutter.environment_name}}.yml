@@ -93,6 +93,8 @@ jobs:
           eks-cluster-name: {% raw %}${{ env.EKS_CLUSTER_NAME }}{% endraw %}
           aws-region: {% raw %}${{ env.AWS_REGION }}{% endraw %}
           tutor-version: "{{ cookiecutter.ci_build_tutor_version }}"
+          tutor-mfe-version: "{{ cookiecutter.ci_build_tutor_mfe_version }}"
+          kubectl-version: "{{ cookiecutter.ci_build_kubectl_version }}"
 
       # Setup a connection to our AWS Elastic Container Registry so that we can pull
       # containers that we created with the build workflows in this Cookiecutter.

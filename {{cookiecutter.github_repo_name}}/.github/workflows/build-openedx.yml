@@ -38,6 +38,8 @@ jobs:
           eks-cluster-name: {% raw %}${{ env.EKS_CLUSTER_NAME }}{% endraw %}
           aws-region: {% raw %}${{ env.AWS_REGION }}{% endraw %}
           tutor-version: "{{ cookiecutter.ci_build_tutor_version }}"
+          tutor-mfe-version: "{{ cookiecutter.ci_build_tutor_mfe_version }}"
+          kubectl-version: "{{ cookiecutter.ci_build_kubectl_version }}"
 
       #------------------------------------------------------------------------
       # un-comment this to pin your build to a specific open edx release.
