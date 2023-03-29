@@ -228,7 +228,7 @@ jobs:
       - name: fetch AWS SES SMTP configuration from Kubernetes secrets
         uses: openedx-actions/tutor-k8s-get-secret@v1.0.0
         with:
-          eks-namespace: ${{ env.NAMESPACE }}
+          eks-namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
           eks-secret-name: aws-ses-config
 
       - name: Disable tutor's default SMTP service
