@@ -2,9 +2,9 @@
 # written by: Lawrence McDaniel
 #             https://lawrencemcdaniel.com/
 #
-# date: Mar-2023
+# date:   apr-2023
 #
-# usage: Add DNS records for AWS SES Identity Verification.
+# usage:  Add DNS records for AWS SES Identity Verification.
 #------------------------------------------------------------------------------
 data "aws_route53_zone" "environment_domain" {
   name = var.environment_domain

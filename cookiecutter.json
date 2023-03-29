@@ -28,6 +28,7 @@
     "stack_add_remote_mysql":  ["Y", "N"],
     "stack_add_remote_mongodb": ["Y", "N"],
     "stack_add_remote_redis":  ["Y", "N"],
+    "environment_add_aws_ses":  ["Y", "N"],
     "ci_build_tutor_version": "14.2.3",
     "ci_build_tutor_mfe_version": "14.0.2",
     "ci_build_kubectl_version": "1.25",

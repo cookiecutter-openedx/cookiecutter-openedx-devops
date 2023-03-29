@@ -1,10 +1,11 @@
 #------------------------------------------------------------------------------
-# written by: Miguel Afonso
-#             https://www.linkedin.com/in/mmafonso/
+# written by: Lawrence McDaniel
+#             https://lawrencemcdaniel.com
 #
-# date: Aug-2021
+# date:   Apr-2023
 #
-# usage: create a VPC to contain all Open edX backend resources.
+# usage:  implement AWS Simple Email Service for this environment.
+#         https://aws.amazon.com/ses/
 #------------------------------------------------------------------------------
 locals {
   # Automatically load environment-level variables

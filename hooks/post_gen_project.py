@@ -15,6 +15,14 @@ INFO = "\x1b[1;33m [INFO]: "
 HINT = "\x1b[3;33m"
 SUCCESS = "\x1b[1;32m [SUCCESS]: "
 
+def remove_aws_ses():
+    dir_path = os.path.join("terraform", "environments",
+                            "modules", "ses")
+    rm_directory(dir_path)
+
+    dir_path = os.path.join("terraform", "environments",
+                            "{{ cookiecutter.environment_name }}", "ses")
+    rm_directory(dir_path)
 
 def remove_wordpress():
     dir_path = os.path.join("terraform", "environments",
@@ -23,12 +31,6 @@ def remove_wordpress():
 
     dir_path = os.path.join("terraform", "environments", "wordpress")
     rm_directory(dir_path)
-
-    dir_path = os.path.join("terraform", "stacks", "modules", "varnish")
-    rm_directory(dir_path)
-
-    dir_path = os.path.join(
-        "terraform", "stacks", "{{ cookiecutter.global_platform_shared_resource_identifier }}", "varnish")
 
     rm_directory(dir_path)
     dir_path = os.path.join("terraform", "environments",
@@ -190,6 +192,9 @@ def main():
 
     if "{{ cookiecutter.wordpress_add_site }}".upper() != "Y":
         remove_wordpress()
+
+    if "{{ cookiecutter.environment_add_aws_ses }}".upper() != "Y":
+        remove_aws_ses()
 
     print(SUCCESS + "Your Open edX devops repo has been initialized." + TERMINATOR)
 
