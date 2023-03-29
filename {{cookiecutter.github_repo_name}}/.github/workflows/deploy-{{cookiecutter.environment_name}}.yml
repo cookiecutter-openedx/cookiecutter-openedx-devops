@@ -34,7 +34,11 @@ jobs:
       {% else -%}
       ENABLE_DISCOVERY: false
       {% endif -%}
-
+      {% if cookiecutter.environment_add_aws_ses == "Y" %}
+      ENABLE_SMTP: true
+      {% else -%}
+      ENABLE_SMTP: false
+      {% endif -%}
       ENABLE_BACKUP: false
       {% if cookiecutter.ci_deploy_install_credentials_server == "Y" -%}
       ENABLE_CREDENTIALS: true
@@ -226,12 +230,14 @@ jobs:
       #  SMTP_PASSWORD=AWS_IAM_USERNAME_SECRET
       # ---------------------------------------------------------------------------------
       - name: fetch AWS SES SMTP configuration from Kubernetes secrets
+        if: {% raw %}${{ env.ENABLE_SMTP == 'true' }}{% endraw %}
         uses: openedx-actions/tutor-k8s-get-secret@v1.0.0
         with:
           eks-namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
           eks-secret-name: aws-ses-config
 
       - name: Disable tutor's default SMTP service
+        if: {% raw %}${{ env.ENABLE_SMTP == 'true' }}{% endraw %}
         shell: bash
         run: |-
           tutor config save --set RUN_SMTP=false
