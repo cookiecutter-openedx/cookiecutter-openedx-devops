@@ -59,7 +59,7 @@
     "ci_deploy_EMAIL_USE_TLS": "true",
     "ci_actions_setup_build_action_version": "v2.5.0",
     "ci_actions_amazon_ecr_login_version": "v1.5.3",
-    "ci_actions_checkout_version": "v3.5.0",
+    "ci_actions_checkout_version": "v3",
     "ci_actions_configure_aws_credentials_version": "v2",
     "ci_openedx_actions_tutor_k8s_init_version": "v1.0.8",
     "ci_openedx_actions_tutor_k8s_configure_autoscaling_version": "v0.0.1",
