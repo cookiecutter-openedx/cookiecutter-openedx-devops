@@ -45,14 +45,6 @@ resource "kubernetes_persistent_volume_claim" "wordpress" {
     volume_name = kubernetes_persistent_volume.wordpress.metadata.0.name
   }
 
-  tags = merge(
-    local.tags,
-    {
-      "cookiecutter/resource/source"  = "hashicorp/aws/aws_ebs_volume"
-      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
-    }
-  )
-
   depends_on = [
     kubernetes_persistent_volume.wordpress
   ]

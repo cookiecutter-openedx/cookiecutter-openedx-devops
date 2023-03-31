@@ -145,7 +145,7 @@ module "cookiecutter_meta" {
 resource "kubernetes_secret" "cookiecutter" {
   metadata {
     name      = "cookiecutter"
-    namespace = var.cert_manager_namespace
+    namespace = var.wordpressConfig["Namespace"]
   }
 
   # https://stackoverflow.com/questions/64134699/terraform-map-to-string-value
