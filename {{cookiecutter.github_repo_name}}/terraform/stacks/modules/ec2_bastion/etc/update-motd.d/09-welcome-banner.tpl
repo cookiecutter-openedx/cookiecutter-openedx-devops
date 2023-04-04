@@ -10,7 +10,7 @@
 COLUMNS=78
 title="Welcome to the Bastion Server for ${platform_name}"
 sub_title="Created with Cookiecutter for Open edX (tm) Devops"
-attribution="https://github.com/lpm0073/cookiecutter-openedx-devops"
+attribution="https://github.com/cookiecutter-openedx/cookiecutter-openedx-devops"
 
 printf "\n"
 printf "*******************************************************************************\n"

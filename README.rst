@@ -44,7 +44,7 @@ Cookiecutter Open edX Devops Tools
 |
 
 
-Powered by `Cookiecutter <https://github.com/cookiecutter/cookiecutter>`_, Cookiecutter Open edX Devops Tools is a community maintained project template for jumpstarting production-ready, `Kubernetes <https://kubernetes.io/>`_-based installations of the `Open edX <https://openedx.org/>`_ online learning management system running on `AWS <https://aws.amazon.com/>`_ cloud infrastructure that is built and managed with fully parameterized `Terraform <https://www.terraform.io/>`_ and `Github Actions <https://docs.github.com/en/actions>`_ automation scripts. The template offers a number of generation options, we invite you to check the dedicated `docs <https://github.com/lpm0073/cookiecutter-openedx-devops/tree/main/doc>`_ pages to learn more about each of them.
+Powered by `Cookiecutter <https://github.com/cookiecutter/cookiecutter>`_, Cookiecutter Open edX Devops Tools is a community maintained project template for jumpstarting production-ready, `Kubernetes <https://kubernetes.io/>`_-based installations of the `Open edX <https://openedx.org/>`_ online learning management system running on `AWS <https://aws.amazon.com/>`_ cloud infrastructure that is built and managed with fully parameterized `Terraform <https://www.terraform.io/>`_ and `Github Actions <https://docs.github.com/en/actions>`_ automation scripts. The template offers a number of generation options, we invite you to check the dedicated `docs <https://github.com/cookiecutter-openedx/cookiecutter-openedx-devops/tree/main/doc>`_ pages to learn more about each of them.
 
 .. image:: doc/cookiecutter-workflow.png
   :width: 100%
@@ -103,13 +103,13 @@ Now run it against this repo, using the following example usage pattern:
                 ci_deploy_install_xqueue_service=N \
                 ci_deploy_install_license_manager_service=N \
 
-There are lots more Cookiecutter parameters `here <https://github.com/lpm0073/cookiecutter-openedx-devops/tree/main/doc>`_.
+There are lots more Cookiecutter parameters `here <https://github.com/cookiecutter-openedx/cookiecutter-openedx-devops/tree/main/doc>`_.
 
 Alternatively, you can run Cookiecutter without providing any prompts, which will result in it generating a questionnaire that includes all of the 75 or so input parameters. You'll be prompted for some values. Provide them, then a complete git repository will be created for you, with Github Actions workflows to automate the build and deployment of your Tutor Open edX platform, and Terraform scripts to automate the build of your AWS backend. Answer the prompts with your own desired options. For example:
 
 .. code-block:: shell
 
-    $ cookiecutter https://github.com/lpm0073/cookiecutter-openedx-devops
+    $ cookiecutter https://github.com/cookiecutter-openedx/cookiecutter-openedx-devops
 
     Cloning into 'cookiecutter-openedx-devops'...
     remote: Counting objects: 550, done.
@@ -286,7 +286,7 @@ Local Development Quick Start
 .. code-block:: shell
 
   # clone this repository
-  git clone https://github.com/lpm0073/cookiecutter-openedx-devops
+  git clone https://github.com/cookiecutter-openedx/cookiecutter-openedx-devops
 
   # install the pre-commit command-line tools
   pip install pre-commit

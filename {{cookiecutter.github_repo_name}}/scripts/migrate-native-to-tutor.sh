@@ -35,7 +35,7 @@
 # Infrastructure notes
 #
 # running on a Cookiecutter Bastion EC2 instance.
-# see: https://github.com/lpm0073/cookiecutter-openedx-devops/tree/main/%7B%7Bcookiecutter.github_repo_name%7D%7D/terraform/stacks/modules/ec2_bastion
+# see: https://github.com/cookiecutter-openedx/cookiecutter-openedx-devops/tree/main/%7B%7Bcookiecutter.github_repo_name%7D%7D/terraform/stacks/modules/ec2_bastion
 #
 # size:     t3.xlarge (4 vCPU / 16Gib memory).
 #           500Gib standard EBS drive volume
