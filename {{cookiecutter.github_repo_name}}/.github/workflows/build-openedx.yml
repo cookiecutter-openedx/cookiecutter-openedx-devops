@@ -94,7 +94,7 @@ jobs:
         with:
           repository: edx-ora2
           repository-organization: openedx
-          repository-ref: master
+          repository-ref: "4.5.1"
           # UN-COMMENT THIS IF YOUR REPO IS PRIVATE.
           #----------------------------------------------
           #repository-token: {% raw %}${{ secrets.PAT }}{% endraw %}
