@@ -78,27 +78,28 @@ jobs:
       # note that `repository-token` is optional and is only needed for
       # private repositories
       #------------------------------------------------------------------------
-      - name: Add an edx plugin
+      - name: Add an Open edX Plugin PyPi Package - cookiecutter-openedx-plugin
+        uses: openedx-actions/tutor-plugin-build-openedx-add-requirement@{{ cookiecutter.ci_openedx_actions_tutor_plugin_build_openedx_add_requirement_version }}
+        with:
+          pip-package: cookiecutter-openedx-plugin
+          pip-package-version: ">=0.1.2"
+
+      - name: Add an Open edX Plugin from source - openedx-plugin-example
         uses: openedx-actions/tutor-plugin-build-openedx-add-requirement@{{ cookiecutter.ci_openedx_actions_tutor_plugin_build_openedx_add_requirement_version }}
         with:
           repository: openedx-plugin-example
-          repository-organization: lpm0073
+          repository-organization: cookiecutter-openedx
           repository-ref: main
           # UN-COMMENT THIS IF YOUR REPO IS PRIVATE.
           #----------------------------------------------
           #repository-token: {% raw %}${{ secrets.PAT }}{% endraw %}
           #----------------------------------------------
 
-      - name: Add an Xblock
+      - name: Add the edx-ora2 Xblock
         uses: openedx-actions/tutor-plugin-build-openedx-add-requirement@{{ cookiecutter.ci_openedx_actions_tutor_plugin_build_openedx_add_requirement_version }}
         with:
-          repository: edx-ora2
-          repository-organization: openedx
-          repository-ref: "4.5.1"
-          # UN-COMMENT THIS IF YOUR REPO IS PRIVATE.
-          #----------------------------------------------
-          #repository-token: {% raw %}${{ secrets.PAT }}{% endraw %}
-          #----------------------------------------------
+          pip-package: ora2
+          pip-package-version: "4.5.1"
 
       - name: Dump tutor config
         uses: openedx-actions/tutor-print-dump@{{ cookiecutter.ci_openedx_actions_tutor_print_dump }}
