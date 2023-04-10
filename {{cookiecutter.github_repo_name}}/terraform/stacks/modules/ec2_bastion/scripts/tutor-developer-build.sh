@@ -37,7 +37,7 @@ echo "finished adding custom Python requirements."
 
 # II. Add Custom theme packages for openedx
 # -----------------------------------------------------------------------------
-sudo rm -r ${TUTOR_THEMES_PATH}/edx-theme-example && git clone https://${PAT}@github.com/lpm0073/edx-theme-example.git ${TUTOR_THEMES_PATH}/edx-theme-example
+sudo rm -r ${TUTOR_THEMES_PATH}/edx-theme-example && git clone https://${PAT}@github.com/cookiecutter-openedx/edx-theme-example.git ${TUTOR_THEMES_PATH}/edx-theme-example
 
 echo "finished adding custom theme repo."
 

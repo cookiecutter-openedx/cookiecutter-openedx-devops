@@ -65,7 +65,7 @@ Now run it against this repo, using the following example usage pattern:
 
 .. code-block:: shell
 
-    GITHUB_REPO="gh:lpm0073/cookiecutter-openedx-devops"
+    GITHUB_REPO="gh:cookiecutter-openedx/cookiecutter-openedx-devops"
     GITHUB_BRANCH="main"
     OUTPUT_FOLDER="./"
 

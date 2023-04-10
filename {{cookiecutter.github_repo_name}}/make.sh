@@ -8,7 +8,7 @@
 # usage:        Re-runs the Cookiecutter for this repository.
 #------------------------------------------------------------------------------
 
-GITHUB_REPO="gh:lpm0073/cookiecutter-openedx-devops"
+GITHUB_REPO="gh:cookiecutter-openedx/cookiecutter-openedx-devops"
 GITHUB_BRANCH="{{ cookiecutter.github_release }}"
 OUTPUT_FOLDER="../"
 

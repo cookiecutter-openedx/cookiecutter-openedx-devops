@@ -9,7 +9,7 @@
 #               Inject your own parameters to override cookiecutter.json defaults
 #------------------------------------------------------------------------------
 
-GITHUB_REPO="gh:lpm0073/cookiecutter-openedx-devops"
+GITHUB_REPO="gh:cookiecutter-openedx/cookiecutter-openedx-devops"
 GITHUB_BRANCH="main"
 OUTPUT_FOLDER="/Users/mcdaniel/github/stepwisemath.ai/"
 
