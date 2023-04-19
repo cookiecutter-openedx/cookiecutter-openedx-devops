@@ -165,11 +165,21 @@ jobs:
           aws-ecr-uri: ${AWS_ECR_REPOSITORY_BACKUPS}
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
+      # -----------------------------------------------------------------------
+      # NOTE: the major version of tutor-discovery must be consistent with
+      #       the version of tutor that is managing the overall installation.
+      #       for example: if you've installed tutor v14.2.3 then you should
+      #       install tutor-discovery v14.0.2
+      #
+      #       refer to https://pypi.org/project/tutor-discovery/#history
+      #       for a list of available versions.
+      # -----------------------------------------------------------------------
       - name: Enable tutor plugin - Discovery
         uses: openedx-actions/tutor-plugin-enable-discovery@{{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_discovery_version }}
         if: {% raw %}${{ env.ENABLE_DISCOVERY == 'true' }}{% endraw %}
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
+          tutor-discovery-version: "14.0.2"
 
       - name: Enable tutor plugin - Credentials
         uses: openedx-actions/tutor-plugin-enable-credentials@{{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_credentials_version }}
@@ -201,9 +211,20 @@ jobs:
           currency: USD
           enabled-payment-processors: '["stripe", "paypal"]'
 
+      # -----------------------------------------------------------------------
+      # NOTE: the major version of tutor-forum must be consistent with
+      #       the version of tutor that is managing the overall installation.
+      #       for example: if you've installed tutor v14.2.3 then you should
+      #       install tutor-forum v14.0.0
+      #
+      #       refer to https://pypi.org/project/tutor-forum/#history
+      #       for a list of available versions.
+      # -----------------------------------------------------------------------
       - name: Enable tutor plugin - Forum
         uses: openedx-actions/tutor-plugin-enable-forum@{{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_forum_version }}
         if: {% raw %}${{ env.ENABLE_FORUM == 'true' }}{% endraw %}
+        with:
+          tutor-forum-version: "14.0.0"
 
       - name: Enable tutor plugin - License Manager
         uses: openedx-actions/tutor-enable-plugin-license-manager@{{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_license_manager_version }}
