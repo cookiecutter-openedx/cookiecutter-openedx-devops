@@ -82,7 +82,7 @@ jobs:
         uses: openedx-actions/tutor-plugin-build-openedx-add-requirement@{{ cookiecutter.ci_openedx_actions_tutor_plugin_build_openedx_add_requirement_version }}
         with:
           pip-package: cookiecutter-openedx-plugin
-          pip-package-version: ">=0.1.2"
+          pip-package-version: "0.1.3"
 
       - name: Add an Open edX Plugin from source - openedx-plugin-example
         uses: openedx-actions/tutor-plugin-build-openedx-add-requirement@{{ cookiecutter.ci_openedx_actions_tutor_plugin_build_openedx_add_requirement_version }}
