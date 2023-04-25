@@ -24,12 +24,12 @@ locals {
 
 dependencies {
   paths = [
-    "../../../stacks/service/vpc"
+    "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/vpc"
     ]
 }
 
 dependency "vpc" {
-  config_path = "../../../stacks/service/vpc"
+  config_path = "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/vpc"
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
