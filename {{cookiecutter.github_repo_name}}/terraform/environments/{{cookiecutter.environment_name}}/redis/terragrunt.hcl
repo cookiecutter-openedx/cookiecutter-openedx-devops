@@ -26,15 +26,15 @@ locals {
 
 dependencies {
   paths = [
-    "../../../stacks/service/vpc",
-    "../../../stacks/service/kubernetes",
-    "../../../stacks/service/redis",
+    "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/vpc",
+    "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/kubernetes",
+    "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/redis",
     "../vpc",
     ]
 }
 
 dependency "vpc" {
-  config_path = "../../../stacks/service/vpc"
+  config_path = "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/vpc"
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
@@ -48,7 +48,7 @@ dependency "vpc" {
 }
 
 dependency "kubernetes" {
-  config_path = "../../../stacks/service/kubernetes"
+  config_path = "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/kubernetes"
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
@@ -74,7 +74,7 @@ dependency "kubernetes" {
 }
 
 dependency "redis" {
-  config_path = "../../../stacks/service/redis"
+  config_path = "../../../stacks/{{ cookiecutter.global_platform_shared_resource_identifier }}/redis"
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
