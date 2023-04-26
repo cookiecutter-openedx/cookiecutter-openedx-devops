@@ -1,3 +1,8 @@
+variable "resource_name" {
+  description = "The name of the shared RDS instance"
+  type        = string
+}
+
 variable "environment_domain" {
   type = string
 }
