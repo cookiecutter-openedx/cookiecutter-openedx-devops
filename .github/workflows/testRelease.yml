@@ -9,6 +9,11 @@ on:
   schedule:
     - cron: 0 2 * * 0
 
+permissions:
+      contents: write
+      pages: write
+      id-token: write
+
 jobs:
   test-semantic-latest:
     name: test-semantic-latest
