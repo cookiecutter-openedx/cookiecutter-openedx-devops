@@ -121,6 +121,7 @@ jobs:
           echo "AWS_ECR_REPOSITORY_CREDENTIALS=${AWS_ECR_URI}/openedx_credentials:latest" >> $GITHUB_ENV
           echo "AWS_ECR_REPOSITORY_LICENSE_MANAGER=${AWS_ECR_URI}/license_manager:latest" >> $GITHUB_ENV
           echo "AWS_ECR_REPOSITORY_OPENEDX=${AWS_ECR_URI}/openedx:latest" >> $GITHUB_ENV
+          echo "AWS_ECR_REPOSITORY_MFE=${AWS_ECR_URI}/mfe:latest" >> $GITHUB_ENV
 
       - name: Load environment specific settings (direct)
         shell: bash
@@ -136,6 +137,7 @@ jobs:
           echo "TUTOR_LMS_HOST=$LMS_HOSTNAME" >> $GITHUB_ENV
           echo "TUTOR_CMS_HOST=$CMS_HOSTNAME" >> $GITHUB_ENV
           echo "TUTOR_DOCKER_IMAGE_OPENEDX=${AWS_ECR_REPOSITORY_OPENEDX}" >> $GITHUB_ENV
+          echo "TUTOR_DOCKER_IMAGE_MFE=${AWS_ECR_REPOSITORY_MFE}" >> $GITHUB_ENV
 
       #------------------------------------------------------------------------
       # un-comment this to pin your deployment to a specific open edx release.

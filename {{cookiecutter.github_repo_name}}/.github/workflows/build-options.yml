@@ -14,25 +14,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      {% if cookiecutter.ci_deploy_install_backup_plugin == "Y" -%}
-      ENABLE_BACKUP: true
-      {% else -%}
+      ENABLE_MFE: true
       ENABLE_BACKUP: false
-      {% endif -%}
-      {% if cookiecutter.ci_deploy_install_credentials_server == "Y" -%}
-      ENABLE_CREDENTIALS: true
-      {% else -%}
       ENABLE_CREDENTIALS: false
-      {% endif -%}
-      {% if cookiecutter.ci_deploy_install_license_manager_service == "Y" -%}
-      ENABLE_LICENSE_MANAGER: true
-      {% else -%}
       ENABLE_LICENSE_MANAGER: false
-      {% endif -%}
+
+      # environment settings
+      # --------------------------------------------
       SUBDOMAIN: {{ cookiecutter.environment_subdomain }}
       DOMAIN_NAME: {{ cookiecutter.global_root_domain }}
       SITE_NAME: {{ cookiecutter.global_platform_name }}
       AWS_REGION: {{ cookiecutter.global_aws_region }}
+      ENVIRONMENT_ID: {{ cookiecutter.environment_name }}
+      NAMESPACE: {{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.environment_name }}
+      EKS_CLUSTER_NAME: {{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.global_platform_shared_resource_identifier }}
+      S3_BUCKET_PREFIX: {{ cookiecutter.global_platform_name }}-{{ cookiecutter.global_platform_region }}-{{ cookiecutter.environment_name }}
 
     steps:
       - uses: actions/checkout@{{ cookiecutter.ci_actions_checkout_version }}
@@ -56,6 +52,10 @@ jobs:
           tutor-version: "{{ cookiecutter.ci_build_tutor_version }}"
           tutor-mfe-version: "{{ cookiecutter.ci_build_tutor_mfe_version }}"
           kubectl-version: "{{ cookiecutter.ci_build_kubectl_version }}"
+
+      - name: Build MFE
+        if: {% raw %}${{ env.ENABLE_MFE == 'true' }}{% endraw %}
+        uses: openedx-actions/tutor-plugin-build-mfe@v0.1.6
 
       - name: Build Backup
         if: {% raw %}${{ env.ENABLE_BACKUP == 'true' }}{% endraw %}
