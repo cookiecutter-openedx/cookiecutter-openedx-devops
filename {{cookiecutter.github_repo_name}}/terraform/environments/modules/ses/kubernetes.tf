@@ -26,11 +26,11 @@ resource "kubernetes_secret" "smtp_user" {
   }
 
   data = {
-    OPENEDX_EMAIL_USERNAME     = aws_iam_access_key.smtp_user.id
-    OPENEDX_EMAIL_PASSWORD     = base64encode(aws_iam_access_key.smtp_user.secret)
-    OPENEDX_EMAIL_HOST         = "email-smtp.${var.aws_region}.amazonaws.com"
-    OPENEDX_EMAIL_USE_SSL      = false
-    OPENEDX_EMAIL_USE_TLS      = true
-    OPENEDX_EMAIL_PORT         = 587
+    SMTP_HOST         = "email-smtp.${var.aws_region}.amazonaws.com"
+    SMTP_PORT         = 587
+    SMTP_USE_SSL      = false
+    SMTP_USE_TLS      = true
+    SMTP_USERNAME     = aws_iam_access_key.smtp_user.id
+    SMTP_PASSWORD     = base64encode(aws_iam_access_key.smtp_user.secret)
   }
 }
