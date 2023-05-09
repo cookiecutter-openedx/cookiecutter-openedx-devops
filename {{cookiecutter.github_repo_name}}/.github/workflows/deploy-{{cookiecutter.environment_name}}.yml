@@ -137,7 +137,7 @@ jobs:
           echo "TUTOR_LMS_HOST=$LMS_HOSTNAME" >> $GITHUB_ENV
           echo "TUTOR_CMS_HOST=$CMS_HOSTNAME" >> $GITHUB_ENV
           echo "TUTOR_DOCKER_IMAGE_OPENEDX=${AWS_ECR_REPOSITORY_OPENEDX}" >> $GITHUB_ENV
-          echo "TUTOR_DOCKER_IMAGE_MFE=${AWS_ECR_REPOSITORY_MFE}" >> $GITHUB_ENV
+          echo "TUTOR_MFE_DOCKER_IMAGE=${AWS_ECR_REPOSITORY_MFE}" >> $GITHUB_ENV
 
       #------------------------------------------------------------------------
       # un-comment this to pin your deployment to a specific open edx release.
