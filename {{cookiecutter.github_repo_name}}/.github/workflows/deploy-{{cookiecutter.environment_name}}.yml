@@ -259,11 +259,17 @@ jobs:
           eks-namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
           eks-secret-name: aws-ses-config
 
-      - name: Disable tutor's default SMTP service
-        if: {% raw %}${{ env.ENABLE_SMTP == 'true' }}{% endraw %}
+      - name: Configure remote SMTP service - AWS SES
         shell: bash
         run: |-
           tutor config save --set RUN_SMTP=false
+                            --set SMTP_BACKEND="django.core.mail.backends.smtp.EmailBackend" \
+                            --set SMTP_HOST=${{ env.TUTOR_SMTP_HOST }} \
+                            --set SMTP_PORT=${{ env.TUTOR_SMTP_PORT }} \
+                            --set SMTP_USE_SSL=${{ env.TUTOR_SMTP_USE_SSL }} \
+                            --set SMTP_USE_TLS=${{ env.TUTOR_SMTP_USE_TLS }} \
+                            --set SMTP_HOST_USER=${{ env.TUTOR_SMTP_USERNAME }} \
+                            --set SMTP_HOST_PASSWORD=${{ env.TUTOR_SMTP_PASSWORD }} \
 
       - name: Configure Redis
         uses: openedx-actions/tutor-k8s-configure-redis@{{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_redis_version }}
