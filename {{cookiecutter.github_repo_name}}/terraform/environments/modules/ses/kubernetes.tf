@@ -26,11 +26,11 @@ resource "kubernetes_secret" "smtp_user" {
   }
 
   data = {
-    SMTP_USERNAME     = aws_iam_access_key.smtp_user.id
-    SMTP_PASSWORD     = base64encode(aws_iam_access_key.smtp_user.secret)
-    SMTP_HOST         = "email-smtp.${var.aws_region}.amazonaws.com"
-    SMTP_USE_SSL      = false
-    SMTP_USE_TLS      = true
-    SMTP_PORT         = 587
+    EMAIL_USERNAME     = aws_iam_access_key.smtp_user.id
+    EMAIL_PASSWORD     = base64encode(aws_iam_access_key.smtp_user.secret)
+    EMAIL_HOST         = "email-smtp.${var.aws_region}.amazonaws.com"
+    EMAIL_USE_SSL      = false
+    EMAIL_USE_TLS      = true
+    EMAIL_PORT         = 587
   }
 }
