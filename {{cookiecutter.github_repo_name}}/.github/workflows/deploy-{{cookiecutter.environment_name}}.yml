@@ -245,12 +245,12 @@ jobs:
       # ---------------------------------------------------------------------------------
       # fetch the following
       #
-      #  SMTP_HOST=email-smtp.ca-central-1.amazonaws.com \
-      #  SMTP_PORT=587 \
-      #  SMTP_USE_SSL=false  \
-      #  SMTP_USE_TLS=true \
-      #  SMTP_USERNAME=AWS_IAM_USERNAME_KEY \
-      #  SMTP_PASSWORD=AWS_IAM_USERNAME_SECRET
+      #  OPENEDX_EMAIL_HOST=email-smtp.ca-central-1.amazonaws.com \
+      #  OPENEDX_EMAIL_PORT=587 \
+      #  OPENEDX_EMAIL_USE_SSL=false  \
+      #  OPENEDX_EMAIL_USE_TLS=true \
+      #  OPENEDX_EMAIL_USERNAME=AWS_IAM_USERNAME_KEY \
+      #  OPENEDX_EMAIL_PASSWORD=AWS_IAM_USERNAME_SECRET
       # ---------------------------------------------------------------------------------
       - name: fetch AWS SES SMTP configuration from Kubernetes secrets
         if: {% raw %}${{ env.ENABLE_SMTP == 'true' }}{% endraw %}
