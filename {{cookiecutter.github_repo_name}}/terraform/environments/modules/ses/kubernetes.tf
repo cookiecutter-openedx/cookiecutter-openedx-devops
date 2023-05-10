@@ -17,6 +17,9 @@
 #
 #         see this thread regarding how to use an IAM key-secret with AWS SES
 #         https://stackoverflow.com/questions/45653939/amazon-ses-535-authentication-credentials-invalid-trying-to-rotate-access-key
+#
+#         see https://stackoverflow.com/questions/52850212/terraform-aws-ses-credential-resource
+#             https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_access_key
 #------------------------------------------------------------------------------
 
 resource "kubernetes_secret" "smtp_user" {
@@ -31,6 +34,6 @@ resource "kubernetes_secret" "smtp_user" {
     SMTP_USE_SSL      = false
     SMTP_USE_TLS      = true
     SMTP_USERNAME     = aws_iam_access_key.smtp_user.id
-    SMTP_PASSWORD     = base64encode(aws_iam_access_key.smtp_user.secret)
+    SMTP_PASSWORD     = aws_iam_access_key.smtp_user.ses_smtp_password_v4
   }
 }
