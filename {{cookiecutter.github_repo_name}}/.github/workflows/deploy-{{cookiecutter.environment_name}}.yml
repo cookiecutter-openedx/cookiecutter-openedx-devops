@@ -260,9 +260,10 @@ jobs:
           eks-secret-name: aws-ses-config
 
       - name: Configure remote SMTP service - AWS SES
+        if: ${{ env.ENABLE_SMTP == 'true' }}
         shell: bash
         run: |-
-          tutor config save --set RUN_SMTP=false
+          tutor config save --set RUN_SMTP=false \
                             --set SMTP_BACKEND="django.core.mail.backends.smtp.EmailBackend" \
                             --set SMTP_HOST={% raw %}${{ env.TUTOR_SMTP_HOST }}{% endraw %} \
                             --set SMTP_PORT={% raw %}${{ env.TUTOR_SMTP_PORT }}{% endraw %} \
