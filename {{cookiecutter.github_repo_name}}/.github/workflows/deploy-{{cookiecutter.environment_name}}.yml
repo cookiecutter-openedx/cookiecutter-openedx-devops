@@ -240,38 +240,6 @@ jobs:
       # ***********************************************************************
       # Configure backend services
       # ***********************************************************************
-
-
-      # ---------------------------------------------------------------------------------
-      # fetch the following
-      #
-      #  SMTP_HOST=email-smtp.ca-central-1.amazonaws.com \
-      #  SMTP_PORT=587 \
-      #  SMTP_USE_SSL=false  \
-      #  SMTP_USE_TLS=true \
-      #  SMTP_USERNAME=AWS_IAM_USERNAME_KEY \
-      #  SMTP_PASSWORD=AWS_IAM_USERNAME_SECRET
-      # ---------------------------------------------------------------------------------
-      - name: fetch AWS SES SMTP configuration from Kubernetes secrets
-        if: {% raw %}${{ env.ENABLE_SMTP == 'true' }}{% endraw %}
-        uses: openedx-actions/tutor-k8s-get-secret@v1.0.0
-        with:
-          eks-namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
-          eks-secret-name: aws-ses-config
-
-      - name: Configure remote SMTP service - AWS SES
-        if: ${{ env.ENABLE_SMTP == 'true' }}
-        shell: bash
-        run: |-
-          tutor config save --set RUN_SMTP=false \
-                            --set SMTP_BACKEND="django.core.mail.backends.smtp.EmailBackend" \
-                            --set SMTP_HOST={% raw %}${{ env.TUTOR_SMTP_HOST }}{% endraw %} \
-                            --set SMTP_PORT={% raw %}${{ env.TUTOR_SMTP_PORT }}{% endraw %} \
-                            --set SMTP_USE_SSL={% raw %}${{ env.TUTOR_SMTP_USE_SSL }}{% endraw %} \
-                            --set SMTP_USE_TLS={% raw %}${{ env.TUTOR_SMTP_USE_TLS }}{% endraw %} \
-                            --set SMTP_HOST_USER={% raw %}${{ env.TUTOR_SMTP_USERNAME }}{% endraw %} \
-                            --set SMTP_HOST_PASSWORD={% raw %}${{ env.TUTOR_SMTP_PASSWORD }}{% endraw %} \
-
       - name: Configure Redis
         uses: openedx-actions/tutor-k8s-configure-redis@{{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_redis_version }}
         with:
@@ -291,6 +259,12 @@ jobs:
           {% elif cookiecutter.stack_add_remote_mongodb == "N" -%}
           remote-server: "false"
           {% endif %}
+
+      - name: Configure AWS SES
+        if: ${{ env.ENABLE_SMTP == 'true' }}
+        uses: openedx-actions/tutor-k8s-configure-ses@v1
+        with:
+          namespace: ${{ env.NAMESPACE }}
 
       # ---------------------------------------------------------------------------------
       # Configure application secrets
