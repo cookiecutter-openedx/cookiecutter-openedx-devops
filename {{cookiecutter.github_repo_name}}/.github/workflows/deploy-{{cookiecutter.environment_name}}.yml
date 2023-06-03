@@ -261,10 +261,10 @@ jobs:
           {% endif %}
 
       - name: Configure AWS SES
-        if: ${{ env.ENABLE_SMTP == 'true' }}
+        if: {% raw %}${{ env.ENABLE_SMTP == 'true' }}{% endraw %}
         uses: openedx-actions/tutor-k8s-configure-ses@v1
         with:
-          namespace: ${{ env.NAMESPACE }}
+          namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
       # ---------------------------------------------------------------------------------
       # Configure application secrets
