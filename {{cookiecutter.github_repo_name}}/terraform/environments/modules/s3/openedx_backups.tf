@@ -12,6 +12,7 @@ module "openedx_backup" {
   version = "~> {{ cookiecutter.terraform_aws_modules_s3 }}"
 
   bucket = var.resource_name_backup
+  object_ownership = "BucketOwnerPreferred"
   acl    = "private"
 
   tags = merge(

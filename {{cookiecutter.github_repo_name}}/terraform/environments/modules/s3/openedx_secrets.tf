@@ -12,6 +12,7 @@ module "openedx_secrets" {
   version = "~> {{ cookiecutter.terraform_aws_modules_s3 }}"
 
   bucket = var.resource_name_secrets
+  object_ownership = "BucketOwnerPreferred"
   acl    = "private"
 
   tags = merge(
