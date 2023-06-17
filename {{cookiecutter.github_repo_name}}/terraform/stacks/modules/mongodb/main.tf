@@ -41,7 +41,7 @@ resource "aws_instance" "mongodb" {
   key_name                    = aws_key_pair.mongodb.key_name
   subnet_id                   = var.subnet_id
   monitoring                  = false
-  associate_public_ip_address = false
+  associate_public_ip_address = true
   ebs_optimized               = false
 
   tags = merge(
