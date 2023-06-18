@@ -71,8 +71,8 @@ inputs = {
   # additional inter-AZ data transfer charges. We recommend choosing a
   # maintenance window for architecture changes in your Amazon VPC.
   enable_nat_gateway      = true
-  single_nat_gateway      = false
-  one_nat_gateway_per_az  = true
+  single_nat_gateway      = true
+  one_nat_gateway_per_az  = false
 
   # a bit of foreshadowing:
   # AWS EKS uses tags for identifying resources which it interacts.
