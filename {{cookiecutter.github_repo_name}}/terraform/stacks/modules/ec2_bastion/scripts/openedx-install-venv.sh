@@ -17,7 +17,7 @@ echo "*-------------------------------------------------------------------------
 
 PYTHON_VERSION=3.8.12
 EDX_PLATFORM_REPOSITORY=https://github.com/openedx/edx-platform
-EDX_PLATFORM_VERSION=open-release/nutmeg.master
+EDX_PLATFORM_VERSION=open-release/olive.master
 
 sudo apt update && sudo apt upgrade -y
 
