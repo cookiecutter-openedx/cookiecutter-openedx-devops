@@ -76,7 +76,7 @@
     "ci_openedx_actions_tutor_plugin_build_backup_version": "v0.1.7",
     "ci_openedx_actions_tutor_plugin_build_credentials_version": "v1.0.0",
     "ci_openedx_actions_tutor_plugin_build_license_manager_version": "v0.0.2",
-    "ci_openedx_actions_tutor_plugin_build_openedx_version": "v1.0.2",
+    "ci_openedx_actions_tutor_plugin_build_openedx_version": "v1.0.3",
     "ci_openedx_actions_tutor_plugin_build_openedx_add_requirement_version": "v1.0.7",
     "ci_openedx_actions_tutor_plugin_build_openedx_add_theme_version": "v1.0.2",
     "ci_openedx_actions_tutor_plugin_enable_backup_version": "v0.0.11",

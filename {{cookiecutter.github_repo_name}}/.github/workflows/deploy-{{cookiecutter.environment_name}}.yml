@@ -186,7 +186,7 @@ jobs:
         if: {% raw %}${{ env.ENABLE_DISCOVERY == 'true' }}{% endraw %}
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
-          tutor-discovery-version: "14.0.2"
+          tutor-discovery-version: "15.0.0"
 
       - name: Enable tutor plugin - Credentials
         uses: openedx-actions/tutor-plugin-enable-credentials@{{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_credentials_version }}
