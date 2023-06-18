@@ -61,5 +61,6 @@ sudo chgrp -R mongodb /var/log/mongodb
 
 sudo systemctl enable mongod.service
 sudo systemctl start mongod.service
+sudo systemctl status mongod.service
 
 # install anything else we need
