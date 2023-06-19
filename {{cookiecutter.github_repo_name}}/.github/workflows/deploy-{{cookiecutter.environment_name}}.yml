@@ -363,7 +363,10 @@ jobs:
       #      )
       # ---------------------------------------------------------------------------------
       - name: Add tutor k8s-specific deployment tasks
-        uses: openedx-actions/tutor-plugin-enable-k8s-deploy-tasks@{{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_k8s_deploy_tasks_version }}
+        run: |-
+          pip install git+https://github.com/cookiecutter-openedx/tutor-contrib-k8s-deploy-tasks@open-release/nutmeg.master
+          tutor plugins enable k8s_deploy_tasks
+          tutor config save
 
       - name: Dump tutor config
         uses: openedx-actions/tutor-print-dump@{{ cookiecutter.ci_openedx_actions_tutor_print_dump }}
