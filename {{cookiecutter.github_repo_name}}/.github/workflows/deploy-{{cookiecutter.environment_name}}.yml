@@ -121,7 +121,6 @@ jobs:
           echo "AWS_ECR_REPOSITORY_CREDENTIALS=${AWS_ECR_URI}/openedx_credentials:latest" >> $GITHUB_ENV
           echo "AWS_ECR_REPOSITORY_LICENSE_MANAGER=${AWS_ECR_URI}/license_manager:latest" >> $GITHUB_ENV
           echo "AWS_ECR_REPOSITORY_OPENEDX=${AWS_ECR_URI}/openedx:latest" >> $GITHUB_ENV
-          echo "AWS_ECR_REPOSITORY_MFE=${AWS_ECR_URI}/mfe:latest" >> $GITHUB_ENV
 
       - name: Load environment specific settings (direct)
         shell: bash
@@ -130,14 +129,20 @@ jobs:
           cat ci/tutor-deploy/environments/{% raw %}${{ env.ENVIRONMENT_ID }}{% endraw %}/config.yml >> $GITHUB_ENV
 
       # note that values like $LMS_HOSTNAME come from this repo
-      # in /ci/tutor-deploy/environments/{{ cookiecutter.environment_name }}/config.yml
-      - name: Load additional environment specific settings
+      # in /ci/tutor-deploy/environments/staging/config.yml
+      #
+      - name: Set the Open edX runtime version and base domains
         shell: bash
         run: |-
           echo "TUTOR_LMS_HOST=$LMS_HOSTNAME" >> $GITHUB_ENV
           echo "TUTOR_CMS_HOST=$CMS_HOSTNAME" >> $GITHUB_ENV
           echo "TUTOR_DOCKER_IMAGE_OPENEDX=${AWS_ECR_REPOSITORY_OPENEDX}" >> $GITHUB_ENV
-          echo "TUTOR_MFE_DOCKER_IMAGE=${AWS_ECR_REPOSITORY_MFE}" >> $GITHUB_ENV
+
+      # see: https://docs.tutor.overhang.io/configuration.html
+      - name: Override backend service versions
+        shell: bash
+        run: |-
+          echo "TUTOR_DOCKER_IMAGE_ELASTICSEARCH=docker.io/elasticsearch:7.17.9" >> $GITHUB_ENV
 
       #------------------------------------------------------------------------
       # un-comment this to pin your deployment to a specific open edx release.
@@ -181,7 +186,7 @@ jobs:
         if: {% raw %}${{ env.ENABLE_DISCOVERY == 'true' }}{% endraw %}
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
-          tutor-discovery-version: "14.0.2"
+          tutor-discovery-version: "15.0.0"
 
       - name: Enable tutor plugin - Credentials
         uses: openedx-actions/tutor-plugin-enable-credentials@{{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_credentials_version }}
@@ -197,18 +202,21 @@ jobs:
         if: {% raw %}${{ env.ENABLE_XQUEUE == 'true' }}{% endraw %}
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
+          tutor-xqueue-version: latest
 
       - name: Enable tutor plugin - Notes
         uses: openedx-actions/tutor-plugin-enable-notes@{{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_notes_version }}
         if: {% raw %}${{ env.ENABLE_NOTES == 'true' }}{% endraw %}
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
+          tutor-notes-version: "15.0.4"
 
       - name: Enable tutor plugin - Ecommerce
         uses: openedx-actions/tutor-plugin-enable-ecommerce@{{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_ecommerce_version }}
         if: {% raw %}${{ env.ENABLE_ECOMMERCE == 'true' }}{% endraw %}
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
+          tutor-ecommerce-version: latest
           secrets-s3-bucket-name: {% raw %}${{ env.S3_BUCKET_PREFIX }}{% endraw %}-secrets
           currency: USD
           enabled-payment-processors: '["stripe", "paypal"]'
@@ -226,7 +234,7 @@ jobs:
         uses: openedx-actions/tutor-plugin-enable-forum@{{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_forum_version }}
         if: {% raw %}${{ env.ENABLE_FORUM == 'true' }}{% endraw %}
         with:
-          tutor-forum-version: "14.0.0"
+          tutor-forum-version: "15.1.1"
 
       - name: Enable tutor plugin - License Manager
         uses: openedx-actions/tutor-enable-plugin-license-manager@{{ cookiecutter.ci_openedx_actions_tutor_plugin_enable_license_manager_version }}
@@ -262,7 +270,7 @@ jobs:
 
       - name: Configure AWS SES
         if: {% raw %}${{ env.ENABLE_SMTP == 'true' }}{% endraw %}
-        uses: openedx-actions/tutor-k8s-configure-ses@v1
+        uses: openedx-actions/tutor-k8s-configure-ses@{{ cookiecutter.ci_openedx_actions_tutor_k8s_configure_ses_version }}
         with:
           namespace: {% raw %}${{ env.NAMESPACE }}{% endraw %}
 
