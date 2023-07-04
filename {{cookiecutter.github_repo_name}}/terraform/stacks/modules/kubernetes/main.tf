@@ -149,7 +149,11 @@ module "eks" {
       instance_types = ["${var.eks_service_group_instance_type}"]
       tags = merge(
         local.tags,
-        module.cookiecutter_meta.tags,
+
+        # un-comment this if you want Cookiecutter meta tags added to the EC2 instances.
+        # note however that this will taint the instance on pretty much every 'apply'
+        # module.cookiecutter_meta.tags,
+
         # Tag node group resources for Karpenter auto-discovery
         # NOTE - if creating multiple security groups with this module, only tag the
         # security group that Karpenter should utilize with the following tag
@@ -183,7 +187,11 @@ module "eks" {
       instance_types = ["${var.eks_hosting_group_instance_type}"]
       tags = merge(
         local.tags,
-        module.cookiecutter_meta.tags,
+
+        # un-comment this if you want Cookiecutter meta tags added to the EC2 instances.
+        # note however that this will taint the instance on pretty much every 'apply'
+        # module.cookiecutter_meta.tags,
+
         # Tag node group resources for Karpenter auto-discovery
         # NOTE - if creating multiple security groups with this module, only tag the
         # security group that Karpenter should utilize with the following tag
