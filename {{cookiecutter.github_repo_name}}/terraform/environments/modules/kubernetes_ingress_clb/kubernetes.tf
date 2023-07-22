@@ -33,8 +33,16 @@ data "template_file" "ingress_scorm_proxy_service" {
   }
 }
 
-data "template_file" "ingress_mfe" {
+data "template_file" "ingress_mfe_config" {
   template = file("${path.module}/manifests/ingress-mfe-config.yml.tpl")
+  vars = {
+    environment_domain    = var.environment_domain
+    environment_namespace = var.environment_namespace
+  }
+}
+
+data "template_file" "ingress_mfe" {
+  template = file("${path.module}/manifests/ingress-mfe.yml.tpl")
   vars = {
     environment_domain    = var.environment_domain
     environment_namespace = var.environment_namespace
@@ -57,6 +65,15 @@ resource "kubectl_manifest" "ingress_scorm_proxy_service" {
     aws_route53_record.naked,
     aws_route53_record.wildcard,
     kubectl_manifest.ingress_scorm_proxy_service,
+  ]
+}
+
+resource "kubectl_manifest" "ingress_mfe_config" {
+  yaml_body = data.template_file.ingress_mfe_config.rendered
+
+  depends_on = [
+    aws_route53_record.naked,
+    aws_route53_record.wildcard,
   ]
 }
 

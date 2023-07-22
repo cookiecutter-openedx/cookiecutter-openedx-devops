@@ -4,12 +4,15 @@
 
 # date: Jan-2023
 #
-# usage: open-release olive.1 and newer include the url endpoint /api/mfe_config/v1
-#        that is implemented in edx-platform/lms/djangoapps/mfe_config_api.
+# usage: 
+#   1. open-release olive.1 and newer include the url endpoint /api/mfe_config/v1
+#      that is implemented in edx-platform/lms/djangoapps/mfe_config_api.
 #
-#        we need to add a special ingress, just for this endpoint.
-#        note that this ingress requires an additional annotation to set the
-#        Host header in the request to the hostname of the lms.
+#      we need to add a special ingress, just for this endpoint.
+#      note that this ingress requires an additional annotation to set the
+#      Host header in the request to the hostname of the lms.
+#
+#   2. process the base ReactJS index.html end point.
 #
 # example: https://apps.${environment_domain}/api/mfe_config/v1?mfe=authn
 #------------------------------------------------------------------------------
@@ -71,3 +74,11 @@ spec:
             name: lms
             port:
               number: 8000
+      - path: /index.html
+        pathType: Exact
+        backend:
+          service:
+            name: mfe
+            port:
+              number: 8002
+      
