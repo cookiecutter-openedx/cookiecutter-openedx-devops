@@ -39,7 +39,7 @@ spec:
   - host: apps.${environment_domain}
     http:
       paths:
-      - path: /learning/
+      - path: /
         pathType: Prefix
         backend:
           service:
