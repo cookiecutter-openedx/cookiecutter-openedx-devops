@@ -11,12 +11,6 @@ AUTH_PASSWORD_VALIDATORS:
 AWS_SES_REGION_ENDPOINT: email.{{ cookiecutter.global_aws_region }}.amazonaws.com
 AWS_SES_REGION_NAME: "{{ cookiecutter.global_aws_region }}"
 CORS_ORIGIN_ALLOW_ALL: true
-CORS_ORIGIN_WHITELIST:
-- https://{{ cookiecutter.global_root_domain }}
-- https://{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
-- https://{{ cookiecutter.environment_studio_subdomain }}.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
-- https://apps.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
-- https://preview.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
 COURSE_ABOUT_VISIBILITY_PERMISSION: see_about_page
 COURSE_CATALOG_VISIBILITY_PERMISSION: see_in_catalog
 CREDIT_HELP_LINK_URL: https://{{ cookiecutter.global_root_domain }}/support/
