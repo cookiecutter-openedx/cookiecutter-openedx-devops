@@ -11,6 +11,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: ${environment_domain}
+  namespace: ${namespace}
 spec:
   secretName: ${environment_domain}-tls
   issuerRef:
