@@ -70,16 +70,16 @@ data "template_file" "vpa-smtp" {
   }
 }
 
-resource "kubectl_manifest" "vpa-lms" {
-  yaml_body = data.template_file.vpa-lms.rendered
+resource "kubernetes_manifest" "vpa-lms" {
+  manifest = yamldecode(data.template_file.vpa-lms.rendered)
 
   depends_on = [
     kubernetes_namespace.environment_namespace
   ]
 }
 
-resource "kubectl_manifest" "vpa-lms-worker" {
-  yaml_body = data.template_file.vpa-lms-worker.rendered
+resource "kubernetes_manifest" "vpa-lms-worker" {
+  manifest = yamldecode(data.template_file.vpa-lms-worker.rendered)
 
   depends_on = [
     kubernetes_namespace.environment_namespace
@@ -87,64 +87,64 @@ resource "kubectl_manifest" "vpa-lms-worker" {
 }
 
 
-resource "kubectl_manifest" "vpa-cms" {
-  yaml_body = data.template_file.vpa-cms.rendered
+resource "kubernetes_manifest" "vpa-cms" {
+  manifest = yamldecode(data.template_file.vpa-cms.rendered)
 
   depends_on = [
     kubernetes_namespace.environment_namespace
   ]
 }
 
-resource "kubectl_manifest" "vpa-cms-worker" {
-  yaml_body = data.template_file.vpa-cms-worker.rendered
+resource "kubernetes_manifest" "vpa-cms-worker" {
+  manifest = yamldecode(data.template_file.vpa-cms-worker.rendered)
 
   depends_on = [
     kubernetes_namespace.environment_namespace
   ]
 }
 
-resource "kubectl_manifest" "vpa-mfe" {
-  yaml_body = data.template_file.vpa-mfe.rendered
+resource "kubernetes_manifest" "vpa-mfe" {
+  manifest = yamldecode(data.template_file.vpa-mfe.rendered)
 
   depends_on = [
     kubernetes_namespace.environment_namespace
   ]
 }
 
-resource "kubectl_manifest" "vpa-elasticsearch" {
-  yaml_body = data.template_file.vpa-elasticsearch.rendered
+resource "kubernetes_manifest" "vpa-elasticsearch" {
+  manifest = yamldecode(data.template_file.vpa-elasticsearch.rendered)
 
   depends_on = [
     kubernetes_namespace.environment_namespace
   ]
 }
 
-resource "kubectl_manifest" "vpa-discovery" {
-  yaml_body = data.template_file.vpa-discovery.rendered
+resource "kubernetes_manifest" "vpa-discovery" {
+  manifest = yamldecode(data.template_file.vpa-discovery.rendered)
 
   depends_on = [
     kubernetes_namespace.environment_namespace
   ]
 }
 
-resource "kubectl_manifest" "mongodb" {
-  yaml_body = data.template_file.vpa-mongodb.rendered
+resource "kubernetes_manifest" "mongodb" {
+  manifest = yamldecode(data.template_file.vpa-mongodb.rendered)
 
   depends_on = [
     kubernetes_namespace.environment_namespace
   ]
 }
 
-resource "kubectl_manifest" "notes" {
-  yaml_body = data.template_file.vpa-notes.rendered
+resource "kubernetes_manifest" "notes" {
+  manifest = yamldecode(data.template_file.vpa-notes.rendered)
 
   depends_on = [
     kubernetes_namespace.environment_namespace
   ]
 }
 
-resource "kubectl_manifest" "smtp" {
-  yaml_body = data.template_file.vpa-smtp.rendered
+resource "kubernetes_manifest" "smtp" {
+  manifest = yamldecode(data.template_file.vpa-smtp.rendered)
 
   depends_on = [
     kubernetes_namespace.environment_namespace
