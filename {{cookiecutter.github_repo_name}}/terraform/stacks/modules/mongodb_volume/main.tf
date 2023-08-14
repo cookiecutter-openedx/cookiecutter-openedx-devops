@@ -23,6 +23,7 @@ locals {
 resource "aws_ebs_volume" "mongodb" {
   availability_zone = data.aws_subnet.database_subnet.availability_zone
   size              = var.allocated_storage
+  type              = "gp3"
 
   tags = merge(
     local.tags,
