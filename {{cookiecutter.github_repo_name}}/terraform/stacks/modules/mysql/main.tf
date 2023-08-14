@@ -64,7 +64,7 @@ module "db" {
   #replicate_source_db =
   #s3_import =
   #snapshot_identifier  =
-  #storage_type =
+  storage_type = "gp3"
   #timezone =
   username = var.username
 
