@@ -186,12 +186,10 @@ tutor local quickstart
 # then the mysql database will be named 'edxapp', and needs to be renamed to
 # 'openedx'
 #
-# Use vi/vim to search-replace the source database name 'edxapp' for the Tutor
+# Use sed to search-replace the source database name 'edxapp' for the Tutor
 # database name 'openedx'.
-#
-vim ${LOCAL_BACKUP_PATH}mysql/mysql-data-${SOURCE_MYSQL_TAG}.sql
-# usage:
-#   :%s/edxapp/openedx/g
+# see: https://unix.stackexchange.com/questions/255373/replace-text-quickly-in-very-large-file
+sed -i '/edxapp/ s//openedx/g' ${LOCAL_BACKUP_PATH}mysql/mysql-data-${SOURCE_MYSQL_TAG}.sql
 # -----------------------------------------------------------------------------
 
 
