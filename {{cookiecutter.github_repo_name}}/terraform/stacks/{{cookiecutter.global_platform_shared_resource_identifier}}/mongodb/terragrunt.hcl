@@ -94,7 +94,7 @@ dependency "mongodb_volume" {
     mongodb_volume_multi_attach_enabled = false
     mongodb_volume_iops = 100
     mongodb_volume_throughput = "fake-volume-throughput"
-    mongodb_volume_type = "gp2"
+    mongodb_volume_type = "gp3"
   }
 }
 
