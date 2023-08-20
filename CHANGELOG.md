@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - add Kubernetes Descheduler - https://github.com/kubernetes-sigs/descheduler/blob/master/charts/descheduler/README.md
 - refactor Kubernetes Karpenter
+- remove manual settings for eks managed node group. these are now fully managed by Karpenter.
 - upgrade all EBS Volumes from gp2 to gp3
 - replace kubectl_manifest with kubernetes_manifest
 - relax most openedx-actions version pins to "v1"
