@@ -126,39 +126,17 @@ resource "aws_iam_instance_profile" "karpenter" {
 }
 
 
+data "template_file" "karpenter_provisioner" {
+  template = file("${path.module}/yml/karpenter-provisioner.yaml.tpl")
+  vars = {
+    stack_namespace = var.stack_namespace
+  }
+
+}
+
 # see: https://karpenter.sh/v0.6.1/provisioner/
-resource "kubectl_manifest" "karpenter_provisioner" {
-  yaml_body = <<-YAML
-  apiVersion: karpenter.sh/v1alpha5
-  kind: Provisioner
-  metadata:
-    name: default
-  spec:
-    requirements:
-      - key: karpenter.sh/capacity-type
-        operator: In
-        values: ["spot", "on-demand"]
-      - key: node.kubernetes.io/instance-type
-        operator: In
-        values: ["t3.2xlarge", "t3.xlarge", "t2.2xlarge", "t3.large", "t2.xlarge"]
-    limits:
-      resources:
-        cpu: "400"        # 100 * 4 cpu
-        memory: 1600Gi    # 100 * 16Gi
-    provider:
-      subnetSelector:
-        karpenter.sh/discovery: ${var.stack_namespace}
-      securityGroupSelector:
-        karpenter.sh/discovery: ${var.stack_namespace}
-      tags:
-        karpenter.sh/discovery: ${var.stack_namespace}
-
-    # If nil, the feature is disabled, nodes will never terminate
-    ttlSecondsUntilExpired: 600           # 10 minutes = 60 seconds * 10 minutes
-
-    # If nil, the feature is disabled, nodes will never scale down due to low utilization
-    ttlSecondsAfterEmpty: 600             # 10 minutes = 60 seconds * 10 minutes
-  YAML
+resource "kubernetes_manifest" "karpenter_provisioner" {
+  manifest = yamldecode(data.template_file.karpenter_provisioner.rendered)
 
   depends_on = [
     helm_release.karpenter

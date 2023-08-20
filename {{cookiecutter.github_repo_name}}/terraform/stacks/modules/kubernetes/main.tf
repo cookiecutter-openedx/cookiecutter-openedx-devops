@@ -63,7 +63,10 @@ module "eks" {
     # Tag node group resources for Karpenter auto-discovery
     # NOTE - if creating multiple security groups with this module, only tag the
     # security group that Karpenter should utilize with the following tag
-    { "karpenter.sh/discovery" = var.namespace },
+    {
+      "karpenter.sh/discovery" = var.namespace
+      "karpenter.sh/provisioner-name" = "general-compute"
+    },
     {
       "cookiecutter/resource/source"  = "terraform-aws-modules/eks/aws"
       "cookiecutter/resource/version" = "{{ cookiecutter.terraform_aws_modules_eks }}"
@@ -118,24 +121,29 @@ module "eks" {
   }
 
   eks_managed_node_groups = {
-    # This node group is managed by Karpenter. There must be at least
+    # Karpenter cannot self-initialize and therefore depends on this
+    # managed group having at least a single node at all times. Karpenter
+    # will dynamically add/remove additional EC2 compute resources as-needed
+    # based on your real-time environment.
+    #
+    # More: There must be at least a single
     # node in this group at all times in order for Karpenter to monitor
     # load and act on metrics data. Karpenter's bin packing algorithms
     # perform more effectively with larger instance types. The Cookiecutter
-    # default instance type is t3.xlarge (4 vCPU / 16 GiB). These instances,
+    # default instance type is t3.large (2 vCPU / 8 GiB). These instances,
     # beyond the 1 permanent instance, are assumed to be short-lived
     # (a few hours or less) as these are usually only instantiated during
     # bursts of user activity such as at the start of a scheduled lecture or
     # exam on a large mooc.
-    {{ cookiecutter.global_platform_shared_resource_identifier }} = {
-      capacity_type     = "SPOT"
-      enable_monitoring = false
-      desired_size      = var.eks_service_group_desired_size
-      min_size          = var.eks_service_group_min_size
-      max_size          = var.eks_service_group_max_size
+    service = {
+      capacity_type               = "SPOT"
+      enable_monitoring           = false
+      desired_size                = 1
+      min_size                    = 1
+      max_size                    = 1
 
       labels = {
-        node-group = "{{ cookiecutter.global_platform_shared_resource_identifier }}"
+        node-group = "service"
       }
 
       iam_role_additional_policies = {
@@ -146,30 +154,26 @@ module "eks" {
         AmazonEBSCSIDriverPolicy = data.aws_iam_policy.AmazonEBSCSIDriverPolicy.arn
       }
 
-      instance_types = ["${var.eks_service_group_instance_type}"]
-      tags = merge(
-        local.tags,
-        # Tag node group resources for Karpenter auto-discovery
-        # NOTE - if creating multiple security groups with this module, only tag the
-        # security group that Karpenter should utilize with the following tag
-        { Name = "eks-${var.shared_resource_identifier}-{{ cookiecutter.global_platform_shared_resource_identifier }}" },
-        {
-          "cookiecutter/resource/source"  = "terraform-aws-modules/eks/aws"
-          "cookiecutter/resource/version" = "{{ cookiecutter.terraform_aws_modules_eks }}"
+      instance_types = ["t3.large", "t3a.large", "t2.large", "m4.large"]
+
+      block_device_mappings = {
+        xvda = {
+          device_name = "/dev/xvda"
+          ebs = {
+            volume_type           = "gp3"
+            volume_size           = 100
+            delete_on_termination = true
+          }
+      }
+      }
+
+      iam_role_additional_policies = {
+        # Required by Karpenter
+        AmazonSSMManagedInstanceCore = "arn:${local.partition}:iam::aws:policy/AmazonSSMManagedInstanceCore"
+
+        # Required by EBS CSI Add-on
+        AmazonEBSCSIDriverPolicy = data.aws_iam_policy.AmazonEBSCSIDriverPolicy.arn
         }
-      )
-    }
-
-    hosting = {
-      capacity_type     = "SPOT"
-      enable_monitoring = false
-      desired_size      = var.eks_hosting_group_desired_size
-      min_size          = var.eks_hosting_group_min_size
-      max_size          = var.eks_hosting_group_max_size
-
-      labels = {
-        node-group = "{{ cookiecutter.global_platform_shared_resource_identifier }}"
-      }
 
       iam_role_additional_policies = {
         # Required by Karpenter
@@ -179,13 +183,12 @@ module "eks" {
         AmazonEBSCSIDriverPolicy = data.aws_iam_policy.AmazonEBSCSIDriverPolicy.arn
       }
 
-      instance_types = ["${var.eks_hosting_group_instance_type}"]
       tags = merge(
         local.tags,
         # Tag node group resources for Karpenter auto-discovery
         # NOTE - if creating multiple security groups with this module, only tag the
         # security group that Karpenter should utilize with the following tag
-        { Name = "eks-${var.shared_resource_identifier}-hosting" },
+        { Name = "eks-${var.shared_resource_identifier}-service" },
         {
           "cookiecutter/resource/source"  = "terraform-aws-modules/eks/aws"
           "cookiecutter/resource/version" = "{{ cookiecutter.terraform_aws_modules_eks }}"
