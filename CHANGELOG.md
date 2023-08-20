@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [14.1.2] (2023-8-??)
+
+- add Kubernetes Descheduler - https://github.com/kubernetes-sigs/descheduler/blob/master/charts/descheduler/README.md
+- refactor Kubernetes Karpenter
+- upgrade all EBS Volumes from gp2 to gp3
+- replace kubectl_manifest with kubernetes_manifest
+- mandatory refactor of AWS S3 ACL config
+
 ## [14.1.1] (2023-6-18)
 
 This is a reference archive of the final code base for build-deploy of Open edX
