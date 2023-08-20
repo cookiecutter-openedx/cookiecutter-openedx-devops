@@ -22,14 +22,6 @@ locals {
   shared_resource_identifier      = local.global_vars.locals.shared_resource_identifier
   kubernetes_version              = local.stack_vars.locals.kubernetes_version
   eks_create_kms_key              = local.stack_vars.locals.eks_create_kms_key
-  eks_hosting_group_instance_type = local.stack_vars.locals.eks_hosting_group_instance_type
-  eks_hosting_group_min_size      = local.stack_vars.locals.eks_hosting_group_min_size
-  eks_hosting_group_max_size      = local.stack_vars.locals.eks_hosting_group_max_size
-  eks_hosting_group_desired_size  = local.stack_vars.locals.eks_hosting_group_desired_size
-  eks_service_group_instance_type = local.stack_vars.locals.eks_service_group_instance_type
-  eks_service_group_min_size      = local.stack_vars.locals.eks_service_group_min_size
-  eks_service_group_max_size      =  local.stack_vars.locals.eks_service_group_max_size
-  eks_service_group_desired_size  =  local.stack_vars.locals.eks_service_group_desired_size
   bastion_iam_arn                 = "arn:aws:iam::${local.account_id}:user/system/bastion-user/${local.namespace}-bastion"
   bastion_iam_username            = "${local.namespace}-bastion"
 
@@ -78,14 +70,6 @@ inputs = {
   vpc_id                          = dependency.vpc.outputs.vpc_id
   kubernetes_cluster_version      = local.kubernetes_version
   eks_create_kms_key              = local.eks_create_kms_key
-  eks_hosting_group_instance_type = local.eks_hosting_group_instance_type
-  eks_hosting_group_min_size      = local.eks_hosting_group_min_size
-  eks_hosting_group_max_size      = local.eks_hosting_group_max_size
-  eks_hosting_group_desired_size  = local.eks_hosting_group_desired_size
-  eks_service_group_instance_type = local.eks_service_group_instance_type
-  eks_service_group_min_size      = local.eks_service_group_min_size
-  eks_service_group_max_size      = local.eks_service_group_max_size
-  eks_service_group_desired_size  = local.eks_service_group_desired_size
   bastion_iam_arn                 = local.bastion_iam_arn
   tags                            = local.tags
 

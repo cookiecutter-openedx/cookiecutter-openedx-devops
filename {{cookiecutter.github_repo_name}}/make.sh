@@ -46,14 +46,6 @@ cookiecutter --checkout $GITHUB_BRANCH \
             environment_subdomain={{ cookiecutter.environment_subdomain }} \
             environment_add_aws_ses={{ cookiecutter.environment_add_aws_ses }} \
             eks_create_kms_key={{ cookiecutter.eks_create_kms_key }} \
-            eks_hosting_group_instance_type={{ cookiecutter.eks_hosting_group_instance_type }} \
-            eks_hosting_group_min_size={{ cookiecutter.eks_hosting_group_min_size }} \
-            eks_hosting_group_max_size={{ cookiecutter.eks_hosting_group_max_size }} \
-            eks_hosting_group_desired_size={{ cookiecutter.eks_hosting_group_desired_size }} \
-            eks_service_group_instance_type={{ cookiecutter.eks_service_group_instance_type }} \
-            eks_service_group_min_size={{ cookiecutter.eks_service_group_min_size }} \
-            eks_service_group_max_size={{ cookiecutter.eks_service_group_max_size }} \
-            eks_service_group_desired_size={{ cookiecutter.eks_service_group_desired_size }} \
             mysql_instance_class={{ cookiecutter.mysql_instance_class }} \
             mysql_allocated_storage={{ cookiecutter.mysql_allocated_storage }} \
             redis_node_type={{ cookiecutter.redis_node_type }} \

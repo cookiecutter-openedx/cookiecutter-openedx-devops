@@ -53,38 +53,6 @@ variable "eks_create_kms_key" {
   type = bool
 }
 
-variable "eks_hosting_group_min_size" {
-  type = number
-}
-
-variable "eks_hosting_group_max_size" {
-  type = number
-}
-
-variable "eks_service_group_instance_type" {
-  type = string
-}
-
-variable "eks_service_group_min_size" {
-  type = number
-}
-
-variable "eks_service_group_max_size" {
-  type = number
-}
-
-variable "eks_service_group_desired_size" {
-  type = number
-}
-
-variable "eks_hosting_group_desired_size" {
-  type = number
-}
-
-variable "eks_hosting_group_instance_type" {
-  type = string
-}
-
 variable "map_users" {
   description = "Additional IAM users to add to the aws-auth configmap."
   type = list(object({

@@ -44,17 +44,6 @@ locals {
   eks_create_kms_key                 = false
   {% endif -%}
 
-  eks_service_group_instance_type    = "{{ cookiecutter.eks_service_group_instance_type }}"
-  eks_service_group_min_size         = {{ cookiecutter.eks_service_group_min_size }}
-  eks_service_group_max_size         = {{ cookiecutter.eks_service_group_max_size }}
-  eks_service_group_desired_size     = {{ cookiecutter.eks_service_group_desired_size }}
-
-  eks_hosting_group_instance_type    = "{{ cookiecutter.eks_hosting_group_instance_type }}"
-  eks_hosting_group_min_size         = {{ cookiecutter.eks_hosting_group_min_size }}
-  eks_hosting_group_max_size         = {{ cookiecutter.eks_hosting_group_max_size }}
-  eks_hosting_group_desired_size     = {{ cookiecutter.eks_hosting_group_desired_size }}
-
-
   tags = merge(
     local.global_vars.locals.tags,
     {
