@@ -65,7 +65,6 @@ module "eks" {
     # security group that Karpenter should utilize with the following tag
     {
       "karpenter.sh/discovery" = var.namespace
-      "karpenter.sh/provisioner-name" = "general-compute"
     },
     {
       "cookiecutter/resource/source"  = "terraform-aws-modules/eks/aws"
