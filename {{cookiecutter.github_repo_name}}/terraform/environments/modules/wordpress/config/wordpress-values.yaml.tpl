@@ -69,7 +69,7 @@ nodeAffinityPreset:
 affinity:
     nodeAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 1
+      - weight: 100
         preference:
           matchExpressions:
           - key: node-group

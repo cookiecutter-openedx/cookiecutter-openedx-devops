@@ -14,8 +14,8 @@ data "template_file" "vpa_wordpress" {
   }
 }
 
-resource "kubectl_manifest" "vpa-prometheus-operator" {
-  yaml_body = data.template_file.vpa_wordpress.rendered
+resource "kubernetes_manifest" "vpa-prometheus-operator" {
+  manifest = yamldecode(data.template_file.vpa_wordpress.rendered)
 
   depends_on = [
     helm_release.wordpress

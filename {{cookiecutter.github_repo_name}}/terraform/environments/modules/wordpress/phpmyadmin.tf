@@ -57,6 +57,6 @@ resource "helm_release" "phpmyadmin" {
     helm_release.wordpress,
     aws_route53_record.wordpress,
     kubectl_manifest.wordpress_ingress,
-    kubectl_manifest.cluster-issuer
+    kubernetes_manifest.cluster-issuer
   ]
 }
