@@ -105,6 +105,7 @@ resource "kubernetes_persistent_volume" "wordpress" {
 #------------------------------------------------------------------------------
 resource "aws_ebs_volume" "wordpress" {
   availability_zone = data.aws_subnet.private_subnet.availability_zone
+  type              = "gp3"
   size              = local.persistenceSize
 
   tags = merge(
@@ -134,15 +135,5 @@ resource "aws_ebs_volume" "wordpress" {
 #------------------------------------------------------------------------------
 
 data "aws_subnet" "private_subnet" {
-  id = var.subnet_ids[random_integer.subnet_id.result]
-}
-
-# randomize the choice of subnet. Each of the
-# possible subnets corresponds to the AWS availability
-# zones in the data center. Most data center have three
-# availability zones, but some like us-east-1 have more than
-# three.
-resource "random_integer" "subnet_id" {
-  min = 0
-  max = length(var.subnet_ids) - 1
+  id = element(var.subnet_ids, 0)
 }
