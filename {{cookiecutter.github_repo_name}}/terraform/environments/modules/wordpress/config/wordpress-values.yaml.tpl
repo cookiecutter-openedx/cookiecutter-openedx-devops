@@ -31,37 +31,12 @@ allowEmptyPassword: ${allowEmptyPassword}
 # see https://github.com/bitnami/charts/issues/4255
 # pestebogdan commented on Jan 11, 2021
 # -----------------------------------------------------------------------------
-htaccessPersistenceEnabled: false
+htaccessPersistenceEnabled: true
 readinessProbe:
   enabled: false
 service:
   type: ClusterIP
   annotations: {}
-## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-##
-podAffinityPreset: ""
-## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-##
-podAntiAffinityPreset: soft
-## Node affinity preset
-## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-##
-nodeAffinityPreset:
-  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-  ##
-  type: ""
-  ## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
-  ##
-  key: ""
-  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
-  ## E.g.
-  ## values:
-  ##   - e2e-az1
-  ##   - e2e-az2
-  ##
-  values: []
 ## @param affinity Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## NOTE: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
@@ -76,10 +51,6 @@ affinity:
             operator: In
             values:
             - wordpress
-## @param nodeSelector Node labels for pod assignment
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
-##
-nodeSelector: {}
 ## @param tolerations Tolerations for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
@@ -98,9 +69,6 @@ resources:
   limits:
     memory: "1000Mi"
     cpu: "1000m"
-  requests:
-    memory: "128Mi"
-    cpu: "12m"
 containerPorts:
   http: 8080
   https: 8443
@@ -122,9 +90,9 @@ autoscaling:
   targetMemory: 512Mi
   targetCPU: 250m
 metrics:
-  enabled: true
+  enabled: false
   serviceMonitor:
-    enabled: true
+    enabled: false
 mariadb:
   enabled: false
 externalDatabase:
