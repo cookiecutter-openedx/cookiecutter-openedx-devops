@@ -153,7 +153,49 @@ module "eks" {
         AmazonEBSCSIDriverPolicy = data.aws_iam_policy.AmazonEBSCSIDriverPolicy.arn
       }
 
-      instance_types = ["t3.large", "t3a.large", "t2.large", "m4.large"]
+      # Top 40 list of instance types with
+      #   - x86_64 / amd64 cpu architecture
+      #   - 8 <= Memory <= 16
+      #   - 2 <= vCPU <= 4
+      instance_types = [
+        "t3.large",
+        "t3.xlarge",
+        "t3a.large",
+        "t3a.xlarge",
+        "t2.large",
+        "t2.xlarge",
+        "m4.large",
+        "m5.large",
+        "m5a.large",
+        "m5ad.large",
+        "m5d.large",
+        "m5dn.large",
+        "m5n.large",
+        "m5zn.large",
+        "m6a.large",
+        "m6i.large",
+        "m6id.large",
+        "m6idn.large",
+        "m6in.large",
+        "m7a.large",
+        "m7a.xlarge",
+        "m7i-flex.large",
+        "m7i.large",
+        "r3.large",
+        "r4.large",
+        "r5.large",
+        "r5a.large",
+        "r5ad.large",
+        "r5b.large",
+        "r5d.large",
+        "r5dn.large",
+        "r5n.large",
+        "r6a.large",
+        "r6i.large",
+        "r6id.large",
+        "r6idn.large",
+        "r6in.large",
+        ]
 
       block_device_mappings = {
         xvda = {
