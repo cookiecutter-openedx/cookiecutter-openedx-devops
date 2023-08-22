@@ -135,6 +135,7 @@ data "template_file" "karpenter_provisioner" {
 }
 
 # see: https://karpenter.sh/v0.6.1/provisioner/
+#      https://karpenter.sh/docs/concepts/provisioners/
 resource "kubernetes_manifest" "karpenter_provisioner" {
   manifest = yamldecode(data.template_file.karpenter_provisioner.rendered)
 
@@ -143,6 +144,7 @@ resource "kubernetes_manifest" "karpenter_provisioner" {
   ]
 }
 
+# see: https://karpenter.sh/docs/concepts/node-templates/
 data "template_file" "karpenter_aws_node_template" {
   template = file("${path.module}/yml/karpenter-aws-node-template.yaml.tpl")
 
