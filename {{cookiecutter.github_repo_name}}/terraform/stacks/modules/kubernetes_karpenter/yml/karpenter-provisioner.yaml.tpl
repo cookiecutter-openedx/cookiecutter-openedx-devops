@@ -23,10 +23,5 @@ spec:
     resources:
       cpu: 400
       memory: 1600Gi
-  provider:
-    subnetSelector:
-      karpenter.sh/discovery: ${stack_namespace}
-    securityGroupSelector:
-      karpenter.sh/discovery: ${stack_namespace}
-    tags:
-      karpenter.sh/discovery: ${stack_namespace}
+  providerRef:
+    name: default

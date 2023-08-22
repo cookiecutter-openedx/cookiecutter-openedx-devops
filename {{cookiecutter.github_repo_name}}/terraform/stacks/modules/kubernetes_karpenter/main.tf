@@ -143,6 +143,22 @@ resource "kubernetes_manifest" "karpenter_provisioner" {
   ]
 }
 
+data "template_file" "karpenter_aws_node_template" {
+  template = file("${path.module}/yml/karpenter-aws-node-template.yaml.tpl")
+
+  vars = {
+    stack_namespace = var.stack_namespace
+  }
+}
+resource "kubernetes_manifest" "karpenter_aws_node_template" {
+  manifest = yamldecode(data.template_file.karpenter_aws_node_template.rendered)
+
+  depends_on = [
+    helm_release.karpenter
+  ]
+}
+
+
 resource "aws_iam_role" "ec2_spot_fleet_tagging_role" {
   name = "AmazonEC2SpotFleetTaggingRole"
 
@@ -174,13 +190,6 @@ resource "aws_iam_role_policy_attachment" "ec2_spot_fleet_tagging" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2SpotFleetTaggingRole"
 }
 
-resource "kubectl_manifest" "vpa-karpenter" {
-  yaml_body = file("${path.module}/yml/vpa-karpenter.yaml")
-
-  depends_on = [
-    helm_release.karpenter
-  ]
-}
 
 #------------------------------------------------------------------------------
 #                               COOKIECUTTER META

@@ -1,10 +1,12 @@
 
-data "template_file" "karpenter" {
+data "template_file" "vpa-karpenter" {
   template = file("${path.module}/yml/vpa-karpenter.yaml")
+  vars = {
+  }
 }
 
-resource "kubectl_manifest" "karpenter" {
-  yaml_body = data.template_file.karpenter.rendered
+resource "kubernetes_manifest" "vpa-karpenter" {
+  manifest = yamldecode(data.template_file.vpa-karpenter.rendered)
 
   depends_on = [
     helm_release.karpenter
