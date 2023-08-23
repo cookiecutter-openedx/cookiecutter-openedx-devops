@@ -56,6 +56,7 @@ module "eks" {
   # kubectl and k9s work from inside the bastion server by default.
   manage_aws_auth_configmap = true
   aws_auth_users = var.map_users
+  aws_auth_roles = var.map_roles
 
   tags = merge(
     local.tags,
