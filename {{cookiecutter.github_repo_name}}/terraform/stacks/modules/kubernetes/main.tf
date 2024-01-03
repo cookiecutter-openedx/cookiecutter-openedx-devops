@@ -75,17 +75,17 @@ module "eks" {
 
   cluster_addons = {
     vpc-cni = {
-      addon_version = "v1.13.4-eksbuild.1"
+      addon_version = "v1.16.0-eksbuild.1"
     }
     coredns = {
-      addon_version = "v1.10.1-eksbuild.2"
+      addon_version = "v1.10.1-eksbuild.6"
     }
     kube-proxy = {
-      addon_version = "v1.27.4-eksbuild.2"
+      addon_version = "v1.28.4-eksbuild.1"
     }
     aws-ebs-csi-driver = {
       service_account_role_arn = aws_iam_role.AmazonEKS_EBS_CSI_DriverRole.arn
-      addon_version            = "v1.21.0-eksbuild.1"
+      addon_version            = "v1.26.0-eksbuild.1"
     }
   }
 
