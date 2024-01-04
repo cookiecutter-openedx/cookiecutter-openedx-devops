@@ -1,2 +1,3 @@
 LMS_HOSTNAME={{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
 CMS_HOSTNAME={{ cookiecutter.environment_studio_subdomain }}.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
+MFE_HOSTNAME=apps.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}

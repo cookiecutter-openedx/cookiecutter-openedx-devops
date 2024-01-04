@@ -309,32 +309,6 @@ jobs:
           tutor plugins enable mfe
           tutor config save
 
-      # see: https://github.com/overhangio/tutor-mfe
-  {% if cookiecutter.ci_deploy_enable_mfes|upper == "Y" -%}
-      # un-comment this section to disable specific MFEs
-      # -----------------------------------------------------------------------
-      # - name: Disable all MFEs
-      #   shell: bash
-      #   run: |-
-      #     tutor config save --set MFE_ACCOUNT_MFE_APP=null \
-      #                       --set MFE_GRADEBOOK_MFE_APP=null \
-      #                       --set MFE_PROFILE_MFE_APP=null \
-      #                       --set MFE_COURSE_AUTHORING_MFE_APP=null \
-      #                       --set MFE_DISCUSSIONS_MFE_APP=null \
-      #                       --set MFE_AUTHN_MFE_APP=null \
-  {% else -%}
-      # remove or modify this section to enable individual MFEs
-      # -----------------------------------------------------------------------
-      - name: Disable all MFEs
-       shell: bash
-        run: |-
-          tutor config save --set MFE_ACCOUNT_MFE_APP=null \
-                            --set MFE_GRADEBOOK_MFE_APP=null \
-                            --set MFE_PROFILE_MFE_APP=null \
-                            --set MFE_COURSE_AUTHORING_MFE_APP=null \
-                            --set MFE_DISCUSSIONS_MFE_APP=null \
-                            --set MFE_AUTHN_MFE_APP=null \
-  {% endif -%}
 
       # ---------------------------------------------------------------------------------
       # install and enable tutor plugin https://github.com/lpm0073/tutor-contrib-k8s-deploy-tasks

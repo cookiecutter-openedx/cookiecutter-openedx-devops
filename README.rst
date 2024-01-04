@@ -96,7 +96,6 @@ Now run it against this repo, using the following example usage pattern:
                 ci_deploy_install_backup_plugin=N \
                 ci_deploy_install_credentials_server=N \
                 ci_deploy_install_discovery_service=N \
-                ci_deploy_enable_mfes=Y \
                 ci_deploy_install_notes_service=N \
                 ci_deploy_install_ecommerce_service=N \
                 ci_deploy_install_forum_service=Y \

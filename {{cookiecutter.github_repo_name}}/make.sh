@@ -31,7 +31,6 @@ cookiecutter --checkout $GITHUB_BRANCH \
             ci_deploy_install_credentials_server={{ cookiecutter.ci_deploy_install_credentials_server }} \
             ci_deploy_install_license_manager_service={{ cookiecutter.ci_deploy_install_license_manager_service }} \
             ci_deploy_install_discovery_service={{ cookiecutter.ci_deploy_install_discovery_service }} \
-            ci_deploy_enable_mfes={{ cookiecutter.ci_deploy_enable_mfes }} \
             ci_deploy_install_notes_service={{ cookiecutter.ci_deploy_install_notes_service }} \
             ci_deploy_install_ecommerce_service={{ cookiecutter.ci_deploy_install_ecommerce_service }} \
             global_platform_name={{ cookiecutter.global_platform_name }} \

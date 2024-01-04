@@ -46,7 +46,6 @@
     "ci_deploy_install_backup_plugin": ["N", "Y"],
     "ci_deploy_install_credentials_server": ["N", "Y"],
     "ci_deploy_install_discovery_service": ["Y", "N"],
-    "ci_deploy_enable_mfes": ["Y", "N"],
     "ci_deploy_install_notes_service": ["Y", "N"],
     "ci_deploy_install_ecommerce_service": ["Y", "N"],
     "ci_deploy_install_forum_service": ["N", "Y"],

@@ -570,12 +570,6 @@ Open edX Deployment
 
   *default value: Y*
 
-- **ci_deploy_enable_mfes:**
-
-  'Y' to enable all MFE's using `Open edX MFE service <https://github.com/overhangio/tutor-mfe>`_
-
-  *default value: Y*
-
 - **ci_deploy_install_notes_service:**
 
   'Y' to install the `Open edX Notes service <https://github.com/openedx/edx-notes-api>`_
