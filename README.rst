@@ -92,7 +92,7 @@ Now run it against this repo, using the following example usage pattern:
                 stack_add_k8s_karpenter=Y \
                 stack_add_k8s_prometheus=Y \
                 wordpress_add_site=N \
-                ci_deploy_open_edx_version=olive.1 \
+                ci_openedx_release_tag=olive.1 \
                 ci_deploy_install_backup_plugin=N \
                 ci_deploy_install_credentials_server=N \
                 ci_deploy_install_discovery_service=N \

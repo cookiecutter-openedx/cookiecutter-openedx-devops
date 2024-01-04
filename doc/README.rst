@@ -552,7 +552,7 @@ Open edX Deployment
 
   *default value: v1.0.0*
 
-- **ci_deploy_open_edx_version:**
+- **ci_openedx_release_tag:**
 
   The Open edX release version for your deployment. This is the single most consequential choice amongst the long list of Cookiecutter options.
 

@@ -328,7 +328,7 @@ General production release
 
 ## [0.0.3] - 2022-03-20
 
-- added Cookiecutter parameters for environment_subdomain, ci_deploy_open_edx_version, ci_build_tutor_version, all teraform version constraints
+- added Cookiecutter parameters for environment_subdomain, ci_openedx_release_tag, ci_build_tutor_version, all teraform version constraints
 - split environment_name and environment_subdomain
 - added Cookiecutter post hook to process selection of EKS Load Balancer configuration
 - added scripts to make, test, lint

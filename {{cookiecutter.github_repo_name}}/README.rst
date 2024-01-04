@@ -152,7 +152,7 @@ This repository was generated using `Cookiecutter <https://cookiecutter.readthed
   * - Software
     - Version
   * - `Open edX Named Release <https://edx.readthedocs.io/projects/edx-developer-docs/en/latest/named_releases.html>`_
-    - {{ cookiecutter.ci_deploy_open_edx_version }}
+    - {{ cookiecutter.ci_openedx_release_tag }}
   * - `MySQL Server <https://www.mysql.com/>`_
     - {{ cookiecutter.mysql_engine_version }}
   * - `Redis Cache <https://redis.io/>`_
