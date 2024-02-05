@@ -1,4 +1,4 @@
-
+{% raw %}
 # Default values for kube-prometheus-stack.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
@@ -213,13 +213,6 @@ alertmanager:
     templates:
     - '/etc/alertmanager/config/*.tmpl'
 
-  ## Alertmanager configuration directives (as string type, preferred over the config hash map)
-  ## stringConfig will be used only, if tplConfig is true
-  ## ref: https://prometheus.io/docs/alerting/configuration/#configuration-file
-  ##      https://prometheus.io/webtools/alerting/routing-tree-editor/
-  ##
-  stringConfig: ""
-
   ## Pass the Alertmanager configuration directives through Helm's templating
   ## engine. If the Alertmanager configuration contains Alertmanager templates,
   ## they'll need to be properly escaped so that they are not interpreted by
@@ -421,10 +414,6 @@ alertmanager:
     interval: ""
     selfMonitor: true
 
-    ## Additional labels
-    ##
-    additionalLabels: {}
-
     ## SampleLimit defines per-scrape limit on number of scraped samples that will be accepted.
     ##
     sampleLimit: 0
@@ -565,13 +554,6 @@ alertmanager:
     # alertmanagerConfiguration:
     #   name: global-alertmanager-Configuration
 
-    ## Defines the strategy used by AlertmanagerConfig objects to match alerts. eg:
-    ##
-    alertmanagerConfigMatcherStrategy: {}
-    ## Example with use OnNamespace strategy
-    # alertmanagerConfigMatcherStrategy:
-    #   type: OnNamespace
-
     ## Define Log Format
     # Use logfmt (default) or json logging
     logFormat: logfmt
@@ -643,7 +625,16 @@ alertmanager:
     ## Assign custom affinity rules to the alertmanager instance
     ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
     ##
-    affinity: {}
+    affinity:
+      nodeAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+          preference:
+            matchExpressions:
+            - key: node-group
+              operator: In
+              values:
+              - {{ cookiecutter.global_platform_shared_resource_identifier }}
     # nodeAffinity:
     #   requiredDuringSchedulingIgnoredDuringExecution:
     #     nodeSelectorTerms:
@@ -1857,7 +1848,7 @@ prometheusOperator:
   ## Admission webhook support for PrometheusRules resources added in Prometheus Operator 0.30 can be enabled to prevent incorrectly formatted
   ## rules from making their way into prometheus and potentially preventing the container from starting
   admissionWebhooks:
-    failurePolicy:
+    failurePolicy: Fail
     ## The default timeoutSeconds is 10 and the maximum value is 30.
     timeoutSeconds: 10
     enabled: true
@@ -1874,9 +1865,9 @@ prometheusOperator:
     patch:
       enabled: true
       image:
-        registry: registry.k8s.io
+        registry: k8s.gcr.io
         repository: ingress-nginx/kube-webhook-certgen
-        tag: v20221220-controller-v1.5.1-58-g787ea74b6
+        tag: v1.3.0
         sha: ""
         pullPolicy: IfNotPresent
       resources: {}
@@ -1888,7 +1879,16 @@ prometheusOperator:
       #   argocd.argoproj.io/hook-delete-policy: HookSucceeded
       podAnnotations: {}
       nodeSelector: {}
-      affinity: {}
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: node-group
+                operator: In
+                values:
+                - {{ cookiecutter.global_platform_shared_resource_identifier }}
       tolerations: []
 
       ## SecurityContext holds pod-level security attributes and common container settings.
@@ -2114,7 +2114,16 @@ prometheusOperator:
   ## Assign custom affinity rules to the prometheus operator
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
   ##
-  affinity: {}
+  affinity:
+      nodeAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+          preference:
+            matchExpressions:
+            - key: node-group
+              operator: In
+              values:
+              - {{ cookiecutter.global_platform_shared_resource_identifier }}
     # nodeAffinity:
     #   requiredDuringSchedulingIgnoredDuringExecution:
     #     nodeSelectorTerms:
@@ -2172,8 +2181,7 @@ prometheusOperator:
   image:
     registry: quay.io
     repository: prometheus-operator/prometheus-operator
-    # if not set appVersion field from Chart.yaml is used
-    tag: ""
+    tag: v0.61.1
     sha: ""
     pullPolicy: IfNotPresent
 
@@ -2199,8 +2207,7 @@ prometheusOperator:
     image:
       registry: quay.io
       repository: prometheus-operator/prometheus-config-reloader
-      # if not set appVersion field from Chart.yaml is used
-      tag: ""
+      tag: v0.61.1
       sha: ""
 
     # resource config for prometheusConfigReloader
@@ -2217,7 +2224,7 @@ prometheusOperator:
   thanosImage:
     registry: quay.io
     repository: thanos/thanos
-    tag: v0.30.2
+    tag: v0.29.0
     sha: ""
 
   ## Set a Field Selector to filter watched secrets
@@ -2227,22 +2234,12 @@ prometheusOperator:
 ## Deploy a Prometheus instance
 ##
 prometheus:
+
   enabled: true
 
   ## Annotations for Prometheus
   ##
   annotations: {}
-
-  ## Configure network policy for the prometheus
-  networkPolicy:
-    enabled: false
-    # egress:
-    # - {}
-    # ingress:
-    # - {}
-    # podSelector:
-    #   matchLabels:
-    #     app: prometheus
 
   ## Service account for Prometheuses to use.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -2294,10 +2291,6 @@ prometheus:
   thanosServiceMonitor:
     enabled: false
     interval: ""
-
-    ## Additional labels
-    ##
-    additionalLabels: {}
 
     ## scheme: HTTP scheme to use for scraping. Can be used with `tlsConfig` for example if using istio mTLS.
     scheme: ""
@@ -2581,10 +2574,6 @@ prometheus:
     interval: ""
     selfMonitor: true
 
-    ## Additional labels
-    ##
-    additionalLabels: {}
-
     ## SampleLimit defines per-scrape limit on number of scraped samples that will be accepted.
     ##
     sampleLimit: 0
@@ -2693,7 +2682,7 @@ prometheus:
     image:
       registry: quay.io
       repository: prometheus/prometheus
-      tag: v2.42.0
+      tag: v2.40.5
       sha: ""
 
     ## Tolerations for use with node taints
@@ -2883,11 +2872,6 @@ prometheus:
     ##
     retentionSize: ""
 
-    ## Allow out-of-order/out-of-bounds samples ingested into Prometheus for a specified duration
-    ## See https://prometheus.io/docs/prometheus/latest/configuration/configuration/#tsdb
-    tsdb:
-      outOfOrderTimeWindow: 0s
-
     ## Enable compression of the write-ahead log using Snappy.
     ##
     walCompression: true
@@ -2945,7 +2929,16 @@ prometheus:
     ## Assign custom affinity rules to the prometheus instance
     ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
     ##
-    affinity: {}
+    affinity:
+      nodeAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+          preference:
+            matchExpressions:
+            - key: node-group
+              operator: In
+              values:
+              - {{ cookiecutter.global_platform_shared_resource_identifier }}
     # nodeAffinity:
     #   requiredDuringSchedulingIgnoredDuringExecution:
     #     nodeSelectorTerms:
@@ -3248,14 +3241,6 @@ prometheus:
     # When hostNetwork is enabled, this will set dnsPolicy to ClusterFirstWithHostNet automatically.
     hostNetwork: false
 
-    # HostAlias holds the mapping between IP and hostnames that will be injected
-    # as an entry in the pod’s hosts file.
-    hostAliases: []
-    #  - ip: 10.10.0.100
-    #    hostnames:
-    #      - a1.app.local
-    #      - b1.app.local
-
   additionalRulesForClusterRole: []
   #  - apiGroups: [ "" ]
   #    resources:
@@ -3502,10 +3487,6 @@ thanosRuler:
     interval: ""
     selfMonitor: true
 
-    ## Additional labels
-    ##
-    additionalLabels: {}
-
     ## SampleLimit defines per-scrape limit on number of scraped samples that will be accepted.
     ##
     sampleLimit: 0
@@ -3572,7 +3553,7 @@ thanosRuler:
     image:
       registry: quay.io
       repository: thanos/thanos
-      tag: v0.30.2
+      tag: v0.29.0
       sha: ""
 
     ## Namespaces to be selected for PrometheusRules discovery.
@@ -3718,7 +3699,16 @@ thanosRuler:
     ## Assign custom affinity rules to the thanosRuler instance
     ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
     ##
-    affinity: {}
+    affinity:
+      nodeAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+          preference:
+            matchExpressions:
+            - key: node-group
+              operator: In
+              values:
+              - {{ cookiecutter.global_platform_shared_resource_identifier }}
     # nodeAffinity:
     #   requiredDuringSchedulingIgnoredDuringExecution:
     #     nodeSelectorTerms:
@@ -3800,3 +3790,4 @@ thanosRuler:
 ## Setting to true produces cleaner resource names, but requires a data migration because the name of the persistent volume changes. Therefore this should only be set once on initial installation.
 ##
 cleanPrometheusOperatorObjectNames: false
+{% endraw %}
