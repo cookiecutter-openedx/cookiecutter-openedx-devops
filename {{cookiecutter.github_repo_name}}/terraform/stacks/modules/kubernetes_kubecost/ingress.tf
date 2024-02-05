@@ -6,17 +6,17 @@
 #
 # usage: install Kubecost https://www.kubecost.com/
 #-----------------------------------------------------------
+locals {
 
-data "template_file" "kubecost_ingress" {
-  template = file("${path.module}/config/kubecost-ingress.yaml.tpl")
-  vars = {
+  templatefile_kubecost_ingress = templatefile("${path.module}/config/kubecost-ingress.yaml.tpl", {
     services_domain = var.services_subdomain
     subdomain       = "kubecost"
-  }
+  })
+
 }
 
-resource "kubectl_manifest" "ingress_kubecost" {
-  yaml_body = data.template_file.kubecost_ingress.rendered
+resource "kubernetes_manifest" "ingress_kubecost" {
+  manifest = yamldecode(local.templatefile_kubecost_ingress)
 
   depends_on = [
     helm_release.kubecost

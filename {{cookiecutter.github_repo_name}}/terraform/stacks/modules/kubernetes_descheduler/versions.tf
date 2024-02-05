@@ -7,30 +7,26 @@
 # usage: create an EKS cluster
 #------------------------------------------------------------------------------
 terraform {
-  required_version = "~> 1.3"
+  required_version = "{{ cookiecutter.terraform_required_version }}"
 
   required_providers {
-    local = "~> 2.2"
+    local = "{{ cookiecutter.terraform_provider_hashicorp_local_version }}"
     random = {
       source  = "hashicorp/random"
-      version = "~> 3.4"
+      version = "{{ cookiecutter.terraform_provider_hashicorp_random_version }}"
     }
 
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 4.67"
-    }
-    kubectl = {
-      source  = "gavinbunney/kubectl"
-      version = "~> 1.14"
+      version = "~> {{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "~> 2.8"
+      version = "{{ cookiecutter.terraform_provider_hashicorp_helm_version }}"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "~> 2.22"
+      version = "{{ cookiecutter.terraform_provider_kubernetes_version }}"
     }
   }
 }

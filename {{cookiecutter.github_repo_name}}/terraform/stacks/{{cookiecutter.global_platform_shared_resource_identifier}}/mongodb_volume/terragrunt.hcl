@@ -9,7 +9,7 @@
 #------------------------------------------------------------------------------
 locals {
   # Automatically load stack-level variables
-  stack_vars = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
+  stack_vars  = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
   global_vars = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   stack_namespace           = local.stack_vars.locals.stack_namespace
@@ -36,7 +36,7 @@ dependency "vpc" {
   mock_outputs = {
     vpc_id           = "fake-vpc-id"
     database_subnets = ["fake-subnetid-01", "fake-subnetid-02"]
-    vpc_cidr_block = "fake-cidr-block"
+    vpc_cidr_block   = "fake-cidr-block"
   }
 }
 
@@ -45,6 +45,10 @@ dependency "vpc" {
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
   source = "../../modules//mongodb_volume"
+  before_hook "before_init" {
+    commands = ["init"]
+    execute  = ["echo", "Initializing module in ${get_terragrunt_dir()}"]
+  }
 }
 
 # Include all settings from the root terragrunt.hcl file
@@ -54,8 +58,8 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  allocated_storage     = local.mongodb_allocated_storage
-  tags                  = local.tags
-  subnet_ids            = dependency.vpc.outputs.database_subnets
-  tags = local.tags
+  allocated_storage = local.mongodb_allocated_storage
+  tags              = local.tags
+  subnet_ids        = dependency.vpc.outputs.database_subnets
+  tags              = local.tags
 }

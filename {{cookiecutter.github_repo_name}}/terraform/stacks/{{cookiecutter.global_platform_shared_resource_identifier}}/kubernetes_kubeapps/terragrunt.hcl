@@ -8,12 +8,12 @@
 #------------------------------------------------------------------------------
 locals {
   # Automatically load stack-level variables
-  stack_vars = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
-  global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
+  stack_vars  = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
+  global_vars = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
-  stack_namespace       = local.stack_vars.locals.stack_namespace
-  services_subdomain          = local.global_vars.locals.services_subdomain
+  stack_namespace    = local.stack_vars.locals.stack_namespace
+  services_subdomain = local.global_vars.locals.services_subdomain
 
   tags = merge(
     local.stack_vars.locals.tags,
@@ -27,7 +27,7 @@ dependencies {
     "../kubernetes",
     "../kubernetes_ingress_clb",
     "../kubernetes_cert_manager",
-    ]
+  ]
 }
 
 dependency "vpc" {
@@ -85,6 +85,10 @@ dependency "kubernetes_cert_manager" {
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
   source = "../../modules//kubernetes_kubeapps"
+  before_hook "before_init" {
+    commands = ["init"]
+    execute  = ["echo", "Initializing module in ${get_terragrunt_dir()}"]
+  }
 }
 
 # Include all settings from the root terragrunt.hcl file
@@ -94,7 +98,7 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  services_subdomain    = local.services_subdomain
-  stack_namespace = local.stack_namespace
-  tags = local.tags
+  services_subdomain = local.services_subdomain
+  stack_namespace    = local.stack_namespace
+  tags               = local.tags
 }

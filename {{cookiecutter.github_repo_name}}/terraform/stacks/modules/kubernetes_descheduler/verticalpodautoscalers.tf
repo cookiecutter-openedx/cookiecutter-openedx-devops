@@ -1,10 +1,8 @@
-
-data "template_file" "descheduler" {
-  template = file("${path.module}/yml/vpa-descheduler.yaml")
+locals {
+  templatefile_descheduler = templatefile("${path.module}/yml/vpa-descheduler.yaml", {})
 }
-
 resource "kubernetes_manifest" "descheduler" {
-  manifest = yamldecode(data.template_file.descheduler.rendered)
+  manifest = yamldecode(local.templatefile_descheduler)
 
   depends_on = [
     helm_release.descheduler

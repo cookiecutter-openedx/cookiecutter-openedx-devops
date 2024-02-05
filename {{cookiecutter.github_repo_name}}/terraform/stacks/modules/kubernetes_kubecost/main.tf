@@ -22,6 +22,12 @@
 
 #-----------------------------------------------------------
 locals {
+  templatefile_kubecost_values = templatefile("${path.module}/config/kubecost-values.yaml", {
+    # get a free Kubecost token here:
+    # https://www.kubecost.com/install#show-instructions
+    kubecostToken = "set-me-please"
+  })
+
   cost_analyzer = "cost-analyzer"
   kubecost      = "kubecost"
 
@@ -36,14 +42,6 @@ locals {
   )
 }
 
-data "template_file" "kubecost-values" {
-  template = file("${path.module}/config/kubecost-values.yaml")
-  vars = {
-    # get a free Kubecost token here:
-    # https://www.kubecost.com/install#show-instructions
-    kubecostToken = "set-me-please"
-  }
-}
 
 resource "helm_release" "kubecost" {
   name             = local.cost_analyzer
@@ -55,7 +53,7 @@ resource "helm_release" "kubecost" {
   version    = "~> {{ cookiecutter.terraform_helm_kubecost }}"
 
   values = [
-    data.template_file.kubecost-values.rendered
+    local.templatefile_kubecost_values
   ]
 
 }

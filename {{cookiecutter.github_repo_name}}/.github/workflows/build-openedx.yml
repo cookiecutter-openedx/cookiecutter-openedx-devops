@@ -114,6 +114,6 @@ jobs:
       # Build and upload the Docker container
       #------------------------------------------------------------------------
       - name: Build openedx
-        uses: openedx-actions/tutor-plugin-build-openedx@{{ cookiecutter.ci_openedx_actions_tutor_plugin_build_OPENEDX_RELEASE_VERSION }}
+        uses: openedx-actions/tutor-plugin-build-openedx@{{ cookiecutter.ci_openedx_actions_tutor_plugin_build_openedx_version }}
         with:
           aws-ecr-repository: openedx-{% raw %}${{ env.OPENEDX_RELEASE_VERSION}}{% endraw %}

@@ -8,7 +8,7 @@
 #         see:  https://kubeapps.dev/docs/latest/tutorials/getting-started/
 #
 #         to retrieve this token
-#         kubectl get --namespace kubeapps secret kubeapps-admin -o go-template='{% raw %}{{.data.token | base64decode}}{% endraw %}'
+#         kubectl get --namespace kubeapps secret kubeapps-admin -o go-template='{{.data.token | base64decode}}'
 #------------------------------------------------------------------------------
 
 resource "kubernetes_namespace" "kubeapps" {
@@ -75,8 +75,8 @@ resource "kubernetes_secret_v1" "kubeapps_admin" {
   ]
 }
 
-resource "kubectl_manifest" "ingress-kubeapps" {
-  yaml_body = file("${path.module}/yml/ingress-kubeapps.yml")
+resource "kubernetes_manifest" "ingress-kubeapps" {
+  manifest = yamldecode(templatefile("${path.module}/yml/ingress-kubeapps.yml", {}))
 
   depends_on = [
     helm_release.kubeapps,

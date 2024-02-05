@@ -1,4 +1,7 @@
+.terraform.lock.hcl
 .terragrunt-cache
 .DS_Store
+._.DS_Store
 .terraform
 terraform-provider-aws_v4.15.1_x5
+data

@@ -22,6 +22,9 @@
 #   helm show values metrics-server/metrics-server
 #-----------------------------------------------------------
 locals {
+  templatefile_metrics_server_values = templatefile("${path.module}/config/metrics-server-values.yaml", {})
+
+
   metrics_server = "metrics-server"
   tags = merge(
     var.tags,
@@ -34,11 +37,6 @@ locals {
   )
 
 }
-data "template_file" "metrics-server-values" {
-  template = file("${path.module}/config/metrics-server-values.yaml")
-  vars     = {}
-}
-
 resource "helm_release" "metrics_server" {
   namespace        = local.metrics_server
   create_namespace = true
@@ -49,7 +47,7 @@ resource "helm_release" "metrics_server" {
   version    = "~> {{ cookiecutter.terraform_helm_metrics_server }}"
 
   values = [
-    data.template_file.metrics-server-values.rendered
+    local.templatefile_metrics_server_values
   ]
 
 }

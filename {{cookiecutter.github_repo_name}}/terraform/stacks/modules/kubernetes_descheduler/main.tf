@@ -23,20 +23,19 @@
 locals {
   descheduler_namespace = "descheduler"
 
+  templatefile_descheduler_values = templatefile("${path.module}/yml/descheduler-values.yaml", {})
+
   tags = merge(
     var.tags,
     module.cookiecutter_meta.tags,
     {
       "cookiecutter/module/source"    = "openedx_devops/terraform/stacks/modules/kubernetes_descheduler"
       "cookiecutter/resource/source"  = "https://artifacthub.io/packages/helm/descheduler/descheduler"
-      "cookiecutter/resource/version" = "0.27"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_helm_descheduler}}"
     }
   )
 }
 
-data "template_file" "descheduler-values" {
-  template = file("${path.module}/yml/descheduler-values.yaml")
-}
 
 
 resource "helm_release" "descheduler" {
@@ -47,10 +46,10 @@ resource "helm_release" "descheduler" {
   repository = "https://kubernetes-sigs.github.io/descheduler/"
   chart      = "descheduler"
 
-  version = "~> 0.27"
+  version = "~> {{ cookiecutter.terraform_helm_descheduler}}"
 
   values = [
-    data.template_file.descheduler-values.rendered
+    local.templatefile_descheduler_values
   ]
 
 }

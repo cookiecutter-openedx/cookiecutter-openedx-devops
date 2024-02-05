@@ -20,10 +20,42 @@ locals {
   tags = merge(
     var.tags,
     {
-      "cookiecutter/module/source"  = "{{ cookiecutter.github_repo_name }}/terraform/stacks/modules/kubernetes"
+      "cookiecutter/module/source" = "openedx_devops/terraform/stacks/modules/kubernetes"
     }
   )
 
+}
+
+resource "kubernetes_config_map_v1_data" "aws_auth_new" {
+  metadata {
+    name      = "aws-auth"
+    namespace = "kube-system"
+  }
+
+  data = {
+    "mapAccounts" = jsonencode([])
+    "mapRoles"    = <<-EOT
+      - "groups":
+        - "system:bootstrappers"
+        - "system:nodes"
+        "rolearn": "arn:aws:iam::${var.account_id}:role/service-eks-node-group-20230225001424228200000001"
+        "username": "system:node:{{EC2PrivateDNSName}}"
+      - "groups":
+        - "system:bootstrappers"
+        - "system:nodes"
+        "rolearn": "arn:aws:iam::${var.account_id}:role/wordpress-eks-node-group-20230821193015357700000001"
+        "username": "system:node:{{EC2PrivateDNSName}}"
+    EOT
+    "mapUsers"    = <<-EOT
+      - "groups":
+        - "system:masters"
+        "userarn": "arn:aws:iam::${var.account_id}:user/system/bastion-user/apps-hosting-service-bastion"
+        "username": "apps-hosting-service-bastion"
+    EOT
+  }
+
+  field_manager = "Terraform"
+  force         = true
 }
 
 module "eks" {
@@ -37,6 +69,7 @@ module "eks" {
   subnet_ids                      = var.private_subnet_ids
   create_cloudwatch_log_group     = false
   enable_irsa                     = true
+  authentication_mode             = "API_AND_CONFIG_MAP"
 
   # NOTE:
   # larger organizations might want to change these two settings
@@ -54,19 +87,11 @@ module "eks" {
 
   # add the bastion IAM user to aws-auth.mapUsers so that
   # kubectl and k9s work from inside the bastion server by default.
-  manage_aws_auth_configmap = true
-  aws_auth_users = var.map_users
-  aws_auth_roles = var.map_roles
+  create_iam_role = true
 
   tags = merge(
     local.tags,
     module.cookiecutter_meta.tags,
-    # Tag node group resources for Karpenter auto-discovery
-    # NOTE - if creating multiple security groups with this module, only tag the
-    # security group that Karpenter should utilize with the following tag
-    {
-      "karpenter.sh/discovery" = var.namespace
-    },
     {
       "cookiecutter/resource/source"  = "terraform-aws-modules/eks/aws"
       "cookiecutter/resource/version" = "{{ cookiecutter.terraform_aws_modules_eks }}"
@@ -121,26 +146,21 @@ module "eks" {
   }
 
   eks_managed_node_groups = {
-    # Karpenter cannot self-initialize and therefore depends on this
-    # managed group having at least a single node at all times. Karpenter
-    # will dynamically add/remove additional EC2 compute resources as-needed
-    # based on your real-time environment.
-    #
-    # More: There must be at least a single
+    # This node group is managed by Karpenter. There must be at least
     # node in this group at all times in order for Karpenter to monitor
     # load and act on metrics data. Karpenter's bin packing algorithms
     # perform more effectively with larger instance types. The Cookiecutter
-    # default instance type is t3.large (2 vCPU / 8 GiB). These instances,
+    # default instance type is t3.xlarge (4 vCPU / 16 GiB). These instances,
     # beyond the 1 permanent instance, are assumed to be short-lived
     # (a few hours or less) as these are usually only instantiated during
     # bursts of user activity such as at the start of a scheduled lecture or
     # exam on a large mooc.
     service = {
-      capacity_type               = "SPOT"
-      enable_monitoring           = false
-      desired_size                = 1
-      min_size                    = 1
-      max_size                    = 1
+      capacity_type     = "SPOT"
+      enable_monitoring = false
+      desired_size      = var.service_group_desired_size
+      min_size          = var.service_group_min_size
+      max_size          = var.service_group_max_size
 
       labels = {
         node-group = "service"
@@ -196,7 +216,7 @@ module "eks" {
         "r6id.large",
         "r6idn.large",
         "r6in.large",
-        ]
+      ]
 
       block_device_mappings = {
         xvda = {
@@ -206,23 +226,7 @@ module "eks" {
             volume_size           = 100
             delete_on_termination = true
           }
-      }
-      }
-
-      iam_role_additional_policies = {
-        # Required by Karpenter
-        AmazonSSMManagedInstanceCore = "arn:${local.partition}:iam::aws:policy/AmazonSSMManagedInstanceCore"
-
-        # Required by EBS CSI Add-on
-        AmazonEBSCSIDriverPolicy = data.aws_iam_policy.AmazonEBSCSIDriverPolicy.arn
         }
-
-      iam_role_additional_policies = {
-        # Required by Karpenter
-        AmazonSSMManagedInstanceCore = "arn:${local.partition}:iam::aws:policy/AmazonSSMManagedInstanceCore"
-
-        # Required by EBS CSI Add-on
-        AmazonEBSCSIDriverPolicy = data.aws_iam_policy.AmazonEBSCSIDriverPolicy.arn
       }
 
       tags = merge(
@@ -231,10 +235,93 @@ module "eks" {
         # NOTE - if creating multiple security groups with this module, only tag the
         # security group that Karpenter should utilize with the following tag
         { Name = "eks-${var.shared_resource_identifier}-service" },
+        # Tag node group resources for Karpenter auto-discovery
+        # NOTE - if creating multiple security groups with this module, only tag the
+        # security group that Karpenter should utilize with the following tag
         {
-          "cookiecutter/resource/source"  = "terraform-aws-modules/eks/aws"
-          "cookiecutter/resource/version" = "{{ cookiecutter.terraform_aws_modules_eks }}"
+          "karpenter.sh/discovery" = var.namespace
+        },
+      )
+    }
+
+    # a 2-node managed node group with a taint to limit workloads to Wordpress pods only.
+    # node is constricted to a single availability zone by taking the 1st element of the
+    # EKS private_subnet_ids list as the only subnet to add to subnet_ids.
+    wordpress = {
+      capacity_type     = "SPOT"
+      enable_monitoring = false
+      desired_size      = var.hosting_group_desired_size
+      min_size          = var.hosting_group_min_size
+      max_size          = var.hosting_group_max_size
+      subnet_ids        = [element(var.private_subnet_ids, 0)]
+      labels = {
+        node-group = "wordpress"
+      }
+      taints = [{
+        key    = "lawrencemcdaniel.com/wordpress-only"
+        effect = "NO_SCHEDULE"
+      }]
+
+      iam_role_additional_policies = {
+        # Required by Karpenter
+        AmazonSSMManagedInstanceCore = "arn:${local.partition}:iam::aws:policy/AmazonSSMManagedInstanceCore"
+
+        # Required by EBS CSI Add-on
+        AmazonEBSCSIDriverPolicy = data.aws_iam_policy.AmazonEBSCSIDriverPolicy.arn
+      }
+
+      # complete list of instance types with
+      #   - x86_64 / amd64 cpu architecture
+      #   - 8 <= Memory <= 16
+      #   - vCPU == 4
+      instance_types = [
+        "t3.xlarge",
+        "t3a.xlarge",
+        "t2.xlarge",
+        "c5.xlarge",
+        "c5a.xlarge",
+        "c5ad.xlarge",
+        "c5d.xlarge",
+        "c5n.xlarge",
+        "c6a.xlarge",
+        "c6i.xlarge",
+        "c6id.xlarge",
+        "c6in.xlarge",
+        "m4.xlarge",
+        "m5.xlarge",
+        "m5a.xlarge",
+        "m5ad.xlarge",
+        "m5d.xlarge",
+        "m5dn.xlarge",
+        "m5n.xlarge",
+        "m5zn.xlarge",
+        "m6a.xlarge",
+        "m6i.xlarge",
+        "m6id.xlarge",
+        "m6idn.xlarge",
+        "m6in.xlarge",
+        "m7a.xlarge",
+        "m7i-flex.xlarge",
+        "m7i.xlarge",
+      ]
+
+      block_device_mappings = {
+        xvda = {
+          device_name = "/dev/xvda"
+          ebs = {
+            volume_type           = "gp3"
+            volume_size           = 100
+            delete_on_termination = true
+          }
         }
+      }
+
+      tags = merge(
+        local.tags,
+        # Tag node group resources for Karpenter auto-discovery
+        # NOTE - if creating multiple security groups with this module, only tag the
+        # security group that Karpenter should utilize with the following tag
+        { Name = "eks-${var.shared_resource_identifier}-wordpress" },
       )
     }
 
@@ -308,13 +395,12 @@ resource "kubernetes_namespace" "namespace-shared" {
   depends_on = [module.eks]
 }
 
-{% if cookiecutter.wordpress_add_site|upper == "Y" -%}
 resource "kubernetes_namespace" "wordpress" {
   metadata {
     name = "wordpress"
   }
   depends_on = [module.eks]
-}{% endif -%}
+}
 
 #------------------------------------------------------------------------------
 #                               COOKIECUTTER META

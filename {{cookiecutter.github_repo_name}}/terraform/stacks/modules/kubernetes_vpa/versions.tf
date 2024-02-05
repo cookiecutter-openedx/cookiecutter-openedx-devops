@@ -4,7 +4,7 @@
 #
 # date: Mar-2022
 #
-# usage: create an EKS cluster
+# usage: create vertical pod autoscaler (VPA) for a kubernetes cluster
 #------------------------------------------------------------------------------
 terraform {
   required_version = "{{ cookiecutter.terraform_required_version }}"
@@ -19,10 +19,6 @@ terraform {
     aws = {
       source  = "hashicorp/aws"
       version = "~> {{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
-    }
-    kubectl = {
-      source  = "gavinbunney/kubectl"
-      version = "{{ cookiecutter.terraform_provider_hashicorp_kubectl_version }}"
     }
     helm = {
       source  = "hashicorp/helm"

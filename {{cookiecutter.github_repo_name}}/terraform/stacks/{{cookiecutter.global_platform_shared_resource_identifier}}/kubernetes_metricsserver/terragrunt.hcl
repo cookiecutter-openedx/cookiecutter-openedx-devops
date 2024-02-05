@@ -8,11 +8,11 @@
 #------------------------------------------------------------------------------
 locals {
   # Automatically load stack-level variables
-  stack_vars    = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
-  global_vars   = read_terragrunt_config(find_in_parent_folders("global.hcl"))
+  stack_vars  = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
+  global_vars = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
-  stack_namespace       = local.stack_vars.locals.stack_namespace
+  stack_namespace = local.stack_vars.locals.stack_namespace
 
   tags = merge(
     local.stack_vars.locals.tags,
@@ -24,7 +24,7 @@ dependencies {
   paths = [
     "../vpc",
     "../kubernetes",
-    ]
+  ]
 }
 
 dependency "vpc" {
@@ -58,6 +58,10 @@ dependency "kubernetes" {
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
   source = "../../modules//kubernetes_metricsserver"
+  before_hook "before_init" {
+    commands = ["init"]
+    execute  = ["echo", "Initializing module in ${get_terragrunt_dir()}"]
+  }
 }
 
 # Include all settings from the root terragrunt.hcl file

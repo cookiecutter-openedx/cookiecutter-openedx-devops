@@ -9,6 +9,36 @@
 locals {
   hostname = "bastion.${var.services_subdomain}"
 
+  # Parameterize the bootstrapping script
+  templatefile_bastion_config = templatefile("${path.module}/scripts/install.sh.tpl", {
+    aws_region = var.aws_region
+    namespace  = var.stack_namespace
+  })
+
+  templatefile_update = templatefile("${path.module}/scripts/update.sh.tpl", {
+    aws_region = var.aws_region
+    namespace  = var.stack_namespace
+  })
+
+  templatefile_aws_config = templatefile("${path.module}/aws/config.tpl", {
+    aws_region = var.aws_region
+  })
+
+  templatefile_aws_credentials = templatefile("${path.module}/aws/credentials.tpl", {
+    aws_access_key_id     = aws_iam_access_key.aws_cli.id
+    aws_secret_access_key = aws_iam_access_key.aws_cli.secret
+  })
+
+  templatefile_welcome_banner = templatefile("${path.module}/etc/update-motd.d/09-welcome-banner.tpl", {
+    platform_name = var.platform_name
+  })
+
+  templatefile_help_text = templatefile("${path.module}/etc/update-motd.d/10-help-text.tpl", {
+    stack_namespace    = var.stack_namespace
+    services_subdomain = var.services_subdomain
+    aws_region         = var.aws_region
+  })
+
   tags = merge(
     var.tags,
     module.cookiecutter_meta.tags,
@@ -88,7 +118,7 @@ resource "aws_instance" "bastion" {
       host        = self.public_ip
     }
 
-    content     = data.template_file.aws_config.rendered
+    content     = local.templatefile_aws_config
     destination = "/home/ubuntu/.aws/config"
   }
 
@@ -100,7 +130,7 @@ resource "aws_instance" "bastion" {
       host        = self.public_ip
     }
 
-    content     = data.template_file.aws_credentials.rendered
+    content     = local.templatefile_aws_credentials
     destination = "/home/ubuntu/.aws/credentials"
   }
 
@@ -113,7 +143,7 @@ resource "aws_instance" "bastion" {
       host        = self.public_ip
     }
 
-    content     = data.template_file.welcome_banner.rendered
+    content     = local.templatefile_welcome_banner
     destination = "/tmp/cookiecutter/etc/09-welcome-banner"
   }
 
@@ -125,7 +155,7 @@ resource "aws_instance" "bastion" {
       host        = self.public_ip
     }
 
-    content     = data.template_file.help_text.rendered
+    content     = local.templatefile_help_text
     destination = "/tmp/cookiecutter/etc/10-help-text"
   }
 
@@ -150,7 +180,7 @@ resource "aws_instance" "bastion" {
       host        = self.public_ip
     }
 
-    content     = data.template_file.bastion_config.rendered
+    content     = local.templatefile_bastion_config
     destination = "/home/ubuntu/scripts/install.sh"
   }
 
@@ -162,7 +192,7 @@ resource "aws_instance" "bastion" {
       host        = self.public_ip
     }
 
-    content     = data.template_file.update.rendered
+    content     = local.templatefile_update
     destination = "/home/ubuntu/scripts/update.sh"
   }
 
@@ -316,22 +346,7 @@ resource "aws_key_pair" "bastion" {
 }
 
 
-# Parameterize the bootstrapping script
-data "template_file" "bastion_config" {
-  template = file("${path.module}/scripts/install.sh.tpl")
-  vars = {
-    aws_region = var.aws_region
-    namespace  = var.stack_namespace
-  }
-}
 
-data "template_file" "update" {
-  template = file("${path.module}/scripts/update.sh.tpl")
-  vars = {
-    aws_region = var.aws_region
-    namespace  = var.stack_namespace
-  }
-}
 
 
 # Create an IAM user with a key/secret to use with the aws cli.
@@ -370,36 +385,6 @@ resource "kubernetes_secret" "aws_cli" {
   }
 }
 
-data "template_file" "aws_config" {
-  template = file("${path.module}/aws/config.tpl")
-  vars = {
-    aws_region = var.aws_region
-  }
-}
-
-data "template_file" "aws_credentials" {
-  template = file("${path.module}/aws/credentials.tpl")
-  vars = {
-    aws_secret_access_key = aws_iam_access_key.aws_cli.secret
-    aws_access_key_id     = aws_iam_access_key.aws_cli.id
-  }
-}
-
-data "template_file" "welcome_banner" {
-  template = file("${path.module}/etc/update-motd.d/09-welcome-banner.tpl")
-  vars = {
-    platform_name = var.platform_name
-  }
-}
-
-data "template_file" "help_text" {
-  template = file("${path.module}/etc/update-motd.d/10-help-text.tpl")
-  vars = {
-    stack_namespace    = var.stack_namespace
-    services_subdomain = var.services_subdomain
-    aws_region         = var.aws_region
-  }
-}
 
 #------------------------------------------------------------------------------
 #                               COOKIECUTTER META

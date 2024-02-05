@@ -26,6 +26,8 @@
 #   kubectl -n default port-forward $POD_NAME 8443:8443
 #-----------------------------------------------------------
 locals {
+  templatefile_dashboard_values = templatefile("${path.module}/yml/values.yaml", {})
+
   tags = merge(
     var.tags,
     module.cookiecutter_meta.tags,
@@ -35,10 +37,6 @@ locals {
       "cookiecutter/resource/version" = "{{ cookiecutter.terraform_helm_dashboard }}"
     }
   )
-}
-
-data "template_file" "dashboard-values" {
-  template = file("${path.module}/yml/values.yaml")
 }
 
 resource "helm_release" "dashboard" {
@@ -51,7 +49,7 @@ resource "helm_release" "dashboard" {
   version    = "~> {{ cookiecutter.terraform_helm_dashboard }}"
 
   values = [
-    data.template_file.dashboard-values.rendered
+    local.templatefile_dashboard_values
   ]
 }
 

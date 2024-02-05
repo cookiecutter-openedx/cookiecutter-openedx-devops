@@ -53,6 +53,7 @@ variable "eks_create_kms_key" {
   type = bool
 }
 
+
 variable "map_users" {
   description = "Additional IAM users to add to the aws-auth configmap."
   type = list(object({
@@ -66,7 +67,7 @@ variable "map_users" {
 variable "map_roles" {
   description = "Additional IAM roles to add to the aws-auth configmap."
   type = list(object({
-    rolearn  = string
+    userarn  = string
     username = string
     groups   = list(string)
   }))
@@ -80,4 +81,34 @@ variable "bastion_iam_arn" {
 variable "kms_key_owners" {
   type    = list(any)
   default = []
+}
+
+variable "service_group_min_size" {
+  type    = number
+  default = 4
+}
+
+variable "service_group_max_size" {
+  type    = number
+  default = 4
+}
+
+variable "service_group_desired_size" {
+  type    = number
+  default = 4
+}
+
+variable "hosting_group_min_size" {
+  type    = number
+  default = 1
+}
+
+variable "hosting_group_max_size" {
+  type    = number
+  default = 1
+}
+
+variable "hosting_group_desired_size" {
+  type    = number
+  default = 1
 }

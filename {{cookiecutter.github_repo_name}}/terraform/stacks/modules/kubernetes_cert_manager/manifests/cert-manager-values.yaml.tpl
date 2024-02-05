@@ -1,13 +1,3 @@
-affinity:
-  nodeAffinity:
-    preferredDuringSchedulingIgnoredDuringExecution:
-    - weight: 1
-      preference:
-        matchExpressions:
-        - key: node-group
-          operator: In
-          values:
-          - {{ cookiecutter.global_platform_shared_resource_identifier }}
 serviceAccount:
   annotations:
     eks.amazonaws.com/role-arn: ${role_arn}

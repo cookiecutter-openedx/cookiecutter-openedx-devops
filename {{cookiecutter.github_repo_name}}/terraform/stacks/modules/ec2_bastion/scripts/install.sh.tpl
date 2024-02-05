@@ -36,10 +36,6 @@ sudo passwd ubuntu
 
 sudo apt update && sudo apt upgrade -y
 
-{% if cookiecutter.stack_add_bastion_openedx_dev_environment|upper == "Y" -%}
-./install-openedx-venv.sh
-{% endif -%}
-
 # add more packages that we need for our stuff
 # -------------------------------------------------------------
 sudo apt install jq mysql-client-8.0 libevent-dev libyaml-dev python3-pip build-essential -y
@@ -50,10 +46,6 @@ sudo snap install yq
 
 pip install --upgrade pyyaml
 pip install "tutor[full]"
-
-{% if cookiecutter.stack_add_bastion_openedx_dev_environment|upper == "Y" -%}
-./tutor-enable-automount.sh
-{% endif -%}
 
 # install homebrew
 # installation time: around 15 minutes
