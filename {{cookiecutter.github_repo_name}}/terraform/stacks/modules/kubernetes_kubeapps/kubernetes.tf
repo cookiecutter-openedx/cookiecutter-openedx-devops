@@ -3,12 +3,6 @@
 #             https://lawrencemcdaniel.com/
 #
 # date: Jan-2023
-#
-# usage:  create and store web app sign in token.
-#         see:  https://kubeapps.dev/docs/latest/tutorials/getting-started/
-#
-#         to retrieve this token
-#         kubectl get --namespace kubeapps secret kubeapps-admin -o go-template='{{.data.token | base64decode}}'
 #------------------------------------------------------------------------------
 
 resource "kubernetes_namespace" "kubeapps" {
