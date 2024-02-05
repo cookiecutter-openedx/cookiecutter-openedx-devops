@@ -19,6 +19,7 @@ locals {
 
   redis_node_type           = "{{ cookiecutter.redis_node_type }}"
 
+  {% if cookiecutter.stack_add_remote_mongodb|upper == "Y" -%}
   # MongoDB EC2 instance sizing
   mongodb_instance_type     = "{{ cookiecutter.mongodb_instance_type }}"
   mongodb_allocated_storage = {{ cookiecutter.mongodb_allocated_storage }}
