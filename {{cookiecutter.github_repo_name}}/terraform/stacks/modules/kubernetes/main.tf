@@ -39,12 +39,12 @@ resource "kubernetes_config_map_v1_data" "aws_auth_new" {
         - "system:bootstrappers"
         - "system:nodes"
         "rolearn": "arn:aws:iam::${var.account_id}:role/service-eks-node-group-20230225001424228200000001"
-        "username": "system:node:{{EC2PrivateDNSName}}"
+        {% raw %}"username": "system:node:{{EC2PrivateDNSName}}"{% endraw %}
       - "groups":
         - "system:bootstrappers"
         - "system:nodes"
         "rolearn": "arn:aws:iam::${var.account_id}:role/wordpress-eks-node-group-20230821193015357700000001"
-        "username": "system:node:{{EC2PrivateDNSName}}"
+        {% raw %}"username": "system:node:{{EC2PrivateDNSName}}"{% endraw %}
     EOT
     "mapUsers"    = <<-EOT
       - "groups":
