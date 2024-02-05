@@ -20,7 +20,7 @@
 #       Terraform module.
 #
 # To generate the web app sign-in token:
-#   kubectl get --namespace kubeapps secret kubeapps-admin -o go-template='{{.data.token | base64decode}}'
+{% raw %}#   kubectl get --namespace kubeapps secret kubeapps-admin -o go-template='{{.data.token | base64decode}}'{% endraw %}
 #-----------------------------------------------------------
 locals {
 
