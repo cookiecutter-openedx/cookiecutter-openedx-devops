@@ -15,10 +15,10 @@ attribution="https://github.com/cookiecutter-openedx/cookiecutter-openedx-devops
 printf "\n"
 printf "*******************************************************************************\n"
 printf "*\n"
-printf "*%*s\n" $((($${#title}+$COLUMNS)/2)) "$title"
-printf "*%*s\n" $((($${#sub_title}+$COLUMNS)/2)) "$sub_title"
+{% raw %}printf "*%*s\n" $((($${#title}+$COLUMNS)/2)) "$title"{% endraw %}
+{% raw %}printf "*%*s\n" $((($${#sub_title}+$COLUMNS)/2)) "$sub_title"{% endraw %}
 printf "*\n"
-printf "*%*s\n" $((($${#attribution}+$COLUMNS)/2)) "$attribution"
+{% raw %}printf "*%*s\n" $((($${#attribution}+$COLUMNS)/2)) "$attribution"{% endraw %}
 printf "*\n"
 printf "*******************************************************************************\n"
 printf "\n"
