@@ -73,6 +73,11 @@ jobs:
       {% else %}
       ENABLE_LICENSE_MANAGER: false
       {% endif %}
+      {% if cookiecutter.ci_deploy_install_codejail_service == "Y" -%}
+      ENABLE_CODEJAIL: true
+      {% else %}
+      ENABLE_CODEJAIL: false
+      {% endif %}
 
     # deployment workflow begins here
     # --------------------------------------------
@@ -140,6 +145,15 @@ jobs:
           echo "TUTOR_LMS_HOST=$LMS_HOSTNAME" >> $GITHUB_ENV
           echo "TUTOR_CMS_HOST=$CMS_HOSTNAME" >> $GITHUB_ENV
           echo "TUTOR_DOCKER_IMAGE_OPENEDX=${AWS_ECR_REPOSITORY_OPENEDX}" >> $GITHUB_ENV
+
+      - name: Codejail environment settings
+        id: codejail-env-settings
+        if: {% raw %}${{ env.ENABLE_CODEJAIL == 'true' }}{% endraw %}
+        shell: bash
+        run: |-
+          echo "TUTOR_CODEJAIL_ENFORCE_APPARMOR=false" >> $GITHUB_ENV
+          echo "TUTOR_CODEJAIL_ENABLE_K8S_DAEMONSET=false" >> $GITHUB_ENV
+          echo "TUTOR_CODEJAIL_SKIP_INIT=false" >> $GITHUB_ENV
 
       # see: https://docs.tutor.overhang.io/configuration.html
       - name: Override backend service versions
@@ -243,6 +257,14 @@ jobs:
           aws-ecr-uri: ${AWS_ECR_REPOSITORY_LICENSE_MANAGER}
           host: subscriptions.{{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
           lms_host: {{ cookiecutter.environment_subdomain }}.{{ cookiecutter.global_root_domain }}
+
+      - name: Install tutor-contrib-codejail
+        id: install-tutor-contrib-codejail
+        if: {% raw %}${{ env.ENABLE_CODEJAIL == 'true' }}{% endraw %}
+        shell: bash
+        run: |
+          pip install git+https://github.com/lpm0073/tutor-contrib-codejail@mcdaniel-202401
+          tutor plugins enable codejail
 
       # ***********************************************************************
       # Configure backend services

@@ -15,9 +15,9 @@ locals {
   service_group_min_size     = local.stack_vars.locals.eks_service_group_min_size
   service_group_max_size     = local.stack_vars.locals.eks_service_group_max_size
 
-  hosting_group_desired_size = local.stack_vars.locals.eks_service_group_desired_size
-  hosting_group_min_size     = local.stack_vars.locals.eks_service_group_desired_size
-  hosting_group_max_size     = local.stack_vars.locals.eks_service_group_desired_size
+  hosting_group_desired_size = local.stack_vars.locals.eks_hosting_group_desired_size
+  hosting_group_min_size     = local.stack_vars.locals.eks_hosting_group_min_size
+  hosting_group_max_size     = local.stack_vars.locals.eks_hosting_group_max_size
 
   # Extract out common variables for reuse
   env                        = local.stack_vars.locals.stack
