@@ -21,6 +21,8 @@
 
 #------------------------------------------------------------------------------
 locals {
+  templatefile_nginx_values = templatefile("${path.module}/yml/nginx-values.yaml", {})
+
   tags = merge(
     var.tags,
     module.cookiecutter_meta.tags,
@@ -30,10 +32,6 @@ locals {
       "cookiecutter/resource/version" = "{{ cookiecutter.terraform_helm_ingress_nginx_controller }}"
     }
   )
-}
-
-data "template_file" "nginx-values" {
-  template = file("${path.module}/yml/nginx-values.yaml")
 }
 
 resource "helm_release" "ingress_nginx_controller" {
@@ -46,7 +44,7 @@ resource "helm_release" "ingress_nginx_controller" {
   version    = "~> {{ cookiecutter.terraform_helm_ingress_nginx_controller }}"
 
   values = [
-    data.template_file.nginx-values.rendered
+    local.templatefile_nginx_values
   ]
 
   set {

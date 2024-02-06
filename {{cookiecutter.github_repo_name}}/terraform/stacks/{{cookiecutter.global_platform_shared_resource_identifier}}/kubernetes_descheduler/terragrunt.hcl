@@ -8,11 +8,11 @@
 #------------------------------------------------------------------------------
 locals {
   # Automatically load stack-level variables
-  stack_vars = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
-  global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
+  stack_vars  = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
+  global_vars = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
-  stack_namespace       = local.stack_vars.locals.stack_namespace
+  stack_namespace = local.stack_vars.locals.stack_namespace
 
   tags = merge(
     local.stack_vars.locals.tags,
@@ -25,7 +25,7 @@ dependencies {
     "../vpc",
     "../kubernetes",
     "../kubernetes_karpenter",
-    ]
+  ]
 }
 
 dependency "vpc" {
@@ -52,7 +52,7 @@ dependency "kubernetes" {
   mock_outputs = {
     service_node_group_iam_role_name = "fake-karpenter-node-group-iam-role-name"
     service_node_group_iam_role_arn  = "fake-karpenter-node-group-iam-role-arn"
-    oidc_provider_arn = "fakse-oidc-provider-arn"
+    oidc_provider_arn                = "fakse-oidc-provider-arn"
   }
 
 }
@@ -72,6 +72,10 @@ dependency "kubernetes_karpenter" {
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
   source = "../../modules//kubernetes_descheduler"
+  before_hook "before_init" {
+    commands = ["init"]
+    execute  = ["echo", "Initializing module in ${get_terragrunt_dir()}"]
+  }
 }
 
 # Include all settings from the root terragrunt.hcl file
@@ -82,5 +86,5 @@ include {
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
   stack_namespace = local.stack_namespace
-  tags = local.tags
+  tags            = local.tags
 }

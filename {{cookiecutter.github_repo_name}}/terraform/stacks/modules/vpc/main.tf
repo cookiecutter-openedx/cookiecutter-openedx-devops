@@ -22,6 +22,8 @@ locals {
   )
 
 }
+
+
 module "vpc" {
   source                 = "terraform-aws-modules/vpc/aws"
   version                = "~> {{ cookiecutter.terraform_aws_modules_vpc }}"

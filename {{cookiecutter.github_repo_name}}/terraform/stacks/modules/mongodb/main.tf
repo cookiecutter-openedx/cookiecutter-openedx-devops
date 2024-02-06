@@ -21,6 +21,42 @@
 #   https://www.digitalocean.com/community/tutorials/how-to-configure-remote-access-for-mongodb-on-ubuntu-20-04
 #------------------------------------------------------------------------------
 locals {
+  templatefile_aws_config = templatefile("${path.module}/aws/config.tpl", {
+    aws_region = var.aws_region
+  })
+
+  templatefile_aws_credentials = templatefile("${path.module}/aws/credentials.tpl", {
+    aws_secret_access_key = aws_iam_access_key.aws_cli.secret
+    aws_access_key_id     = aws_iam_access_key.aws_cli.id
+  })
+
+  # mcdaniel aug-2022
+  # switching to private ip address bc of occasional delays
+  # in updating Route53 DNS entries.
+  templatefile_ssh_config = templatefile("${path.module}/ssh/config.tpl", {
+    host                 = aws_instance.mongodb.private_ip
+    user                 = "ubuntu"
+    private_key_filename = local.ssh_private_key_filename
+  })
+
+  templatefile_preinstall_tasks = templatefile("${path.module}/scripts/mongodb-preinstall-tasks.sh.tpl", {
+    ssh_private_key_filename = local.ssh_private_key_filename
+  })
+
+  templatefile_install_tasks = templatefile("${path.module}/scripts/mongodb-install-tasks.sh.tpl", {
+    ssh_private_key_filename = local.ssh_private_key_filename
+    private_ip               = aws_instance.mongodb.private_ip
+    ssh_config               = local.templatefile_ssh_config
+  })
+
+  templatefile_mongod_conf = templatefile("${path.module}/etc/mongod.conf.tpl", {
+    private_ip = aws_instance.mongodb.private_ip
+  })
+
+  templatefile_welcome_banner = templatefile("${path.module}/etc/update-motd.d/09-welcome-banner.tpl", {
+    platform_name = var.platform_name
+  })
+
   ssh_private_key_filename = "${var.stack_namespace}-mongodb.pem"
   host_name                = "mongodb.${var.services_subdomain}"
 
@@ -78,7 +114,7 @@ resource "aws_instance" "mongodb" {
       host        = data.kubernetes_secret.bastion_ssh_key.data["HOST"]
     }
 
-    content     = data.template_file.preinstall_tasks.rendered
+    content     = local.templatefile_preinstall_tasks
     destination = "/home/ubuntu/scripts/mongodb-preinstall-tasks.sh"
   }
 
@@ -106,7 +142,7 @@ resource "aws_instance" "mongodb" {
       host        = data.kubernetes_secret.bastion_ssh_key.data["HOST"]
     }
 
-    content     = data.template_file.welcome_banner.rendered
+    content     = local.templatefile_welcome_banner
     destination = "/tmp/cookiecutter/mongodb/etc/09-welcome-banner"
   }
 
@@ -131,7 +167,7 @@ resource "aws_instance" "mongodb" {
       host        = data.kubernetes_secret.bastion_ssh_key.data["HOST"]
     }
 
-    content     = data.template_file.aws_config.rendered
+    content     = local.templatefile_aws_config
     destination = "/tmp/cookiecutter/mongodb/.aws/config"
   }
 
@@ -143,7 +179,7 @@ resource "aws_instance" "mongodb" {
       host        = data.kubernetes_secret.bastion_ssh_key.data["HOST"]
     }
 
-    content     = data.template_file.aws_credentials.rendered
+    content     = local.templatefile_aws_credentials
     destination = "/tmp/cookiecutter/mongodb/.aws/credentials"
   }
 
@@ -195,7 +231,7 @@ resource "null_resource" "install_script" {
 
   triggers = {
     mongodb_instance = aws_instance.mongodb.id
-    install_script   = data.template_file.install_tasks.rendered
+    install_script   = local.templatefile_install_tasks
   }
 
   provisioner "file" {
@@ -206,7 +242,7 @@ resource "null_resource" "install_script" {
       host        = data.kubernetes_secret.bastion_ssh_key.data["HOST"]
     }
 
-    content     = data.template_file.mongod_conf.rendered
+    content     = local.templatefile_mongod_conf
     destination = "/tmp/cookiecutter/mongodb/etc/mongod.conf"
   }
 
@@ -218,7 +254,7 @@ resource "null_resource" "install_script" {
       host        = data.kubernetes_secret.bastion_ssh_key.data["HOST"]
     }
 
-    content     = data.template_file.install_tasks.rendered
+    content     = local.templatefile_install_tasks
     destination = "/home/ubuntu/scripts/mongodb-install-tasks.sh"
   }
 
@@ -416,62 +452,7 @@ resource "kubernetes_secret" "aws_cli" {
   }
 }
 
-data "template_file" "aws_config" {
-  template = file("${path.module}/aws/config.tpl")
-  vars = {
-    aws_region = var.aws_region
-  }
-}
 
-data "template_file" "aws_credentials" {
-  template = file("${path.module}/aws/credentials.tpl")
-  vars = {
-    aws_secret_access_key = aws_iam_access_key.aws_cli.secret
-    aws_access_key_id     = aws_iam_access_key.aws_cli.id
-  }
-}
-
-# mcdaniel aug-2022
-# switching to private ip address bc of occasional delays
-# in updating Route53 DNS entries.
-data "template_file" "ssh_config" {
-  template = file("${path.module}/ssh/config.tpl")
-  vars = {
-    host                 = aws_instance.mongodb.private_ip
-    user                 = "ubuntu"
-    private_key_filename = local.ssh_private_key_filename
-  }
-}
-
-data "template_file" "preinstall_tasks" {
-  template = file("${path.module}/scripts/mongodb-preinstall-tasks.sh.tpl")
-  vars = {
-    ssh_private_key_filename = local.ssh_private_key_filename
-  }
-}
-
-data "template_file" "install_tasks" {
-  template = file("${path.module}/scripts/mongodb-install-tasks.sh.tpl")
-  vars = {
-    ssh_private_key_filename = local.ssh_private_key_filename
-    private_ip               = aws_instance.mongodb.private_ip
-    ssh_config               = data.template_file.ssh_config.rendered
-  }
-}
-
-data "template_file" "mongod_conf" {
-  template = file("${path.module}/etc/mongod.conf.tpl")
-  vars = {
-    private_ip = aws_instance.mongodb.private_ip
-  }
-}
-
-data "template_file" "welcome_banner" {
-  template = file("${path.module}/etc/update-motd.d/09-welcome-banner.tpl")
-  vars = {
-    platform_name = var.platform_name
-  }
-}
 
 #------------------------------------------------------------------------------
 #                               COOKIECUTTER META

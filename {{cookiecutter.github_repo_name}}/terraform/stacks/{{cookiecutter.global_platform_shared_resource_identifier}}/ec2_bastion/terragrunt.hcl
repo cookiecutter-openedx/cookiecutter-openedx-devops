@@ -8,8 +8,8 @@
 #------------------------------------------------------------------------------
 locals {
   # Automatically load stack-level variables
-  stack_vars        = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
-  global_vars       = read_terragrunt_config(find_in_parent_folders("global.hcl"))
+  stack_vars  = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
+  global_vars = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
   platform_name             = local.global_vars.locals.platform_name
@@ -49,22 +49,22 @@ dependency "kubernetes" {
   # module hasn't been applied yet.
   mock_outputs_allowed_terraform_commands = ["init", "validate", "destroy"]
   mock_outputs = {
-    cluster_arn           = "fake-cluster-arn"
+    cluster_arn                        = "fake-cluster-arn"
     cluster_certificate_authority_data = "fake-cert"
-    cluster_endpoint = "fake-cluster-endpoint"
-    cluster_id = "fake-cluster-id"
-    cluster_oidc_issuer_url = "fake-oidc-issuer-url"
-    cluster_platform_version = "fake-cluster-version"
-    cluster_security_group_arn = "fake-security-group-arn"
-    cluster_security_group_id = "fake-security-group-id"
-    cluster_status = "fake-cluster-status"
-    cluster_version = "fake-cluster-version"
-    eks_managed_node_groups = "fake-managed-node-group"
-    fargate_profiles = "fake-fargate-profile"
-    node_security_group_arn = "fake-security-group-arn"
-    node_security_group_id = "fake-security-group-id"
-    oidc_provider = "fake-oidc-provider"
-    oidc_provider_arn = "fake-provider-arn"
+    cluster_endpoint                   = "fake-cluster-endpoint"
+    cluster_id                         = "fake-cluster-id"
+    cluster_oidc_issuer_url            = "fake-oidc-issuer-url"
+    cluster_platform_version           = "fake-cluster-version"
+    cluster_security_group_arn         = "fake-security-group-arn"
+    cluster_security_group_id          = "fake-security-group-id"
+    cluster_status                     = "fake-cluster-status"
+    cluster_version                    = "fake-cluster-version"
+    eks_managed_node_groups            = "fake-managed-node-group"
+    fargate_profiles                   = "fake-fargate-profile"
+    node_security_group_arn            = "fake-security-group-arn"
+    node_security_group_id             = "fake-security-group-id"
+    oidc_provider                      = "fake-oidc-provider"
+    oidc_provider_arn                  = "fake-provider-arn"
   }
 }
 
@@ -72,6 +72,10 @@ dependency "kubernetes" {
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
   source = "../../modules//ec2_bastion"
+  before_hook "before_init" {
+    commands = ["init"]
+    execute  = ["echo", "Initializing module in ${get_terragrunt_dir()}"]
+  }
 }
 
 # Include all settings from the root terragrunt.hcl file
@@ -85,16 +89,16 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  platform_name               = local.platform_name
-  instance_type               = local.bastion_instance_type
-  volume_size                 = local.bastion_allocated_storage
-  aws_region                  = local.aws_region
-  services_subdomain          = local.services_subdomain
-  resource_name               = local.resource_name
-  stack_namespace             = local.stack_namespace
-  vpc_id                      = dependency.vpc.outputs.vpc_id
-  ingress_cidr_blocks         = dependency.vpc.outputs.public_subnets_cidr_blocks
-  security_group_name_prefix  = local.resource_name
-  subnet_ids                  = dependency.vpc.outputs.public_subnets
-  tags                        = local.tags
+  platform_name              = local.platform_name
+  instance_type              = local.bastion_instance_type
+  volume_size                = local.bastion_allocated_storage
+  aws_region                 = local.aws_region
+  services_subdomain         = local.services_subdomain
+  resource_name              = local.resource_name
+  stack_namespace            = local.stack_namespace
+  vpc_id                     = dependency.vpc.outputs.vpc_id
+  ingress_cidr_blocks        = dependency.vpc.outputs.public_subnets_cidr_blocks
+  security_group_name_prefix = local.resource_name
+  subnet_ids                 = dependency.vpc.outputs.public_subnets
+  tags                       = local.tags
 }

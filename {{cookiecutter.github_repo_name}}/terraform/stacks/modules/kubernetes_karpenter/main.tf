@@ -26,7 +26,16 @@
 #
 # see: https://registry.terraform.io/modules/terraform-aws-modules/iam/aws/latest/submodules/iam-role-for-service-accounts-eks
 locals {
-  karpenter_namespace = "karpenter"
+  karpenter_namespace           = "karpenter"
+  templatefile_karpenter_values = templatefile("${path.module}/yml/karpenter-values.yaml", {})
+
+  templatefile_karpenter_provisioner = templatefile("${path.module}/yml/karpenter-provisioner.yaml.tpl", {
+    stack_namespace = var.stack_namespace
+  })
+
+  templatefile_karpenter_aws_node_template = templatefile("${path.module}/yml/karpenter-aws-node-template.yaml.tpl", {
+    stack_namespace = var.stack_namespace
+  })
 
   tags = merge(
     var.tags,
@@ -39,9 +48,6 @@ locals {
   )
 }
 
-data "template_file" "karpenter-values" {
-  template = file("${path.module}/yml/karpenter-values.yaml")
-}
 
 
 resource "helm_release" "karpenter" {
@@ -55,7 +61,7 @@ resource "helm_release" "karpenter" {
   version = "~> {{ cookiecutter.terraform_helm_karpenter }}"
 
   values = [
-    data.template_file.karpenter-values.rendered
+    local.templatefile_karpenter_values
   ]
 
   set {
@@ -126,34 +132,18 @@ resource "aws_iam_instance_profile" "karpenter" {
 }
 
 
-data "template_file" "karpenter_provisioner" {
-  template = file("${path.module}/yml/karpenter-provisioner.yaml.tpl")
-  vars = {
-    stack_namespace = var.stack_namespace
-  }
-
-}
 
 # see: https://karpenter.sh/v0.6.1/provisioner/
-#      https://karpenter.sh/docs/concepts/provisioners/
 resource "kubernetes_manifest" "karpenter_provisioner" {
-  manifest = yamldecode(data.template_file.karpenter_provisioner.rendered)
+  manifest = yamldecode(local.templatefile_karpenter_provisioner)
 
   depends_on = [
     helm_release.karpenter
   ]
 }
 
-# see: https://karpenter.sh/docs/concepts/node-templates/
-data "template_file" "karpenter_aws_node_template" {
-  template = file("${path.module}/yml/karpenter-aws-node-template.yaml.tpl")
-
-  vars = {
-    stack_namespace = var.stack_namespace
-  }
-}
 resource "kubernetes_manifest" "karpenter_aws_node_template" {
-  manifest = yamldecode(data.template_file.karpenter_aws_node_template.rendered)
+  manifest = yamldecode(local.templatefile_karpenter_aws_node_template)
 
   depends_on = [
     helm_release.karpenter

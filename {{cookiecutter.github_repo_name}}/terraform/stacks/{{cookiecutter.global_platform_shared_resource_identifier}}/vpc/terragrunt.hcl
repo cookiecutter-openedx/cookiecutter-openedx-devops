@@ -8,19 +8,19 @@
 #------------------------------------------------------------------------------
 locals {
   # Automatically load stack-level variables
-  stack_vars   = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
-  global_vars  = read_terragrunt_config(find_in_parent_folders("global.hcl"))
+  stack_vars  = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
+  global_vars = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
-  root_domain           = local.global_vars.locals.root_domain
-  services_subdomain    = local.global_vars.locals.services_subdomain
-  platform_name         = local.global_vars.locals.platform_name
-  platform_region       = local.global_vars.locals.platform_region
-  aws_region            = local.global_vars.locals.aws_region
-  stack_namespace       = local.stack_vars.locals.stack_namespace
-  stack                 = local.stack_vars.locals.stack
-  namespace             = local.stack_vars.locals.stack_namespace
-  resource_name         = local.stack_vars.locals.stack_namespace
+  root_domain        = local.global_vars.locals.root_domain
+  services_subdomain = local.global_vars.locals.services_subdomain
+  platform_name      = local.global_vars.locals.platform_name
+  platform_region    = local.global_vars.locals.platform_region
+  aws_region         = local.global_vars.locals.aws_region
+  stack_namespace    = local.stack_vars.locals.stack_namespace
+  stack              = local.stack_vars.locals.stack
+  namespace          = local.stack_vars.locals.stack_namespace
+  resource_name      = local.stack_vars.locals.stack_namespace
 
   tags = merge(
     local.stack_vars.locals.tags,
@@ -34,6 +34,10 @@ locals {
 
 terraform {
   source = "../../modules//vpc"
+  before_hook "before_init" {
+    commands = ["init"]
+    execute  = ["echo", "Initializing module in ${get_terragrunt_dir()}"]
+  }
 }
 
 # Include all settings from the root terragrunt.hcl file
@@ -43,13 +47,13 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  root_domain           = local.root_domain
-  services_subdomain    = local.services_subdomain
-  aws_region            = local.aws_region
-  namespace             = local.namespace
-  name                  = "${local.resource_name}"
-  cidr                  = "192.168.0.0/20"
-  azs                   = ["${local.aws_region}a", "${local.aws_region}b", "${local.aws_region}c"]
+  root_domain        = local.root_domain
+  services_subdomain = local.services_subdomain
+  aws_region         = local.aws_region
+  namespace          = local.namespace
+  name               = "${local.resource_name}"
+  cidr               = "192.168.0.0/20"
+  azs                = ["${local.aws_region}a", "${local.aws_region}b", "${local.aws_region}c"]
 
   public_subnets      = ["192.168.1.0/24", "192.168.2.0/24", "192.168.3.0/24"]
   private_subnets     = ["192.168.4.0/24", "192.168.5.0/24", "192.168.6.0/24"]
@@ -70,9 +74,9 @@ inputs = {
   # routing traffic from one AZ to a NAT Gateway in a different AZ incurs
   # additional inter-AZ data transfer charges. We recommend choosing a
   # maintenance window for architecture changes in your Amazon VPC.
-  enable_nat_gateway      = true
-  single_nat_gateway      = true
-  one_nat_gateway_per_az  = false
+  enable_nat_gateway     = true
+  single_nat_gateway     = true
+  one_nat_gateway_per_az = false
 
   # a bit of foreshadowing:
   # AWS EKS uses tags for identifying resources which it interacts.

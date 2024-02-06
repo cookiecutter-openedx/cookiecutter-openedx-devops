@@ -12,7 +12,6 @@ apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
   name: ${services_subdomain}
-  namespace: ${namespace}
 spec:
   acme:
     email: no-reply@${root_domain}

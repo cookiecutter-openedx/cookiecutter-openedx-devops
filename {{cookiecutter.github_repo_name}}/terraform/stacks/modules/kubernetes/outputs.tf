@@ -157,11 +157,11 @@ output "fargate_profiles" {
 # EKS Managed Node Groups
 ################################################################################
 output "service_node_group_iam_role_name" {
-  value = module.eks.eks_managed_node_groups["{{ cookiecutter.global_platform_shared_resource_identifier }}"].iam_role_name
+  value = module.eks.eks_managed_node_groups["service"].iam_role_name
 }
 
 output "service_node_group_iam_role_arn" {
-  value = module.eks.eks_managed_node_groups["{{ cookiecutter.global_platform_shared_resource_identifier }}"].iam_role_arn
+  value = module.eks.eks_managed_node_groups["service"].iam_role_arn
 }
 output "eks_managed_node_groups" {
   description = "Map of attribute maps for all EKS managed node groups created"
@@ -180,11 +180,6 @@ output "self_managed_node_groups" {
 ################################################################################
 # Additional
 ################################################################################
-
-output "aws_auth_configmap_yaml" {
-  description = "Formatted yaml output for base aws-auth configmap containing roles used in cluster node groups/fargate profiles"
-  value       = module.eks.aws_auth_configmap_yaml
-}
 
 ################################################################################
 # ELB

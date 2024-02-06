@@ -23,6 +23,7 @@
 #       Terraform module.
 #-----------------------------------------------------------
 locals {
+  templatefile_vertical_pod_autoscaler_values = templatefile("${path.module}/yml/vertical-pod-autoscaler-values.yaml", {})
 
   tags = merge(
     var.tags,
@@ -35,10 +36,6 @@ locals {
   )
 
 }
-data "template_file" "vertical-pod-autoscaler-values" {
-  template = file("${path.module}/yml/vertical-pod-autoscaler-values.yaml")
-  vars     = {}
-}
 
 resource "helm_release" "vpa" {
   namespace        = "vpa"
@@ -50,7 +47,7 @@ resource "helm_release" "vpa" {
   version    = "~> {{ cookiecutter.terraform_helm_vertical_pod_autoscaler }}"
 
   values = [
-    data.template_file.vertical-pod-autoscaler-values.rendered
+    local.templatefile_vertical_pod_autoscaler_values
   ]
 
 }

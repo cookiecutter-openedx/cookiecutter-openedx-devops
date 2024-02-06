@@ -11,11 +11,11 @@ locals {
   global_vars = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
-  root_domain                     = local.global_vars.locals.root_domain
-  shared_resource_namespace       = local.global_vars.locals.shared_resource_namespace
-  aws_region                      = local.global_vars.locals.aws_region
-  cert_manager_namespace          = "cert-manager"
-  services_subdomain              = local.global_vars.locals.services_subdomain
+  root_domain               = local.global_vars.locals.root_domain
+  shared_resource_namespace = local.global_vars.locals.shared_resource_namespace
+  aws_region                = local.global_vars.locals.aws_region
+  cert_manager_namespace    = "cert-manager"
+  services_subdomain        = local.global_vars.locals.services_subdomain
 
   tags = merge(
     local.stack_vars.locals.tags,
@@ -29,7 +29,7 @@ dependencies {
     "../kubernetes",
     "../kubernetes_vpa",
     "../kubernetes_ingress_clb",
-    ]
+  ]
 }
 
 dependency "vpc" {
@@ -71,6 +71,10 @@ dependency "kubernetes_vpa" {
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
   source = "../../modules//kubernetes_cert_manager"
+  before_hook "before_init" {
+    commands = ["init"]
+    execute  = ["echo", "Initializing module in ${get_terragrunt_dir()}"]
+  }
 }
 
 # Include all settings from the root terragrunt.hcl file
@@ -80,10 +84,10 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  root_domain                 = local.root_domain
-  aws_region                  = local.aws_region
-  cert_manager_namespace      = local.cert_manager_namespace
-  namespace                   = local.shared_resource_namespace
-  services_subdomain          = local.services_subdomain
-  tags                        = local.tags
+  root_domain            = local.root_domain
+  aws_region             = local.aws_region
+  cert_manager_namespace = local.cert_manager_namespace
+  namespace              = local.shared_resource_namespace
+  services_subdomain     = local.services_subdomain
+  tags                   = local.tags
 }

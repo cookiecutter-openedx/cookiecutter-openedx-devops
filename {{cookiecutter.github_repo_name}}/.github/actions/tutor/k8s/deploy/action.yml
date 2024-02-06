@@ -13,7 +13,7 @@ inputs:
     required: true
     type: string
   namespace:
-    description: 'The Kubernetes namesapce to which the Open edX platform environment will be deployed. Example: openedx-prod'
+    description: 'The Kubernetes namespace to which the Open edX platform environment will be deployed. Example: openedx-prod'
     required: true
     type: string
 

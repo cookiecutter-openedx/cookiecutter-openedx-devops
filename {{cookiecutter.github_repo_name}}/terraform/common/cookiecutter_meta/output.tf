@@ -9,7 +9,6 @@ output "tags" {
     "cookiecutter/meta/github_commit_date" = replace(tostring(data.local_file.cookiecutter_github_commit_date.content), "\n", "")
     "cookiecutter/meta/awscli_version"     = replace(tostring(data.local_file.cookiecutter_awscli_version.content), "\n", "")
     "cookiecutter/meta/terraform_version"  = replace(tostring(data.local_file.cookiecutter_terraform_version.content), "\n", "")
-    "cookiecutter/meta/kubectl_version"    = replace(tostring(data.local_file.cookiecutter_kubectl_version.content), "\n", "")
     "cookiecutter/meta/os"                 = replace(tostring(data.local_file.cookiecutter_os.content), "\n", "")
     "cookiecutter/meta/timestamp"          = replace(tostring(data.local_file.cookiecutter_timestamp.content), "\n", "")
   }

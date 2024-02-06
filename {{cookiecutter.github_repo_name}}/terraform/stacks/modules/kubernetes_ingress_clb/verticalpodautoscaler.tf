@@ -1,8 +1,7 @@
 
-data "template_file" "vpa-nginx" {
-  template = file("${path.module}/yml/vpa-openedx-nginx.yaml")
+locals {
+  templatefile_vpa_nginx = templatefile("${path.module}/yml/vpa-openedx-nginx.yaml", {})
 }
-
-resource "kubectl_manifest" "nginx" {
-  yaml_body = data.template_file.vpa-nginx.rendered
+resource "kubernetes_manifest" "nginx" {
+  manifest = yamldecode(local.templatefile_vpa_nginx)
 }

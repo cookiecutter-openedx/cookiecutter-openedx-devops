@@ -35,24 +35,21 @@
 #   kubectl delete crd thanosrulers.monitoring.coreos.com
 #-----------------------------------------------------------
 locals {
-  cost_analyzer = "cost-analyzer"
-  prometheus    = "prometheus"
+  templatefile_prometheus_values = templatefile("${path.module}/yml/prometheus-values.yaml", {})
+  cost_analyzer                  = "cost-analyzer"
+  prometheus                     = "prometheus"
 
   tags = merge(
     var.tags,
     module.cookiecutter_meta.tags,
     {
-      "cookiecutter/module/source"    = "{{ cookiecutter.github_repo_name }}/terraform/stacks/modules/kubernetes_prometheus"
+      "cookiecutter/module/source"    = "openedx_devops/terraform/stacks/modules/kubernetes_prometheus"
       "cookiecutter/resource/source"  = "prometheus-community.github.io/helm-charts/kube-prometheus-stack"
       "cookiecutter/resource/version" = "{{ cookiecutter.terraform_helm_prometheus }}"
     }
   )
 }
 
-data "template_file" "prometheus-values" {
-  template = file("${path.module}/yml/prometheus-values.yaml")
-  vars     = {}
-}
 
 resource "helm_release" "prometheus" {
   namespace        = local.prometheus
@@ -64,7 +61,7 @@ resource "helm_release" "prometheus" {
   version    = "{{ cookiecutter.terraform_helm_prometheus }}"
 
   values = [
-    data.template_file.prometheus-values.rendered
+    local.templatefile_prometheus_values
   ]
 
   # changes the password (stored in k8s secret prometheus-grafana) from 'prom-operator'

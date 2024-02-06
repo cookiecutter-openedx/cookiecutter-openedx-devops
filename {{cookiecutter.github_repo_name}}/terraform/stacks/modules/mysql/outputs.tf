@@ -31,11 +31,6 @@ output "db_instance_hosted_zone_id" {
   value       = module.db.db_instance_hosted_zone_id
 }
 
-output "db_instance_id" {
-  description = "The RDS instance ID"
-  value       = module.db.db_instance_id
-}
-
 output "db_instance_resource_id" {
   description = "The RDS Resource ID of this instance"
   value       = module.db.db_instance_resource_id
@@ -59,8 +54,13 @@ output "db_instance_username" {
 
 output "db_instance_password" {
   description = "The database password (this password may be old, because Terraform doesn't track it after initial creation)"
-  value       = module.db.db_instance_password
+  value       = random_password.mysql_root.result
   sensitive   = true
+}
+
+output "db_instance_master_user_secret_arn" {
+  description = "The ARN of the master user secret (Only available when manage_master_user_password is set to true)"
+  value       = module.db.db_instance_master_user_secret_arn
 }
 
 output "db_instance_port" {

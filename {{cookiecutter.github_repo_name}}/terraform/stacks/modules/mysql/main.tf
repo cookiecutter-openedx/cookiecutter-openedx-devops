@@ -28,12 +28,19 @@ module "db" {
   source  = "terraform-aws-modules/rds/aws"
   version = "~> {{cookiecutter.terraform_aws_modules_rds}}"
 
+  # iam_database_authentication_enabled  = false
+  manage_master_user_password          = false
+  manage_master_user_password_rotation = false
+  password                             = random_password.mysql_root.result
+  # master_user_secret_kms_key_id        = "SET-ME-PLEASE"
+  # kms_key_id =
+
   # required parameters (unless we like the default value)
   # ---------------------------------------------------------------------------
-  allocated_storage = var.allocated_storage
-  #availability_zone =
+  allocated_storage       = var.allocated_storage
   backup_retention_period = var.backup_retention_period
   backup_window           = var.backup_window
+  #availability_zone =
   #ca_cert_identifier =
   #character_set_name =
   #cloudwatch_log_group_kms_key_id =
@@ -47,7 +54,6 @@ module "db" {
   family         = var.family
   identifier     = var.resource_name
   instance_class = var.instance_class
-  #kms_key_id =
   #license_model =
   maintenance_window   = var.maintenance_window
   major_engine_version = var.major_engine_version
@@ -57,7 +63,6 @@ module "db" {
   #option_group_name =
   #parameter_group_description =
   #parameter_group_name =
-  #password =
   #performance_insights_kms_key_id =
   port = var.port
   #replica_mode =
@@ -70,12 +75,15 @@ module "db" {
 
   # optional parameters
   # ---------------------------------------------------------------------------
-  max_allocated_storage                 = var.max_allocated_storage
-  storage_encrypted                     = var.storage_encrypted
-  create_random_password                = var.create_random_password
-  multi_az                              = var.multi_az
-  subnet_ids                            = var.subnet_ids
-  vpc_security_group_ids                = [module.security_group.security_group_id]
+  publicly_accessible   = true
+  max_allocated_storage = var.max_allocated_storage
+  storage_encrypted     = var.storage_encrypted
+  multi_az              = var.multi_az
+  subnet_ids            = var.subnet_ids
+  vpc_security_group_ids = [
+    module.security_group.security_group_id,
+    module.security_group_fb.security_group_id
+  ]
   enabled_cloudwatch_logs_exports       = var.enabled_cloudwatch_logs_exports
   skip_final_snapshot                   = var.skip_final_snapshot
   deletion_protection                   = var.deletion_protection
@@ -97,6 +105,15 @@ module "db" {
 #------------------------------------------------------------------------------
 #                        SUPPORTING RESOURCES
 #------------------------------------------------------------------------------
+resource "random_password" "mysql_root" {
+  length           = 16
+  special          = true
+  override_special = "_%@"
+  keepers = {
+    version = "1"
+  }
+}
+
 
 resource "aws_db_subnet_group" "mysql_subnet_group" {
   name       = "mysql_subnet_group"
@@ -141,6 +158,7 @@ module "security_group" {
     },
   ]
 
+
   tags = merge(
     local.tags,
     {
@@ -149,6 +167,7 @@ module "security_group" {
     }
   )
 }
+
 
 #------------------------------------------------------------------------------
 #                               COOKIECUTTER META

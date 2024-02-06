@@ -8,22 +8,30 @@
 #------------------------------------------------------------------------------
 locals {
   # Automatically load stack-level variables
-  stack_vars    = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
-  global_vars   = read_terragrunt_config(find_in_parent_folders("global.hcl"))
+  stack_vars  = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
+  global_vars = read_terragrunt_config(find_in_parent_folders("global.hcl"))
+
+  service_group_desired_size = local.stack_vars.locals.eks_service_group_desired_size
+  service_group_min_size     = local.stack_vars.locals.eks_service_group_min_size
+  service_group_max_size     = local.stack_vars.locals.eks_service_group_max_size
+
+  hosting_group_desired_size = local.stack_vars.locals.eks_service_group_desired_size
+  hosting_group_min_size     = local.stack_vars.locals.eks_service_group_desired_size
+  hosting_group_max_size     = local.stack_vars.locals.eks_service_group_desired_size
 
   # Extract out common variables for reuse
-  env                             = local.stack_vars.locals.stack
-  namespace                       = local.stack_vars.locals.stack_namespace
-  root_domain                     = local.global_vars.locals.root_domain
-  platform_name                   = local.global_vars.locals.platform_name
-  platform_region                 = local.global_vars.locals.platform_region
-  account_id                      = local.global_vars.locals.account_id
-  aws_region                      = local.global_vars.locals.aws_region
-  shared_resource_identifier      = local.global_vars.locals.shared_resource_identifier
-  kubernetes_version              = local.stack_vars.locals.kubernetes_version
-  eks_create_kms_key              = local.stack_vars.locals.eks_create_kms_key
-  bastion_iam_arn                 = "arn:aws:iam::${local.account_id}:user/system/bastion-user/${local.namespace}-bastion"
-  bastion_iam_username            = "${local.namespace}-bastion"
+  env                        = local.stack_vars.locals.stack
+  namespace                  = local.stack_vars.locals.stack_namespace
+  root_domain                = local.global_vars.locals.root_domain
+  platform_name              = local.global_vars.locals.platform_name
+  platform_region            = local.global_vars.locals.platform_region
+  account_id                 = local.global_vars.locals.account_id
+  aws_region                 = local.global_vars.locals.aws_region
+  shared_resource_identifier = local.global_vars.locals.shared_resource_identifier
+  kubernetes_version         = local.stack_vars.locals.kubernetes_version
+  eks_create_kms_key         = local.stack_vars.locals.eks_create_kms_key
+  bastion_iam_arn            = "arn:aws:iam::${local.account_id}:user/system/bastion-user/${local.namespace}-bastion"
+  bastion_iam_username       = "${local.namespace}-bastion"
 
   tags = merge(
     local.stack_vars.locals.tags,
@@ -51,6 +59,10 @@ dependency "vpc" {
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
   source = "../../modules//kubernetes"
+  before_hook "before_init" {
+    commands = ["init"]
+    execute  = ["echo", "Initializing module in ${get_terragrunt_dir()}"]
+  }
 }
 
 # Include all settings from the root terragrunt.hcl file
@@ -60,47 +72,34 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  account_id                      = local.account_id
-  shared_resource_identifier      = local.shared_resource_identifier
-  aws_region                      = local.aws_region
-  root_domain                     = local.root_domain
-  namespace                       = local.namespace
-  private_subnet_ids              = dependency.vpc.outputs.private_subnets
-  public_subnet_ids               = dependency.vpc.outputs.public_subnets
-  vpc_id                          = dependency.vpc.outputs.vpc_id
-  kubernetes_cluster_version      = local.kubernetes_version
-  eks_create_kms_key              = local.eks_create_kms_key
-  bastion_iam_arn                 = local.bastion_iam_arn
-  tags                            = local.tags
+  account_id                 = local.account_id
+  shared_resource_identifier = local.shared_resource_identifier
+  aws_region                 = local.aws_region
+  root_domain                = local.root_domain
+  namespace                  = local.namespace
+  private_subnet_ids         = dependency.vpc.outputs.private_subnets
+  public_subnet_ids          = dependency.vpc.outputs.public_subnets
+  vpc_id                     = dependency.vpc.outputs.vpc_id
+  kubernetes_cluster_version = local.kubernetes_version
+  eks_create_kms_key         = local.eks_create_kms_key
+  bastion_iam_arn            = local.bastion_iam_arn
+  tags                       = local.tags
 
-  map_roles = []
+  service_group_desired_size = local.service_group_desired_size
+  service_group_min_size     = local.service_group_min_size
+  service_group_max_size     = local.service_group_max_size
+
+  hosting_group_desired_size = local.hosting_group_desired_size
+  hosting_group_min_size     = local.hosting_group_min_size
+  hosting_group_max_size     = local.hosting_group_max_size
+
   kms_key_owners = [
-    "${local.bastion_iam_arn}",
+    "${local.bastion_iam_arn}"
     # -------------------------------------------------------------------------
     # ADD MORE CLUSTER ADMIN USER IAM ACCOUNTS TO THE AWS KMS KEY OWNER LIST:
     # -------------------------------------------------------------------------
     #"arn:aws:iam::${local.account_id}:user/mcdaniel",
     #"arn:aws:iam::${local.account_id}:user/bob_marley",
-  ]
-  map_users = [
-    {
-      userarn  = local.bastion_iam_arn
-      username = local.bastion_iam_username
-      groups   = ["system:masters"]
-    },
-    # -------------------------------------------------------------------------
-    # ADD MORE CLUSTER ADMIN USER IAM ACCOUNTS HERE:
-    # -------------------------------------------------------------------------
-    #{
-    #  userarn  = "arn:aws:iam::${local.account_id}:user/mcdaniel"
-    #  username = "mcdaniel"
-    #  groups   = ["system:masters"]
-    #},
-    #{
-    #  userarn  = "arn:aws:iam::${local.account_id}:user/bob_marley"
-    #  username = "bob_marley"
-    #  groups   = ["system:masters"]
-    #},
   ]
 
 }

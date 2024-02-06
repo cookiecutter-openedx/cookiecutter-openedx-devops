@@ -8,11 +8,11 @@
 #------------------------------------------------------------------------------
 locals {
   # Automatically load stack-level variables
-  stack_vars    = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
-  global_vars   = read_terragrunt_config(find_in_parent_folders("global.hcl"))
+  stack_vars  = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
+  global_vars = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
   # Extract out common variables for reuse
-  stack_namespace       = local.stack_vars.locals.stack_namespace
+  stack_namespace = local.stack_vars.locals.stack_namespace
 
   tags = merge(
     local.stack_vars.locals.tags,
@@ -27,7 +27,7 @@ dependencies {
     "../kubernetes_metricsserver",
     "../kubernetes_vpa",
     "../kubernetes_ingress_clb",
-    ]
+  ]
 }
 
 dependency "vpc" {
@@ -54,7 +54,7 @@ dependency "kubernetes" {
   mock_outputs = {
     service_node_group_iam_role_name = "fake-karpenter-node-group-iam-role-name"
     service_node_group_iam_role_arn  = "fake-karpenter-node-group-iam-role-arn"
-    oidc_provider_arn = "fake-oidc-provider-arn"
+    oidc_provider_arn                = "fake-oidc-provider-arn"
   }
 
 }
@@ -96,6 +96,10 @@ dependency "kubernetes_vpa" {
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
   source = "../../modules//kubernetes_prometheus"
+  before_hook "before_init" {
+    commands = ["init"]
+    execute  = ["echo", "Initializing module in ${get_terragrunt_dir()}"]
+  }
 }
 
 # Include all settings from the root terragrunt.hcl file

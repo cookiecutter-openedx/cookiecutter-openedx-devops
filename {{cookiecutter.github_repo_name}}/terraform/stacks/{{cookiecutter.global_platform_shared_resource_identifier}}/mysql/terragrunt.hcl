@@ -36,7 +36,7 @@ dependency "vpc" {
   mock_outputs = {
     vpc_id           = "fake-vpc-id"
     database_subnets = ["fake-subnetid-01", "fake-subnetid-02"]
-    vpc_cidr_block = "fake-cidr-block"
+    vpc_cidr_block   = "fake-cidr-block"
   }
 }
 
@@ -47,22 +47,22 @@ dependency "kubernetes" {
   # module hasn't been applied yet.
   mock_outputs_allowed_terraform_commands = ["init", "validate", "destroy"]
   mock_outputs = {
-    cluster_arn           = "fake-cluster-arn"
+    cluster_arn                        = "fake-cluster-arn"
     cluster_certificate_authority_data = "fake-cert"
-    cluster_endpoint = "fake-cluster-endpoint"
-    cluster_id = "fake-cluster-id"
-    cluster_oidc_issuer_url = "fake-oidc-issuer-url"
-    cluster_platform_version = "fake-cluster-version"
-    cluster_security_group_arn = "fake-security-group-arn"
-    cluster_security_group_id = "fake-security-group-id"
-    cluster_status = "fake-cluster-status"
-    cluster_version = "fake-cluster-version"
-    eks_managed_node_groups = "fake-managed-node-group"
-    fargate_profiles = "fake-fargate-profile"
-    node_security_group_arn = "fake-security-group-arn"
-    node_security_group_id = "fake-security-group-id"
-    oidc_provider = "fake-oidc-provider"
-    oidc_provider_arn = "fake-provider-arn"
+    cluster_endpoint                   = "fake-cluster-endpoint"
+    cluster_id                         = "fake-cluster-id"
+    cluster_oidc_issuer_url            = "fake-oidc-issuer-url"
+    cluster_platform_version           = "fake-cluster-version"
+    cluster_security_group_arn         = "fake-security-group-arn"
+    cluster_security_group_id          = "fake-security-group-id"
+    cluster_status                     = "fake-cluster-status"
+    cluster_version                    = "fake-cluster-version"
+    eks_managed_node_groups            = "fake-managed-node-group"
+    fargate_profiles                   = "fake-fargate-profile"
+    node_security_group_arn            = "fake-security-group-arn"
+    node_security_group_id             = "fake-security-group-id"
+    oidc_provider                      = "fake-oidc-provider"
+    oidc_provider_arn                  = "fake-provider-arn"
   }
 }
 
@@ -70,6 +70,10 @@ dependency "kubernetes" {
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
   source = "../../modules//mysql"
+  before_hook "before_init" {
+    commands = ["init"]
+    execute  = ["echo", "Initializing module in ${get_terragrunt_dir()}"]
+  }
 }
 
 # Include all settings from the root terragrunt.hcl file
@@ -80,21 +84,21 @@ include {
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
   # AWS RDS instance identifying information
-  services_subdomain          = local.services_subdomain
-  resource_name         = local.resource_name
-  tags                  = local.tags
+  services_subdomain = local.services_subdomain
+  resource_name      = local.resource_name
+  tags               = local.tags
 
   # database identifying information
-  username                            = "{{ cookiecutter.mysql_username }}"
-  create_random_password              = {{ cookiecutter.mysql_create_random_password }}
-  iam_database_authentication_enabled = {{ cookiecutter.mysql_iam_database_authentication_enabled }}
+  username                            = "root"
+  create_random_password              = true
+  iam_database_authentication_enabled = false
 
   # db server parameters
-  port                  = "{{ cookiecutter.mysql_port }}"
-  engine                = "{{ cookiecutter.mysql_engine }}"
-  engine_version        = "{{ cookiecutter.mysql_engine_version }}"
-  family                = "{{ cookiecutter.mysql_family }}"
-  major_engine_version  = "{{ cookiecutter.mysql_major_engine_version }}"
+  port                 = "3306"
+  engine               = "mysql"
+  engine_version       = "5.7.42"
+  family               = "mysql5.7"
+  major_engine_version = "5.7"
   parameters = [
     {
       name  = "character_set_client"
@@ -107,29 +111,29 @@ inputs = {
   ]
 
   # db server size
-  instance_class        = local.mysql_instance_class
-  allocated_storage     = local.mysql_allocated_storage
-  max_allocated_storage = 1000
-  storage_encrypted     = false
-  multi_az              = false
-  enabled_cloudwatch_logs_exports = []
-  performance_insights_enabled = false
+  instance_class                        = local.mysql_instance_class
+  allocated_storage                     = local.mysql_allocated_storage
+  max_allocated_storage                 = 1000
+  storage_encrypted                     = false
+  multi_az                              = false
+  enabled_cloudwatch_logs_exports       = []
+  performance_insights_enabled          = false
   performance_insights_retention_period = 7
-  create_monitoring_role = false
-  monitoring_interval = 0
-  create_db_subnet_group = false
+  create_monitoring_role                = false
+  monitoring_interval                   = 0
+  create_db_subnet_group                = false
 
   # backups and maintenance
-  maintenance_window    = "{{ cookiecutter.mysql_maintenance_window }}"
-  backup_window         = "{{ cookiecutter.mysql_backup_window }}"
-  backup_retention_period = {{ cookiecutter.mysql_backup_retention_period }}
-  deletion_protection   = {{ cookiecutter.mysql_deletion_protection }}
-  skip_final_snapshot   = {{ cookiecutter.mysql_skip_final_snapshot }}
+  maintenance_window      = "Sun:00:00-Sun:03:00"
+  backup_window           = "03:00-06:00"
+  backup_retention_period = 7
+  deletion_protection     = true
+  skip_final_snapshot     = true
 
 
   # network configuration
-  subnet_ids            = dependency.vpc.outputs.database_subnets
-  vpc_id                = dependency.vpc.outputs.vpc_id
-  ingress_cidr_blocks   = [dependency.vpc.outputs.vpc_cidr_block]
+  subnet_ids          = dependency.vpc.outputs.database_subnets
+  vpc_id              = dependency.vpc.outputs.vpc_id
+  ingress_cidr_blocks = [dependency.vpc.outputs.vpc_cidr_block]
 
 }

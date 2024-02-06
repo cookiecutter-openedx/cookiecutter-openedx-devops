@@ -20,9 +20,5 @@ terraform {
       source  = "hashicorp/kubernetes"
       version = "{{ cookiecutter.terraform_provider_kubernetes_version }}"
     }
-    kubectl = {
-      source  = "gavinbunney/kubectl"
-      version = "{{ cookiecutter.terraform_provider_hashicorp_kubectl_version }}"
-    }
   }
 }
