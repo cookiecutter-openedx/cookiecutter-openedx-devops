@@ -34,7 +34,6 @@ resource "null_resource" "init" {
     touch ${path.module}/output/cookiecutter_github_commit.state
     touch ${path.module}/output/cookiecutter_github_repository.state
     touch ${path.module}/output/cookiecutter_iam_arn.state
-    touch ${path.module}/output/cookiecutter_kubectl_version.state
     touch ${path.module}/output/cookiecutter_os.state
     touch ${path.module}/output/cookiecutter_terraform_version.state
     touch ${path.module}/output/cookiecutter_timestamp.state
@@ -117,12 +116,8 @@ resource "null_resource" "environment" {
     echo $cookiecutter_global_iam_arn > ${path.module}/output/cookiecutter_global_iam_arn.state
 
     #------------------------------------------------------------------------------
-    # 7. cookiecutter_kubectl_version
-    # get the current version of kubectl that is running on the machine executing
-    # this module.
+    # 7. REMOVED: cookiecutter_kubectl_version
     #------------------------------------------------------------------------------
-    cookiecutter_kubectl_version=$(kubectl version --output=json | jq -r '.["clientVersion"].gitVersion as $v | "\($v)"')
-    echo $cookiecutter_kubectl_version > ${path.module}/output/cookiecutter_kubectl_version.state
 
     #------------------------------------------------------------------------------
     # 8. cookiecutter_os
@@ -208,12 +203,8 @@ data "local_file" "cookiecutter_global_iam_arn" {
 }
 
 # 7. cookiecutter_kubectl_version
-data "local_file" "cookiecutter_kubectl_version" {
-  filename = "${path.module}/output/cookiecutter_kubectl_version.state"
-  depends_on = [
-    null_resource.environment
-  ]
-}
+# removed
+
 
 # 8. cookiecutter_os
 data "local_file" "cookiecutter_os" {

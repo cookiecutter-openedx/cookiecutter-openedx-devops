@@ -7,16 +7,13 @@
 # usage: build an EKS cluster load balancer that uses a Fargate Compute Cluster
 #------------------------------------------------------------------------------
 terraform {
-  required_version = "~> 1.3"
+  required_version = "{{ cookiecutter.terraform_required_version }}"
 
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 4.48"
+      version = "~> {{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
     }
-    local = {
-      source  = "hashicorp/local"
-      version = "~> 2.2"
-    }
+    local = "{{ cookiecutter.terraform_provider_hashicorp_local_version }}"
   }
 }

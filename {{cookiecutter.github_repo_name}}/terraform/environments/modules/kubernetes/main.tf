@@ -8,7 +8,7 @@
 #        store the MySQL credentials in Kubernetes Secrets
 #------------------------------------------------------------------------------
 #------------------------------------------------------------------------------
-# Tutor deploys into this namespace, bc of a namesapce command-line argument
+# Tutor deploys into this namespace, bc of a namespace command-line argument
 # that we pass inside of GitHub Actions deploy workflow
 #------------------------------------------------------------------------------
 locals {
