@@ -12,6 +12,7 @@
 # - https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/
 #
 #------------------------------------------------------------------------------
+data "aws_partition" "current" {}
 
 locals {
   # Used by Karpenter config to determine correct partition (i.e. - `aws`, `aws-gov`, `aws-cn`, etc.)
@@ -24,38 +25,6 @@ locals {
     }
   )
 
-}
-
-resource "kubernetes_config_map_v1_data" "aws_auth_new" {
-  metadata {
-    name      = "aws-auth"
-    namespace = "kube-system"
-  }
-
-  data = {
-    "mapAccounts" = jsonencode([])
-    "mapRoles"    = <<-EOT
-      - "groups":
-        - "system:bootstrappers"
-        - "system:nodes"
-        "rolearn": "arn:aws:iam::${var.account_id}:role/service-eks-node-group-20230225001424228200000001"
-        {% raw %}"username": "system:node:{{EC2PrivateDNSName}}"{% endraw %}
-      - "groups":
-        - "system:bootstrappers"
-        - "system:nodes"
-        "rolearn": "arn:aws:iam::${var.account_id}:role/wordpress-eks-node-group-20230821193015357700000001"
-        {% raw %}"username": "system:node:{{EC2PrivateDNSName}}"{% endraw %}
-    EOT
-    "mapUsers"    = <<-EOT
-      - "groups":
-        - "system:masters"
-        "userarn": "arn:aws:iam::${var.account_id}:user/system/bastion-user/apps-hosting-service-bastion"
-        "username": "apps-hosting-service-bastion"
-    EOT
-  }
-
-  field_manager = "Terraform"
-  force         = true
 }
 
 module "eks" {
@@ -88,6 +57,24 @@ module "eks" {
   # add the bastion IAM user to aws-auth.mapUsers so that
   # kubectl and k9s work from inside the bastion server by default.
   create_iam_role = true
+
+  # Cluster access entry
+  enable_cluster_creator_admin_permissions = true
+  access_entries = {
+    bastion = {
+      kubernetes_groups = []
+      principal_arn     = var.bastion_iam_arn
+
+      policy_associations = {
+        admin = {
+          policy_arn = "arn:${local.partition}:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+          access_scope = {
+            type       = "cluster"
+          }
+        }
+      }
+    }
+  }
 
   tags = merge(
     local.tags,
@@ -353,7 +340,7 @@ resource "aws_security_group" "worker_group_mgmt" {
     { Name = "eks-${var.shared_resource_identifier}-worker_group_mgmt" },
     {
       "cookiecutter/resource/source"  = "hashicorp/aws/aws_security_group"
-      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+      "cookiecutter/resource/version" = "5.35"
     }
   )
 }
