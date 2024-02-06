@@ -43,6 +43,15 @@ locals {
   {% else -%}
   eks_create_kms_key                 = false
   {% endif -%}
+  eks_service_group_instance_type = "t3.xlarge"
+  eks_service_group_min_size      = 3
+  eks_service_group_max_size      = 10
+  eks_service_group_desired_size  = 3
+
+  eks_hosting_group_min_size      = 0
+  eks_hosting_group_max_size      = 0
+  eks_hosting_group_desired_size  = 0
+  eks_hosting_group_instance_type = "t3.xlarge"
 
   tags = merge(
     local.global_vars.locals.tags,
