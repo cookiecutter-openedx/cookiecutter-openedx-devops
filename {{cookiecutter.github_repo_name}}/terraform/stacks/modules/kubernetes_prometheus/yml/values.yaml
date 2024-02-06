@@ -634,7 +634,7 @@ alertmanager:
             - key: node-group
               operator: In
               values:
-              - {{ cookiecutter.global_platform_shared_resource_identifier }}
+              - {% endraw %}- {{ cookiecutter.global_platform_shared_resource_identifier }}- {% raw %}
     # nodeAffinity:
     #   requiredDuringSchedulingIgnoredDuringExecution:
     #     nodeSelectorTerms:
@@ -1888,7 +1888,7 @@ prometheusOperator:
               - key: node-group
                 operator: In
                 values:
-                - {{ cookiecutter.global_platform_shared_resource_identifier }}
+                - {% endraw %}{{ cookiecutter.global_platform_shared_resource_identifier }}{% raw %}
       tolerations: []
 
       ## SecurityContext holds pod-level security attributes and common container settings.
@@ -2123,7 +2123,7 @@ prometheusOperator:
             - key: node-group
               operator: In
               values:
-              - {{ cookiecutter.global_platform_shared_resource_identifier }}
+              - {% endraw %}- {{ cookiecutter.global_platform_shared_resource_identifier }}- {% raw %}
     # nodeAffinity:
     #   requiredDuringSchedulingIgnoredDuringExecution:
     #     nodeSelectorTerms:
@@ -2938,7 +2938,7 @@ prometheus:
             - key: node-group
               operator: In
               values:
-              - {{ cookiecutter.global_platform_shared_resource_identifier }}
+              - {% endraw %}- {{ cookiecutter.global_platform_shared_resource_identifier }}- {% raw %}
     # nodeAffinity:
     #   requiredDuringSchedulingIgnoredDuringExecution:
     #     nodeSelectorTerms:
@@ -3708,7 +3708,7 @@ thanosRuler:
             - key: node-group
               operator: In
               values:
-              - {{ cookiecutter.global_platform_shared_resource_identifier }}
+              - {% endraw %}- {{ cookiecutter.global_platform_shared_resource_identifier }}- {% raw %}
     # nodeAffinity:
     #   requiredDuringSchedulingIgnoredDuringExecution:
     #     nodeSelectorTerms:
