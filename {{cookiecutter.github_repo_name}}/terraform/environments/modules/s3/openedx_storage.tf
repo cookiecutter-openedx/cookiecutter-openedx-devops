@@ -11,16 +11,16 @@ module "openedx_storage" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "~> {{ cookiecutter.terraform_aws_modules_s3 }}"
 
-  bucket                    = var.resource_name_storage
-  acl                       = "private"
-  control_object_ownership  = true
-  object_ownership          = "ObjectWriter"
+  bucket                   = var.resource_name_storage
+  acl                      = "private"
+  control_object_ownership = true
+  object_ownership         = "ObjectWriter"
 
   tags = merge(
     local.tags,
     {
       "cookiecutter/resource/source"  = "terraform-aws-modules/s3-bucket/aws"
-      "cookiecutter/resource/version" = "3.6"
+      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_aws_modules_s3 }}"
     }
   )
 

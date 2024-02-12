@@ -11,10 +11,10 @@ module "openedx_backup" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "~> {{ cookiecutter.terraform_aws_modules_s3 }}"
 
-  bucket                    = var.resource_name_backup
-  acl                       = "private"
-  control_object_ownership  = true
-  object_ownership          = "ObjectWriter"
+  bucket                   = var.resource_name_backup
+  acl                      = "private"
+  control_object_ownership = true
+  object_ownership         = "ObjectWriter"
 
   tags = merge(
     local.tags,
