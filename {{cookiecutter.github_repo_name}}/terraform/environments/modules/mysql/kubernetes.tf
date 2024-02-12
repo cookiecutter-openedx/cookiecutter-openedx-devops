@@ -7,6 +7,7 @@
 # usage: create an RDS MySQL instance.
 #        store the MySQL credentials in Kubernetes Secrets
 #------------------------------------------------------------------------------
+
 # Retrieve the mysql_root connection parameters from the shared resource namespace.
 # we'll refer to this data for the HOST and PORT assignments on all other MySQL
 # secrets.
@@ -80,8 +81,7 @@ resource "kubernetes_secret" "discovery" {
     MYSQL_PORT               = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
   }
 }
-{% endif %}
-{% if cookiecutter.ci_deploy_install_ecommerce_service|upper == "Y" -%}
+
 resource "random_password" "mysql_ecommerce" {
   length           = 16
   special          = true
@@ -105,8 +105,7 @@ resource "kubernetes_secret" "ecommerce" {
     MYSQL_PORT               = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
   }
 }
-{% endif %}
-{% if cookiecutter.ci_deploy_install_notes_service|upper == "Y" -%}
+
 resource "random_password" "mysql_notes" {
   length           = 16
   special          = true
@@ -130,7 +129,7 @@ resource "kubernetes_secret" "notes" {
     MYSQL_PORT           = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
   }
 }
-{% endif %}
+
 resource "random_password" "mysql_xqueue" {
   length           = 16
   special          = true
