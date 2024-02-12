@@ -2,11 +2,20 @@
 ## @param tolerations Tolerations for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
+affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        preference:
+          matchExpressions:
+          - key: node-group
+            operator: In
+            values:
+            - wordpress
 tolerations:
-  - effect: NoSchedule
-    key: role
-    operator: Equal
-    value: pvc-pods
+- key: {{ cookiecutter.global_root_domain }}/wordpress-only
+  operator: Exists
+  effect: NoSchedule
 ## Database configuration
 ##
 db:

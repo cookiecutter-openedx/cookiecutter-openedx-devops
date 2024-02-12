@@ -21,17 +21,18 @@
 # see: https://jmrobles.medium.com/launch-a-wordpress-site-on-kubernetes-in-just-1-minute-193914cb4902
 #-----------------------------------------------------------
 
-data "template_file" "phpmyadmin-values" {
-  template = file("${path.module}/config/phpmyadmin-values.yaml.tpl")
-  vars = {
+locals {
+  template_phpmyadmin_values = templatefile("${path.module}/config/phpmyadmin-values.yaml.tpl", {
     externalDatabaseHost           = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
     externalDatabasePort           = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
     externalDatabaseUser           = local.externalDatabaseUser
     externalDatabasePassword       = random_password.externalDatabasePassword.result
     externalDatabaseDatabase       = local.externalDatabaseDatabase
     externalDatabaseExistingSecret = kubernetes_secret.wordpress_config.metadata[0].name
-  }
+  })
+
 }
+
 
 resource "helm_release" "phpmyadmin" {
   name             = "phpmyadmin"
@@ -41,13 +42,13 @@ resource "helm_release" "phpmyadmin" {
 
   chart      = "phpmyadmin"
   repository = "bitnami"
-  version    = "{{ cookiecutter.phpmyadmin_helm_chart_version }}"
+  version    = "~> {{ cookiecutter.phpmyadmin_helm_chart_version }}"
 
   # https://github.com/bitnami/charts/blob/main/bitnami/wordpress/values.yaml
   # or
   # helm show values bitnami/wordpress
   values = [
-    data.template_file.phpmyadmin-values.rendered
+    local.template_phpmyadmin_values
   ]
 
   depends_on = [
@@ -56,7 +57,7 @@ resource "helm_release" "phpmyadmin" {
     ssh_sensitive_resource.mysql,
     helm_release.wordpress,
     aws_route53_record.wordpress,
-    kubectl_manifest.wordpress_ingress,
+    kubernetes_manifest.wordpress_ingress,
     kubernetes_manifest.cluster-issuer
   ]
 }

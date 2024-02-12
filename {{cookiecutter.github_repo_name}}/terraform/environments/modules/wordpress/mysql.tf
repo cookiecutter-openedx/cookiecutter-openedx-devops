@@ -8,9 +8,8 @@
 #        Login to the bastion EC2 instance and execute mysql-config.sh
 #------------------------------------------------------------------------------
 
-data "template_file" "mysql_config" {
-  template = file("${path.module}/config/mysql-config.sql.tpl")
-  vars = {
+locals {
+  template_mysql_config = templatefile("${path.module}/config/mysql-config.sql.tpl", {
     MYSQL_HOST               = data.kubernetes_secret.mysql_root.data.MYSQL_HOST
     MYSQL_PORT               = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
     MYSQL_ROOT_USERNAME      = data.kubernetes_secret.mysql_root.data.MYSQL_ROOT_USERNAME
@@ -18,9 +17,8 @@ data "template_file" "mysql_config" {
     WORDPRESS_MYSQL_DATABASE = local.externalDatabaseDatabase
     WORDPRESS_MYSQL_USERNAME = local.externalDatabaseUser
     WORDPRESS_MYSQL_PASSWORD = random_password.externalDatabasePassword.result
-  }
+  })
 }
-
 
 resource "ssh_sensitive_resource" "mysql" {
   triggers = {
@@ -33,7 +31,7 @@ resource "ssh_sensitive_resource" "mysql" {
   agent       = false
 
   file {
-    content     = data.template_file.mysql_config.rendered
+    content     = local.template_mysql_config
     destination = "/tmp/mysql-config.sh"
     permissions = "0755"
   }

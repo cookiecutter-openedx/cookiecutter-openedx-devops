@@ -46,21 +46,7 @@ locals {
   HorizontalAutoscalingMaxReplicas = 1
   externalCachePort                = "11211"
 
-  tags = merge(
-    var.tags,
-    module.cookiecutter_meta.tags,
-    {
-      "cookiecutter/module/source"    = "{{ cookiecutter.github_repo_name }}/terraform/environments/modules/wordpress"
-      "cookiecutter/resource/source"  = "bitnami/wordpress"
-      "cookiecutter/resource/version" = "{{ cookiecutter.wordpress_helm_chart_version }}"
-    }
-  )
-}
-
-
-data "template_file" "wordpress-values" {
-  template = file("${path.module}/config/wordpress-values.yaml.tpl")
-  vars = {
+  template_wordpress_values = templatefile("${path.module}/config/wordpress-values.yaml.tpl", {
     wordpressDomain                  = local.wordpressDomain
     wordpressUsername                = local.wordpressUsername
     wordpressExistingSecret          = kubernetes_secret.wordpress_config.metadata[0].name
@@ -86,8 +72,19 @@ data "template_file" "wordpress-values" {
     memcachedEnabled                 = false
     externalCacheHost                = data.kubernetes_secret.redis.data.REDIS_HOST
     externalCachePort                = local.externalCachePort
-  }
+  })
+
+  tags = merge(
+    var.tags,
+    module.cookiecutter_meta.tags,
+    {
+      "cookiecutter/module/source"    = "openedx_devops/terraform/environments/modules/wordpress"
+      "cookiecutter/resource/source"  = "bitnami/wordpress"
+      "cookiecutter/resource/version" = "~> {{ cookiecutter.wordpress_helm_chart_version }}"
+    }
+  )
 }
+
 
 resource "helm_release" "wordpress" {
   name             = local.wordpress
@@ -96,13 +93,13 @@ resource "helm_release" "wordpress" {
 
   chart      = "wordpress"
   repository = "bitnami"
-  version    = "{{ cookiecutter.wordpress_helm_chart_version }}"
+  version    = "~> {{ cookiecutter.wordpress_helm_chart_version }}"
 
   # https://github.com/bitnami/charts/blob/main/bitnami/wordpress/values.yaml
   # or
   # helm show values bitnami/wordpress
   values = [
-    data.template_file.wordpress-values.rendered
+    local.template_wordpress_values
   ]
 
   depends_on = [
