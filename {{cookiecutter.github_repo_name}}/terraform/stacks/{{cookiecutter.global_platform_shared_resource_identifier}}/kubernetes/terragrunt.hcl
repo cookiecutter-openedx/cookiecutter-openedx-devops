@@ -11,6 +11,10 @@ locals {
   stack_vars  = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
   global_vars = read_terragrunt_config(find_in_parent_folders("global.hcl"))
 
+  ubuntu_group_desired_size = local.stack_vars.locals.eks_ubuntu_group_desired_size
+  ubuntu_group_min_size     = local.stack_vars.locals.eks_ubuntu_group_min_size
+  ubuntu_group_max_size     = local.stack_vars.locals.eks_ubuntu_group_max_size
+
   service_group_desired_size = local.stack_vars.locals.eks_service_group_desired_size
   service_group_min_size     = local.stack_vars.locals.eks_service_group_min_size
   service_group_max_size     = local.stack_vars.locals.eks_service_group_max_size
@@ -84,6 +88,10 @@ inputs = {
   eks_create_kms_key         = local.eks_create_kms_key
   bastion_iam_arn            = local.bastion_iam_arn
   tags                       = local.tags
+
+  ubuntu_group_desired_size = local.ubuntu_group_desired_size
+  ubuntu_group_min_size     = local.ubuntu_group_min_size
+  ubuntu_group_max_size     = local.ubuntu_group_max_size
 
   service_group_desired_size = local.service_group_desired_size
   service_group_min_size     = local.service_group_min_size

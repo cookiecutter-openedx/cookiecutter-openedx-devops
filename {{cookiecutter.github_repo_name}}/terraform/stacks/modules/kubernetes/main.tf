@@ -10,13 +10,18 @@
 # Technical documentation:
 # - https://docs.aws.amazon.com/kubernetes
 # - https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/
-#
+# - https://repost.aws/knowledge-center/execute-user-data-ec2
 #------------------------------------------------------------------------------
 data "aws_partition" "current" {}
 
 locals {
   # Used by Karpenter config to determine correct partition (i.e. - `aws`, `aws-gov`, `aws-cn`, etc.)
   partition = data.aws_partition.current.partition
+
+  template_docker_edx_sandbox = templatefile("${path.module}/templates/docker-edx-sandbox.tpl", {})
+  template_post_install_apparmor = templatefile("${path.module}/templates/post-install-apparmor.tpl", {
+    docker_edx_sandbox = local.template_docker_edx_sandbox
+  })
 
   tags = merge(
     var.tags,
@@ -59,7 +64,7 @@ module "eks" {
   create_iam_role = true
 
   # Cluster access entry
-  enable_cluster_creator_admin_permissions = true
+  # enable_cluster_creator_admin_permissions = true
   access_entries = {
     bastion = {
       kubernetes_groups = []
@@ -69,7 +74,7 @@ module "eks" {
         admin = {
           policy_arn = "arn:${local.partition}:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
           access_scope = {
-            type       = "cluster"
+            type = "cluster"
           }
         }
       }
@@ -132,6 +137,125 @@ module "eks" {
     }
   }
 
+  self_managed_node_group_defaults = {
+    # enable discovery of autoscaling groups by cluster-autoscaler
+    autoscaling_group_tags = {
+      "k8s.io/cluster-autoscaler/enabled" : true,
+      "k8s.io/cluster-autoscaler/${var.namespace}" : "owned",
+    }
+  }
+
+  self_managed_node_groups = {
+    # see: https://github.com/overhangio/tutor/issues/284
+    #
+    # TO DO: VERIFY THAT THIS NODE GROUP HAS THE FOLLOWING ROLE-BASED PERMISSIONS:
+    # IAM Role policies for EC2 node group
+    # AmazonEKSWorkerNodePolicy
+    # AmazonEKS_CNI_Policy
+    # AmazonEC2ContainerRegistryReadOnly
+
+    eks_ubuntu = {
+      min_size          = var.ubuntu_group_min_size
+      max_size          = var.ubuntu_group_max_size
+      desired_size      = var.ubuntu_group_desired_size
+      ami_id            = data.aws_ami.ubuntu.id
+      capacity_type     = "SPOT"
+      enable_monitoring = false
+
+      labels = {
+        node-group = "ubuntu"
+      }
+
+      # TO DO: configure a taint based on existing codejail deployment lables
+      # taints = [{
+      #   key    = "lawrencemcdaniel.com/wordpress-only"
+      #   effect = "NO_SCHEDULE"
+      # }]
+
+      # init customizations
+      pre_bootstrap_user_data = <<-EOT
+      EOT
+      # bootstrap_extra_args = "--kubelet-extra-args '--node-labels=node.kubernetes.io/lifecycle=spot'"
+      post_bootstrap_user_data = local.template_post_install_apparmor
+
+      use_mixed_instances_policy = true
+      mixed_instances_policy = {
+        instances_distribution = {
+          on_demand_base_capacity                  = 0
+          on_demand_percentage_above_base_capacity = 0
+          spot_allocation_strategy                 = "capacity-optimized"
+        }
+
+        override = [
+          { instance_type = "t3.large" },
+          { instance_type = "t3.xlarge" },
+          { instance_type = "t3a.large" },
+          { instance_type = "t3a.xlarge" },
+          { instance_type = "t2.large" },
+          { instance_type = "t2.xlarge" },
+          { instance_type = "m4.large" },
+          { instance_type = "m5.large" },
+          { instance_type = "m5a.large" },
+          { instance_type = "m5ad.large" },
+          { instance_type = "m5d.large" },
+          { instance_type = "m5dn.large" },
+          { instance_type = "m5n.large" },
+          { instance_type = "m5zn.large" },
+          { instance_type = "m6a.large" },
+          { instance_type = "m6i.large" },
+          { instance_type = "m6id.large" },
+          { instance_type = "m6idn.large" },
+          { instance_type = "m6in.large" },
+          { instance_type = "m7a.large" },
+          { instance_type = "m7a.xlarge" },
+          { instance_type = "m7i-flex.large" },
+          { instance_type = "m7i.large" },
+          { instance_type = "r3.large" },
+          { instance_type = "r4.large" },
+          { instance_type = "r5.large" },
+          { instance_type = "r5a.large" },
+          { instance_type = "r5ad.large" },
+          { instance_type = "r5b.large" },
+          { instance_type = "r5d.large" },
+          { instance_type = "r5dn.large" },
+          { instance_type = "r5n.large" },
+          { instance_type = "r6a.large" },
+          { instance_type = "r6i.large" },
+          { instance_type = "r6id.large" },
+          { instance_type = "r6idn.large" },
+          { instance_type = "r6in.large" },
+        ]
+
+      }
+
+
+      iam_role_additional_policies = {
+        # see https://ubuntu.com/blog/introducing-ubuntu-support-for-amazon-eks-1-18
+        AmazonEKSWorkerNodePolicy          = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+        AmazonEKS_CNI_Policy               = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+        AmazonEC2ContainerRegistryReadOnly = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+
+        # Required by Karpenter
+        AmazonSSMManagedInstanceCore = "arn:${local.partition}:iam::aws:policy/AmazonSSMManagedInstanceCore"
+
+        # Required by EBS CSI Add-on
+        AmazonEBSCSIDriverPolicy = data.aws_iam_policy.AmazonEBSCSIDriverPolicy.arn
+      }
+      block_device_mappings = {
+        sda1 = {
+          device_name = "/dev/sda1"
+          ebs = {
+            volume_type           = "gp3"
+            volume_size           = 100
+            delete_on_termination = true
+          }
+        }
+      }
+
+      tags = local.tags
+
+    }
+  }
   eks_managed_node_groups = {
     # This node group is managed by Karpenter. There must be at least
     # node in this group at all times in order for Karpenter to monitor
@@ -142,7 +266,7 @@ module "eks" {
     # (a few hours or less) as these are usually only instantiated during
     # bursts of user activity such as at the start of a scheduled lecture or
     # exam on a large mooc.
-    service = {
+    eks_amazn = {
       capacity_type     = "SPOT"
       enable_monitoring = false
       desired_size      = var.service_group_desired_size
@@ -152,7 +276,6 @@ module "eks" {
       labels = {
         node-group = "service"
       }
-
       iam_role_additional_policies = {
         # Required by Karpenter
         AmazonSSMManagedInstanceCore = "arn:${local.partition}:iam::aws:policy/AmazonSSMManagedInstanceCore"
@@ -318,6 +441,14 @@ module "eks" {
 #==============================================================================
 #                             SUPPORTING RESOURCES
 #==============================================================================
+data "aws_ami" "ubuntu" {
+  most_recent = true
+  filter {
+    name = "name"
+    # https://aws.amazon.com/marketplace/server/procurement?productId=prod-lg73jq6vy35h2
+    values = ["ubuntu-eks/k8s_1.29/images/hvm-ssd/ubuntu-jammy-22.04-amd64*"]
+  }
+}
 
 resource "aws_security_group" "worker_group_mgmt" {
   name_prefix = "${var.namespace}-eks_hosting_group_mgmt"
@@ -368,7 +499,7 @@ resource "aws_security_group" "all_worker_mgmt" {
     { Name = "eks-${var.shared_resource_identifier}-all_worker_mgmt" },
     {
       "cookiecutter/resource/source"  = "hashicorp/aws/aws_security_group"
-      "cookiecutter/resource/version" = "{{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+      "cookiecutter/resource/version" = "5.35"
     }
   )
 }
