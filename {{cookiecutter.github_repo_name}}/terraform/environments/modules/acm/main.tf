@@ -19,25 +19,6 @@ data "aws_route53_zone" "environment_domain" {
 }
 
 
-module "acm_root_domain_environment_region" {
-  source  = "terraform-aws-modules/acm/aws"
-  version = "~> {{ cookiecutter.terraform_aws_modules_acm }}"
-
-  providers = {
-    aws = aws.environment_region
-  }
-
-  domain_name = var.root_domain
-  zone_id     = data.aws_route53_zone.root_domain.id
-
-  subject_alternative_names = [
-    "*.${var.root_domain}",
-  ]
-  tags = local.tags
-
-  wait_for_validation = true
-}
-
 module "acm_environment_environment_region" {
   source  = "terraform-aws-modules/acm/aws"
   version = "{{ cookiecutter.terraform_aws_modules_acm }}"
@@ -46,8 +27,9 @@ module "acm_environment_environment_region" {
     aws = aws.environment_region
   }
 
-  domain_name = var.environment_domain
-  zone_id     = data.aws_route53_zone.environment_domain.id
+  domain_name       = var.environment_domain
+  zone_id           = data.aws_route53_zone.environment_domain.id
+  validation_method = "DNS"
 
   subject_alternative_names = [
     "*.${var.environment_domain}",
