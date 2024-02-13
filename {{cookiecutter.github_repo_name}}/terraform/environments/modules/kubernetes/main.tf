@@ -8,7 +8,7 @@
 #        store the MySQL credentials in Kubernetes Secrets
 #------------------------------------------------------------------------------
 #------------------------------------------------------------------------------
-# Tutor deploys into this namespace, bc of a namespace command-line argument
+# Tutor deploys into this namespace, bc of a namesapce command-line argument
 # that we pass inside of GitHub Actions deploy workflow
 #------------------------------------------------------------------------------
 locals {
@@ -16,7 +16,7 @@ locals {
     var.tags,
     module.cookiecutter_meta.tags,
     {
-      "cookiecutter/module/source" = "{{ cookiecutter.github_repo_name }}/terraform/environments/modules/kubernetes"
+      "cookiecutter/module/source" = "openedx_devops/terraform/environments/modules/kubernetes"
     }
   )
 }
