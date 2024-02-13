@@ -7,28 +7,28 @@
 # usage: Wordpress module Terraform provider configurations
 #------------------------------------------------------------------------------
 terraform {
-  required_version = "{{ cookiecutter.terraform_required_version }}"
+  required_version = "~> 1.5"
 
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> {{ cookiecutter.terraform_provider_hashicorp_aws_version }}"
+      version = "~> 5.35"
     }
     local = {
       source  = "hashicorp/local"
-      version = "{{ cookiecutter.terraform_provider_hashicorp_local_version }}"
+      version = "~> 2.4"
     }
     random = {
       source  = "hashicorp/random"
-      version = "{{ cookiecutter.terraform_provider_hashicorp_random_version }}"
+      version = "~> 3.6"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "{{ cookiecutter.terraform_provider_kubernetes_version }}"
+      version = "~> 2.25"
     }
     ssh = {
       source  = "loafoe/ssh"
-      version = "{{ cookiecutter.terraform_provider_hashicorp_ssh_version }}"
+      version = "~> 2.4"
     }
   }
 }

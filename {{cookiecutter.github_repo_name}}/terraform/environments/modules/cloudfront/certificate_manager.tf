@@ -19,8 +19,10 @@ module "acm_environment_domain" {
     aws = aws.us-east-1
   }
 
-  domain_name = var.environment_domain
-  zone_id     = data.aws_route53_zone.environment_domain.id
+  domain_name       = var.environment_domain
+  zone_id           = data.aws_route53_zone.environment_domain.id
+  validation_method = "DNS"
+
 
   subject_alternative_names = [
     "*.${var.environment_domain}",

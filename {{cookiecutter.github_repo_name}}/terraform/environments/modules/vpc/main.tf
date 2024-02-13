@@ -1,5 +1,5 @@
 locals {
-  cdn_name         = "cdn.${var.environment_domain}"
+  cdn_name = "cdn.${var.environment_domain}"
 
   tags = merge(
     var.tags,

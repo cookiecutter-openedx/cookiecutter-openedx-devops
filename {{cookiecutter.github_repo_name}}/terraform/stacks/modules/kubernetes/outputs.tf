@@ -157,11 +157,11 @@ output "fargate_profiles" {
 # EKS Managed Node Groups
 ################################################################################
 output "service_node_group_iam_role_name" {
-  value = module.eks.eks_managed_node_groups["service"].iam_role_name
+  value = module.eks.eks_managed_node_groups["eks_amazn"].iam_role_name
 }
 
 output "service_node_group_iam_role_arn" {
-  value = module.eks.eks_managed_node_groups["service"].iam_role_arn
+  value = module.eks.eks_managed_node_groups["eks_amazn"].iam_role_arn
 }
 output "eks_managed_node_groups" {
   description = "Map of attribute maps for all EKS managed node groups created"

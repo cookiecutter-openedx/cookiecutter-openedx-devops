@@ -83,24 +83,39 @@ variable "kms_key_owners" {
   default = []
 }
 
+variable "ubuntu_group_min_size" {
+  type    = number
+  default = 0
+}
+
+variable "ubuntu_group_max_size" {
+  type    = number
+  default = 1
+}
+
+variable "ubuntu_group_desired_size" {
+  type    = number
+  default = 1
+}
+
 variable "service_group_min_size" {
   type    = number
-  default = 4
+  default = 0
 }
 
 variable "service_group_max_size" {
   type    = number
-  default = 4
+  default = 1
 }
 
 variable "service_group_desired_size" {
   type    = number
-  default = 4
+  default = 1
 }
 
 variable "hosting_group_min_size" {
   type    = number
-  default = 1
+  default = 0
 }
 
 variable "hosting_group_max_size" {

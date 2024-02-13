@@ -1,56 +1,35 @@
-data "template_file" "scorm_proxy_service" {
-  template = file("${path.module}/manifests/proxy-service.yml.tpl")
-  vars = {
+locals {
+  template_scorm_proxy_service = templatefile("${path.module}/manifests/proxy-service.yml.tpl", {
     environment_domain    = var.environment_domain
     environment_namespace = var.environment_namespace
     bucket_uri            = data.aws_s3_bucket.storage.bucket_domain_name
-  }
-}
-resource "kubectl_manifest" "scorm_proxy_service" {
-  yaml_body = data.template_file.scorm_proxy_service.rendered
+  })
 
-  depends_on = [
-    aws_route53_record.naked,
-    aws_route53_record.wildcard,
-  ]
-}
-
-data "template_file" "ingress" {
-  template = file("${path.module}/manifests/ingress.yml.tpl")
-  vars = {
+  template_ingress = templatefile("${path.module}/manifests/ingress.yml.tpl", {
     environment_domain    = var.environment_domain
     environment_namespace = var.environment_namespace
     studio_subdomain      = var.studio_subdomain
-  }
-}
+  })
 
-data "template_file" "ingress_scorm_proxy_service" {
-  template = file("${path.module}/manifests/ingress-scorm-proxy-service.yml.tpl")
-  vars = {
+
+  template_ingress_scorm_proxy_service = templatefile("${path.module}/manifests/ingress-scorm-proxy-service.yml.tpl", {
     environment_domain    = var.environment_domain
     environment_namespace = var.environment_namespace
     studio_subdomain      = var.studio_subdomain
-  }
-}
+  })
 
-data "template_file" "ingress_mfe_config" {
-  template = file("${path.module}/manifests/ingress-mfe-config.yml.tpl")
-  vars = {
+  template_ingress_mfe_config = templatefile("${path.module}/manifests/ingress-mfe-config.yml.tpl", {
     environment_domain    = var.environment_domain
     environment_namespace = var.environment_namespace
-  }
-}
+  })
 
-data "template_file" "ingress_mfe" {
-  template = file("${path.module}/manifests/ingress-mfe.yml.tpl")
-  vars = {
+  template_ingress_mfe = templatefile("${path.module}/manifests/ingress-mfe.yml.tpl", {
     environment_domain    = var.environment_domain
     environment_namespace = var.environment_namespace
-  }
+  })
 }
-
-resource "kubectl_manifest" "ingress" {
-  yaml_body = data.template_file.ingress.rendered
+resource "kubernetes_manifest" "scorm_proxy_service" {
+  manifest = yamldecode(local.template_scorm_proxy_service)
 
   depends_on = [
     aws_route53_record.naked,
@@ -58,18 +37,8 @@ resource "kubectl_manifest" "ingress" {
   ]
 }
 
-resource "kubectl_manifest" "ingress_scorm_proxy_service" {
-  yaml_body = data.template_file.ingress_scorm_proxy_service.rendered
-
-  depends_on = [
-    aws_route53_record.naked,
-    aws_route53_record.wildcard,
-    kubectl_manifest.ingress_scorm_proxy_service,
-  ]
-}
-
-resource "kubectl_manifest" "ingress_mfe_config" {
-  yaml_body = data.template_file.ingress_mfe_config.rendered
+resource "kubernetes_manifest" "ingress" {
+  manifest = yamldecode(local.template_ingress)
 
   depends_on = [
     aws_route53_record.naked,
@@ -77,8 +46,27 @@ resource "kubectl_manifest" "ingress_mfe_config" {
   ]
 }
 
-resource "kubectl_manifest" "ingress_mfe" {
-  yaml_body = data.template_file.ingress_mfe.rendered
+resource "kubernetes_manifest" "ingress_scorm_proxy_service" {
+  manifest = yamldecode(local.template_ingress_scorm_proxy_service)
+
+  depends_on = [
+    aws_route53_record.naked,
+    aws_route53_record.wildcard,
+    kubernetes_manifest.ingress_scorm_proxy_service,
+  ]
+}
+
+resource "kubernetes_manifest" "ingress_mfe_config" {
+  manifest = yamldecode(local.template_ingress_mfe_config)
+
+  depends_on = [
+    aws_route53_record.naked,
+    aws_route53_record.wildcard,
+  ]
+}
+
+resource "kubernetes_manifest" "ingress_mfe" {
+  manifest = yamldecode(local.template_ingress_mfe)
 
   depends_on = [
     aws_route53_record.naked,

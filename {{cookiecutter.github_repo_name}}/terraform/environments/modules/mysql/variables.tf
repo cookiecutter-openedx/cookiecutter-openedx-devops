@@ -28,7 +28,7 @@ variable "environment" {
   type = string
 }
 
-variable "db_instance_id" {
+variable "db_instance_arn" {
   type = string
 }
 

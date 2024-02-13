@@ -4,7 +4,7 @@
 
 # date: Jan-2023
 #
-# usage: 
+# usage:
 #   1. open-release olive.1 and newer include the url endpoint /api/mfe_config/v1
 #      that is implemented in edx-platform/lms/djangoapps/mfe_config_api.
 #
@@ -81,4 +81,3 @@ spec:
             name: mfe
             port:
               number: 8002
-      

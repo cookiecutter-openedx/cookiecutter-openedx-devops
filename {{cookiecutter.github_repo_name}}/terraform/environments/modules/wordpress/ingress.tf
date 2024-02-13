@@ -7,18 +7,23 @@
 # usage: Wordpress ingress
 #------------------------------------------------------------------------------
 
-data "template_file" "wordpress_ingress" {
-  template = file("${path.module}/config/wordpress-ingress.yml.tpl")
-  vars = {
+locals {
+  template_wordpress_ingress = templatefile("${path.module}/config/wordpress-ingress.yml.tpl", {
     name           = local.wordpressDomain
     namespace      = local.wordpressNamespace
     cluster_issuer = local.wordpressDomain
     domain         = local.wordpressDomain
-  }
-}
+  })
 
-resource "kubectl_manifest" "wordpress_ingress" {
-  yaml_body = data.template_file.wordpress_ingress.rendered
+  template_phpmyadmin_ingress = templatefile("${path.module}/config/phpmyadmin-ingress.yml.tpl", {
+    name           = "phpmyadmin.${local.wordpressDomain}"
+    namespace      = local.wordpressNamespace
+    cluster_issuer = local.wordpressDomain
+    domain         = "phpmyadmin.${local.wordpressDomain}"
+  })
+}
+resource "kubernetes_manifest" "wordpress_ingress" {
+  manifest = yamldecode(local.template_wordpress_ingress)
 
   depends_on = [
     kubernetes_namespace.wordpress,
@@ -26,25 +31,14 @@ resource "kubectl_manifest" "wordpress_ingress" {
   ]
 }
 
-
-data "template_file" "phpmyadmin_ingress" {
-  template = file("${path.module}/config/phpmyadmin-ingress.yml.tpl")
-  vars = {
-    name           = "phpmyadmin.${local.wordpressDomain}"
-    namespace      = local.wordpressNamespace
-    cluster_issuer = local.wordpressDomain
-    domain         = "phpmyadmin.${local.wordpressDomain}"
-  }
-}
-
-resource "kubectl_manifest" "phpmyadmin" {
-  count     = var.phpmyadmin == "Y" ? 1 : 0
-  yaml_body = data.template_file.phpmyadmin_ingress.rendered
+resource "kubernetes_manifest" "phpmyadmin" {
+  count    = var.phpmyadmin == "Y" ? 1 : 0
+  manifest = yamldecode(local.template_phpmyadmin_ingress)
 
   depends_on = [
     kubernetes_namespace.wordpress,
     helm_release.wordpress,
     helm_release.phpmyadmin,
-    kubectl_manifest.wordpress_ingress
+    kubernetes_manifest.wordpress_ingress
   ]
 }

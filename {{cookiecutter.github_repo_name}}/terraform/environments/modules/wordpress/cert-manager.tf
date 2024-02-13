@@ -7,18 +7,16 @@
 # usage: Wordpress ssl certs for ingress
 #------------------------------------------------------------------------------
 
-data "template_file" "cluster-issuer" {
-  template = file("${path.module}/config/cluster-issuer.yml.tpl")
-  vars = {
+locals {
+  template_cluster_issuer = templatefile("${path.module}/config/cluster-issuer.yml.tpl", {
     root_domain      = local.wordpressRootDomain
     wordpress_domain = local.wordpressDomain
     aws_region       = var.aws_region
     hosted_zone_id   = data.aws_route53_zone.wordpress_domain.id
-  }
+  })
 }
-
 resource "kubernetes_manifest" "cluster-issuer" {
-  manifest = yamldecode(data.template_file.cluster-issuer.rendered)
+  manifest = yamldecode(local.template_cluster_issuer)
 
   depends_on = [
     kubernetes_namespace.wordpress,

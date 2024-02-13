@@ -1,77 +1,50 @@
+locals {
 
-data "template_file" "vpa-cms" {
-  template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-cms.yaml.tpl")
-  vars = {
+  vpa_cms = templatefile("${path.module}/yml/verticalpodautoscalers/vpa-openedx-cms.yaml.tpl", {
     environment_namespace = var.environment_namespace
-  }
-}
+  })
 
-data "template_file" "vpa-cms-worker" {
-  template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-cms-worker.yaml.tpl")
-  vars = {
+  vpa_cms_worker = templatefile("${path.module}/yml/verticalpodautoscalers/vpa-openedx-cms-worker.yaml.tpl", {
     environment_namespace = var.environment_namespace
-  }
-}
+  })
 
-data "template_file" "vpa-discovery" {
-  template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-discovery.yaml.tpl")
-  vars = {
+  vpa_discovery = templatefile("${path.module}/yml/verticalpodautoscalers/vpa-openedx-discovery.yaml.tpl", {
     environment_namespace = var.environment_namespace
-  }
-}
+  })
 
-data "template_file" "vpa-elasticsearch" {
-  template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-elasticsearch.yaml.tpl")
-  vars = {
+  vpa_elasticsearch = templatefile("${path.module}/yml/verticalpodautoscalers/vpa-openedx-elasticsearch.yaml.tpl", {
     environment_namespace = var.environment_namespace
-  }
-}
+  })
 
-data "template_file" "vpa-lms" {
-  template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-lms.yaml.tpl")
-  vars = {
+  vpa_lms = templatefile("${path.module}/yml/verticalpodautoscalers/vpa-openedx-lms.yaml.tpl", {
     environment_namespace = var.environment_namespace
-  }
-}
+  })
 
-data "template_file" "vpa-lms-worker" {
-  template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-lms-worker.yaml.tpl")
-  vars = {
+  vpa_lms_worker = templatefile("${path.module}/yml/verticalpodautoscalers/vpa-openedx-lms-worker.yaml.tpl", {
     environment_namespace = var.environment_namespace
-  }
-}
+  })
 
-data "template_file" "vpa-mfe" {
-  template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-mfe.yaml.tpl")
-  vars = {
+  vpa_mfe = templatefile("${path.module}/yml/verticalpodautoscalers/vpa-openedx-mfe.yaml.tpl", {
     environment_namespace = var.environment_namespace
-  }
-}
+  })
 
-data "template_file" "vpa-mongodb" {
-  template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-mongodb.yaml.tpl")
-  vars = {
+  vpa_mongodb = templatefile("${path.module}/yml/verticalpodautoscalers/vpa-openedx-mongodb.yaml.tpl", {
     environment_namespace = var.environment_namespace
-  }
-}
+  })
 
-
-data "template_file" "vpa-notes" {
-  template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-notes.yaml.tpl")
-  vars = {
+  vpa_notes = templatefile("${path.module}/yml/verticalpodautoscalers/vpa-openedx-notes.yaml.tpl", {
     environment_namespace = var.environment_namespace
-  }
-}
+  })
 
-data "template_file" "vpa-smtp" {
-  template = file("${path.module}/yml/verticalpodautoscalers/vpa-openedx-smtp.yaml.tpl")
-  vars = {
+  vpa_smtp = templatefile("${path.module}/yml/verticalpodautoscalers/vpa-openedx-smtp.yaml.tpl", {
     environment_namespace = var.environment_namespace
-  }
+  })
+
+
 }
 
 resource "kubernetes_manifest" "vpa-lms" {
-  manifest = yamldecode(data.template_file.vpa-lms.rendered)
+  manifest = yamldecode(local.vpa_lms)
 
   depends_on = [
     kubernetes_namespace.environment_namespace
@@ -79,7 +52,7 @@ resource "kubernetes_manifest" "vpa-lms" {
 }
 
 resource "kubernetes_manifest" "vpa-lms-worker" {
-  manifest = yamldecode(data.template_file.vpa-lms-worker.rendered)
+  manifest = yamldecode(local.vpa_lms_worker)
 
   depends_on = [
     kubernetes_namespace.environment_namespace
@@ -88,7 +61,7 @@ resource "kubernetes_manifest" "vpa-lms-worker" {
 
 
 resource "kubernetes_manifest" "vpa-cms" {
-  manifest = yamldecode(data.template_file.vpa-cms.rendered)
+  manifest = yamldecode(local.vpa_cms)
 
   depends_on = [
     kubernetes_namespace.environment_namespace
@@ -96,7 +69,7 @@ resource "kubernetes_manifest" "vpa-cms" {
 }
 
 resource "kubernetes_manifest" "vpa-cms-worker" {
-  manifest = yamldecode(data.template_file.vpa-cms-worker.rendered)
+  manifest = yamldecode(local.vpa_cms_worker)
 
   depends_on = [
     kubernetes_namespace.environment_namespace
@@ -104,7 +77,7 @@ resource "kubernetes_manifest" "vpa-cms-worker" {
 }
 
 resource "kubernetes_manifest" "vpa-mfe" {
-  manifest = yamldecode(data.template_file.vpa-mfe.rendered)
+  manifest = yamldecode(local.vpa_mfe)
 
   depends_on = [
     kubernetes_namespace.environment_namespace
@@ -112,7 +85,7 @@ resource "kubernetes_manifest" "vpa-mfe" {
 }
 
 resource "kubernetes_manifest" "vpa-elasticsearch" {
-  manifest = yamldecode(data.template_file.vpa-elasticsearch.rendered)
+  manifest = yamldecode(local.vpa_elasticsearch)
 
   depends_on = [
     kubernetes_namespace.environment_namespace
@@ -120,7 +93,7 @@ resource "kubernetes_manifest" "vpa-elasticsearch" {
 }
 
 resource "kubernetes_manifest" "vpa-discovery" {
-  manifest = yamldecode(data.template_file.vpa-discovery.rendered)
+  manifest = yamldecode(local.vpa_discovery)
 
   depends_on = [
     kubernetes_namespace.environment_namespace
@@ -128,7 +101,7 @@ resource "kubernetes_manifest" "vpa-discovery" {
 }
 
 resource "kubernetes_manifest" "mongodb" {
-  manifest = yamldecode(data.template_file.vpa-mongodb.rendered)
+  manifest = yamldecode(local.vpa_mongodb)
 
   depends_on = [
     kubernetes_namespace.environment_namespace
@@ -136,7 +109,7 @@ resource "kubernetes_manifest" "mongodb" {
 }
 
 resource "kubernetes_manifest" "notes" {
-  manifest = yamldecode(data.template_file.vpa-notes.rendered)
+  manifest = yamldecode(local.vpa_notes)
 
   depends_on = [
     kubernetes_namespace.environment_namespace
@@ -144,7 +117,7 @@ resource "kubernetes_manifest" "notes" {
 }
 
 resource "kubernetes_manifest" "smtp" {
-  manifest = yamldecode(data.template_file.vpa-smtp.rendered)
+  manifest = yamldecode(local.vpa_smtp)
 
   depends_on = [
     kubernetes_namespace.environment_namespace
