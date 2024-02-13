@@ -1,24 +1,21 @@
 
-data "template_file" "certificate" {
-  template = file("${path.module}/manifests/certificate.yml.tpl")
-  vars = {
+locals {
+  template_certificate = templatefile("${path.module}/manifests/certificate.yml.tpl", {
     environment_domain = var.environment_domain
     namespace          = var.environment_namespace
-  }
-}
+  })
 
-data "template_file" "cluster-issuer" {
-  template = file("${path.module}/manifests/cluster-issuer.yml.tpl")
-  vars = {
+  template_cluster_issuer = templatefile("${path.module}/manifests/cluster-issuer.yml.tpl", {
     root_domain        = var.root_domain
     environment_domain = var.environment_domain
+    namespace          = var.environment_namespace
     aws_region         = var.aws_region
     hosted_zone_id     = data.aws_route53_zone.environment_domain.id
-  }
+  })
 }
 
 resource "kubernetes_manifest" "cluster-issuer" {
-  manifest = yamldecode(data.template_file.cluster-issuer.rendered)
+  manifest = yamldecode(local.template_cluster_issuer)
 
   depends_on = [
     aws_route53_record.naked,
@@ -27,7 +24,7 @@ resource "kubernetes_manifest" "cluster-issuer" {
 }
 
 resource "kubernetes_manifest" "certificate" {
-  manifest = yamldecode(data.template_file.certificate.rendered)
+  manifest = yamldecode(local.template_certificate)
 
   depends_on = [
     aws_route53_record.naked,
