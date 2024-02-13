@@ -39,10 +39,10 @@ data "aws_route53_zone" "environment_domain" {
 # see eks_ec2/acm.tf or eks_fargate/acm.tf for creation of this certificate
 # as well as the definition for the provider "aws.us-east-1"
 data "aws_acm_certificate" "environment_domain" {
-  domain   = var.environment_domain
-  statuses = ["ISSUED"]
-  provider = aws.us-east-1
-  {% if cookiecutter.global_aws_region != "us-east-1" -%}depends_on = [module.acm_environment_domain]{% endif %}
+  domain     = var.environment_domain
+  statuses   = ["ISSUED"]
+  provider   = aws.us-east-1
+  depends_on = [module.acm_environment_domain]
 }
 
 data "aws_s3_bucket" "environment_domain" {
