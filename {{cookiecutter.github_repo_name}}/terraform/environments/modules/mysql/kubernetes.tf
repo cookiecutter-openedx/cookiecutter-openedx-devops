@@ -81,6 +81,7 @@ resource "kubernetes_secret" "discovery" {
     MYSQL_PORT               = data.kubernetes_secret.mysql_root.data.MYSQL_PORT
   }
 }
+{% endif %}
 
 resource "random_password" "mysql_ecommerce" {
   length           = 16
