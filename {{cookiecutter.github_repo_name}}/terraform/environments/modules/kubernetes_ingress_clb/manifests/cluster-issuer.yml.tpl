@@ -19,6 +19,9 @@ spec:
       name: ${environment_domain}
     server: https://acme-v02.api.letsencrypt.org/directory
     solvers:
+      - http01:
+          ingress:
+            class: nginx
       - dns01:
           # hosted Zone ID for for the environment domain.
           route53:
