@@ -154,7 +154,7 @@ resource "kubernetes_secret" "xqueue" {
   }
 }
 
-{% if cookiecutter.ci_deploy_install_credentials_server|upper == "Y" -%}
+{% endif %}{% if cookiecutter.ci_deploy_install_credentials_server|upper == "Y" -%}
 resource "random_password" "mysql_credentials" {
   length           = 16
   special          = true
