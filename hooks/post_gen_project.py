@@ -188,7 +188,7 @@ def main():
 
     if "{{ cookiecutter.stack_add_remote_mongodb }}".upper() != "Y":
         remove_mongodb()
-        remove_mongodb_volume
+        remove_mongodb_volume()
 
     if "{{ cookiecutter.wordpress_add_site }}".upper() != "Y":
         remove_wordpress()
