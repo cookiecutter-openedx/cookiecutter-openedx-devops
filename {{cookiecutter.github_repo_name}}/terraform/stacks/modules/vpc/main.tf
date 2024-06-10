@@ -42,7 +42,7 @@ module "vpc" {
   one_nat_gateway_per_az = var.one_nat_gateway_per_az
   public_subnet_tags     = var.public_subnet_tags
   private_subnet_tags    = var.private_subnet_tags
-
+  map_public_ip_on_launch = var.map_public_ip_on_launch 
   tags = merge(
     local.tags,
     {
