@@ -180,6 +180,20 @@ tutor local quickstart
 pip install "tutor[full]==14.2.4"       # installs/upgrades to Nutmeg by default
 tutor local quickstart
 
+pip install "tutor[full]==15.3.9"       # installs/upgrades to Olive by default
+tutor local launch
+
+pip install "tutor[full]==16.1.8"       # installs/upgrades to Palm by default
+tutor local launch
+
+pip install "tutor[full]==17.0.6"       # installs/upgrades to Quince by default
+tutor local launch
+
+pip install "tutor[full]==18.1.3"       # installs/upgrades to Redwood by default
+tutor local launch
+
+
+
 # 6. modify the db name inside your source mysql dump file
 # -----------------------------------------------------------------------------
 # If your source data comes from a native build (presumably Lilac or earlier)
